@@ -1,0 +1,1121 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-060RZGCFFW"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-060RZGCFFW');
+</script>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>MatriX Match</title>
+<style>
+:root{
+  --ink:#202124;
+  --muted:#6c625b;
+  --line:#eadfcd;
+  --glass:rgba(255,255,255,.78);
+  --blue:#7bd3ff;
+  --blue2:#dff5ff;
+  --pink:#ff91bc;
+  --pink2:#ffe1ec;
+  --purple:#b59bff;
+  --purple2:#ece6ff;
+  --green:#8de99d;
+  --green2:#e5fae9;
+  --yellow:#ffe16d;
+  --yellow2:#fff6c7;
+  --good:#0f8f54;
+  --bad:#c22b31;
+  --shadow:0 16px 42px rgba(35,31,25,.15);
+  --colW:76px;
+  --opW:18px;
+  --gap:12px;
+  --cardH:88px;
+  --cardGap:10px;
+  --labelH:34px;
+  --dot-size:5px;
+  --dot-gap:3.2px;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family:ui-rounded,"SF Pro Rounded","Inter",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  color:var(--ink);
+  background:
+    radial-gradient(circle at 18% 14%, #ffe0eb 0 15%, transparent 16%),
+    radial-gradient(circle at 88% 15%, #d8f5ff 0 18%, transparent 19%),
+    radial-gradient(circle at 22% 92%, #e8e0ff 0 18%, transparent 19%),
+    linear-gradient(145deg,#fff8df,#fff0f6 48%,#effcff);
+  display:grid;
+  place-items:start center;
+  padding:8px 12px 12px;
+}
+.app{
+  width:min(720px,100%);
+  background:var(--glass);
+  backdrop-filter:blur(14px);
+  border:1px solid rgba(255,255,255,.9);
+  border-radius:30px;
+  box-shadow:var(--shadow);
+  overflow:hidden;
+}
+.app.matchLevel{
+  --gap:16px;
+  --cardGap:14px;
+}
+.top{
+  padding:10px 16px 6px;
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:10px 14px;
+  align-items:start;
+}
+h1{
+  margin:0;
+  font-size:clamp(25px,5vw,39px);
+  letter-spacing:-.06em;
+  line-height:.9;
+}
+.subtitle{
+  margin:4px 0 0;
+  color:#6f655c;
+  font-size:13px;
+  font-weight:1000;
+  letter-spacing:.02em;
+  text-transform:lowercase;
+}
+.xmark{
+  display:inline-block;
+  color:#202124;
+  transform:translateY(-.01em) rotate(-4deg);
+}
+.instruction{
+  margin:6px 0 0;
+  font-size:14px;
+  color:#45484e;
+  font-weight:750;
+  max-width:520px;
+}
+.hud{
+  display:flex;
+  gap:8px;
+  justify-content:flex-end;
+  align-items:center;
+  flex-wrap:wrap;
+}
+.pill{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:999px;
+  min-width:58px;
+  padding:8px 10px;
+  text-align:center;
+  font-weight:1000;
+  box-shadow:0 2px 0 rgba(0,0,0,.04);
+}
+.pill span{display:block;font-size:10px;color:#7a6f65;font-weight:950;letter-spacing:.06em;text-transform:uppercase}
+.controls{
+  grid-column:1/-1;
+  display:flex;
+  justify-content:space-between;
+  gap:9px;
+  align-items:center;
+  flex-wrap:wrap;
+}
+.levels,.tools{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.shapeControl{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  border-radius:999px;
+  background:rgba(255,255,255,.62);
+  box-shadow:inset 0 0 0 1px rgba(234,223,205,.85),0 2px 0 rgba(0,0,0,.035);
+  padding:5px 5px 5px 11px;
+}
+.shapeLabel{
+  color:#51483f;
+  font-size:12px;
+  font-weight:1000;
+  white-space:nowrap;
+  letter-spacing:.01em;
+}
+.shapeToggle{
+  width:58px;
+  height:34px;
+  padding:0 5px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:flex-start;
+  background:linear-gradient(135deg,#fff,var(--yellow2));
+  box-shadow:inset 0 0 0 1px #edd781,0 2px 0 rgba(0,0,0,.04);
+}
+.shapeToggle.on{
+  justify-content:flex-end;
+  background:linear-gradient(135deg,var(--green),var(--green2));
+  box-shadow:inset 0 0 0 1px #80d991,0 2px 0 rgba(0,0,0,.04);
+}
+.toggleFace{
+  width:26px;
+  height:26px;
+  border-radius:50%;
+  background:#fff;
+  display:grid;
+  place-items:center;
+  flex:0 0 auto;
+  box-shadow:0 1px 3px rgba(0,0,0,.12), inset 0 0 0 1px rgba(32,33,36,.08);
+  transition:transform .18s ease;
+}
+.shapeToggle.on .toggleFace{transform:rotate(6deg)}
+.miniMatrix{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:2px;
+}
+.miniBracket{
+  width:4px;
+  height:18px;
+  border-top:2px solid #202124;
+  border-bottom:2px solid #202124;
+  flex:0 0 auto;
+}
+.miniBracket.left{border-left:2px solid #202124;border-radius:2px 0 0 2px}
+.miniBracket.right{border-right:2px solid #202124;border-radius:0 2px 2px 0}
+.miniDots{
+  display:grid;
+  grid-template-columns:repeat(2,4px);
+  grid-template-rows:repeat(2,4px);
+  gap:3px;
+}
+.miniDots i{
+  width:4px;
+  height:4px;
+  border-radius:50%;
+  background:#202124;
+  display:block;
+}
+.miniText{
+  display:none;
+  font-size:11px;
+  font-weight:1000;
+  letter-spacing:-.05em;
+  color:#202124;
+  line-height:1;
+}
+.shapeToggle.on .miniMatrix{display:none}
+.shapeToggle.on .miniText{display:block}
+button{
+  appearance:none;
+  border:0;
+  border-radius:999px;
+  padding:8px 11px;
+  font:inherit;
+  font-size:13px;
+  font-weight:1000;
+  cursor:pointer;
+  background:#fff;
+  color:var(--ink);
+  box-shadow:inset 0 0 0 1px var(--line),0 2px 0 rgba(0,0,0,.04);
+  transition:transform .12s ease, box-shadow .12s ease, width .18s ease, background .12s ease;
+}
+button:hover{transform:translateY(-1px)}
+button.active{background:#202124;color:#fff;box-shadow:none}
+.hintRow{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:46px;
+  padding:16px 22px 0;
+}
+.hintBtn{
+  background:linear-gradient(180deg,var(--yellow),var(--yellow2));
+  box-shadow:inset 0 0 0 1px #efd25e,0 2px 0 rgba(0,0,0,.04);
+  min-width:58px;
+  max-width:min(430px, calc(100% - 28px));
+  white-space:normal;
+  overflow:hidden;
+  text-align:center;
+  line-height:1.12;
+}
+.hintLabel{
+  display:block;
+}
+.hintText{
+  display:none;
+  margin-top:5px;
+  color:#51483f;
+  font-size:12px;
+  line-height:1.18;
+  font-weight:950;
+}
+.hintBtn.expanded{
+  padding-left:14px;
+  padding-right:14px;
+}
+.hintBtn.expanded .hintText{
+  display:block;
+}
+.boardWrap{padding:0 12px 0;position:relative}
+.boardRel{position:relative;display:flex;justify-content:center}
+.lines{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+  z-index:0;
+  overflow:visible;
+}
+.productGrid{
+  display:grid;
+  grid-template-columns:var(--colW) var(--opW) var(--colW) var(--opW) var(--colW);
+  gap:var(--gap);
+  justify-content:center;
+  align-items:stretch;
+  position:relative;
+  z-index:1;
+}
+.productGrid.three{
+  grid-template-columns:var(--colW) var(--opW) var(--colW) var(--opW) var(--colW) var(--opW) var(--colW);
+}
+.groupTitle{
+  height:var(--labelH);
+  margin:0 0 8px;
+  text-align:center;
+  font-size:28px;
+  line-height:1;
+  font-weight:1000;
+  color:#202124;
+  text-transform:none;
+  letter-spacing:-.07em;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.cardColumn{display:grid;grid-template-rows:repeat(3,var(--cardH));gap:var(--cardGap)}
+.opColumn{display:grid;grid-template-rows:calc(var(--labelH) + 6px) auto;align-items:stretch}
+.opStack{display:grid;grid-template-rows:repeat(3,var(--cardH));gap:var(--cardGap)}
+.opSymbol{
+  grid-row:2;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:1000;
+  font-size:24px;
+  color:#3f3831;
+  line-height:1;
+}
+.card{
+  width:var(--colW);
+  height:var(--cardH);
+  border:0;
+  border-radius:19px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  position:relative;
+  cursor:pointer;
+  user-select:none;
+  transition:transform .12s ease, filter .12s ease, box-shadow .12s ease, opacity .12s ease;
+  box-shadow:inset 0 -4px 0 rgba(0,0,0,.055),0 2px 0 rgba(0,0,0,.06);
+  padding:0;
+}
+.card:hover{transform:translateY(-1px)}
+.card.first{background:linear-gradient(160deg,var(--blue),var(--blue2))}
+.card.second{background:linear-gradient(160deg,var(--pink),var(--pink2))}
+.card.third{background:linear-gradient(160deg,var(--purple),var(--purple2))}
+.card.target{background:linear-gradient(160deg,var(--green),var(--green2))}
+.card.selected{
+  transform:translateY(-2px) scale(1.02);
+  box-shadow:0 0 0 4px #202124,inset 0 -4px 0 rgba(0,0,0,.07),0 8px 15px rgba(0,0,0,.12);
+}
+.card.matched{
+  box-shadow:0 0 0 4px var(--match-color,#202124),inset 0 -4px 0 rgba(0,0,0,.05),0 8px 16px rgba(0,0,0,.12);
+  cursor:default;
+}
+.card.used{opacity:.72}
+.card.goodFlash{animation:pop .28s ease}
+.card.badFlash{animation:shake .28s ease}
+@keyframes pop{50%{transform:translateY(-2px) scale(1.09)}}
+@keyframes shake{20%{transform:translateX(-5px)}40%{transform:translateX(5px)}60%{transform:translateX(-4px)}80%{transform:translateX(3px)}}
+.shapeStack{
+  height:100%;
+  width:100%;
+  display:grid;
+  grid-template-rows:1fr 14px;
+  align-items:center;
+  justify-items:center;
+  gap:4px;
+  padding:8px 4px 9px;
+}
+.dotsOnly .shapeStack{
+  grid-template-rows:1fr;
+  padding:9px 4px;
+}
+.matrix{display:flex;align-items:center;gap:4px;justify-content:center;max-width:100%}
+.bracket{
+  width:7px;
+  height:50px;
+  border-top:3px solid rgba(32,33,36,.72);
+  border-bottom:3px solid rgba(32,33,36,.72);
+  flex:0 0 auto;
+}
+.bracket.left{border-left:3px solid rgba(32,33,36,.72);border-radius:4px 0 0 4px}
+.bracket.right{border-right:3px solid rgba(32,33,36,.72);border-radius:0 4px 4px 0}
+.dots{
+  display:grid;
+  gap:var(--dot-gap);
+  justify-content:center;
+  align-content:center;
+}
+.dot{
+  width:var(--dot-size);
+  height:var(--dot-size);
+  border-radius:50%;
+  background:#202124;
+  opacity:.76;
+}
+.sizeLabel{
+  height:14px;
+  min-height:14px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:12px;
+  line-height:1;
+  font-weight:1000;
+  letter-spacing:.02em;
+  color:rgba(32,33,36,.72);
+}
+.dotsOnly .sizeLabel{display:none}
+.matchTray{
+  display:none;
+  min-height:38px;
+  padding:11px 14px 0;
+  justify-content:center;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.matchTray.show{display:flex}
+.matchChip{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  padding:7px 9px;
+  border-radius:999px;
+  background:#fff;
+  border:1px solid var(--line);
+  font-size:12px;
+  font-weight:1000;
+  box-shadow:0 2px 0 rgba(0,0,0,.04);
+}
+.matchDot{width:10px;height:10px;border-radius:50%;background:var(--match-color)}
+.undoBtn{
+  width:21px;
+  height:21px;
+  padding:0;
+  line-height:1;
+  display:inline-grid;
+  place-items:center;
+  background:#f7f1e9;
+  box-shadow:none;
+  font-size:14px;
+}
+.feedback{
+  min-height:48px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:4px 14px 8px;
+}
+.msg{
+  width:min(500px,100%);
+  border-radius:20px;
+  padding:10px 14px;
+  text-align:center;
+  font-weight:1000;
+  background:#fff;
+  border:1px solid var(--line);
+  box-shadow:0 2px 0 rgba(0,0,0,.04);
+}
+.msg.good{background:#eaffef;border-color:#99ecb9;color:#087a42}
+.msg.bad{background:#fff0f0;border-color:#ffb4b6;color:#b82025}
+.msg.done{background:#202124;color:#fff;border-color:#202124}
+.footer{display:flex;justify-content:center;align-items:center;padding:0 16px 17px}
+.restart{background:#202124;color:#fff;display:none}
+.restart.show{display:inline-block}
+@media(max-width:520px){
+  :root{--colW:65px;--opW:14px;--gap:7px;--cardH:78px;--cardGap:7px;--labelH:28px;--dot-size:4.5px;--dot-gap:3px}
+  body{padding:8px}
+  .app{border-radius:24px}
+  .top{padding:10px 13px 6px;grid-template-columns:1fr;gap:8px}
+  .hud{justify-content:flex-start}
+  .controls{gap:7px}
+  button{font-size:12px;padding:7px 9px}
+  .app.matchLevel{--gap:9px;--cardGap:11px}
+  .hintRow{padding:14px 16px 0;min-height:44px}
+  .hintBtn.expanded{max-width:min(330px, calc(100% - 16px));white-space:normal;text-align:center;line-height:1.15}
+  .boardWrap{padding-left:7px;padding-right:7px}
+  .groupTitle{font-size:22px;height:var(--labelH);margin-bottom:5px;letter-spacing:-.06em}
+  .opColumn{grid-template-rows:calc(var(--labelH) + 5px) auto}
+  .opSymbol{font-size:18px}
+  .card{border-radius:16px}
+  .bracket{height:42px;width:6px;border-top-width:2.5px;border-bottom-width:2.5px}
+  .bracket.left{border-left-width:2.5px}.bracket.right{border-right-width:2.5px}
+  .sizeLabel{font-size:10px}
+  .instruction{font-size:13px}
+}
+@media(max-width:355px){
+  :root{--colW:60px;--opW:12px;--gap:5px;--cardH:74px;--cardGap:6px;--labelH:25px;--dot-size:4.25px;--dot-gap:2.75px}
+  h1{font-size:24px}
+  .groupTitle{font-size:20px;height:var(--labelH);margin-bottom:4px;letter-spacing:-.06em}
+  .opColumn{grid-template-rows:calc(var(--labelH) + 5px) auto}
+  .productGrid.three{gap:4px}
+}
+</style>
+</head>
+<body>
+  <main class="app dotsOnly" id="app" aria-live="polite">
+    <section class="top">
+      <div>
+        <h1>Matri<span class="xmark">X</span> Match</h1>
+        <p class="instruction" id="instruction">Choose matching shapes for A, B, and AB.</p>
+      </div>
+      <div class="hud" aria-label="score and timer">
+        <div class="pill"><span>score</span><b id="score">0</b></div>
+        <div class="pill"><span>time</span><b id="time">45</b></div>
+      </div>
+      <div class="controls">
+        <div class="levels" aria-label="level choices">
+          <button id="basicLevel" class="active" type="button">Basic: AB</button>
+          <button id="challenge1" type="button">Challenge 1: ABC</button>
+          <button id="challenge2" type="button">Challenge 2: Match All</button>
+        </div>
+        <div class="tools" aria-label="display tools">
+          <div class="shapeControl">
+            <span class="shapeLabel">show shape</span>
+            <button id="shapeToggle" class="shapeToggle" type="button" aria-pressed="false" aria-label="show shape labels">
+              <span class="toggleFace" aria-hidden="true">
+                <span class="miniMatrix">
+                  <span class="miniBracket left"></span>
+                  <span class="miniDots"><i></i><i></i><i></i><i></i></span>
+                  <span class="miniBracket right"></span>
+                </span>
+                <span class="miniText">2×2</span>
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="feedback"><div id="msg" class="msg">Tap exactly one card in each column to make a valid product.</div></section>
+    <section class="boardWrap">
+      <div class="boardRel" id="boardRel">
+        <svg class="lines" id="lines"></svg>
+        <div id="board" class="productGrid"></div>
+      </div>
+    </section>
+    <section class="matchTray" id="matchTray"></section>
+    <section class="hintRow"><button id="hintBtn" class="hintBtn" type="button" aria-expanded="false"><span class="hintLabel">hint</span><span class="hintText">Inner numbers match; outer numbers survive.</span></button></section>
+    <section class="footer"><button id="restart" class="restart" type="button">play again</button></section>
+  </main>
+
+<script>
+(() => {
+  const app = document.getElementById('app');
+  const board = document.getElementById('board');
+  const boardRel = document.getElementById('boardRel');
+  const linesSvg = document.getElementById('lines');
+  const instructionEl = document.getElementById('instruction');
+  const scoreEl = document.getElementById('score');
+  const timeEl = document.getElementById('time');
+  const msgEl = document.getElementById('msg');
+  const restartBtn = document.getElementById('restart');
+  const matchTray = document.getElementById('matchTray');
+  const hintBtn = document.getElementById('hintBtn');
+  const shapeToggle = document.getElementById('shapeToggle');
+  const levelBtns = {
+    basic: document.getElementById('basicLevel'),
+    chain: document.getElementById('challenge1'),
+    match: document.getElementById('challenge2')
+  };
+
+  let level = 'basic';
+  let score = 0;
+  let time = 45;
+  let timer = null;
+  let started = false;
+  let locked = false;
+  let showSizes = false;
+  let round = null;
+  let selected = {};
+  let matches = [];
+
+  const maxDim = 6;
+  const lineColors = ['#ff5a8a', '#2fafff', '#22b865', '#8b6cff', '#f2b600'];
+
+  function timestampSeed(){
+    const now = new Date();
+    const pad = (n, w=2) => String(n).padStart(w, '0');
+    return `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}T${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}.${pad(now.getMilliseconds(),3)}`;
+  }
+  function hashSeed(str){
+    let h = 2166136261;
+    for(let i=0; i<str.length; i++){
+      h ^= str.charCodeAt(i);
+      h = Math.imul(h, 16777619);
+    }
+    return h >>> 0;
+  }
+  function mulberry32(seed){
+    return function(){
+      let t = seed += 0x6D2B79F5;
+      t = Math.imul(t ^ (t >>> 15), t | 1);
+      t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  const urlSeed = new URLSearchParams(window.location.search).get('seed');
+  const sessionSeed = urlSeed || timestampSeed();
+  const useRecentFilter = !urlSeed;
+  const rng = mulberry32(hashSeed(sessionSeed));
+  const recentKey = 'matriXMatchRecentBoards:v3';
+  let matchIdCounter = 0;
+
+  const rand = (lo, hi) => lo + Math.floor(rng() * (hi - lo + 1));
+  const same = (a,b) => a && b && a.r === b.r && a.c === b.c;
+  const shapeText = s => `${s.r}×${s.c}`;
+  const shapeKey = s => `${s.r}x${s.c}`;
+  const shuffle = arr => {
+    const a = arr.slice();
+    for(let i=a.length-1; i>0; i--){
+      const j = Math.floor(rng() * (i+1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  };
+  const randomShape = () => ({r:rand(1,maxDim), c:rand(1,maxDim)});
+  const cloneShape = s => ({r:s.r, c:s.c});
+  console.info(`MatriX Match seed: ${sessionSeed}`);
+
+  function levelTime(){ return level === 'match' ? 60 : 45; }
+  function requiredKinds(){ return level === 'chain' ? ['first','second','third','target'] : ['first','second','target']; }
+  function productName(){ return level === 'chain' ? 'ABC' : 'AB'; }
+  function roleLabel(kind){
+    if(kind === 'first') return 'A';
+    if(kind === 'second') return 'B';
+    if(kind === 'third') return 'C';
+    if(kind === 'target') return productName();
+    return kind;
+  }
+  function setInstruction(){
+    instructionEl.textContent = level === 'basic'
+      ? 'Choose matching shapes for A, B, and AB.'
+      : level === 'chain'
+        ? 'Choose matching shapes for A, B, C, and ABC.'
+        : 'Match every valid product';
+  }
+
+  function setMessage(text, type=''){
+    msgEl.textContent = text;
+    msgEl.className = `msg ${type}`.trim();
+  }
+  function startTimer(){
+    if(started) return;
+    started = true;
+    timer = setInterval(() => {
+      time--;
+      timeEl.textContent = time;
+      if(time <= 0) endGame();
+    }, 1000);
+  }
+  function endGame(){
+    clearInterval(timer);
+    timer = null;
+    locked = true;
+    setMessage(`Time. Score: ${score}.`, 'done');
+    restartBtn.classList.add('show');
+  }
+  function resetGame(){
+    clearInterval(timer);
+    timer = null;
+    started = false;
+    locked = false;
+    score = 0;
+    time = levelTime();
+    scoreEl.textContent = score;
+    timeEl.textContent = time;
+    restartBtn.classList.remove('show');
+    setInstruction();
+    app.classList.toggle('matchLevel', level === 'match');
+    collapseHint();
+    renderRound();
+  }
+
+  function uniquePush(arr, s){
+    if(!arr.some(x => same(x,s))) arr.push(s);
+  }
+  function countBasic(firsts, seconds, targets){
+    let count = 0;
+    for(const A of firsts) for(const B of seconds){
+      if(A.c !== B.r) continue;
+      const P = {r:A.r,c:B.c};
+      for(const T of targets) if(same(P,T)) count++;
+    }
+    return count;
+  }
+  function countChain(firsts, seconds, thirds, targets){
+    let count = 0;
+    for(const A of firsts) for(const B of seconds) for(const C of thirds){
+      if(A.c !== B.r || B.c !== C.r) continue;
+      const P = {r:A.r,c:C.c};
+      for(const T of targets) if(same(P,T)) count++;
+    }
+    return count;
+  }
+
+  function groupSignature(shapes){
+    return (shapes || []).map(shapeKey).sort().join(',');
+  }
+  function roundSignature(data){
+    return [
+      level,
+      `A:${groupSignature(data.first)}`,
+      `B:${groupSignature(data.second)}`,
+      data.third ? `C:${groupSignature(data.third)}` : '',
+      `T:${groupSignature(data.target)}`
+    ].filter(Boolean).join('|');
+  }
+  function recentSignatures(){
+    try{
+      const parsed = JSON.parse(localStorage.getItem(recentKey) || '[]');
+      return Array.isArray(parsed) ? parsed : [];
+    }catch(err){
+      return [];
+    }
+  }
+  function rememberSignature(sig){
+    if(!useRecentFilter || !sig) return;
+    try{
+      const recent = recentSignatures().filter(x => x !== sig);
+      recent.unshift(sig);
+      localStorage.setItem(recentKey, JSON.stringify(recent.slice(0, 60)));
+    }catch(err){}
+  }
+  function freshRound(generator){
+    for(let attempt=0; attempt<120; attempt++){
+      const candidate = generator();
+      const sig = roundSignature(candidate);
+      if(!useRecentFilter || !recentSignatures().includes(sig)){
+        rememberSignature(sig);
+        return candidate;
+      }
+    }
+    const fallback = generator();
+    rememberSignature(roundSignature(fallback));
+    return fallback;
+  }
+
+  function makeBasicRound(){
+    for(let attempt=0; attempt<5000; attempt++){
+      const m = rand(1,maxDim), n = rand(1,maxDim), k = rand(1,maxDim);
+      const A = {id:'f0', r:m, c:n}, B = {id:'s0', r:n, c:k}, T = {id:'t0', r:m, c:k};
+      const firsts=[A], seconds=[B], targets=[T];
+      while(firsts.length<3) uniquePush(firsts, {...randomShape(), id:`f${firsts.length}`});
+      while(seconds.length<3) uniquePush(seconds, {...randomShape(), id:`s${seconds.length}`});
+      while(targets.length<3) uniquePush(targets, {...randomShape(), id:`t${targets.length}`});
+      if(countBasic(firsts, seconds, targets) === 1){
+        return {first:shuffle(firsts), second:shuffle(seconds), target:shuffle(targets)};
+      }
+    }
+    return {
+      first: shuffle([{id:'f0',r:2,c:3},{id:'f1',r:4,c:1},{id:'f2',r:3,c:2}]),
+      second: shuffle([{id:'s0',r:3,c:4},{id:'s1',r:2,c:2},{id:'s2',r:1,c:3}]),
+      target: shuffle([{id:'t0',r:2,c:4},{id:'t1',r:4,c:3},{id:'t2',r:3,c:1}])
+    };
+  }
+
+  function makeChainRound(){
+    for(let attempt=0; attempt<8000; attempt++){
+      const m = rand(1,maxDim), n = rand(1,maxDim), k = rand(1,maxDim), r = rand(1,maxDim);
+      const A = {id:'f0', r:m, c:n};
+      const B = {id:'s0', r:n, c:k};
+      const C = {id:'h0', r:k, c:r};
+      const T = {id:'t0', r:m, c:r};
+      const firsts=[A], seconds=[B], thirds=[C], targets=[T];
+      while(firsts.length<3) uniquePush(firsts, {...randomShape(), id:`f${firsts.length}`});
+      while(seconds.length<3) uniquePush(seconds, {...randomShape(), id:`s${seconds.length}`});
+      while(thirds.length<3) uniquePush(thirds, {...randomShape(), id:`h${thirds.length}`});
+      while(targets.length<3) uniquePush(targets, {...randomShape(), id:`t${targets.length}`});
+      if(countChain(firsts, seconds, thirds, targets) === 1){
+        return {first:shuffle(firsts), second:shuffle(seconds), third:shuffle(thirds), target:shuffle(targets)};
+      }
+    }
+    return {
+      first: shuffle([{id:'f0',r:2,c:3},{id:'f1',r:4,c:1},{id:'f2',r:3,c:2}]),
+      second: shuffle([{id:'s0',r:3,c:4},{id:'s1',r:2,c:1},{id:'s2',r:1,c:3}]),
+      third: shuffle([{id:'h0',r:4,c:2},{id:'h1',r:3,c:1},{id:'h2',r:2,c:4}]),
+      target: shuffle([{id:'t0',r:2,c:2},{id:'t1',r:4,c:4},{id:'t2',r:3,c:3}])
+    };
+  }
+
+  function validMatchTriples(firsts, seconds, targets){
+    const triples=[];
+    for(const A of firsts) for(const B of seconds){
+      if(A.c !== B.r) continue;
+      const P = {r:A.r,c:B.c};
+      for(const T of targets) if(same(P,T)) triples.push({A,B,T});
+    }
+    return triples;
+  }
+  function goodPerfectSet(triples, n){
+    if(triples.length !== n) return false;
+    return new Set(triples.map(x=>x.A.id)).size === n &&
+           new Set(triples.map(x=>x.B.id)).size === n &&
+           new Set(triples.map(x=>x.T.id)).size === n;
+  }
+  function makeMatchRound(){
+    const n = 3;
+    for(let attempt=0; attempt<12000; attempt++){
+      const firsts=[], seconds=[], targets=[];
+      for(let i=0; i<n; i++){
+        const m=rand(1,maxDim), mid=rand(1,maxDim), k=rand(1,maxDim);
+        uniquePush(firsts, {id:`f${i}`, r:m, c:mid});
+        uniquePush(seconds, {id:`s${i}`, r:mid, c:k});
+        uniquePush(targets, {id:`t${i}`, r:m, c:k});
+      }
+      if(firsts.length !== n || seconds.length !== n || targets.length !== n) continue;
+      const triples = validMatchTriples(firsts, seconds, targets);
+      if(goodPerfectSet(triples, n)){
+        return {first:shuffle(firsts), second:shuffle(seconds), target:shuffle(targets), validTriples:triples};
+      }
+    }
+    const firsts=[{id:'f0',r:2,c:3},{id:'f1',r:4,c:1},{id:'f2',r:3,c:2}];
+    const seconds=[{id:'s0',r:3,c:4},{id:'s1',r:1,c:3},{id:'s2',r:2,c:1}];
+    const targets=[{id:'t0',r:2,c:4},{id:'t1',r:4,c:3},{id:'t2',r:3,c:1}];
+    return {first:shuffle(firsts), second:shuffle(seconds), target:shuffle(targets), validTriples:validMatchTriples(firsts,seconds,targets)};
+  }
+
+  function matrixCard(shape, kind){
+    const card = document.createElement('button');
+    card.className = `card ${kind}`;
+    card.type = 'button';
+    card.dataset.kind = kind;
+    card.dataset.id = shape.id;
+    card.dataset.r = shape.r;
+    card.dataset.c = shape.c;
+    const role = roleLabel(kind);
+    card.setAttribute('aria-label', kind === 'target' ? `${role} shape ${shapeText(shape)}` : `${role} matrix ${shapeText(shape)}`);
+
+    const stack = document.createElement('span');
+    stack.className = 'shapeStack';
+    const matrix = document.createElement('span');
+    matrix.className = 'matrix';
+    const left = document.createElement('span'); left.className = 'bracket left';
+    const dots = document.createElement('span'); dots.className = 'dots';
+    dots.style.gridTemplateColumns = `repeat(${shape.c}, var(--dot-size))`;
+    dots.style.gridTemplateRows = `repeat(${shape.r}, var(--dot-size))`;
+    for(let i=0; i<shape.r*shape.c; i++){
+      const d = document.createElement('span');
+      d.className = 'dot';
+      dots.appendChild(d);
+    }
+    const right = document.createElement('span'); right.className = 'bracket right';
+    matrix.append(left, dots, right);
+    const size = document.createElement('span');
+    size.className = 'sizeLabel';
+    size.textContent = shapeText(shape);
+    stack.append(matrix, size);
+    card.appendChild(stack);
+    card.addEventListener('click', () => pick(kind, shape.id, shape));
+    return card;
+  }
+
+  function op(symbol){
+    const wrap = document.createElement('div');
+    wrap.className = 'opColumn';
+    const spacer = document.createElement('div');
+    const stack = document.createElement('div');
+    stack.className = 'opStack';
+    stack.innerHTML = `<span></span><span class="opSymbol">${symbol}</span><span></span>`;
+    wrap.append(spacer, stack);
+    return wrap;
+  }
+  function column(kind, title, shapes){
+    const wrap = document.createElement('div');
+    const p = document.createElement('p');
+    p.className = 'groupTitle';
+    p.textContent = title;
+    const col = document.createElement('div');
+    col.className = 'cardColumn';
+    shapes.forEach(s => col.appendChild(matrixCard(s, kind)));
+    wrap.append(p, col);
+    return wrap;
+  }
+
+  function renderRound(){
+    selected = {};
+    matches = [];
+    linesSvg.innerHTML = '';
+    matchTray.innerHTML = '';
+    matchTray.classList.toggle('show', level === 'match');
+    board.innerHTML = '';
+    board.className = `productGrid${level === 'chain' ? ' three' : ''}`;
+    round = freshRound(level === 'basic' ? makeBasicRound : level === 'chain' ? makeChainRound : makeMatchRound);
+
+    if(level === 'chain'){
+      board.append(
+        column('first','A',round.first), op('×'),
+        column('second','B',round.second), op('×'),
+        column('third','C',round.third), op('='),
+        column('target','ABC',round.target)
+      );
+    }else{
+      board.append(
+        column('first','A',round.first), op('×'),
+        column('second','B',round.second), op('='),
+        column('target','AB',round.target)
+      );
+    }
+    setMessage(level === 'match' ? 'Match every valid product.' : 'Tap exactly one card in each column to make a valid product.');
+    drawLines();
+  }
+
+  function pick(kind, id, shape){
+    if(locked || time <= 0) return;
+    const card = findCard(kind, id);
+    if(card && card.classList.contains('matched')) return;
+    startTimer();
+    selected[kind] = {...cloneShape(shape), id};
+    document.querySelectorAll(`.card[data-kind="${kind}"]`).forEach(c => c.classList.remove('selected'));
+    if(card) card.classList.add('selected');
+    if(requiredKinds().every(k => selected[k])) checkAnswer();
+  }
+
+  function productOfSelection(){
+    const A = selected.first, B = selected.second;
+    if(!A || !B) return {valid:false};
+    if(A.c !== B.r) return {valid:false, seam:[A.c,B.r], where:'AB'};
+    if(level === 'chain'){
+      const C = selected.third;
+      if(!C) return {valid:false};
+      if(B.c !== C.r) return {valid:false, seam:[B.c,C.r], where:'BC'};
+      return {valid:true, shape:{r:A.r,c:C.c}};
+    }
+    return {valid:true, shape:{r:A.r,c:B.c}};
+  }
+
+  function checkAnswer(){
+    locked = true;
+    const result = productOfSelection();
+    const chosenCards = [...document.querySelectorAll('.card.selected')];
+    let good = false;
+    let message = '';
+
+    if(!result.valid){
+      message = showSizes
+        ? `${result.where} does not multiply: ${result.seam[0]} and ${result.seam[1]} do not match.`
+        : `${result.where} does not multiply. Inner counts do not match.`;
+    }else if(!same(result.shape, selected.target)){
+      const name = productName();
+      message = showSizes
+        ? `${name} is ${shapeText(result.shape)}, not ${shapeText(selected.target)}.`
+        : `${name} is valid, but not that shape.`;
+    }else{
+      good = true;
+      message = level === 'match' ? 'Locked.' : 'Nice.';
+    }
+
+    chosenCards.forEach(c => c.classList.add(good ? 'goodFlash' : 'badFlash'));
+    setMessage(message, good ? 'good' : 'bad');
+
+    if(good && level === 'match'){
+      lockCurrentMatch();
+      score++;
+      scoreEl.textContent = score;
+      setTimeout(() => {
+        clearSelectedOnly();
+        if(matches.length === 2){
+          autoLockRemainingMatch();
+        }
+        if(matches.length === 3){
+          locked = true;
+          setTimeout(() => {
+            setMessage('Board clear.', 'good');
+            setTimeout(() => { locked=false; renderRound(); }, 750);
+          }, matches.some(m => m.auto) ? 620 : 0);
+        }else{
+          locked = false;
+          setMessage(`${matches.length}/3 locked. Keep going.`, 'good');
+        }
+      }, 280);
+    }else if(good){
+      score++;
+      scoreEl.textContent = score;
+      setTimeout(() => { locked=false; renderRound(); }, 520);
+    }else{
+      setTimeout(() => {
+        clearSelectedOnly();
+        locked=false;
+      }, 620);
+    }
+  }
+
+  function clearSelectedOnly(){
+    document.querySelectorAll('.card.selected').forEach(c => c.classList.remove('selected','goodFlash','badFlash'));
+    document.querySelectorAll('.card.badFlash,.card.goodFlash').forEach(c => c.classList.remove('badFlash','goodFlash'));
+    selected = {};
+  }
+  function findCard(kind, id){ return document.querySelector(`.card[data-kind="${kind}"][data-id="${id}"]`); }
+
+  function lockCurrentMatch(){
+    lockMatchByIds(selected.first.id, selected.second.id, selected.target.id, false);
+  }
+
+  function lockMatchByIds(firstId, secondId, targetId, auto=false){
+    const color = lineColors[matches.length % lineColors.length];
+    const match = {
+      id: `m${matchIdCounter++}`, 
+      color,
+      first: firstId,
+      second: secondId,
+      target: targetId,
+      auto
+    };
+    matches.push(match);
+    for(const [kind, id] of [['first',match.first],['second',match.second],['target',match.target]]){
+      const c = findCard(kind,id);
+      if(c){
+        c.classList.add('matched');
+        c.style.setProperty('--match-color', color);
+        if(auto) c.classList.add('goodFlash');
+      }
+    }
+    renderMatchTray();
+    drawLines();
+  }
+
+  function autoLockRemainingMatch(){
+    if(level !== 'match' || matches.length !== 2) return false;
+    const usedFirst = new Set(matches.map(m => m.first));
+    const usedSecond = new Set(matches.map(m => m.second));
+    const usedTarget = new Set(matches.map(m => m.target));
+    const A = round.first.find(s => !usedFirst.has(s.id));
+    const B = round.second.find(s => !usedSecond.has(s.id));
+    const T = round.target.find(s => !usedTarget.has(s.id));
+    if(!A || !B || !T) return false;
+    const product = A.c === B.r ? {r:A.r, c:B.c} : null;
+    if(!product || !same(product, T)) return false;
+    lockMatchByIds(A.id, B.id, T.id, true);
+    score++;
+    scoreEl.textContent = score;
+    setMessage('Last match filled automatically.', 'good');
+    return true;
+  }
+
+  function undoMatch(matchId){
+    if(locked) return;
+    const index = matches.findIndex(m => m.id === matchId);
+    if(index < 0) return;
+    const match = matches[index];
+    matches.splice(index,1);
+    for(const [kind, id] of [['first',match.first],['second',match.second],['target',match.target]]){
+      const c = findCard(kind,id);
+      if(c){
+        c.classList.remove('matched','selected','goodFlash','badFlash');
+        c.style.removeProperty('--match-color');
+      }
+    }
+    selected = {};
+    renderMatchTray();
+    drawLines();
+    setMessage(`${matches.length}/3 locked.`, matches.length ? 'good' : '');
+  }
+  function renderMatchTray(){
+    matchTray.innerHTML = '';
+    if(level !== 'match') return;
+    matches.forEach((m,i) => {
+      const chip = document.createElement('span');
+      chip.className = 'matchChip';
+      chip.style.setProperty('--match-color', m.color);
+      chip.innerHTML = `<span class="matchDot"></span><span>${m.auto ? 'auto ' : ''}AB ${i+1}</span>`;
+      const undo = document.createElement('button');
+      undo.className = 'undoBtn';
+      undo.type = 'button';
+      undo.textContent = '×';
+      undo.setAttribute('aria-label', `undo match ${i+1}`);
+      undo.addEventListener('click', () => undoMatch(m.id));
+      chip.appendChild(undo);
+      matchTray.appendChild(chip);
+    });
+  }
+
+  function drawLines(){
+    linesSvg.innerHTML = '';
+    if(level !== 'match' || !matches.length) return;
+    const wrap = boardRel.getBoundingClientRect();
+    linesSvg.setAttribute('viewBox', `0 0 ${wrap.width} ${wrap.height}`);
+    for(const m of matches){
+      const cards = [findCard('first',m.first), findCard('second',m.second), findCard('target',m.target)];
+      if(cards.some(x => !x)) continue;
+      const pts = cards.map(card => {
+        const r = card.getBoundingClientRect();
+        return [r.left - wrap.left + r.width/2, r.top - wrap.top + r.height/2];
+      });
+      const poly = document.createElementNS('http://www.w3.org/2000/svg','polyline');
+      poly.setAttribute('points', pts.map(p => `${p[0]},${p[1]}`).join(' '));
+      poly.setAttribute('fill','none');
+      poly.setAttribute('stroke', m.color);
+      poly.setAttribute('stroke-width','7');
+      poly.setAttribute('stroke-linecap','round');
+      poly.setAttribute('stroke-linejoin','round');
+      poly.setAttribute('opacity','.55');
+      linesSvg.appendChild(poly);
+    }
+  }
+
+  function setLevel(next){
+    level = next;
+    for(const [k,btn] of Object.entries(levelBtns)) btn.classList.toggle('active', k === next);
+    resetGame();
+  }
+  levelBtns.basic.addEventListener('click', () => setLevel('basic'));
+  levelBtns.chain.addEventListener('click', () => setLevel('chain'));
+  levelBtns.match.addEventListener('click', () => setLevel('match'));
+
+  function updateShapeToggle(){
+    app.classList.toggle('dotsOnly', !showSizes);
+    shapeToggle.classList.toggle('on', showSizes);
+    shapeToggle.setAttribute('aria-pressed', showSizes ? 'true' : 'false');
+    shapeToggle.setAttribute('aria-label', showSizes ? 'hide shape labels' : 'show shape labels');
+  }
+  shapeToggle.addEventListener('click', () => {
+    showSizes = !showSizes;
+    updateShapeToggle();
+  });
+  function collapseHint(){
+    hintBtn.classList.remove('expanded');
+    hintBtn.setAttribute('aria-expanded', 'false');
+  }
+  hintBtn.addEventListener('click', () => {
+    const expanded = !hintBtn.classList.contains('expanded');
+    hintBtn.classList.toggle('expanded', expanded);
+    hintBtn.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+  });
+  restartBtn.addEventListener('click', resetGame);
+  window.addEventListener('resize', () => requestAnimationFrame(drawLines));
+
+  updateShapeToggle();
+  resetGame();
+})();
+</script>
+</body>
+</html>

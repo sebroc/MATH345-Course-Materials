@@ -1,0 +1,800 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-060RZGCFFW"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-060RZGCFFW');
+</script>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Echelon escape</title>
+<style>
+:root{
+  --ink:#171826;
+  --muted:#696f80;
+  --line:#1d2230;
+  --paper:#fffdf8;
+  --blue:#40b8ff;
+  --yellow:#ffd447;
+  --green:#24d07a;
+  --pink:#ff5aa5;
+  --purple:#9b78ff;
+  --red:#f04d63;
+  --shadow:0 18px 42px rgba(36,27,9,.16);
+  --room:#40b8ff;
+}
+*{box-sizing:border-box}
+html,body{min-height:100%}
+body{
+  margin:0;
+  display:grid;
+  place-items:center;
+  padding:12px;
+  color:var(--ink);
+  font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:
+    radial-gradient(circle at 10% 10%, #ffe675 0 7.5rem, transparent 7.6rem),
+    radial-gradient(circle at 92% 14%, #b7a2ff 0 7.2rem, transparent 7.3rem),
+    radial-gradient(circle at 18% 92%, #87ecc3 0 8.5rem, transparent 8.6rem),
+    linear-gradient(145deg,#fff7d7,#f7fcff 48%,#fff3f9);
+}
+.game{
+  width:min(100%,460px);
+  border:2px solid var(--line);
+  border-radius:28px;
+  background:#fffdf8;
+  box-shadow:var(--shadow);
+  overflow:hidden;
+  position:relative;
+}
+.top{
+  padding:16px 16px 10px;
+  border-bottom:2px solid var(--line);
+  background:linear-gradient(135deg,#fff,#fff4c9 52%,#f1eeff);
+}
+.titleRow{display:flex;align-items:start;justify-content:space-between;gap:10px}
+h1{margin:0;font-size:27px;letter-spacing:-.07em;line-height:.93;font-weight:1000}
+.stats{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.pill{
+  display:inline-flex;align-items:center;justify-content:center;
+  border:2px solid var(--line);border-radius:999px;background:#fff;
+  box-shadow:0 2px 0 var(--line);font-size:12px;font-weight:950;
+  padding:5px 8px;line-height:1;
+}
+.instructions{font-size:13px;font-weight:750;color:var(--muted);margin-top:9px;line-height:1.25}
+.band{
+  border-bottom:2px solid var(--line);
+  background:var(--room);
+  padding:12px 14px;
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+}
+.roomName{font-size:14px;letter-spacing:.055em;text-transform:uppercase;font-weight:1000}
+.roomHint{font-size:12px;font-weight:950;opacity:.72;margin-top:1px}
+.lockTray{display:flex;gap:7px;align-items:center;flex:0 0 auto}
+.lockSvg{width:26px;height:31px;filter:drop-shadow(0 1px 0 rgba(0,0,0,.45));display:block}
+.lockBody{fill:#fff;stroke:var(--line);stroke-width:3}
+.lockHole{fill:var(--line)}
+.lockShackle{fill:none;stroke:var(--line);stroke-width:3;stroke-linecap:round}
+.lockSvg.open .lockBody{fill:#caffdf}.lockSvg.open .lockShackle{stroke:#10844d}
+.lockSvg.current .lockBody{fill:#ffef9b}.lockSvg.current{transform:translateY(-2px)}
+.play{padding:14px}
+.prompt{
+  border:2px solid var(--line);border-radius:22px;background:#fff;
+  box-shadow:0 4px 0 var(--line);padding:11px 12px;
+  display:grid;grid-template-columns:34px 1fr;gap:9px;align-items:start;
+  min-height:62px;
+}
+.promptIcon{
+  width:34px;height:34px;border:2px solid var(--line);border-radius:12px;
+  background:var(--room);display:grid;place-items:center;font-size:16px;font-weight:1000;
+}
+.promptText{font-size:16px;line-height:1.18;font-weight:1000;letter-spacing:-.025em}
+.promptSub{font-size:12px;color:var(--muted);font-weight:800;margin-top:4px;line-height:1.2}
+.matrixCard{
+  margin:13px 0 10px;
+  border:2px solid var(--line);border-radius:22px;background:#fff;
+  padding:12px 10px 10px;
+}
+.matrixStage{display:grid;grid-template-columns:auto 1fr;gap:8px;align-items:center;justify-content:center}
+.rowLabels{display:grid;grid-template-rows:repeat(3,39px);gap:4px;align-items:center}
+.rowLabel{font:950 14px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;text-align:right;color:#414758;padding-right:1px}
+.matrixWrap{display:flex;justify-content:center;align-items:center;min-width:0}
+ .matrixShell{position:relative;display:inline-block;padding:0 10px;--coefw:64px;--constw:72px}
+.matrixShell::before,.matrixShell::after{
+  content:"";position:absolute;top:-5px;bottom:-5px;width:9px;
+  border-top:3px solid var(--line);border-bottom:3px solid var(--line);
+}
+.matrixShell::before{left:0;border-left:3px solid var(--line);border-radius:9px 0 0 9px}
+.matrixShell::after{right:0;border-right:3px solid var(--line);border-radius:0 9px 9px 0}
+.augLine{position:absolute;top:-5px;bottom:-5px;left:0;width:3px;background:var(--line);border-radius:999px;z-index:4;pointer-events:none}
+table.matrix{border-collapse:separate;border-spacing:0 4px;table-layout:fixed;width:auto;font:950 17px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+table.matrix col.coef{width:var(--coefw)}
+table.matrix col.constantCol{width:var(--constw)}
+.matrix td{width:var(--coefw);min-width:var(--coefw);height:39px;text-align:center;padding:0 7px;border-radius:11px;transition:.16s ease;white-space:nowrap;position:relative;z-index:1}
+.matrix td.constant{width:var(--constw);min-width:var(--constw);border-left:0;border-radius:11px;padding-left:15px;padding-right:4px}
+.matrix td.focus{background:#ffefa8;box-shadow:inset 0 0 0 2px var(--line)}
+.matrix td.done{background:#d7ffe7}.matrix tr.flash td{animation:flash .48s ease}
+@keyframes flash{0%{transform:scale(1);background:#fff}40%{transform:scale(1.045);background:#c4f5ff}100%{transform:scale(1)}}
+.eqToggle{
+  appearance:none;border:2px solid var(--line);border-radius:999px;background:#fff;
+  box-shadow:0 3px 0 var(--line);padding:7px 10px;margin:8px auto 0;display:block;
+  font-size:12px;font-weight:1000;color:var(--ink);cursor:pointer;
+}
+.eqToggle:active{transform:translateY(2px);box-shadow:0 1px 0 var(--line)}
+.equations{
+  display:none;margin-top:10px;border-radius:18px;background:#0b1020;color:#eaf2ff;
+  border:2px solid var(--line);padding:12px 13px;
+  font:800 13px/1.55 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);
+}
+.equations.show{display:block}
+.eqLine{white-space:pre}.eqMuted{color:#7f8aa8}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:11px}
+.choice{
+  appearance:none; white-space:pre-line;border:2px solid var(--line);border-radius:18px;background:#fff;
+  min-height:46px;padding:8px 6px;
+  box-shadow:0 4px 0 var(--line);cursor:pointer;color:var(--ink);
+  font:950 15px/1.12 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  transition:transform .07s ease,box-shadow .07s ease,background .14s ease;
+}
+.choice:hover{transform:translateY(-1px);box-shadow:0 5px 0 var(--line);background:#fff9dc}
+.choice:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
+.choice.correct{background:#caffdf}.choice.wrong{animation:shake .28s ease;background:#ffe1e7}
+@keyframes shake{25%{transform:translateX(-5px)}50%{transform:translateX(5px)}75%{transform:translateX(-3px)}}
+.feedback{min-height:32px;margin-top:10px;text-align:center;font-size:13px;font-weight:950;color:#62697b;line-height:1.2}
+.feedback.good{color:#118250}.feedback.bad{color:#c1263b}
+.footer{border-top:2px solid var(--line);background:#fff;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 14px}
+.dots{display:flex;gap:5px}.dot{width:12px;height:12px;border:2px solid var(--line);border-radius:50%;background:#fff}.dot.done{background:#24d07a}.dot.now{background:#ffd447}
+.reset{appearance:none;border:2px solid var(--line);border-radius:999px;background:#fff;box-shadow:0 3px 0 var(--line);padding:8px 12px;font-size:13px;font-weight:1000;color:var(--ink);cursor:pointer}.reset:active{transform:translateY(2px);box-shadow:0 1px 0 var(--line)}
+.endPanel{display:none;position:absolute;inset:0;z-index:5;padding:20px;background:linear-gradient(135deg,#fff0b5,#eafff2 45%,#f2edff);text-align:center;align-content:center}
+.endPanel.show{display:grid}.endCard{background:#fff;border:2px solid var(--line);border-radius:28px;box-shadow:0 8px 0 var(--line);padding:21px 17px}.endCard h2{font-size:30px;margin:0;letter-spacing:-.05em}.score{font-size:48px;font-weight:1000;color:#10844d;letter-spacing:-.06em;margin:8px 0}.scoreGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.scoreBox{border:2px solid var(--line);border-radius:16px;background:#fffaf0;padding:8px;font-weight:1000}.scoreBox span{display:block;font-size:10px;color:var(--muted);letter-spacing:.07em;text-transform:uppercase}.endNote{font-size:12px;color:var(--muted);font-weight:800;margin:12px 0 0;line-height:1.25}.endBtns{display:flex;justify-content:center;margin-top:13px}.endBtns .reset{background:#ffefa8}
+@media(max-width:410px){
+  body{padding:7px}.game{border-radius:22px}.top{padding:14px 13px 9px}h1{font-size:23px}.play{padding:11px}.promptText{font-size:15px}.matrixShell{--coefw:54px;--constw:62px}.matrix td{height:37px;font-size:15px;padding:0 5px}.matrix td.constant{padding-left:13px;padding-right:3px}.rowLabels{grid-template-rows:repeat(3,37px)}.choice{min-height:43px;font-size:13.5px}.stats{gap:4px}.pill{font-size:11px;padding:5px 7px}.scoreGrid{grid-template-columns:1fr}.instructions{font-size:12px}
+}
+</style>
+</head>
+<body>
+<div class="game" id="game">
+  <div class="top">
+    <div class="titleRow">
+      <h1>Echelon escape</h1>
+      <div class="stats"><span class="pill" id="timer">0:00</span><span class="pill" id="errors">0 misses</span></div>
+    </div>
+    <div class="instructions">Reach REF. Count the solutions. Click New to start over.</div>
+  </div>
+  <div class="band" id="band">
+    <div><div class="roomName" id="roomName">Room 1 · x-column</div><div class="roomHint" id="roomHint">first column</div></div>
+    <div class="lockTray" id="lockTray"></div>
+  </div>
+  <div class="play">
+    <div class="prompt">
+      <div class="promptIcon" id="promptIcon">x</div>
+      <div><div class="promptText" id="promptText"></div><div class="promptSub" id="promptSub"></div></div>
+    </div>
+    <div class="matrixCard">
+      <div class="matrixStage">
+        <div class="rowLabels"><div class="rowLabel">R₁</div><div class="rowLabel">R₂</div><div class="rowLabel">R₃</div></div>
+        <div class="matrixWrap"><div class="matrixShell"><div class="augLine" aria-hidden="true"></div><table class="matrix" id="matrix"></table></div></div>
+      </div>
+      <button class="eqToggle" id="eqBtn">Show equations</button>
+      <div class="equations" id="equations"></div>
+    </div>
+    <div class="choices" id="choices"></div>
+    <div class="feedback" id="feedback">The first lock waits.</div>
+  </div>
+  <div class="footer"><div class="dots" id="dots"></div><button class="reset" id="resetBtn">New</button></div>
+  <div class="endPanel" id="endPanel">
+    <div class="endCard">
+      <h2>Escaped.</h2>
+      <div class="score" id="score">000</div>
+      <div class="scoreGrid">
+        <div class="scoreBox"><span>Time</span><b id="endTime">0:00</b></div>
+        <div class="scoreBox"><span>Misses</span><b id="endMisses">0</b></div>
+        <div class="scoreBox"><span>Stars</span><b id="stars">★★★</b></div>
+      </div>
+      <div class="endNote" id="endNote">REF is enough: no contradiction row, and x, y, z each have a pivot.</div>
+      <div class="endBtns"><button class="reset" id="againBtn">New puzzle</button></div>
+    </div>
+  </div>
+</div>
+<script>class Frac{
+  constructor(n,d=1){
+    if(d===0) throw new Error('zero denominator');
+    if(d<0){n=-n;d=-d;}
+    const g=Frac.gcd(Math.abs(n),Math.abs(d));
+    this.n=n/g; this.d=d/g;
+  }
+  static gcd(a,b){while(b){const t=a%b;a=b;b=t;}return a||1;}
+  static of(x){return x instanceof Frac?x:new Frac(x,1)}
+  add(o){o=Frac.of(o);return new Frac(this.n*o.d+o.n*this.d,this.d*o.d)}
+  sub(o){o=Frac.of(o);return new Frac(this.n*o.d-o.n*this.d,this.d*o.d)}
+  mul(o){o=Frac.of(o);return new Frac(this.n*o.n,this.d*o.d)}
+  neg(){return new Frac(-this.n,this.d)}
+  inv(){if(this.n===0) throw new Error('zero reciprocal'); return new Frac(this.d,this.n)}
+  abs(){return new Frac(Math.abs(this.n),this.d)}
+  eq(o){o=Frac.of(o);return this.n===o.n&&this.d===o.d}
+  zero(){return this.n===0}
+  one(){return this.n===this.d}
+  text(){if(this.d===1)return String(this.n).replace('-', '−'); return (this.n<0?'−':'')+Math.abs(this.n)+'/'+this.d}
+  opText(){return this.text()}
+}
+const F=(n,d=1)=>new Frac(n,d);
+const ROWS=3;
+let nVars=3;
+let activeVars=['x','y','z'];
+const allVars=['x','y','z','w'];
+const ord=['first','second','third','fourth'];
+const colors=['#40b8ff','#ffd447','#9b78ff','#24d07a','#ff5aa5'];
+const smallCoef=[-2,-1,0,1,2];
+const smallConst=[-5,-4,-3,-2,-1,0,1,2,3,4,5];
+const signs=[-1,1];
+let startM=null, M=null, puzzleMeta=null, puzzleNo=0;
+let puzzleSeed=0, rngState=1, seedCounter=0;
+function reseedFromClock(){
+  // Date.now() is the date+time seed in milliseconds. The counter only prevents
+  // same-millisecond collisions if New is clicked extremely quickly.
+  seedCounter=(seedCounter+1)>>>0;
+  puzzleSeed=(Date.now() ^ Math.imul(seedCounter,0x9E3779B9))>>>0;
+  rngState=puzzleSeed || 0xA5A5A5A5;
+}
+function rng(){
+  // Mulberry32: tiny deterministic PRNG. Each puzzle gets a new clock seed.
+  rngState=(rngState+0x6D2B79F5)>>>0;
+  let t=rngState;
+  t=Math.imul(t^(t>>>15), t|1);
+  t^=t+Math.imul(t^(t>>>7), t|61);
+  return ((t^(t>>>14))>>>0)/4294967296;
+}
+let pivotRow=0, pivotCol=0, pivotChosen=false, variableDoorDone=false;
+let misses=0, started=null, tick=null, finalSeconds=0, solved=false, flashing=[], eqShown=false;
+const clone=M=>M.map(r=>r.map(x=>F(x.n,x.d)));
+function fracSig(x){return x.d===1?String(x.n):`${x.n}/${x.d}`}
+function puzzleSignature(A,spec){return `${spec.family}|${spec.outcome}|${spec.nVars}|${spec.pivotCols.join(',')}|`+A.map(row=>row.map(fracSig).join(',')).join(';')}
+function recentPuzzleSignatures(){try{return JSON.parse(sessionStorage.getItem('echelonEscapeRecent')||'[]')}catch(e){return []}}
+function seenRecently(sig){return recentPuzzleSignatures().includes(sig)}
+function rememberPuzzle(sig){try{const arr=[sig,...recentPuzzleSignatures().filter(s=>s!==sig)].slice(0,16); sessionStorage.setItem('echelonEscapeRecent',JSON.stringify(arr));}catch(e){}}
+function randInt(a,b){return a+Math.floor(rng()*(b-a+1))}
+function pick(a){return a[Math.floor(rng()*a.length)]}
+function choiceWeighted(pairs){
+  const sum=pairs.reduce((s,p)=>s+p[1],0); let r=rng()*sum;
+  for(const [v,w] of pairs){ if((r-=w)<=0) return v; }
+  return pairs[pairs.length-1][0];
+}
+function rawAdd(A,target,source,c){A[target]=A[target].map((x,j)=>x.add(A[source][j].mul(c)))}
+function rawSwap(A,a,b){[A[a],A[b]]=[A[b],A[a]]}
+function rawScale(A,row,c){A[row]=A[row].map(x=>x.mul(c))}
+function randomAfterPivot(row,pivot,n){
+  for(let j=pivot+1;j<n;j++) row[j]=F(pick(smallCoef));
+  row[n]=F(pick(smallConst));
+}
+function makeREF(spec){
+  const n=spec.nVars, last=n;
+  const A=Array.from({length:ROWS},()=>Array.from({length:n+1},()=>F(0)));
+  const rankRows=spec.pivotCols.length;
+  for(let r=0;r<rankRows;r++){
+    const p=spec.pivotCols[r];
+    A[r][p]=F(1);
+    randomAfterPivot(A[r],p,n);
+  }
+  if(spec.outcome==='none'){
+    const badRow=rankRows;
+    A[badRow][last]=F(pick([-3,-2,-1,1,2,3]));
+  }
+  return A;
+}
+function makeSpec(){
+  const family=choiceWeighted([['three',36],['four',34],['skipped',30]]);
+  if(family==='three'){
+    const outcome=choiceWeighted([['one',36],['inf',42],['none',22]]);
+    if(outcome==='one') return {family,outcome,nVars:3,pivotCols:[0,1,2]};
+    if(outcome==='inf') return {family,outcome,nVars:3,pivotCols:pick([[0,1],[0,2]])};
+    return {family,outcome,nVars:3,pivotCols:pick([[0,1],[0,2]])};
+  }
+  if(family==='four'){
+    const outcome=choiceWeighted([['inf',76],['none',24]]);
+    if(outcome==='inf'){
+      const pivots=choiceWeighted([[[0,1,2],40],[[0,1,3],18],[[0,2,3],18],[[0,1],16],[[1,2],8]]);
+      return {family,outcome,nVars:4,pivotCols:pivots};
+    }
+    return {family,outcome,nVars:4,pivotCols:pick([[0,1],[0,2],[1,2]])};
+  }
+  // Skipped-column puzzles: at least one variable column before the last pivot is free.
+  const n=pick([3,4]);
+  const outcome=choiceWeighted([['inf',72],['none',28]]);
+  if(n===3){
+    return {family,outcome,nVars:3,pivotCols:pick([[0,2],[1,2]])};
+  }
+  const pivots = outcome==='inf'
+    ? pick([[0,2],[0,3],[1,3],[0,2,3],[1,2,3]])
+    : pick([[0,2],[1,2],[0,3]]);
+  return {family,outcome,nVars:4,pivotCols:pivots};
+}
+function scaleRowsNonunit(A){
+  for(let r=0;r<ROWS;r++){
+    // Keep a visible contradiction row from becoming too large, but still non-unit.
+    const s=pick([-4,-3,-2,2,3,4]);
+    rawScale(A,r,F(s));
+  }
+}
+function scrambleTopNonzeroFromREF(R,spec){
+  const A=clone(R);
+  // Undo several elimination moves. This creates realistic-looking integer systems.
+  if(spec.pivotCols.includes(0)){
+    rawAdd(A,2,1,F(pick([-2,-1,1,2])));
+    rawAdd(A,1,0,F(pick([-2,-1,1,2])));
+    rawAdd(A,2,0,F(pick([-1,1])));
+    if(rng()<0.75) rawSwap(A,...pick([[0,1],[0,2],[1,2]]));
+  }else{
+    // If the x-column is truly absent, preserve that fact but scramble the rest.
+    rawAdd(A,2,1,F(pick([-2,-1,1,2])));
+    if(rng()<0.6) rawSwap(A,...pick([[0,1],[0,2],[1,2]]));
+  }
+  scaleRowsNonunit(A);
+  return A;
+}
+function scrambleTopZeroFromREF(R,spec){
+  const A=clone(R);
+  if(!spec.pivotCols.includes(0)) return scrambleTopNonzeroFromREF(R,spec);
+  // Keep one row with zero x-coefficient and move it to the top. Lower rows still
+  // contain nonzero x-coefficients, so the first lock is a real pivot-row search.
+  let zeroCandidate = 1;
+  if(spec.outcome!=='none' && rng()<0.5) zeroCandidate=2;
+  // Avoid putting an immediate contradiction row at the top in inconsistent puzzles.
+  if(spec.outcome==='none') zeroCandidate=1;
+  const other = zeroCandidate===1 ? 2 : 1;
+  rawAdd(A,other,0,F(pick([-2,-1,1,2])));
+  rawAdd(A,other,zeroCandidate,F(pick([-1,1])));
+  rawSwap(A,0,zeroCandidate);
+  // Mix using the new top row; this does not change the first-column entries below.
+  rawAdd(A,1,0,F(pick([-1,0,1])));
+  rawAdd(A,2,0,F(pick([-1,0,1])));
+  scaleRowsNonunit(A);
+  return A;
+}
+function scrambleFromREF(R,spec,wantZeroTop=false){
+  return wantZeroTop ? scrambleTopZeroFromREF(R,spec) : scrambleTopNonzeroFromREF(R,spec);
+}
+function contradictionRowAnyInMatrix(B){
+  const last=B[0].length-1;
+  for(let r=0;r<ROWS;r++){
+    const coeffZero=B[r].slice(0,last).every(x=>x.zero());
+    if(coeffZero && !B[r][last].zero()) return r;
+  }
+  return -1;
+}
+function contradictionRowAnyIn(B=M){return contradictionRowAnyInMatrix(B)}
+function firstColumnLooksNatural(A,spec,wantZeroTop=false){
+  const vals=A.map(row=>row[0]).filter(x=>!x.zero()).map(x=>Math.abs(x.n/x.d));
+  if(vals.length===0) return !spec.pivotCols.includes(0); // skipped x-column puzzle
+  if(!vals.every(v=>v!==1)) return false;
+  if(wantZeroTop) return A[0][0].zero() && A.slice(1).some(row=>!row[0].zero());
+  return true;
+}
+function matrixEntriesReasonable(A){
+  for(const row of A){
+    for(const x of row){
+      if(Math.abs(x.n)>72 || x.d>8) return false;
+    }
+  }
+  return true;
+}
+function pathLooksReasonable(A,spec){
+  // Follow all accepted game routes. Reject puzzles whose correct moves create
+  // already-open pivot locks or unpleasant fractions along any accepted route.
+  function reasonableMatrix(B){
+    for(const row of B) for(const x of row) if(Math.abs(x.n)>96 || x.d>8) return false;
+    return true;
+  }
+  function rec(B,pr,pc,pchosen,depth){
+    if(depth>24) return true;
+    if(!reasonableMatrix(B)) return false;
+    const cr=contradictionRowAnyInMatrix(B);
+    if(cr>=0) return true;
+    while(true){
+      if(pr>=ROWS || pc>=spec.nVars) return true;
+      const cands=[]; for(let r=pr;r<ROWS;r++) if(!B[r][pc].zero()) cands.push(r);
+      if(cands.length===0){ pc++; pchosen=false; continue; }
+      const currentOK=!B[pr][pc].zero();
+      const hasAlternative=cands.some(r=>r!==pr);
+      if(!pchosen && (!currentOK || hasAlternative)){
+        for(const k of cands){
+          const C=clone(B);
+          if(k!==pr) rawSwap(C,pr,k);
+          if(C[pr][pc].one()) return false;
+          if(!rec(C,pr,pc,true,depth+1)) return false;
+        }
+        return true;
+      }
+      if(!pchosen && B[pr][pc].one()) return false;
+      pchosen=true;
+      if(!B[pr][pc].one()){
+        const C=clone(B); rawScale(C,pr,B[pr][pc].inv());
+        return rec(C,pr,pc,true,depth+1);
+      }
+      const targets=[]; for(let r=pr+1;r<ROWS;r++) if(!B[r][pc].zero()) targets.push(r);
+      if(targets.length){
+        for(const t of targets){
+          const C=clone(B); rawAdd(C,t,pr,C[t][pc].neg());
+          if(!rec(C,pr,pc,true,depth+1)) return false;
+        }
+        return true;
+      }
+      pr++; pc++; pchosen=false;
+    }
+  }
+  return rec(clone(A),0,0,false,0);
+}
+function complexityOK(A,spec,wantZeroTop=false){
+  return matrixEntriesReasonable(A) && firstColumnLooksNatural(A,spec,wantZeroTop) && pathLooksReasonable(A,spec);
+}
+function generatePuzzle(){
+  for(let attempt=0; attempt<260; attempt++){
+    const spec=makeSpec();
+    const hasXPivot=spec.pivotCols.includes(0);
+    const wantZeroTop = hasXPivot && rng()<0.48;
+    const R=makeREF(spec);
+    const A=scrambleFromREF(R,spec,wantZeroTop);
+    if(complexityOK(A,spec,wantZeroTop)){
+      const sig=puzzleSignature(A,spec);
+      if(seenRecently(sig) && attempt<240) continue;
+      puzzleMeta=spec; nVars=spec.nVars; activeVars=allVars.slice(0,nVars); puzzleNo++;
+      rememberPuzzle(sig);
+      return A;
+    }
+  }
+  // Fallback: the textbook-style system, but with a zero in the upper-left corner.
+  puzzleMeta={family:'three',outcome:'one',nVars:3,pivotCols:[0,1,2]};
+  nVars=3; activeVars=allVars.slice(0,nVars); puzzleNo++;
+  const fallback=[[F(0),F(1),F(-1),F(4)],[F(2),F(0),F(6),F(4)],[F(3),F(2),F(2),F(-1)]];
+  rememberPuzzle(puzzleSignature(fallback,puzzleMeta));
+  return fallback;
+}
+function rname(i){return 'R'+sub(i+1)}
+function sub(n){return String(n).replace(/[1234]/g,m=>({'1':'₁','2':'₂','3':'₃','4':'₄'}[m]))}
+function termCoeff(c){const a=c.abs(); return a.one()?'':a.text();}
+function opScale(row,c){return {t:'scale',row,c,txt:`${rname(row)} ← ${c.opText()}${rname(row)}`}}
+function opSwap(a,b){return {t:'swap',a,b,txt:`${rname(a)} ↔ ${rname(b)}`}}
+function opKeep(row){return {t:'keep',row,txt:`${rname(row)} stays`}}
+function opAdd(target,source,c){
+  const sign=c.n<0?' − ':' + ';
+  const mag=c.abs();
+  const coeff=mag.one()?'':mag.opText();
+  return {t:'add',target,source,c,txt:`${rname(target)} ← ${rname(target)}${sign}${coeff}${rname(source)}`}
+}
+function apply(op){
+  if(op.t==='keep') flashing=[];
+  else if(op.t==='swap'){[M[op.a],M[op.b]]=[M[op.b],M[op.a]]; flashing=[op.a,op.b];}
+  else if(op.t==='scale'){M[op.row]=M[op.row].map(x=>x.mul(op.c)); flashing=[op.row];}
+  else if(op.t==='add'){M[op.target]=M[op.target].map((x,j)=>x.add(M[op.source][j].mul(op.c))); flashing=[op.target];}
+}
+function nonzeroRowsFrom(row,col){const a=[]; for(let r=row;r<ROWS;r++) if(!M[r][col].zero()) a.push(r); return a;}
+function belowNonzero(row,col){const a=[]; for(let r=row+1;r<ROWS;r++) if(!M[r][col].zero()) a.push(r); return a;}
+function computeTask(){
+  const visibleContradiction=contradictionRowAnyIn(M);
+  if(visibleContradiction>=0) return {kind:'solution',reason:'contradiction',row:visibleContradiction};
+  while(true){
+    if(pivotRow>=ROWS || pivotCol>=nVars){
+      if(!variableDoorDone) return {kind:'variables'};
+      return {kind:'solution'};
+    }
+    const candidates=nonzeroRowsFrom(pivotRow,pivotCol);
+    if(candidates.length===0){pivotCol++; pivotChosen=false; continue;}
+    const currentOK=!M[pivotRow][pivotCol].zero();
+    const hasAlternative=candidates.some(r=>r!==pivotRow);
+    if(!pivotChosen && (!currentOK || hasAlternative)) return {kind:'pivot',col:pivotCol,row:pivotRow,candidates};
+    pivotChosen=true;
+    if(M[pivotRow][pivotCol].zero()) return {kind:'pivot',col:pivotCol,row:pivotRow,candidates};
+    if(!M[pivotRow][pivotCol].one()) return {kind:'scale',col:pivotCol,row:pivotRow,pivot:M[pivotRow][pivotCol]};
+    const targets=belowNonzero(pivotRow,pivotCol);
+    if(targets.length) return {kind:'clear',col:pivotCol,row:pivotRow,targets};
+    pivotRow++; pivotCol++; pivotChosen=false;
+  }
+}
+function lockSvg(state){
+  if(state==='open') return `<svg class="lockSvg open" viewBox="0 0 44 52"><path class="lockShackle" d="M16 25v-7c0-8 5-13 13-13 3 0 6 1 8 3"/><rect class="lockBody" x="8" y="22" width="28" height="24" rx="7"/><circle class="lockHole" cx="22" cy="34" r="3.1"/><path class="lockHole" d="M20.8 36.4h2.4l1.2 5h-4.8z"/></svg>`;
+  return `<svg class="lockSvg ${state==='current'?'current':''}" viewBox="0 0 44 52"><path class="lockShackle" d="M14 23v-7C14 8 19 4 22 4s8 4 8 12v7"/><rect class="lockBody" x="8" y="22" width="28" height="24" rx="7"/><circle class="lockHole" cx="22" cy="34" r="3.1"/><path class="lockHole" d="M20.8 36.4h2.4l1.2 5h-4.8z"/></svg>`;
+}
+function roomInfo(task){
+  if(task.kind==='solution'){
+    const noPath=refSolutionCount()==='none';
+    return {name:noPath?'Exit · contradiction':'Exit · count the solutions',hint:`puzzle ${puzzleNo}`,icon:'?',color:colors[4]};
+  }
+  if(task.kind==='variables') return {name:'Variable vault',hint:'basic and free variables',icon:'B/F',color:'#24d07a'};
+  const v=activeVars[task.col];
+  return {name:`Room ${task.col+1} · ${v}-column`,hint:`${ord[task.col]} variable column`,icon:v,color:colors[task.col]||colors[0]};
+}
+function renderLocks(task){
+  if(task.kind==='solution'||task.kind==='variables'){
+    document.getElementById('lockTray').innerHTML=lockSvg('current'); return;
+  }
+  const seekOpen=!M[task.row][task.col].zero();
+  const scaleOpen=seekOpen && M[task.row][task.col].one();
+  const clearOpen=scaleOpen && belowNonzero(task.row,task.col).length===0;
+  const states=[
+    task.kind==='pivot'?'current':(seekOpen?'open':'closed'),
+    task.kind==='scale'?'current':(scaleOpen?'open':'closed'),
+    task.kind==='clear'?'current':(clearOpen?'open':'closed')
+  ];
+  document.getElementById('lockTray').innerHTML=states.map(lockSvg).join('');
+}
+function renderRoom(task){
+  const r=roomInfo(task);
+  document.documentElement.style.setProperty('--room',r.color);
+  document.getElementById('band').style.background=r.color;
+  document.getElementById('promptIcon').style.background=r.color;
+  document.getElementById('roomName').textContent=r.name;
+  document.getElementById('roomHint').textContent=r.hint;
+  document.getElementById('promptIcon').textContent=r.icon;
+  renderLocks(task);
+}
+function pivotColOfRow(row){for(let j=0;j<nVars;j++) if(!row[j].zero()) return j; return -1;}
+function cellClass(i,j,task){
+  const cr=contradictionRowAnyIn(M);
+  if(task.kind==='solution' && cr===i && j===nVars) return 'focus';
+  const p=pivotColOfRow(M[i]);
+  if(p>=0 && j===p && M[i][j].one()) return 'done';
+  if(task.kind==='variables'){
+    const basics=basicFree().basicIdx;
+    if(basics.includes(j)) return 'done';
+  }
+  if(task.kind!=='solution'&&task.kind!=='variables' && j===task.col && (i===task.row || (task.kind==='clear'&&task.targets.includes(i)))) return 'focus';
+  return '';
+}
+function renderMatrix(task){
+  const tbl=document.getElementById('matrix'); tbl.innerHTML='';
+  const coefW=nVars===4 ? 49 : 60;
+  const constW=nVars===4 ? 62 : 70;
+  const shell=document.querySelector('.matrixShell');
+  shell.style.setProperty('--coefw',coefW+'px');
+  shell.style.setProperty('--constw',constW+'px');
+  const aug=document.querySelector('.augLine');
+  aug.style.left=(10+coefW*nVars)+'px';
+  tbl.style.width=(coefW*nVars+constW)+'px';
+  const cg=document.createElement('colgroup');
+  for(let j=0;j<nVars+1;j++){
+    const col=document.createElement('col');
+    col.className=j===nVars?'constantCol':'coef';
+    cg.appendChild(col);
+  }
+  tbl.appendChild(cg);
+  M.forEach((row,i)=>{
+    const tr=document.createElement('tr'); if(flashing.includes(i)) tr.className='flash';
+    row.forEach((x,j)=>{
+      const td=document.createElement('td'); td.textContent=x.text(); if(j===nVars)td.classList.add('constant');
+      const cc=cellClass(i,j,task); if(cc)td.classList.add(cc); tr.appendChild(td);
+    });
+    tbl.appendChild(tr);
+  });
+  if(flashing.length){setTimeout(()=>{flashing=[]; renderAll();},510)}
+}
+function eqTerm(c,v,first){
+  if(c.zero()) return '';
+  const neg=c.n<0, coeff=termCoeff(c), body=coeff+v;
+  if(first) return neg?'−'+body:body;
+  return neg?' − '+body:' + '+body;
+}
+function rowEquation(row){
+  let left='';
+  for(let j=0;j<nVars;j++){const t=eqTerm(row[j],activeVars[j],left===''); if(t) left+=t;}
+  if(left==='') left='0';
+  return `${left} = ${row[nVars].text()}`;
+}
+function renderEquations(){
+  const el=document.getElementById('equations');
+  el.classList.toggle('show',eqShown);
+  document.getElementById('eqBtn').textContent=eqShown?'Hide equations':'Show equations';
+  el.innerHTML=`<div class="eqMuted">current system in ${activeVars.join(', ')}</div>`+M.map((row,i)=>`<div class="eqLine">${rname(i)}  ${rowEquation(row)}</div>`).join('');
+}
+function promptFor(task){
+  if(task.kind==='solution'){
+    if(refSolutionCount()==='none') return {text:'A false row is visible. How many solutions remain?', sub:'A row says 0 = nonzero; no scaling is needed.'};
+    return {text:'Now count the paths.', sub:'Use the free variables from the vault.'};
+  }
+  if(task.kind==='variables') return {text:'The staircase names its prisoners.', sub:'Pivots bind basic variables. Columns without pivots are free.'};
+  const v=activeVars[task.col], nth=ord[task.col];
+  if(task.kind==='pivot') return {text:`The ${v}-gate waits. Choose a row with ${v}.`, sub:`Any nonzero entry in the ${nth} variable column may guard the staircase.`};
+  if(task.kind==='scale') return {text:`The ${v}-guardian must wear a 1.`, sub:`Scale the pivot row in the ${nth} variable column.`};
+  if(task.kind==='clear') return {text:`A shadow lingers below the ${v}-torch.`, sub:`Clear below the pivot in the ${nth} variable column; do not clear above.`};
+}
+function renderPrompt(task){
+  const p=promptFor(task);
+  document.getElementById('promptText').textContent=p.text;
+  document.getElementById('promptSub').textContent=p.sub;
+}
+function sameOp(a,b){
+  if(a.t!==b.t) return false;
+  if(a.t==='keep') return a.row===b.row;
+  if(a.t==='swap') return (a.a===b.a&&a.b===b.b)||(a.a===b.b&&a.b===b.a);
+  if(a.t==='scale') return a.row===b.row&&a.c.eq(b.c);
+  if(a.t==='add') return a.target===b.target&&a.source===b.source&&a.c.eq(b.c);
+  return false;
+}
+function addUnique(arr,item){ if(!arr.some(x=>(x.op&&item.op&&sameOp(x.op,item.op))||x.txt===item.txt)) arr.push(item); }
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(rng()*(i+1)); [a[i],a[j]]=[a[j],a[i]];} return a;}
+function basicFree(){
+  const basicIdx=[];
+  for(const row of M){const p=pivotColOfRow(row); if(p>=0 && !basicIdx.includes(p)) basicIdx.push(p);}
+  const freeIdx=[]; for(let j=0;j<nVars;j++) if(!basicIdx.includes(j)) freeIdx.push(j);
+  return {basicIdx, freeIdx, basic:basicIdx.map(j=>activeVars[j]), free:freeIdx.map(j=>activeVars[j])};
+}
+function fmtVarList(arr){return arr.length?arr.join(', '):'none'}
+function varChoiceText(basicIdx,freeIdx){return `B: ${fmtVarList(basicIdx.map(j=>activeVars[j]))}\nF: ${fmtVarList(freeIdx.map(j=>activeVars[j]))}`}
+function sameIdxSet(a,b){return a.length===b.length && a.every(x=>b.includes(x))}
+function normalizeIdx(a){return [...new Set(a)].filter(j=>j>=0&&j<nVars).sort((x,y)=>x-y)}
+function variableChoices(){
+  const bf=basicFree();
+  const correct={txt:varChoiceText(bf.basicIdx,bf.freeIdx),basicIdx:bf.basicIdx,freeIdx:bf.freeIdx,correct:true};
+  const opts=[correct];
+  function add(basic){
+    basic=normalizeIdx(basic); const free=[]; for(let j=0;j<nVars;j++) if(!basic.includes(j)) free.push(j);
+    if(sameIdxSet(basic,bf.basicIdx)) return;
+    const txt=varChoiceText(basic,free);
+    if(!opts.some(o=>o.txt===txt)) opts.push({txt,basicIdx:basic,freeIdx:free});
+  }
+  // Tempting traps.
+  add([...Array(nVars).keys()]);                    // everything basic
+  add([...Array(bf.basicIdx.length).keys()]);       // assumes pivots are the first k columns
+  if(bf.freeIdx.length){ add([...bf.basicIdx, bf.freeIdx[0]].filter((_,i,a)=>i<a.length-1)); }
+  if(bf.basicIdx.length && bf.freeIdx.length){
+    const b=bf.basicIdx.slice(); b.pop(); b.push(bf.freeIdx[0]); add(b);
+  }
+  if(nVars===4) add([0,1,2]);                       // common 4-variable trap: w free only
+  add([]);                                         // everything free
+  return shuffle(opts).slice(0,5);
+}
+function choiceSet(task){
+  if(task.kind==='solution') return shuffle([
+    {txt:'No solutions',answer:'none'},
+    {txt:'Exactly one',answer:'one'},
+    {txt:'Infinitely many',answer:'inf'},
+    {txt:'Not enough info',answer:'unknown'}
+  ]);
+  if(task.kind==='variables') return variableChoices();
+  const good=[]; const wrong=[];
+  const r=task.row, c=task.col;
+  if(task.kind==='pivot'){
+    task.candidates.forEach(k=>{
+      const op=k===r?opKeep(r):opSwap(r,k);
+      good.push({txt:op.txt,op,correct:true});
+    });
+    for(let a=0;a<ROWS;a++) for(let b=a+1;b<ROWS;b++) if(!(a===r&&task.candidates.includes(b)) && !(b===r&&task.candidates.includes(a))) addUnique(wrong,{txt:opSwap(a,b).txt,op:opSwap(a,b)});
+    addUnique(wrong,{txt:opScale(r,F(2)).txt,op:opScale(r,F(2))});
+    addUnique(wrong,{txt:opScale((r+1)%ROWS,F(1,2)).txt,op:opScale((r+1)%ROWS,F(1,2))});
+    addUnique(wrong,{txt:opAdd(r,(r+1)%ROWS,F(1)).txt,op:opAdd(r,(r+1)%ROWS,F(1))});
+  }
+  if(task.kind==='scale'){
+    const corr=opScale(r,task.pivot.inv()); good.push({txt:corr.txt,op:corr,correct:true});
+    addUnique(wrong,{txt:opScale(r,task.pivot).txt,op:opScale(r,task.pivot)});
+    addUnique(wrong,{txt:opScale(r,task.pivot.neg()).txt,op:opScale(r,task.pivot.neg())});
+    addUnique(wrong,{txt:opScale(r,F(0)).txt,op:opScale(r,F(0)),bad:'zero'});
+    addUnique(wrong,{txt:opScale(Math.min(r+1,ROWS-1),task.pivot.inv()).txt,op:opScale(Math.min(r+1,ROWS-1),task.pivot.inv())});
+    if(r>0) addUnique(wrong,{txt:opScale(r-1,task.pivot.inv()).txt,op:opScale(r-1,task.pivot.inv())});
+    if(c>=1){ addUnique(wrong,{txt:opAdd(0,r,M[0][c].neg()).txt,op:opAdd(0,r,M[0][c].neg()),bad:'rref'}); }
+  }
+  if(task.kind==='clear'){
+    task.targets.forEach(t=>{const op=opAdd(t,r,M[t][c].neg()); good.push({txt:op.txt,op,correct:true});});
+    task.targets.forEach(t=>{
+      addUnique(wrong,{txt:opAdd(t,r,M[t][c]).txt,op:opAdd(t,r,M[t][c])});
+      addUnique(wrong,{txt:opAdd(r,t,M[t][c].neg()).txt,op:opAdd(r,t,M[t][c].neg())});
+      addUnique(wrong,{txt:opAdd(t,r,F(-1)).txt,op:opAdd(t,r,F(-1))});
+    });
+    if(r>0) addUnique(wrong,{txt:opAdd(r-1,r,M[r-1][c].neg()).txt,op:opAdd(r-1,r,M[r-1][c].neg()),bad:'above'});
+    addUnique(wrong,{txt:opSwap(r,Math.min(r+1,ROWS-1)).txt,op:opSwap(r,Math.min(r+1,ROWS-1))});
+  }
+  const filteredWrong=shuffle(wrong.filter(w=>!good.some(g=>sameOp(g.op,w.op)||g.txt===w.txt)));
+  const all=shuffle([...good, ...filteredWrong.slice(0, Math.max(0,6-good.length))]);
+  return all.slice(0,6);
+}
+function renderChoices(task){
+  const el=document.getElementById('choices');
+  const choices=choiceSet(task);
+  el.innerHTML=choices.map((ch,i)=>`<button class="choice ${task.kind==='variables'?'varChoice':''}" data-i="${i}">${ch.txt}</button>`).join('');
+  [...el.querySelectorAll('.choice')].forEach((btn,i)=>btn.addEventListener('click',()=>choose(choices[i],btn)));
+}
+function renderDots(task){
+  const count=5; let idx=0;
+  if(task.kind==='variables') idx=3;
+  else if(task.kind==='solution') idx=4;
+  else idx=Math.min(task.col,2);
+  if(solved) idx=5;
+  let html=''; for(let i=0;i<count;i++) html+=`<span class="dot ${i<idx?'done':i===idx?'now':''}"></span>`;
+  document.getElementById('dots').innerHTML=html;
+}
+function updateStats(){document.getElementById('timer').textContent=fmt(finalSeconds||elapsed()); document.getElementById('errors').textContent=misses===1?'1 miss':`${misses} misses`;}
+function renderAll(){const task=computeTask(); renderRoom(task); renderPrompt(task); renderMatrix(task); renderEquations(); renderChoices(task); renderDots(task); updateStats();}
+function startTimer(){if(started!==null)return; started=Date.now(); tick=setInterval(updateStats,300)}
+function elapsed(){return started===null?0:Math.floor((Date.now()-started)/1000)}
+function fmt(s){return `${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`}
+function refSolutionCount(){
+  let pivots=0, bad=false;
+  for(const row of M){
+    const allCoeff=row.slice(0,nVars).every(x=>x.zero());
+    if(allCoeff && !row[nVars].zero()) bad=true;
+    if(!allCoeff) pivots++;
+  }
+  if(bad) return 'none';
+  return pivots===nVars?'one':'inf';
+}
+function solutionNote(){
+  const ans=refSolutionCount();
+  if(ans==='none') return 'A row says 0 = nonzero. No scaling to 1 was needed: no solutions survive.';
+  const bf=basicFree();
+  if(ans==='one') return `Basic: ${fmtVarList(bf.basic)}. Free: none. Every variable column has a pivot.`;
+  return `Basic: ${fmtVarList(bf.basic)}. Free: ${fmtVarList(bf.free)}. A free variable gives infinitely many solutions.`;
+}
+function choose(ch,btn){
+  startTimer(); const task=computeTask();
+  if(task.kind==='solution'){
+    if(ch.answer===refSolutionCount()){
+      btn.classList.add('correct'); document.getElementById('feedback').className='feedback good'; document.getElementById('feedback').textContent='The last door opens.'; solved=true; finish();
+    }else{
+      misses++; btn.classList.add('wrong'); document.getElementById('feedback').className='feedback bad'; document.getElementById('feedback').textContent='That door stays shut.'; updateStats(); setTimeout(()=>btn.classList.remove('wrong'),320);
+    }
+    return;
+  }
+  if(task.kind==='variables'){
+    const bf=basicFree();
+    if(ch.correct || (sameIdxSet(ch.basicIdx,bf.basicIdx)&&sameIdxSet(ch.freeIdx,bf.freeIdx))){
+      btn.classList.add('correct'); variableDoorDone=true; document.getElementById('feedback').className='feedback good'; document.getElementById('feedback').textContent='The variable vault opens.'; setTimeout(renderAll,190);
+    }else{
+      misses++; btn.classList.add('wrong'); document.getElementById('feedback').className='feedback bad'; document.getElementById('feedback').textContent='Pivots bind variables; missing pivot columns are free.'; updateStats(); setTimeout(()=>btn.classList.remove('wrong'),320);
+    }
+    return;
+  }
+  if(ch.correct){
+    btn.classList.add('correct');
+    if(task.kind==='pivot') pivotChosen=true;
+    apply(ch.op);
+    const msg=contradictionRowAnyIn(M)>=0?'A false row appears.':goodText(task);
+    document.getElementById('feedback').className='feedback good'; document.getElementById('feedback').textContent=msg; setTimeout(renderAll,170);
+  }else{
+    misses++; btn.classList.add('wrong'); document.getElementById('feedback').className='feedback bad'; document.getElementById('feedback').textContent=badText(ch,task); updateStats(); setTimeout(()=>btn.classList.remove('wrong'),320);
+  }
+}
+function goodText(task){
+  if(task.kind==='pivot') return 'A pivot row rises.';
+  if(task.kind==='scale') return 'The pivot becomes 1.';
+  if(task.kind==='clear') return 'The shadow vanishes.';
+  return 'Good.';
+}
+function badText(ch,task){
+  if(ch.bad==='zero') return 'A zero key erases the row.';
+  if(ch.bad==='rref'||ch.bad==='above') return 'Too far. This room wants REF, not RREF.';
+  if(task.kind==='pivot') return 'The gate needs a row with a nonzero entry.';
+  if(task.kind==='scale') return 'The pivot must become exactly 1.';
+  if(task.kind==='clear') return 'Clear below the pivot, not somewhere else.';
+  return 'That key does not fit.';
+}
+function finish(){
+  if(tick)clearInterval(tick); finalSeconds=elapsed(); solved=true; renderDots({kind:'solution'});
+  const difficulty=(nVars===4?60:0)+(puzzleMeta.family==='skipped'?70:0)+(refSolutionCount()==='none'?30:0);
+  const score=Math.max(0,Math.min(1200,1000+difficulty-8*finalSeconds-85*misses));
+  const stars=score>=950?'★★★':score>=750?'★★☆':score>=520?'★☆☆':'☆☆☆';
+  document.getElementById('score').textContent=String(score).padStart(3,'0');
+  document.getElementById('endTime').textContent=fmt(finalSeconds);
+  document.getElementById('endMisses').textContent=misses;
+  document.getElementById('stars').textContent=stars;
+  document.getElementById('endNote').textContent=solutionNote();
+  setTimeout(()=>document.getElementById('endPanel').classList.add('show'),520);
+}
+function reset(){
+  reseedFromClock();
+  startM=generatePuzzle(); M=clone(startM); pivotRow=0; pivotCol=0; pivotChosen=false; variableDoorDone=false; misses=0; started=null; finalSeconds=0; solved=false; flashing=[];
+  if(tick)clearInterval(tick); tick=null;
+  document.getElementById('feedback').className='feedback'; document.getElementById('feedback').textContent='The first lock waits.';
+  document.getElementById('resetBtn').title='Current seed: '+puzzleSeed;
+  document.getElementById('againBtn').title='Current seed: '+puzzleSeed;
+  document.getElementById('endPanel').classList.remove('show'); renderAll();
+}
+document.getElementById('eqBtn').addEventListener('click',()=>{eqShown=!eqShown; renderEquations();});
+document.getElementById('resetBtn').addEventListener('click',reset);
+document.getElementById('againBtn').addEventListener('click',reset);
+reset();
+</script>
+</body>
+</html>

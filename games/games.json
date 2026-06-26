@@ -1,0 +1,52 @@
+{
+  "games": [
+    {
+      "title": "MatriX Match",
+      "slug": "MatriXMatch",
+      "href": "MatriXMatch/",
+      "image": "matrix-match-small.jpg"
+    },
+    {
+      "title": "Matrix Dominoes",
+      "slug": "MatrixDominoes",
+      "href": "MatrixDominoes/",
+      "image": "matrix-dominoes-small.jpg"
+    },
+    {
+      "title": "Order Matters!",
+      "slug": "OrderMatters",
+      "href": "OrderMatters/",
+      "image": "order-matters-small.jpg"
+    },
+    {
+      "title": "Echelon Escape",
+      "slug": "EchelonEscape",
+      "href": "EchelonEscape/",
+      "image": "echelon-escape-small.jpg"
+    },
+    {
+      "title": "Null & Order",
+      "slug": "NullAndOrder",
+      "href": "NullAndOrder/",
+      "image": "null-and-order-small.jpg"
+    },
+    {
+      "title": "Differential Diagnosis",
+      "slug": "DifferentialDiagnosis",
+      "href": "DifferentialDiagnosis/",
+      "image": "differential-diagnosis-small.jpg"
+    },
+    {
+      "title": "Unlocking Gram-Schmidt",
+      "slug": "UnlockingGramSchmidt",
+      "href": "UnlockingGramSchmidt/",
+      "image": "unlocking-gram-schmidt-small.jpg"
+    },
+    {
+      "title": "Extreme Quest",
+      "slug": "ExtremeQuest",
+      "href": "ExtremeQuest/",
+      "image": "extreme-quest-small.jpg"
+    }
+  ]
+}

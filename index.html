@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="data:,">
+  <title>MATH 345 Course Materials</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #18202f;
+      --muted: #5c6676;
+      --line: #d8dde6;
+      --paper: #ffffff;
+      --wash: #f5f7fa;
+      --accent: #146b83;
+      --accent-strong: #0c4f63;
+      --focus: #b63f2f;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: linear-gradient(180deg, #f8fafc 0%, #ffffff 32rem);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.5;
+    }
+
+    main {
+      width: min(52rem, calc(100% - 2rem));
+      margin: 0 auto;
+      padding: 2.75rem 0 3rem;
+    }
+
+    h1 {
+      margin: 0 0 0.65rem;
+      font-size: clamp(2.15rem, 6vw, 4.4rem);
+      line-height: 0.98;
+      letter-spacing: 0;
+    }
+
+    .lede {
+      max-width: 38rem;
+      margin: 0 0 1.75rem;
+      color: var(--muted);
+      font-size: clamp(1rem, 2vw, 1.15rem);
+    }
+
+    .links {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+      gap: 1rem;
+    }
+
+    a {
+      display: grid;
+      gap: 0.35rem;
+      min-height: 8rem;
+      padding: 1rem;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      color: inherit;
+      background: var(--paper);
+      box-shadow: 0 10px 28px rgba(24, 32, 47, 0.07);
+      text-decoration: none;
+      transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+    }
+
+    a:hover {
+      border-color: var(--accent);
+      box-shadow: 0 14px 34px rgba(24, 32, 47, 0.12);
+      transform: translateY(-2px);
+    }
+
+    a:focus-visible {
+      border-color: var(--focus);
+      outline: 3px solid color-mix(in srgb, var(--focus) 36%, transparent);
+      outline-offset: 3px;
+    }
+
+    strong {
+      color: var(--accent-strong);
+      font-size: 1.2rem;
+    }
+
+    span {
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>MATH 345 Course Materials</h1>
+    <p class="lede">Public course materials for linear algebra, multivariable calculus, and optimization.</p>
+    <div class="links">
+      <a href="games/">
+        <strong>Games</strong>
+        <span>Interactive linear algebra and optimization games.</span>
+      </a>
+      <a href="labs/">
+        <strong>Lab notebooks</strong>
+        <span>Guided Python notebooks with downloadable and readable views.</span>
+      </a>
+    </div>
+  </main>
+</body>
+</html>

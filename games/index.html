@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-060RZGCFFW"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-060RZGCFFW');
+</script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="data:,">
+  <title>Linear Algebra &amp; Optimization Games</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #18202f;
+      --muted: #5c6676;
+      --line: #d8dde6;
+      --paper: #ffffff;
+      --wash: #f5f7fa;
+      --accent: #146b83;
+      --accent-strong: #0c4f63;
+      --focus: #b63f2f;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        linear-gradient(180deg, #f8fafc 0%, #ffffff 32rem);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.5;
+    }
+
+    main {
+      width: min(72rem, calc(100% - 2rem));
+      margin: 0 auto;
+      padding: 2rem 0 3rem;
+    }
+
+    .masthead {
+      display: grid;
+      gap: 0.65rem;
+      max-width: 48rem;
+      margin-bottom: 1.75rem;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.15rem, 6vw, 4.4rem);
+      line-height: 0.98;
+      letter-spacing: 0;
+    }
+
+    .lede {
+      max-width: 42rem;
+      margin: 0;
+      color: var(--muted);
+      font-size: clamp(1rem, 2vw, 1.15rem);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+      gap: 1rem;
+      padding: 0;
+      margin: 0;
+      list-style: none;
+    }
+
+    .game-link {
+      display: grid;
+      grid-template-rows: auto 1fr;
+      min-height: 100%;
+      color: inherit;
+      text-decoration: none;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper);
+      overflow: hidden;
+      box-shadow: 0 10px 28px rgba(24, 32, 47, 0.07);
+      transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+    }
+
+    .game-link:focus-visible {
+      border-color: var(--focus);
+      outline: 3px solid color-mix(in srgb, var(--focus) 36%, transparent);
+      outline-offset: 3px;
+    }
+
+    .game-link:hover {
+      border-color: var(--accent);
+      box-shadow: 0 14px 34px rgba(24, 32, 47, 0.12);
+      transform: translateY(-2px);
+    }
+
+    .thumb {
+      aspect-ratio: 1 / 1;
+      width: 100%;
+      height: auto;
+      background: var(--wash);
+      object-fit: cover;
+      display: block;
+    }
+
+    .game-body {
+      display: grid;
+      align-content: center;
+      min-height: 6.25rem;
+      padding: 0.9rem 1rem 1rem;
+    }
+
+    .game-topic {
+      color: var(--muted);
+      font-size: 0.93rem;
+    }
+
+    @media (min-width: 54rem) {
+      main {
+        padding-top: 2.75rem;
+      }
+
+      .grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header class="masthead">
+      <h1>Linear Algebra &amp; Optimization Games</h1>
+      <p class="lede">Interactive puzzles for linear algebra, multivariable calculus, and optimization. Read the <a href="https://sebroc.github.io/MATH345-Textbook/">textbook</a>.</p>
+    </header>
+
+    <ul class="grid" aria-label="Puzzle games">
+      <li>
+        <a class="game-link" href="MatriXMatch/" aria-label="Open MatriX Match">
+          <img class="thumb" src="MatriXMatch/matrix-match-small.jpg" alt="Illustrated card for MatriX Match" width="1254" height="1254">
+          <span class="game-body">
+            <span class="game-topic">Skills: matrix product, matrix shape</span>
+          </span>
+        </a>
+      </li>
+      <li>
+        <a class="game-link" href="MatrixDominoes/" aria-label="Open Matrix Dominoes">
+          <img class="thumb" src="MatrixDominoes/matrix-dominoes-small.jpg" alt="Illustrated card for Matrix Dominoes" width="1254" height="1254">
+          <span class="game-body">
+            <span class="game-topic">Skills: transposes</span>
+          </span>
+        </a>
+      </li>
+      <li>
+        <a class="game-link" href="OrderMatters/" aria-label="Open Order Matters">
+          <img class="thumb" src="OrderMatters/order-matters-small.jpg" alt="Illustrated card for Order Matters" width="1254" height="1254">
+          <span class="game-body">
+            <span class="game-topic">Skills: geometric transformation, composition, non-commutativity</span>
+          </span>
+        </a>
+      </li>
+      <li>
+        <a class="game-link" href="EchelonEscape/" aria-label="Open Echelon Escape">
+          <img class="thumb" src="EchelonEscape/echelon-escape-small.jpg" alt="Illustrated card for Echelon Escape" width="1254" height="1254">
+          <span class="game-body">
+            <span class="game-topic">Skills: row operations, REF, linear system, counting solutions</span>
+          </span>
+        </a>
+      </li>
+      <li>
+        <a class="game-link" href="NullAndOrder/" aria-label="Open Null and Order">
+          <img class="thumb" src="NullAndOrder/null-and-order-small.jpg" alt="Illustrated card for Null and Order" width="1254" height="1254">
+          <span class="game-body">
+            <span class="game-topic">Skills: null space, column space, linear independence, rank, nullity</span>
+          </span>
+        </a>
+      </li>
+      <li>
+        <a class="game-link" href="DifferentialDiagnosis/" aria-label="Open Differential Diagnosis">
+          <img class="thumb" src="DifferentialDiagnosis/differential-diagnosis-small.jpg" alt="Illustrated card for Differential Diagnosis" width="1254" height="1254">
+          <span class="game-body">
+            <span class="game-topic">Skills: partial derivatives, gradients, Jacobian matrices, linear approximations</span>
+          </span>
+        </a>
+      </li>
+      <li>
+        <a class="game-link" href="UnlockingGramSchmidt/" aria-label="Open Unlocking Gram-Schmidt">
+          <img class="thumb" src="UnlockingGramSchmidt/unlocking-gram-schmidt-small.jpg" alt="Illustrated card for Unlocking Gram-Schmidt" width="1254" height="1254">
+          <span class="game-body">
+            <span class="game-topic">Skills: inner product, orthogonality, projection, Gram-Schmidt, QR</span>
+          </span>
+        </a>
+      </li>
+      <li>
+        <a class="game-link" href="ExtremeQuest/" aria-label="Open Extreme Quest">
+          <img class="thumb" src="ExtremeQuest/extreme-quest-small.jpg" alt="Illustrated card for Extreme Quest" width="1254" height="1254">
+          <span class="game-body">
+            <span class="game-topic">Skills: critical points, absolute extrema</span>
+          </span>
+        </a>
+      </li>
+    </ul>
+  </main>
+</body>
+</html>

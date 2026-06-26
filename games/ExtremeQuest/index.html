@@ -1,0 +1,839 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-060RZGCFFW"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-060RZGCFFW');
+</script>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Extreme quest — candidate collector</title>
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+<script>
+window.MathJax = {
+  startup: { typeset: false },
+  tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[','\\]']], processEscapes: true },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<style>
+:root{
+  --ink:#2a2015;
+  --muted:#6d5a3b;
+  --line:#5a3d22;
+  --line2:#2f2116;
+  --paper:#fff4cf;
+  --card:#fff8df;
+  --card2:#f6e2a3;
+  --header1:#2b6d3d;
+  --header2:#77a84d;
+  --header3:#b87735;
+  --grass:#76b852;
+  --grass2:#a6d96a;
+  --grass3:#4d8a3f;
+  --path:#c88b46;
+  --path2:#efc779;
+  --pathEdge:#80542e;
+  --stone:#dac58c;
+  --stone2:#9e8050;
+  --roof:#8d4a32;
+  --water:#80c6d4;
+  --gold:#f7c948;
+  --good:#2f8e44;
+  --bad:#b83b2b;
+  --shadow:0 20px 52px rgba(62,39,14,.23);
+  --pathW:30%;
+}
+*{box-sizing:border-box}
+[hidden]{display:none !important}
+html,body{min-height:100%}
+body{
+  margin:0;
+  color:var(--ink);
+  font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background:
+    radial-gradient(circle at 8% 11%, rgba(255,221,122,.48) 0 6.7rem, transparent 6.9rem),
+    radial-gradient(circle at 92% 15%, rgba(141,198,127,.38) 0 7rem, transparent 7.25rem),
+    radial-gradient(circle at 16% 92%, rgba(128,198,212,.30) 0 7.5rem, transparent 7.8rem),
+    linear-gradient(135deg,#f0d595 0%,#fff6d8 48%,#d9e8bb 100%);
+  display:grid;
+  place-items:start center;
+  padding:14px 10px 34px;
+}
+button{font:inherit;cursor:pointer;border:0;user-select:none;-webkit-tap-highlight-color:transparent}
+.app{
+  width:min(1120px,100%);
+  background:rgba(255,248,219,.98);
+  border:3px solid var(--line);
+  border-radius:24px;
+  overflow:hidden;
+  box-shadow:var(--shadow), inset 0 0 0 2px rgba(255,255,255,.48);
+}
+.top{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:14px 18px;
+  align-items:start;
+  padding:16px 18px 13px;
+  color:#fff5c8;
+  background:
+    radial-gradient(circle at 14% 18%,rgba(255,243,182,.33),transparent 35%),
+    linear-gradient(135deg,var(--header1) 0%,var(--header2) 58%,var(--header3) 100%);
+  border-bottom:3px solid var(--line);
+}
+h1{
+  margin:0;
+  font-size:clamp(32px,5vw,55px);
+  line-height:.92;
+  letter-spacing:-.065em;
+  font-weight:1000;
+  text-shadow:0 2px 0 rgba(0,0,0,.22);
+  white-space:nowrap;
+}
+.subtitle{margin:8px 0 0;color:#fff7d2;font-size:14px;font-weight:850;line-height:1.25;max-width:720px;text-shadow:0 1px 0 rgba(0,0,0,.12)}
+.hud{display:grid;gap:8px;justify-items:end}
+.statRow,.topActions{display:flex;gap:8px;align-items:center;justify-content:flex-end;flex-wrap:wrap}
+.pill{
+  min-width:86px;
+  background:rgba(255,248,219,.34);
+  border:2px solid rgba(84,55,28,.62);
+  border-radius:17px;
+  padding:7px 10px 8px;
+  text-align:center;
+  color:#fff9d7;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.25);
+}
+.pill b{display:block;font-size:21px;line-height:1;font-weight:1000;font-variant-numeric:tabular-nums}
+.pill span{display:block;margin-top:4px;font-size:10px;text-transform:uppercase;letter-spacing:.08em;font-weight:950;color:#fff2b7}
+.topBtn,.ghostBtn,.actionBtn,.bigBtn,.selectBtn{
+  border:2px solid var(--line);
+  color:var(--ink);
+  font-weight:1000;
+  box-shadow:0 3px 0 var(--line);
+}
+.topBtn{height:35px;border-radius:999px;padding:0 14px;background:#fff8db;color:#3b2916}
+.topBtn:hover,.ghostBtn:hover,.actionBtn:hover,.bigBtn:hover,.selectBtn:hover{transform:translateY(-1px)}
+.topBtn:active,.ghostBtn:active,.actionBtn:active,.bigBtn:active,.selectBtn:active{transform:translateY(2px);box-shadow:0 1px 0 var(--line)}
+.funcbar{
+  padding:16px 18px 15px;
+  background:
+    radial-gradient(circle at 12% 22%,rgba(255,255,255,.36),transparent 34%),
+    linear-gradient(135deg,#ffe7a4 0%,#fff7dd 54%,#e2efbd 100%);
+  border-bottom:3px solid var(--line);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+}
+.func{font-weight:950;letter-spacing:-.02em;line-height:1.22;color:#3b2814;text-shadow:0 1px 0 rgba(255,255,255,.58)}
+.objectiveLine{font-size:clamp(18px,2.5vw,30px)}
+.domainLine{font-size:clamp(15px,1.9vw,21px);margin-top:6px;color:#6b4a27;font-weight:900;letter-spacing:-.01em}
+.funcLabel{font-size:.58em;text-transform:uppercase;letter-spacing:.08em;color:#80623a;margin-right:.25em;vertical-align:.08em}
+.screen{padding:18px;min-height:540px}
+.card{
+  background:var(--card);
+  border:2px solid var(--line);
+  border-radius:21px;
+  box-shadow:0 4px 0 var(--line);
+  padding:16px;
+}
+.card h2,.screen h2{margin:0 0 8px;font-size:26px;letter-spacing:-.045em;line-height:1;color:#382413}
+.card p{color:var(--muted);font-weight:780;line-height:1.38;margin:8px 0}
+.bigBtn{border-radius:17px;padding:13px 18px;background:linear-gradient(135deg,#d9772a,#b94625);color:#fff7d6;font-size:16px}
+.ghostBtn,.actionBtn{border-radius:15px;padding:11px 13px;background:#fffaf0;color:#3b2916;text-align:left}
+.actionBtn{min-height:54px;line-height:1.22}
+.actionBtn.correct{background:linear-gradient(135deg,#fffaf0,#f2f7cf)}
+
+.runeGrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:13px}
+.runeCard{
+  min-height:118px;
+  border:2px solid var(--line);
+  border-radius:20px;
+  padding:11px 10px 12px;
+  background:
+    radial-gradient(circle at 14% 16%,rgba(255,255,255,.42),transparent 27%),
+    linear-gradient(145deg,#fff8d9,#e9d28f 52%,#c59a58);
+  color:#2e2115;
+  box-shadow:0 4px 0 var(--line), inset 0 0 0 2px rgba(255,255,255,.24);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-start;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+}
+.runeCard::before{content:"";position:absolute;inset:7px;border:1.5px dashed rgba(90,61,33,.38);border-radius:15px;pointer-events:none}
+.runeCard::after{content:"✦";position:absolute;right:10px;top:8px;color:rgba(90,61,33,.55);font-size:15px;font-weight:1000}
+.runeCard:hover{transform:translateY(-1px);filter:saturate(1.04) brightness(1.02)}
+.runeCard:active{transform:translateY(2px);box-shadow:0 1px 0 var(--line)}
+.runeCard.innerRune{background:radial-gradient(circle at 14% 16%,rgba(255,255,255,.42),transparent 27%),linear-gradient(145deg,#fff8d9,#dfe9a0 56%,#99b765)}
+.runeCard.edgeRune{background:radial-gradient(circle at 14% 16%,rgba(255,255,255,.42),transparent 27%),linear-gradient(145deg,#fff8d9,#edc674 54%,#be8142)}
+.runeCard.cornerRune{background:radial-gradient(circle at 14% 16%,rgba(255,255,255,.42),transparent 27%),linear-gradient(145deg,#fff8d9,#e6cf93 54%,#a98654)}
+.runeCard.trapRune{background:radial-gradient(circle at 14% 16%,rgba(255,255,255,.36),transparent 27%),linear-gradient(145deg,#fff5d0,#dec384 52%,#9f7951)}
+.runeVerb{
+  position:relative;z-index:1;display:inline-flex;align-items:center;justify-content:center;
+  min-width:76px;min-height:25px;padding:3px 11px 4px;border-radius:999px;
+  background:#3b2916;color:#fff8d8;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:1000;
+  box-shadow:0 2px 0 rgba(0,0,0,.20);
+}
+.runeMath{
+  position:relative;z-index:1;flex:1;width:100%;min-height:66px;margin:12px 0 0;padding:8px 8px;
+  display:flex;align-items:center;justify-content:center;border-radius:14px;
+  background:rgba(255,250,232,.62);border:1px solid rgba(90,61,33,.28);
+  font-weight:1000;color:#2d2418;line-height:1.22;overflow:hidden;
+}
+.runeMath .mj,.runeMath mjx-container{max-width:100%;overflow:visible}
+.pickGrid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}
+.pickBtn{border:2px solid var(--line);border-radius:15px;padding:12px 13px;background:#fffaf0;color:#3b2916;text-align:left;font-weight:1000;box-shadow:0 3px 0 var(--line)}
+.pickBtn:hover{transform:translateY(-1px)}
+.crownPickCard{cursor:pointer;transition:transform .08s ease, background .12s ease, box-shadow .12s ease}
+.crownPickCard:hover{transform:translateY(-1px);background:#fff3c4}
+.crownPickCard.maxPick{background:#ffe17a;box-shadow:0 0 0 4px rgba(247,201,72,.35),0 2px 0 var(--line)}
+.crownPickCard.minPick{background:#c7edf5;box-shadow:0 0 0 4px rgba(128,198,212,.38),0 2px 0 var(--line)}
+@media(max-width:860px){.runeGrid{grid-template-columns:1fr}.runeCard{min-height:106px}.runeMath{min-height:58px}.pickGrid{grid-template-columns:1fr}}
+
+.footerActions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}.footerActions.center{justify-content:center}
+.start{display:grid;grid-template-columns:minmax(0,1fr) minmax(330px,430px);gap:18px;align-items:stretch}
+/* continuous map */
+.questMap{
+  --tileMin:136px;
+  position:relative;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:0;
+  padding:10px;
+  border-radius:24px;
+  border:3px solid var(--line);
+  background:
+    linear-gradient(90deg,rgba(77,118,54,.14) 1px,transparent 1px),
+    linear-gradient(0deg,rgba(77,118,54,.14) 1px,transparent 1px),
+    #6e9e4f;
+  background-size:22px 22px,22px 22px,auto;
+  box-shadow:0 5px 0 var(--line), inset 0 0 0 3px rgba(255,244,196,.28);
+  overflow:hidden;
+}
+.questMap:not(.miniMap){min-height:452px}.miniMap{min-height:320px;height:100%;--tileMin:96px;padding:8px;align-self:stretch}
+.roomTile{
+  position:relative;
+  min-height:var(--tileMin);
+  border:1px solid rgba(91,62,31,.22);
+  background:
+    radial-gradient(circle at 22% 24%,rgba(255,249,190,.20) 0 3px,transparent 4px),
+    radial-gradient(circle at 75% 72%,rgba(47,110,42,.16) 0 4px,transparent 5px),
+    linear-gradient(135deg,var(--grass),var(--grass2) 57%,var(--grass3));
+  overflow:hidden;
+  color:var(--ink);
+  isolation:isolate;
+  display:block;
+  padding:0;
+  text-align:initial;
+}
+button.roomTile:hover{filter:saturate(1.08) brightness(1.02)}
+.roomTile::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(135deg,rgba(255,255,255,.14),transparent 45%,rgba(0,0,0,.08));z-index:1}
+.path{position:absolute;z-index:2;pointer-events:none;background:linear-gradient(90deg,var(--pathEdge) 0 8%,var(--path2) 9% 22%,var(--path) 23% 78%,var(--path2) 79% 91%,var(--pathEdge) 92% 100%);box-shadow:inset 0 0 0 1px rgba(94,62,32,.20)}
+.path.h{top:calc(50% - var(--pathW)/2);height:var(--pathW)}
+.path.v{left:calc(50% - var(--pathW)/2);width:var(--pathW);background:linear-gradient(0deg,var(--pathEdge) 0 8%,var(--path2) 9% 22%,var(--path) 23% 78%,var(--path2) 79% 91%,var(--pathEdge) 92% 100%)}
+.path.fullH{left:-2px;right:-2px}.path.left{left:-2px;right:50%}.path.right{left:50%;right:-2px}
+.path.fullV{top:-2px;bottom:-2px}.path.up{top:-2px;bottom:50%}.path.down{top:50%;bottom:-2px}
+.shrineMark{position:absolute;left:50%;top:42%;transform:translate(-50%,-50%);z-index:4;width:55px;height:42px;border-radius:9px;background:linear-gradient(180deg,var(--stone),var(--stone2));border:3px solid var(--line);box-shadow:inset 0 -7px 0 rgba(90,61,33,.16),0 2px 0 rgba(90,61,33,.30)}
+.shrineMark::before{content:"";position:absolute;left:7px;right:7px;top:-14px;height:19px;background:var(--roof);border:3px solid var(--line);border-bottom:0;transform:skewX(-12deg);border-radius:6px 6px 0 0}.shrineMark::after{content:"";position:absolute;left:21px;bottom:0;width:12px;height:18px;background:#5f4427;border:2px solid var(--line);border-bottom:0;border-radius:4px 4px 0 0}
+.meadowMark{position:absolute;left:50%;top:48%;transform:translate(-50%,-50%);z-index:3;width:84px;height:62px;border-radius:50% 50% 45% 45%;background:radial-gradient(circle at 50% 68%,#7ec8d7 0 18%,transparent 19%),radial-gradient(circle at 24% 70%,#397c35 0 16%,transparent 17%),radial-gradient(circle at 50% 45%,#2f7e49 0 20%,transparent 21%),radial-gradient(circle at 77% 70%,#397c35 0 16%,transparent 17%);border:3px solid rgba(54,98,39,.65);opacity:.96}
+.tileLabel{position:absolute;left:50%;bottom:9px;transform:translateX(-50%);z-index:5;border-radius:11px;background:rgba(255,248,219,.90);border:1px solid rgba(90,61,33,.44);padding:6px 9px;font-weight:1000;text-align:center;font-size:14px;line-height:1.04;letter-spacing:-.03em;min-width:max-content;max-width:calc(100% - 18px);color:#3b2a18;box-shadow:0 1px 0 rgba(255,255,255,.5)}
+.roomTile.edge .tileLabel{bottom:13px}.roomTile.inner .tileLabel{bottom:6px}.miniMap .tileLabel{font-size:10.5px;padding:4px 6px}.miniMap .roomTile.inner .tileLabel{bottom:4px}.miniMap .meadowMark{transform:translate(-50%,-50%) scale(.68)}.miniMap .shrineMark{transform:translate(-50%,-50%) scale(.68)}
+/* map-only visual update: step shrines, signpost trails, summit flag */
+.questMap .mapFeature{position:absolute;left:50%;top:45%;transform:translate(-50%,-50%);z-index:4;width:86px;height:86px;overflow:visible;pointer-events:none;filter:drop-shadow(0 2px 0 rgba(90,61,33,.30));}
+.questMap .mapFeature .outline{stroke:var(--line);stroke-width:3.4;stroke-linejoin:round;stroke-linecap:round;}
+.questMap .mapFeature .thin{stroke:var(--line);stroke-width:2.4;stroke-linejoin:round;stroke-linecap:round;}
+.questMap .mapFeature .shadow{fill:rgba(47,33,22,.24);}
+.questMap .shrineFeature{top:43%;width:82px;height:82px;}
+.questMap .shrineFeature .base4{fill:#9e8050}.questMap .shrineFeature .base3{fill:#c4a36d}.questMap .shrineFeature .base2{fill:#dac58c}.questMap .shrineFeature .base1{fill:#f1dfac}.questMap .shrineFeature .gem{fill:#f7c948;filter:drop-shadow(0 0 4px rgba(247,201,72,.75));}
+.questMap .trailFeature{top:50%;width:74px;height:74px;}
+.questMap .trailFeature .post{fill:#8b5a2b}.questMap .trailFeature .sign{fill:#f1dfac}.questMap .trailFeature .marker{fill:#f7c948}.questMap .trailFeature .spurDark{fill:#80542e}.questMap .trailFeature .spurLight{fill:#efc779}.questMap .trailFeature .peg{fill:#c07a37}
+.questMap .summitFeature{top:39%;width:84px;height:84px;}
+.questMap .summitFeature .mountA{fill:#e1b471}.questMap .summitFeature .mountB{fill:#c98856}.questMap .summitFeature .snow{fill:#fff1bf}.questMap .summitFeature .flag{fill:#f7c948}.questMap .summitFeature .contour{fill:none;stroke:#f8deb0;stroke-width:2.8;stroke-linecap:round;stroke-linejoin:round;opacity:.70}
+.miniMap .mapFeature{transform:translate(-50%,-50%) scale(.68)}
+.roomTile.cleared .shrineFeature .gem,.roomTile.cleared .trailFeature .marker,.roomTile.cleared .summitFeature .flag{fill:var(--gold);filter:drop-shadow(0 0 5px rgba(247,201,72,.9));}
+
+.check{position:absolute;right:8px;top:8px;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--gold);color:#4d321d;font-weight:1000;z-index:6;border:2px solid var(--line);box-shadow:0 2px 0 var(--line)}
+.roomTile.cleared{filter:saturate(1.10) brightness(1.03)}.roomTile.cleared::before{content:"";position:absolute;inset:6px;border:4px solid rgba(255,220,71,.75);box-shadow:inset 0 0 0 4px rgba(90,61,33,.11);pointer-events:none;z-index:5}
+.mapWrap{display:grid;grid-template-columns:minmax(0,700px) minmax(250px,330px);gap:16px;align-items:start}.sidePanel{display:grid;gap:12px;align-content:start;position:sticky;top:14px}.sideStats{display:grid;grid-template-columns:1fr 1fr;gap:9px}.sideStat{border:2px solid var(--line);border-radius:17px;background:#fffaf0;padding:12px;text-align:center;font-weight:1000;box-shadow:0 2px 0 rgba(90,61,33,.35)}.sideStat b{display:block;font-size:25px}.sideStat span{display:block;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.08em;margin-top:3px}.mapNote{font-size:13px;color:var(--muted);font-weight:800}.locked{opacity:.62}
+.roomGrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(290px,390px);gap:16px;align-items:start}.roomGrid.noSide{grid-template-columns:minmax(0,1fr);max-width:760px;margin:0 auto}.roomSide{position:sticky;top:14px}.roomHead{border:2px solid var(--line);border-radius:20px;padding:14px;margin-bottom:12px;box-shadow:0 3px 0 var(--line);color:var(--ink)}.roomHead.inner{background:#d9ef9f}.roomHead.edge{background:#f1ca7c}.roomHead.corner{background:#e5d1a1}.roomHead h2{margin:0;font-size:29px;letter-spacing:-.055em;line-height:.95}.roomHead p{margin:7px 0 0;color:#5e4b33;font-weight:900}.askGrid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}.resultBox{border:2px solid #8a6b3c;border-radius:17px;background:#fff3c4;padding:13px;margin-top:12px;font-weight:900;color:#4a321c;box-shadow:0 2px 0 rgba(90,61,33,.3)}.mathLine{background:#fffaf0;border:2px solid #8a6b3c;border-radius:10px;padding:9px 10px;margin:7px 0;color:#2f2415;overflow:auto}.feedback{min-height:40px;margin-top:12px;border:2px solid #8a6b3c;border-radius:15px;padding:10px 12px;font-weight:1000;background:#fff3c4;color:#4a321c}.feedback.good{background:#e2f7bf;border-color:#4c8d3c;color:#245d2b}.feedback.bad{background:#ffe1cf;border-color:#b93720;color:#8e2418}.feedback.note{background:#e8f3cc;border-color:#7f9e57;color:#3f5d2c}.roomArt{border:2px solid var(--line);border-radius:20px;background:#fff8db;padding:14px;text-align:left;box-shadow:0 4px 0 var(--line)}.roomArt p{color:var(--muted);font-weight:800;margin:8px 0}.roomIcon{height:144px;border:2px solid var(--line);border-radius:18px;position:relative;overflow:hidden;margin-bottom:10px;background:linear-gradient(135deg,var(--grass),var(--grass2))}.roomIcon.edge{background:linear-gradient(135deg,#f4d18b,#d7a85e)}.roomIcon.corner{background:linear-gradient(135deg,#cfa05c,#e8bf79)}.roomIcon .path{z-index:1}.roomIcon .meadowMark,.roomIcon .shrineMark{transform:translate(-50%,-50%) scale(1.35)}.edgePlotBox,.roomPlotBox{height:260px;border-radius:17px;overflow:hidden;border:2px solid var(--line);background:#fff;margin-bottom:12px;box-shadow:inset 0 0 0 2px rgba(90,61,33,.08)}.roomPlotBox{height:315px}
+.satchelGrid{display:grid;grid-template-columns:minmax(280px,370px) 1fr;gap:16px;align-items:start}.cardList{display:grid;gap:9px}.candidateCard{border:2px solid var(--line);border-radius:16px;padding:10px;background:#fffaf0;display:grid;gap:6px;font-weight:1000;box-shadow:0 2px 0 rgba(90,61,33,.34)}.candidateCard .tag{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:10px;font-size:14px;color:var(--ink);font-weight:1000;margin-right:7px;border:2px solid var(--line)}.tag.I{background:#f7a3a3}.tag.E{background:#9ac4ff}.tag.C{background:#a9f57b}.candidateCard small{color:var(--muted);font-weight:850}.plotBox{height:520px;border:2px solid var(--line);border-radius:20px;overflow:hidden;background:#fff;box-shadow:0 4px 0 var(--line)}.crownGrid{display:grid;grid-template-columns:minmax(300px,1fr) minmax(300px,1fr);gap:16px;align-items:start}.valueList{display:grid;gap:9px}.selectRow{display:flex;gap:7px;flex-wrap:wrap;margin-top:4px}.selectBtn{border-radius:999px;padding:7px 10px;font-size:12px;background:#fffaf0}.selectBtn.on.max{background:#ffe17a;color:#5a3b00}.selectBtn.on.min{background:#bee9f3;color:#164b57}.reward{text-align:center;padding:24px 16px;border-radius:24px;background:linear-gradient(135deg,#fff1c7,#ddedb3 50%,#c7e5ed);border:2px solid var(--line);box-shadow:0 4px 0 var(--line)}.reward .emoji{font-size:74px;line-height:1;margin:6px 0}.reward h2{font-size:37px;letter-spacing:-.06em;margin:0}.mj svg{display:inline-block;vertical-align:-.17em;max-width:100%;overflow:visible}.mj mjx-container{display:inline-block}
+@media(max-width:860px){.top{grid-template-columns:1fr}.hud{justify-items:start}.statRow,.topActions{justify-content:flex-start}.start,.mapWrap,.roomGrid,.satchelGrid,.crownGrid{grid-template-columns:1fr}.sidePanel,.roomSide{position:static}.questMap:not(.miniMap){min-height:365px}.roomTile{min-height:110px}.askGrid{grid-template-columns:1fr}.plotBox{height:410px}.funcbar{padding:14px 12px}}
+@media(max-width:520px){body{padding:8px 7px 22px}.app{border-radius:20px}.screen{padding:12px}.top{padding:14px}h1{font-size:38px}.questMap{padding:6px;border-radius:18px}.roomTile{min-height:88px}.tileLabel{font-size:11px}.miniMap .roomTile{min-height:66px}.path{--pathW:34%}.plotBox{height:340px}.edgePlotBox{height:220px}.roomPlotBox{height:260px}.objectiveLine{font-size:20px}.domainLine{font-size:16px}}
+
+
+/* Objective/domain banner: matched to v2's centered inline card. */
+.funcbar{display:flex;justify-content:center;align-items:center;padding:12px 18px;background:linear-gradient(180deg,#f9f2cf,#f3e6b7);border-bottom:2px solid #b99f69;}
+.objectiveCard{width:min(860px,100%);text-align:center;border:2px solid #b99f69;border-radius:20px;background:linear-gradient(180deg,#fffdf0,#fff6d7);box-shadow:0 4px 0 rgba(96,75,34,.18), inset 0 1px 0 rgba(255,255,255,.9);padding:10px 16px 11px;}
+.objectiveLine{display:flex;justify-content:center;align-items:baseline;gap:.42em;flex-wrap:wrap;font-size:clamp(17px,2.1vw,22px);font-weight:950;line-height:1.22;letter-spacing:-.015em;}
+.objectiveLine + .objectiveLine{margin-top:4px;font-size:clamp(17px,2.1vw,22px);}
+.objectiveLabel{color:#6b4f16;text-transform:none;white-space:nowrap}.mathText{color:#111827;white-space:normal;}
+.objectiveCard .MathJax,.objectiveCard mjx-container{max-width:100%;}
+.objectiveCard mjx-container[jax="SVG"]{margin:0 !important;vertical-align:-0.08em;}
+@media(max-width:820px){.funcbar{display:flex}.objectiveLine{font-size:18px}.objectiveLine + .objectiveLine{font-size:18px}}
+@media(max-width:460px){.objectiveCard{padding:8px 10px}}
+.mapWrap{display:block;max-width:760px;margin:0 auto;}
+.sidePanel{display:none!important;}
+</style>
+</head>
+<body>
+<main class="app" id="app">
+  <header class="top">
+    <div>
+      <h1>Extreme quest</h1>
+      <p class="subtitle">Search the rectangle. Collect extremal candidates. Claim the Peak Crown and Valley Gem.</p>
+    </div>
+    <div class="hud">
+      <div class="statRow">
+        <div class="pill"><b id="satchelCount">0</b><span>satchel</span></div>
+        <div class="pill"><b id="clearCount">0/9</b><span>sites</span></div>
+      </div>
+      <div class="topActions">
+        <button class="topBtn" id="mapTopBtn" type="button">Map</button>
+        <button class="topBtn" id="satchelTopBtn" type="button">Satchel</button>
+        <button class="topBtn" id="newTopBtn" type="button">New</button>
+      </div>
+    </div>
+  </header>
+
+  <section class="funcbar" id="funcbar" hidden>
+    <div class="objectiveCard">
+      <div class="objectiveLine"><span class="objectiveLabel">Objective:</span> <span id="functionText" class="mathText"></span></div>
+      <div class="objectiveLine"><span class="objectiveLabel">Domain:</span> <span id="domainText" class="mathText"></span></div>
+    </div>
+  </section>
+
+  <section class="screen" id="startScreen">
+    <div class="start">
+      <div class="card">
+        <h2>Candidate collector</h2>
+        <p>Each quest uses a random quadratic on a closed rectangle. Visit sites on the map, choose calculus runes, and pack every valid extremal candidate.</p>
+        <p>At the end, click the absolute maximum and then the absolute minimum.</p>
+        <div class="footerActions"><button class="bigBtn" id="startBtn" type="button">Start random quest</button></div>
+      </div>
+      <div class="questMap miniMap" id="previewMap" aria-label="Map preview"></div>
+    </div>
+  </section>
+
+  <section class="screen" id="mapScreen" hidden>
+    <div class="mapWrap">
+      <section class="questMap" id="questMap" aria-label="Quest map"></section>
+    </div>
+  </section>
+
+  <section class="screen" id="roomScreen" hidden></section>
+  <section class="screen" id="satchelScreen" hidden></section>
+  <section class="screen" id="crownScreen" hidden></section>
+  <section class="screen" id="successScreen" hidden></section>
+</main>
+
+<script>
+(() => {
+  const $ = sel => document.querySelector(sel);
+  const screens = ['startScreen','mapScreen','roomScreen','satchelScreen','crownScreen','successScreen'];
+  const order = ['nw','north','ne','west','inner','east','sw','south','se'];
+  const roomMeta = {
+    inner:{name:'Inner mountains', short:'Inner', type:'inner', kind:'Interior', edge:null},
+    north:{name:'North trail', short:'North', type:'edge', kind:'Edge', edge:'top'},
+    east:{name:'East trail', short:'East', type:'edge', kind:'Edge', edge:'right'},
+    south:{name:'South trail', short:'South', type:'edge', kind:'Edge', edge:'bottom'},
+    west:{name:'West trail', short:'West', type:'edge', kind:'Edge', edge:'left'},
+    nw:{name:'NW shrine', short:'NW', type:'corner', kind:'Corner', corner:'nw'},
+    ne:{name:'NE shrine', short:'NE', type:'corner', kind:'Corner', corner:'ne'},
+    sw:{name:'SW shrine', short:'SW', type:'corner', kind:'Corner', corner:'sw'},
+    se:{name:'SE shrine', short:'SE', type:'corner', kind:'Corner', corner:'se'}
+  };
+  const pathClasses = {
+    nw:['h right','v down'], north:['h fullH'], ne:['h left','v down'],
+    west:['v fullV'], inner:[], east:['v fullV'],
+    sw:['h right','v up'], south:['h fullH'], se:['h left','v up']
+  };
+  let state = null;
+  let rng = Math.random;
+  function seedToInt(seed){
+    let h=2166136261 >>> 0;
+    for(let i=0;i<seed.length;i++){ h ^= seed.charCodeAt(i); h = Math.imul(h,16777619); }
+    return h >>> 0;
+  }
+  function makeRng(seed){
+    let a=seedToInt(seed) || 1;
+    return function(){
+      a = (a + 0x6D2B79F5) >>> 0;
+      let t = a;
+      t = Math.imul(t ^ (t >>> 15), t | 1);
+      t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+  function newSeed(){
+    const d = new Date();
+    const pad = (n,w=2) => String(n).padStart(w,'0');
+    return `${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}-${pad(d.getHours())}${pad(d.getMinutes())}${pad(d.getSeconds())}-${pad(d.getMilliseconds(),3)}`;
+  }
+  function shuffle(arr){
+    const a=arr.slice();
+    for(let i=a.length-1;i>0;i--){ const j=Math.floor(rng()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+    return a;
+  }
+
+  function esc(s){return String(s).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));}
+  function math(tex, fallback, display=false){
+    return `<span class="mj" data-tex="${esc(tex)}" data-display="${display?'1':'0'}">${esc(fallback || tex)}</span>`;
+  }
+  let mathQueued = false;
+  function typesetMath(root=document){
+    const nodes = [...root.querySelectorAll('.mj:not([data-rendered="1"])')];
+    if(!nodes.length) return;
+    if(!window.MathJax || !MathJax.tex2svgPromise || !MathJax.startup){
+      if(!mathQueued){ mathQueued=true; setTimeout(()=>{mathQueued=false; typesetMath(root);},180); }
+      return;
+    }
+    MathJax.startup.promise.then(async () => {
+      for(const node of nodes){
+        if(node.dataset.rendered === '1') continue;
+        try{
+          const svg = await MathJax.tex2svgPromise(node.dataset.tex, {display: node.dataset.display === '1'});
+          node.textContent='';
+          node.appendChild(svg);
+          node.dataset.rendered='1';
+        }catch(e){
+          node.dataset.rendered='1';
+        }
+      }
+    });
+  }
+
+  function texInline(tex){ return `\\(${tex}\\)`; }
+  function texTypeset(root=document.body, tries=0){
+    if(window.MathJax && MathJax.typesetPromise){
+      MathJax.typesetPromise([root]).catch(()=>{});
+      return;
+    }
+    if(tries < 80) setTimeout(()=>texTypeset(root, tries+1), 80);
+  }
+
+  function gcd(a,b){ a=Math.abs(a); b=Math.abs(b); while(b){ const t=a%b; a=b; b=t; } return a||1; }
+  function R(n,d=1){ if(d===0) throw new Error('zero denominator'); if(d<0){n=-n; d=-d;} const g=gcd(n,d); return {n:n/g,d:d/g}; }
+  const add=(a,b)=>R(a.n*b.d+b.n*a.d,a.d*b.d), mul=(a,b)=>R(a.n*b.n,a.d*b.d);
+  const num=a=>a.n/a.d;
+  function cmp(a,b){const v=a.n*b.d-b.n*a.d; return v<0?-1:v>0?1:0;}
+  function insideOpen(v,lo,hi){return cmp(v,R(lo))>0 && cmp(v,R(hi))<0;}
+  function insideClosed(v,lo,hi){return cmp(v,R(lo))>=0 && cmp(v,R(hi))<=0;}
+  function atEndpoint(v,lo,hi){return cmp(v,R(lo))===0 || cmp(v,R(hi))===0;}
+  function randInt(lo,hi){return lo+Math.floor(rng()*(hi-lo+1));}
+  function choice(a){return a[Math.floor(rng()*a.length)];}
+  function fmtR(a){ if(a.d===1) return String(a.n).replace('-', '−'); return (a.n<0?'−':'') + Math.abs(a.n) + '/' + a.d; }
+  function texR(a){ if(a.d===1) return String(a.n); return a.n<0 ? `-\\frac{${Math.abs(a.n)}}{${a.d}}` : `\\frac{${a.n}}{${a.d}}`; }
+  function fmtPoint(x,y){return `(${fmtR(x)}, ${fmtR(y)})`;}
+  function texPoint(x,y){return `\\left(${texR(x)}, ${texR(y)}\\right)`;}
+  function fNum(q,x,y){return q.A*x*x + q.B*x*y + q.C*y*y + q.D*x + q.E*y + q.F;}
+  function evalQ(q,x,y){let v=R(0); v=add(v,mul(R(q.A),mul(x,x))); v=add(v,mul(R(q.B),mul(x,y))); v=add(v,mul(R(q.C),mul(y,y))); v=add(v,mul(R(q.D),x)); v=add(v,mul(R(q.E),y)); v=add(v,R(q.F)); return v;}
+  function coeffTerm(coef, texVar, plainVar, first, texMode){
+    if(coef===0) return '';
+    const abs=Math.abs(coef), sign=coef<0?(first?'-':' - '):(first?'':' + ');
+    const v=texMode?texVar:plainVar;
+    const body = v ? (abs===1 ? v : `${abs}${texMode?' ':''}${v}`) : String(abs);
+    return sign + body;
+  }
+  function formatPoly(q,texMode){
+    const parts=[
+      [q.A,'x^2','x²'],[q.B,'xy','xy'],[q.C,'y^2','y²'],[q.D,'x','x'],[q.E,'y','y'],[q.F,'','']
+    ];
+    let out='', first=true;
+    for(const [c,t,p] of parts){ const s=coeffTerm(c,t,p,first,texMode); if(s){out+=s; first=false;} }
+    return out || '0';
+  }
+  function formatLinear(parts,texMode){
+    let out='', first=true;
+    for(const part of parts){ const s=coeffTerm(part.c,part.tex,part.plain,first,texMode); if(s){out+=s; first=false;} }
+    return out || '0';
+  }
+  function derivativeText(q){
+    return {
+      fxTex:formatLinear([{c:2*q.A,tex:'x',plain:'x'},{c:q.B,tex:'y',plain:'y'},{c:q.D,tex:'',plain:''}],true),
+      fyTex:formatLinear([{c:q.B,tex:'x',plain:'x'},{c:2*q.C,tex:'y',plain:'y'},{c:q.E,tex:'',plain:''}],true),
+      fxPlain:formatLinear([{c:2*q.A,tex:'x',plain:'x'},{c:q.B,tex:'y',plain:'y'},{c:q.D,tex:'',plain:''}],false),
+      fyPlain:formatLinear([{c:q.B,tex:'x',plain:'x'},{c:2*q.C,tex:'y',plain:'y'},{c:q.E,tex:'',plain:''}],false)
+    };
+  }
+  function restrictedText(q,fixed,fixedVal){
+    if(fixed==='x'){
+      const constPart=q.A*fixedVal*fixedVal+q.D*fixedVal+q.F;
+      const parts=[{c:q.C,tex:'y^2',plain:'y²'},{c:q.B*fixedVal+q.E,tex:'y',plain:'y'},{c:constPart,tex:'',plain:''}];
+      return {tex:formatLinear(parts,true), plain:formatLinear(parts,false)};
+    }
+    const constPart=q.C*fixedVal*fixedVal+q.E*fixedVal+q.F;
+    const parts=[{c:q.A,tex:'x^2',plain:'x²'},{c:q.B*fixedVal+q.D,tex:'x',plain:'x'},{c:constPart,tex:'',plain:''}];
+    return {tex:formatLinear(parts,true), plain:formatLinear(parts,false)};
+  }
+  function makeCandidate(id,type,source,x,y,q){const value=evalQ(q,x,y); return {id,type,source,x,y,value,xNum:num(x),yNum:num(y),valueNum:num(value)};}
+
+  function analyze(q,rect){
+    const rooms={};
+    const det=4*q.A*q.C-q.B*q.B;
+    const xi=R(q.B*q.E-2*q.C*q.D, det);
+    const yi=R(q.B*q.D-2*q.A*q.E, det);
+    const dtext=derivativeText(q);
+    const innerCand=makeCandidate('inner-cand','I','Inner mountains',xi,yi,q);
+    rooms.inner={...roomMeta.inner,candidate:innerCand,valid:insideOpen(xi,rect.xmin,rect.xmax)&&insideOpen(yi,rect.ymin,rect.ymax),dtext};
+    const edgeSpecs={
+      east:{fixed:'x',fixedVal:rect.xmax,variable:'y',lo:rect.ymin,hi:rect.ymax,label:`x = ${rect.xmax}`,labelTex:`x=${rect.xmax}`},
+      west:{fixed:'x',fixedVal:rect.xmin,variable:'y',lo:rect.ymin,hi:rect.ymax,label:`x = ${rect.xmin}`,labelTex:`x=${rect.xmin}`},
+      north:{fixed:'y',fixedVal:rect.ymax,variable:'x',lo:rect.xmin,hi:rect.xmax,label:`y = ${rect.ymax}`,labelTex:`y=${rect.ymax}`},
+      south:{fixed:'y',fixedVal:rect.ymin,variable:'x',lo:rect.xmin,hi:rect.xmax,label:`y = ${rect.ymin}`,labelTex:`y=${rect.ymin}`}
+    };
+    for(const id of ['north','east','south','west']){
+      const spec=edgeSpecs[id]; let t, deriv, restricted;
+      if(spec.fixed==='x'){
+        t=R(-(q.B*spec.fixedVal+q.E),2*q.C);
+        deriv={tex:formatLinear([{c:2*q.C,tex:'y',plain:'y'},{c:q.B*spec.fixedVal+q.E,tex:'',plain:''}],true), plain:formatLinear([{c:2*q.C,tex:'y',plain:'y'},{c:q.B*spec.fixedVal+q.E,tex:'',plain:''}],false)};
+        restricted=restrictedText(q,'x',spec.fixedVal);
+      }else{
+        t=R(-(q.B*spec.fixedVal+q.D),2*q.A);
+        deriv={tex:formatLinear([{c:2*q.A,tex:'x',plain:'x'},{c:q.B*spec.fixedVal+q.D,tex:'',plain:''}],true), plain:formatLinear([{c:2*q.A,tex:'x',plain:'x'},{c:q.B*spec.fixedVal+q.D,tex:'',plain:''}],false)};
+        restricted=restrictedText(q,'y',spec.fixedVal);
+      }
+      const x=spec.fixed==='x'?R(spec.fixedVal):t;
+      const y=spec.fixed==='y'?R(spec.fixedVal):t;
+      const candidate=makeCandidate(id+'-cand','E',roomMeta[id].name,x,y,q);
+      const open=insideOpen(t,spec.lo,spec.hi), endpoint=atEndpoint(t,spec.lo,spec.hi);
+      const status=open?'valid':endpoint?'endpoint':insideClosed(t,spec.lo,spec.hi)?'endpoint':'outside';
+      rooms[id]={...roomMeta[id],...spec,candidate,valid:open,status,deriv,restricted,criticalVar:t};
+    }
+    const cornerCoords={nw:[R(rect.xmin),R(rect.ymax)],ne:[R(rect.xmax),R(rect.ymax)],sw:[R(rect.xmin),R(rect.ymin)],se:[R(rect.xmax),R(rect.ymin)]};
+    for(const id of ['nw','ne','sw','se']){ const [x,y]=cornerCoords[id]; rooms[id]={...roomMeta[id],candidate:makeCandidate(id+'-cand','C',roomMeta[id].name,x,y,q),valid:true}; }
+    const validCandidates=Object.values(rooms).filter(r=>r.valid).map(r=>r.candidate);
+    const maxValue=Math.max(...validCandidates.map(c=>c.valueNum)), minValue=Math.min(...validCandidates.map(c=>c.valueNum));
+    const maxCandidates=validCandidates.filter(c=>Math.abs(c.valueNum-maxValue)<1e-9), minCandidates=validCandidates.filter(c=>Math.abs(c.valueNum-minValue)<1e-9);
+    return {rooms,validCandidates,maxCandidates,minCandidates};
+  }
+  function randomQuestData(){
+    for(let attempt=0;attempt<3000;attempt++){
+      const q={A:choice([-3,-2,-1,1,2,3]),B:choice([-3,-2,-1,0,1,2,3]),C:choice([-3,-2,-1,1,2,3]),D:randInt(-5,5),E:randInt(-5,5),F:randInt(-4,4)};
+      if(4*q.A*q.C-q.B*q.B===0) continue;
+      const xmin=randInt(-3,0), xmax=xmin+randInt(2,4), ymin=randInt(-3,0), ymax=ymin+randInt(2,4);
+      const rect={xmin,xmax,ymin,ymax}, an=analyze(q,rect);
+      const extras=['inner','north','east','south','west'].filter(id=>an.rooms[id].valid).length;
+      if(extras<1 || extras>4) continue;
+      if(an.maxCandidates.length!==1 || an.minCandidates.length!==1) continue;
+      return {q,rect,analysis:an};
+    }
+    const q={A:2,B:-1,C:1,D:-2,E:3,F:1}, rect={xmin:-1,xmax:2,ymin:-2,ymax:1};
+    return {q,rect,analysis:analyze(q,rect)};
+  }
+  function showScreen(id){ screens.forEach(s=>$('#'+s).hidden=s!==id); $('#funcbar').hidden=id==='startScreen'; }
+  function newQuest(){
+    const seed=newSeed();
+    rng=makeRng(seed);
+    const data=randomQuestData();
+    state={...data,seed,status:Object.fromEntries(order.map(id=>[id,{cleared:false,restricted:false,revealed:false,message:'',kind:'',runes:null}])),satchel:[],valuesShown:true,maxPick:null,minPick:null,crownStep:'max',mistakes:0,questions:0};
+    prepareRunes();
+    showScreen('mapScreen'); renderTop(); renderMap();
+  }
+  function renderTop(){
+    if(!state){ $('#satchelCount').textContent='0'; $('#clearCount').textContent='0/9'; return; }
+    const cleared=Object.values(state.status).filter(s=>s.cleared).length;
+    $('#satchelCount').textContent=state.satchel.length;
+    $('#clearCount').textContent=cleared+'/9';
+    const q=state.q, rect=state.rect;
+    $('#functionText').innerHTML=texInline(`f(x,y)=${formatPoly(q,true)}`);
+    $('#domainText').innerHTML=texInline(`${rect.xmin} \\le x \\le ${rect.xmax},\\quad ${rect.ymin} \\le y \\le ${rect.ymax}`);
+    texTypeset($('#funcbar'));
+  }
+  function allCleared(){return Object.values(state.status).every(s=>s.cleared);}
+  function stepShrineSVG(){
+    return `<svg class="mapFeature shrineFeature" viewBox="0 0 120 120" aria-hidden="true">
+      <ellipse class="shadow" cx="60" cy="88" rx="43" ry="8"/>
+      <rect class="outline base4" x="19" y="66" width="82" height="24" rx="6"/>
+      <rect class="outline base3" x="27" y="54" width="66" height="22" rx="5"/>
+      <rect class="outline base2" x="35" y="43" width="50" height="20" rx="5"/>
+      <rect class="outline base1" x="44" y="33" width="32" height="17" rx="4"/>
+      <path class="thin gem" d="M54 36 L60 24 L66 36 L64 47 H56 Z"/>
+    </svg>`;
+  }
+  function signpostTrailSVG(id){
+    const vertical = id==='east' || id==='west';
+    if(vertical){
+      return `<svg class="mapFeature trailFeature" viewBox="0 0 120 120" aria-hidden="true">
+        <ellipse class="shadow" cx="66" cy="78" rx="26" ry="7"/>
+        <rect class="spurDark" x="60" y="50" width="34" height="20" rx="7"/>
+        <rect class="spurLight" x="60" y="54" width="34" height="12" rx="5"/>
+        <rect class="thin post" x="47" y="57" width="40" height="7" rx="3"/>
+        <path class="thin sign" d="M42 38 V74 L51 83 L60 74 V38 Z"/>
+        <circle class="thin marker" cx="51" cy="61" r="3.5"/>
+      </svg>`;
+    }
+    return `<svg class="mapFeature trailFeature" viewBox="0 0 120 120" aria-hidden="true">
+      <ellipse class="shadow" cx="58" cy="81" rx="28" ry="7"/>
+      <rect class="spurDark" x="50" y="60" width="20" height="34" rx="7"/>
+      <rect class="spurLight" x="54" y="60" width="12" height="34" rx="5"/>
+      <rect class="thin post" x="57" y="45" width="7" height="42" rx="3"/>
+      <path class="thin sign" d="M39 42 H75 L84 51 L75 60 H39 Z"/>
+      <circle class="thin marker" cx="62" cy="51" r="3.5"/>
+    </svg>`;
+  }
+  function summitFlagSVG(){
+    return `<svg class="mapFeature summitFeature" viewBox="0 0 120 120" aria-hidden="true">
+      <ellipse class="shadow" cx="60" cy="88" rx="45" ry="9"/>
+      <path class="outline mountA" d="M18 86 L45 50 L58 62 L70 33 L105 86 Z"/>
+      <path class="outline mountB" d="M45 50 L58 62 L70 33 L78 86 H38 Z" opacity=".93"/>
+      <path class="thin snow" d="M70 33 L63 62 L83 60 Z"/>
+      <path class="thin" fill="none" d="M70 30 V56"/>
+      <path class="thin flag" d="M70 31 H91 L86 39 L91 47 H70 Z"/>
+      <path class="contour" d="M32 80 H91 M39 70 H85 M48 61 H78"/>
+    </svg>`;
+  }
+  function mapFeatureHTML(id,info){
+    if(info.type==='corner') return stepShrineSVG();
+    if(info.type==='edge') return signpostTrailSVG(id);
+    if(info.type==='inner') return summitFlagSVG();
+    return '';
+  }
+  function tileHTML(id,info,cleared=false){
+    const paths=(pathClasses[id]||[]).map(c=>`<span class="path ${c}"></span>`).join('');
+    const feature=mapFeatureHTML(id,info);
+    return `${paths}${feature}${cleared?'<span class="check">✓</span>':''}<span class="tileLabel">${info.name}</span>`;
+  }
+  function renderPreview(){ const map=$('#previewMap'); map.innerHTML=''; for(const id of order){ const div=document.createElement('div'); const info=roomMeta[id]; div.className=`roomTile ${info.type}`; div.innerHTML=tileHTML(id,info,false); map.appendChild(div); } }
+  function renderMap(){
+    const map=$('#questMap'); map.innerHTML='';
+    for(const id of order){ const info=state.analysis.rooms[id]; const st=state.status[id]; const btn=document.createElement('button'); btn.type='button'; btn.className=`roomTile ${info.type}${st.cleared?' cleared':''}`; btn.innerHTML=tileHTML(id,info,st.cleared); btn.addEventListener('click',()=>openRoom(id)); map.appendChild(btn); }
+    renderTop();
+  }
+  function feedback(id,msg,kind='note'){ state.status[id].message=msg; state.status[id].kind=kind; }
+  function wrong(id,msg){ state.mistakes++; feedback(id,msg,'bad'); renderRoom(id); }
+  function clearRoom(id,msg){
+    state.status[id].cleared=true;
+    feedback(id,msg,'good');
+    renderTop();
+    if(allCleared()){
+      setTimeout(openCrown, 300);
+    }else{
+      renderRoom(id);
+    }
+  }
+  function addToSatchel(c){ if(!state.satchel.some(x=>x.id===c.id)) state.satchel.push(c); renderTop(); }
+
+  function runeCardHTML(r){
+    return `<button class="runeCard ${r.style||'trapRune'}" data-act="${r.act}" type="button"><span class="runeVerb">${esc(r.verb)}</span><span class="runeMath">${math(r.tex,r.plain)}</span></button>`;
+  }
+  function runeGridHTML(id){
+    const st=state.status[id];
+    return `<h2>Choose a rune</h2><p class="mapNote">Pick the computation that searches this site.</p><div class="runeGrid">${st.runes.map(runeCardHTML).join('')}</div>`;
+  }
+  function pointTexRaw(x,y){ return `${texR(x)},${texR(y)}`; }
+  function prepareRunes(){
+    for(const id of order){
+      const info=state.analysis.rooms[id];
+      state.status[id].runes = shuffle(runesForSite(id,info));
+    }
+  }
+  function runesForSite(id,info){
+    const rect=state.rect;
+    if(info.type==='inner'){
+      return [
+        {act:'innerSolve',verb:'Solve',tex:'f_x(x,y)=0,\\; f_y(x,y)=0',plain:'fₓ(x,y)=0, fᵧ(x,y)=0',style:'innerRune'},
+        {act:'wrongFunctionZero',verb:'Solve',tex:'f(x,y)=0',plain:'f(x,y)=0',style:'trapRune'},
+        {act:'wrongEdge',verb:'Solve',tex:`f_y(${rect.xmin},y)=0`,plain:`fᵧ(${rect.xmin}, y)=0`,style:'edgeRune'},
+        {act:'wrongCorner',verb:'Compute',tex:`f(${rect.xmax},${rect.ymax})`,plain:`f(${rect.xmax}, ${rect.ymax})`,style:'cornerRune'}
+      ];
+    }
+    if(info.type==='edge'){
+      const vertical=info.fixed==='x';
+      const c=info.fixedVal;
+      const edgeIneq = vertical ? `${state.rect.ymin}<y<${state.rect.ymax}` : `${state.rect.xmin}<x<${state.rect.xmax}`;
+      const correctTex = vertical ? `f_y(${c},y)=0` : `f_x(x,${c})=0`;
+      const correctPlain = vertical ? `fᵧ(${c}, y)=0` : `fₓ(x, ${c})=0`;
+      const normalTex = vertical ? `f_x(${c},y)=0` : `f_y(x,${c})=0`;
+      const normalPlain = vertical ? `fₓ(${c}, y)=0` : `fᵧ(x, ${c})=0`;
+      const zeroTex = vertical ? `f(${c},y)=0` : `f(x,${c})=0`;
+      const zeroPlain = vertical ? `f(${c}, y)=0` : `f(x, ${c})=0`;
+      const cornerTex = vertical ? `f(${c},${state.rect.ymax})` : `f(${state.rect.xmax},${c})`;
+      const cornerPlain = vertical ? `f(${c}, ${state.rect.ymax})` : `f(${state.rect.xmax}, ${c})`;
+      return [
+        {act:'edgeSolve',verb:'Solve',tex:correctTex,plain:correctPlain,style:'edgeRune'},
+        {act:'wrongNormal',verb:'Solve',tex:normalTex,plain:normalPlain,style:'trapRune'},
+        {act:'wrongZeroRestricted',verb:'Solve',tex:zeroTex,plain:zeroPlain,style:'trapRune'},
+        {act:'wrongCorner',verb:'Compute',tex:cornerTex,plain:cornerPlain,style:'cornerRune'}
+      ];
+    }
+    const c=info.candidate;
+    const edgeTest = id==='nw'||id==='sw' ? `f_y(${c.x.n/c.x.d},y)=0` : `f_y(${c.x.n/c.x.d},y)=0`;
+    return [
+      {act:'cornerCompute',verb:'Compute',tex:`f(${pointTexRaw(c.x,c.y)})`,plain:`f${fmtPoint(c.x,c.y)}`,style:'cornerRune'},
+      {act:'wrongCornerGradient',verb:'Solve',tex:`\\nabla f(${pointTexRaw(c.x,c.y)})=\\mathbf 0`,plain:`∇f${fmtPoint(c.x,c.y)} = 0`,style:'trapRune'},
+      {act:'wrongInterior',verb:'Solve',tex:'f_x(x,y)=0,\\; f_y(x,y)=0',plain:'fₓ(x,y)=0, fᵧ(x,y)=0',style:'innerRune'},
+      {act:'wrongEdge',verb:'Solve',tex:edgeTest,plain:edgeTest.replace('f_y','fᵧ'),style:'edgeRune'}
+    ];
+  }
+  function asked(){state.questions++;}
+  function openRoom(id){ showScreen('roomScreen'); renderRoom(id); }
+  function roomRule(info){
+    if(info.type==='inner') return `Search the interior of the rectangle.`;
+    if(info.type==='edge') return `Search the open trail ${math(info.labelTex,info.label)}.`;
+    return `This shrine marks the corner ${math(texPoint(info.candidate.x,info.candidate.y),fmtPoint(info.candidate.x,info.candidate.y))}.`;
+  }
+  function visibleForRoom(id){
+    const info=state.analysis.rooms[id], st=state.status[id]; const arr=[...state.satchel];
+    if(info.type==='inner' && st.revealed && info.valid && !arr.some(c=>c.id===info.candidate.id)) arr.push(info.candidate);
+    return arr;
+  }
+  function roomSide(info,id){
+    if(info.type==='edge') return `<aside class="roomArt roomSide"><div class="edgePlotBox" id="edgePlot"></div><p><b>${info.kind} site</b></p><p>The curve shows the restriction on this trail.</p></aside>`;
+    if(info.type==='inner') return `<aside class="roomArt roomSide"><div class="roomPlotBox" id="innerPlot"></div><p><b>Interior site</b></p><p>The surface view marks collected candidates.</p></aside>`;
+    return '';
+  }
+  function renderRoom(id){
+    const info=state.analysis.rooms[id], st=state.status[id]; let body='';
+    if(st.cleared){ body=`<h2>Site checked</h2><p>${st.message || 'This site is resolved.'}</p><div class="footerActions"><button class="ghostBtn" data-act="map">Return to map</button><button class="ghostBtn" data-act="satchel">Open satchel</button></div>`; }
+    else if(info.type==='inner') body=innerBody(id,info,st);
+    else if(info.type==='edge') body=edgeBody(id,info,st);
+    else body=cornerBody(id,info,st);
+    const side=roomSide(info,id);
+    $('#roomScreen').innerHTML=`<div class="roomGrid ${side ? '' : 'noSide'}"><section><div class="roomHead ${info.type}"><h2>${info.name}</h2><p>${roomRule(info)}</p></div><div class="card">${body}<div class="feedback ${st.kind}">${st.message || 'Choose a rune for this site.'}</div></div></section>${side}</div>`;
+    $('#roomScreen').querySelectorAll('[data-act]').forEach(btn=>btn.addEventListener('click',()=>handleAction(id,btn.dataset.act)));
+    if(info.type==='edge') setTimeout(()=>renderEdgePlot('edgePlot',id),0);
+    if(info.type==='inner') setTimeout(()=>renderSurfacePlot('innerPlot',visibleForRoom(id),false),0);
+    typesetMath($('#roomScreen'));
+  }
+  function innerBody(id,info,st){
+    if(!st.revealed){ return runeGridHTML(id); }
+    const c=info.candidate;
+    return `<div class="resultBox"><b>Result</b><div class="mathLine">${math(`f_x=${info.dtext.fxTex},\\quad f_y=${info.dtext.fyTex}`,`fₓ = ${info.dtext.fxPlain}, fᵧ = ${info.dtext.fyPlain}`)}</div><div class="mathLine">${math(`f_x=0,\\ f_y=0\\quad\\Longrightarrow\\quad (x,y)=${texPoint(c.x,c.y)}`,`fₓ=0, fᵧ=0 gives ${fmtPoint(c.x,c.y)}`)}</div><p>${info.valid?'This point is inside the rectangle.':'This point is outside the rectangle.'}</p></div><div class="pickGrid"><button class="pickBtn" data-act="packInner">Pack it</button><button class="pickBtn" data-act="leaveInner">Leave it</button><button class="pickBtn" data-act="map">Return to map</button></div>`;
+  }
+  function edgeBody(id,info,st){
+    if(!st.revealed){ return runeGridHTML(id); }
+    const c=info.candidate; const statusText=info.status==='valid'?'This point lies on the open edge.':info.status==='endpoint'?'This solution is an endpoint. Endpoints are checked at shrines.':'This solution is outside the edge interval.';
+    return `<div class="resultBox"><b>Trail derivative</b><div class="mathLine">${math(`g(${info.variable})=${info.restricted.tex}`,`g(${info.variable}) = ${info.restricted.plain}`)}</div><div class="mathLine">${math(`g'(${info.variable})=${info.deriv.tex}`,`g′(${info.variable}) = ${info.deriv.plain}`)}</div><div class="mathLine">${math(`g'(${info.variable})=0\\quad\\Longrightarrow\\quad ${info.variable}=${texR(info.criticalVar)}`,`g′(${info.variable})=0 gives ${info.variable} = ${fmtR(info.criticalVar)}`)}</div><div class="mathLine">${math(`(x,y)=${texPoint(c.x,c.y)}`,`Candidate point: ${fmtPoint(c.x,c.y)}`)}</div><p>${statusText}</p></div><div class="pickGrid"><button class="pickBtn" data-act="packEdge">Pack it</button><button class="pickBtn" data-act="leaveEdge">Leave it</button><button class="pickBtn" data-act="map">Return to map</button></div>`;
+  }
+  function cornerBody(id,info,st){
+    const c=info.candidate;
+    if(!st.revealed){ return runeGridHTML(id); }
+    return `<div class="resultBox"><b>Corner value</b><div class="mathLine">${math(`f${texPoint(c.x,c.y)}=${texR(c.value)}`,`f${fmtPoint(c.x,c.y)} = ${fmtR(c.value)}`)}</div><p>Corners are candidates automatically.</p></div><div class="pickGrid"><button class="pickBtn" data-act="packCorner">Pack it</button><button class="pickBtn" data-act="leaveCorner">Leave it</button><button class="pickBtn" data-act="map">Return to map</button></div>`;
+  }
+  function handleAction(id,act){
+    const info=state.analysis.rooms[id], st=state.status[id];
+    if(act==='map'){showScreen('mapScreen'); renderMap(); return;}
+    if(act==='satchel'){openSatchel(); return;}
+    if(act==='wrongEdge'){wrong(id,'That rune belongs to a trail site. Use the rune for this site.'); return;}
+    if(act==='wrongCorner'){wrong(id,'That rune jumps to a corner. Corners are checked at shrine sites.'); return;}
+    if(act==='wrongInterior'){wrong(id,'That is the interior-site rune. Use the rune for this site.'); return;}
+    if(act==='wrongFunctionZero'){wrong(id,'Zeros of f are not the same as critical points. For the interior, solve both partial derivative equations.'); return;}
+    if(act==='wrongNormal'){wrong(id,'That derivative points across the trail. Along this trail, use the partial derivative in the moving variable.'); return;}
+    if(act==='wrongZeroRestricted'){wrong(id,'This finds zeros of the restricted function, not critical points on the trail. Solve the trail derivative equation instead.'); return;}
+    if(act==='wrongCornerGradient'){wrong(id,'Corners are candidates because they are corners. No gradient equation is needed here.'); return;}
+    if(act==='moveShrine'){wrong(id,'Shrines are only for corners of the rectangle.'); return;}
+    if(act==='innerCheckEarly'){wrong(id,'There is no point to check yet. Choose the interior rune first.'); return;}
+    if(act==='innerSolve'){asked(); st.revealed=true; feedback(id,'Interior candidate revealed. Decide whether to pack it.','good'); renderRoom(id); return;}
+    if(act==='packInner'){ if(info.valid){addToSatchel(info.candidate); clearRoom(id,'Packed. Inner mountains site checked.');} else wrong(id,'This point is outside the rectangle. Leave it.'); return; }
+    if(act==='leaveInner'){ if(info.valid) wrong(id,'This point is inside the rectangle, so it should be packed.'); else clearRoom(id,'Left outside. Inner mountains site checked.'); return; }
+    if(act==='edgeSolve'){asked(); st.revealed=true; feedback(id,'Trail derivative solved. Decide whether to pack the point.','good'); renderRoom(id); return;}
+    if(act==='edgeRestrict'){asked(); st.revealed=true; feedback(id,'Trail derivative solved. Decide whether to pack the point.','good'); renderRoom(id); return;}
+    if(act==='edgeSolveEarly'){wrong(id,'Use the trail rune with the correct partial derivative.'); return;}
+    if(act==='packWholeEdge'){wrong(id,'The whole edge is not a candidate. Pack points, not regions.'); return;}
+    if(act==='packEdge'){ if(info.valid){addToSatchel(info.candidate); clearRoom(id,'Packed. Trail site checked.');} else wrong(id, info.status==='endpoint'?'This endpoint belongs to a shrine. Leave it here.':'This point is outside the open trail. Leave it.'); return; }
+    if(act==='leaveEdge'){ if(info.valid) wrong(id,'This point lies on the open trail, so it should be packed.'); else clearRoom(id, info.status==='endpoint'?'Left for the shrine. Trail site checked.':'Left outside. Trail site checked.'); return; }
+    if(act==='clearEdge'){ if(info.valid) wrong(id,'There is a valid open-edge candidate here. Pack it.'); else clearRoom(id,'No open-edge candidate. Trail site checked.'); return; }
+    if(act==='cornerCompute'){asked(); st.revealed=true; feedback(id,'Corner value revealed. Corners are candidates automatically.','good'); renderRoom(id); return;}
+    if(act==='packCorner'){addToSatchel(info.candidate); clearRoom(id,'Packed. Shrine site checked.'); return;}
+    if(act==='leaveCorner' || act==='leaveCornerEarly'){wrong(id,'Corners are always candidates on a closed rectangle. Pack it.'); return;}
+  }
+  function openSatchel(){showScreen('satchelScreen'); renderSatchel();}
+  function candidateHTML(c,withValue=false){return `<div class="candidateCard"><div><span class="tag ${c.type}">${c.type}</span>${math(texPoint(c.x,c.y),fmtPoint(c.x,c.y))}</div><small>${c.source}${withValue?' · '+math(`f=${texR(c.value)}`,`f = ${fmtR(c.value)}`):' · value shown in Crown chamber'}</small></div>`;}
+  function renderSatchel(){
+    renderTop();
+    const cards=state.satchel.length?state.satchel.map(c=>candidateHTML(c,state.valuesShown)).join(''):'<p>No candidates packed yet.</p>';
+    $('#satchelScreen').innerHTML=`<div class="satchelGrid"><section class="card"><h2>Satchel</h2><p>Packed candidates appear here. The surface marks the points you have collected.</p><div class="cardList">${cards}</div><div class="footerActions"><button class="ghostBtn" id="satchelMapReturn">Return to map</button></div></section><section><div class="plotBox" id="satchelPlot"></div></section></div>`;
+    $('#satchelMapReturn').addEventListener('click',()=>{showScreen('mapScreen'); renderMap();});
+    setTimeout(()=>renderSurfacePlot('satchelPlot',state.satchel,false),0); typesetMath($('#satchelScreen'));
+  }
+  function openCrown(){showScreen('crownScreen'); renderCrown();}
+  function crownCardHTML(c){
+    const maxOn=state.maxPick===c.id?' maxPick':'';
+    const minOn=state.minPick===c.id?' minPick':'';
+    const badge=state.maxPick===c.id?' · Peak Crown':state.minPick===c.id?' · Valley Gem':'';
+    return `<button class="candidateCard crownPickCard${maxOn}${minOn}" data-cid="${c.id}" type="button"><div><span class="tag ${c.type}">${c.type}</span>${math(texPoint(c.x,c.y),fmtPoint(c.x,c.y))}</div><small>${math(`f=${texR(c.value)}`,`f = ${fmtR(c.value)}`)} · ${c.source}${badge}</small></button>`;
+  }
+  function renderCrown(){
+    renderTop();
+    if(!allCleared()){ const missing=order.filter(id=>!state.status[id].cleared).map(id=>roomMeta[id].name).join(', '); $('#crownScreen').innerHTML=`<div class="card"><h2>Crown chamber sealed</h2><p>Absolute extrema require a full candidate search.</p><p><b>Still missing:</b> ${missing}</p><div class="footerActions"><button class="ghostBtn" id="backMap">Return to map</button></div></div>`; $('#backMap').addEventListener('click',()=>{showScreen('mapScreen'); renderMap();}); return; }
+    const prompt = state.crownStep==='max' ? 'Click the candidate with the absolute maximum value.' : state.crownStep==='min' ? 'Now click the candidate with the absolute minimum value.' : 'Both relics are selected.';
+    $('#crownScreen').innerHTML=`<div class="crownGrid"><section class="card"><h2>Crown chamber</h2><p>All packed candidates and their values are shown. First click the absolute maximum. Then click the absolute minimum.</p><div class="feedback note" id="crownFeedback">${prompt}</div><div class="footerActions"><button class="ghostBtn" id="crownSatchel">Open satchel plot</button><button class="ghostBtn" id="resetCrownPicks">Reset picks</button></div></section><section class="card"><h2>Candidate values</h2><div class="valueList">${state.satchel.map(crownCardHTML).join('')}</div><div class="footerActions"><button class="ghostBtn" id="crownMapReturn">Return to map</button></div></section></div>`;
+    $('#crownSatchel').addEventListener('click',openSatchel); $('#crownMapReturn').addEventListener('click',()=>{showScreen('mapScreen'); renderMap();}); $('#resetCrownPicks').addEventListener('click',()=>{state.maxPick=null;state.minPick=null;state.crownStep='max';renderCrown();});
+    $('#crownScreen').querySelectorAll('[data-cid]').forEach(btn=>btn.addEventListener('click',()=>pickCrownCandidate(btn.dataset.cid)));
+    typesetMath($('#crownScreen'));
+  }
+
+  function pickCrownCandidate(cid){
+    if(state.crownStep==='max'){
+      state.maxPick=cid; state.crownStep='min'; renderCrown(); return;
+    }
+    if(state.crownStep==='min'){
+      state.minPick=cid;
+      const correctMax=state.analysis.maxCandidates[0].id, correctMin=state.analysis.minCandidates[0].id;
+      if(state.maxPick===correctMax && state.minPick===correctMin){ showSuccess(); return; }
+      state.mistakes++;
+      state.crownStep='max';
+      const msg='Not yet. The Peak Crown goes to the largest value; the Valley Gem goes to the smallest value.';
+      state.maxPick=null; state.minPick=null;
+      renderCrown();
+      const el=$('#crownFeedback'); if(el){el.textContent=msg; el.className='feedback bad';}
+      return;
+    }
+  }
+  function submitCrown(){
+    const correctMax=state.analysis.maxCandidates[0].id, correctMin=state.analysis.minCandidates[0].id;
+    if(state.maxPick===correctMax && state.minPick===correctMin) showSuccess();
+  }
+  function showSuccess(){
+    showScreen('successScreen'); renderTop(); const maxC=state.analysis.maxCandidates[0], minC=state.analysis.minCandidates[0];
+    $('#successScreen').innerHTML=`<div class="reward"><div class="emoji">👑 💎</div><h2>Quest complete</h2><p><b>Peak Crown:</b> absolute maximum at ${math(texPoint(maxC.x,maxC.y),fmtPoint(maxC.x,maxC.y))}, with ${math(`f=${texR(maxC.value)}`,`f = ${fmtR(maxC.value)}`)}.</p><p><b>Valley Gem:</b> absolute minimum at ${math(texPoint(minC.x,minC.y),fmtPoint(minC.x,minC.y))}, with ${math(`f=${texR(minC.value)}`,`f = ${fmtR(minC.value)}`)}.</p><p>You searched the interior, open edges, and corners, then compared all candidate values.</p><p><b>Questions asked:</b> ${state.questions} &nbsp; <b>Misses:</b> ${state.mistakes}</p><div class="footerActions" style="justify-content:center"><button class="bigBtn" id="newSuccess">New random quest</button><button class="ghostBtn" id="reviewSuccess">Review map</button></div><div class="plotBox" id="successPlot" style="margin-top:16px"></div></div>`;
+    $('#newSuccess').addEventListener('click',newQuest); $('#reviewSuccess').addEventListener('click',()=>{showScreen('mapScreen'); renderMap();}); setTimeout(()=>renderSurfacePlot('successPlot',state.satchel,true),0); typesetMath($('#successScreen'));
+  }
+  function renderEdgePlot(divId,id){
+    const div=document.getElementById(divId); if(!div) return; if(!window.Plotly){div.innerHTML='<p style="padding:10px">Plotly did not load.</p>'; return;}
+    const info=state.analysis.rooms[id], q=state.q, st=state.status[id];
+    const lo=info.lo, hi=info.hi, n=160, t=[], vals=[];
+    for(let i=0;i<n;i++){ const tv=lo+(hi-lo)*i/(n-1); t.push(tv); const xv=info.fixed==='x'?info.fixedVal:tv, yv=info.fixed==='y'?info.fixedVal:tv; vals.push(fNum(q,xv,yv)); }
+    const traces=[{type:'scatter',mode:'lines',x:t,y:vals,line:{color:'black',width:3},hovertemplate:`${info.variable}=%{x:.3f}<br>f=%{y:.3f}<extra></extra>`,showlegend:false}];
+    const endpoints=[lo,hi].map(tv=>{const xv=info.fixed==='x'?info.fixedVal:tv, yv=info.fixed==='y'?info.fixedVal:tv; return {t:tv,v:fNum(q,xv,yv)};});
+    traces.push({type:'scatter',mode:'markers',x:endpoints.map(p=>p.t),y:endpoints.map(p=>p.v),marker:{size:9,color:'limegreen',line:{color:'white',width:1}},hovertemplate:'corner endpoint<br>%{x:.3f}, f=%{y:.3f}<extra></extra>',showlegend:false});
+    if(st.revealed && info.valid){ traces.push({type:'scatter',mode:'markers',x:[num(info.criticalVar)],y:[info.candidate.valueNum],marker:{size:11,color:'blue',line:{color:'white',width:1}},hovertemplate:'open-edge candidate<br>%{x:.3f}, f=%{y:.3f}<extra></extra>',showlegend:false}); }
+    const layout={margin:{l:35,r:10,t:8,b:35},paper_bgcolor:'white',plot_bgcolor:'white',xaxis:{title:info.variable,showgrid:false,zeroline:false,showline:true,linecolor:'#c5c8d0',mirror:true},yaxis:{title:'f',showgrid:false,zeroline:false,showline:true,linecolor:'#c5c8d0',mirror:true},showlegend:false};
+    Plotly.newPlot(divId,traces,layout,{displayModeBar:false,responsive:true});
+  }
+  function renderSurfacePlot(divId,candidates,showCrowns){
+    const div=document.getElementById(divId); if(!div) return; if(!window.Plotly){div.innerHTML='<p style="padding:14px">Plotly did not load.</p>'; return;}
+    const {q,rect}=state, nx=55, ny=45, xs=[], ys=[], z=[];
+    for(let i=0;i<nx;i++) xs.push(rect.xmin+(rect.xmax-rect.xmin)*i/(nx-1));
+    for(let j=0;j<ny;j++) ys.push(rect.ymin+(rect.ymax-rect.ymin)*j/(ny-1));
+    for(let j=0;j<ny;j++){ const row=[]; for(let i=0;i<nx;i++) row.push(fNum(q,xs[i],ys[j])); z.push(row); }
+    const traces=[{type:'surface',x:xs,y:ys,z:z,colorscale:'Viridis',opacity:.72,showscale:false,hovertemplate:'x=%{x:.2f}<br>y=%{y:.2f}<br>f=%{z:.2f}<extra></extra>'}];
+    const edgeN=140, xedge=[], yedge=[]; for(let i=0;i<edgeN;i++){xedge.push(rect.xmin+(rect.xmax-rect.xmin)*i/(edgeN-1)); yedge.push(rect.ymin+(rect.ymax-rect.ymin)*i/(edgeN-1));}
+    const addLine=(xarr,yarr)=>traces.push({type:'scatter3d',mode:'lines',x:xarr,y:yarr,z:xarr.map((x,i)=>fNum(q,x,yarr[i])+0.02),line:{color:'black',width:7},hoverinfo:'skip',showlegend:false});
+    addLine(xedge,xedge.map(()=>rect.ymin)); addLine(xedge,xedge.map(()=>rect.ymax)); addLine(yedge.map(()=>rect.xmin),yedge); addLine(yedge.map(()=>rect.xmax),yedge);
+    const unique=[]; for(const c of candidates){ if(!unique.some(u=>u.id===c.id)) unique.push(c); }
+    const groups={I:[],E:[],C:[]}; unique.forEach(c=>groups[c.type].push(c)); const colors={I:'red',E:'blue',C:'limegreen'};
+    for(const type of ['I','E','C']){ const pts=groups[type]; if(!pts.length) continue; traces.push({type:'scatter3d',mode:'markers+text',name:type,x:pts.map(p=>p.xNum),y:pts.map(p=>p.yNum),z:pts.map(p=>p.valueNum+0.16),text:pts.map(p=>showCrowns&&p.id===state.analysis.maxCandidates[0].id?'👑':showCrowns&&p.id===state.analysis.minCandidates[0].id?'💎':type),textposition:'top center',marker:{size:7,color:colors[type],line:{color:'white',width:1}},textfont:{color:'black'},hovertemplate:'%{text}<extra></extra>',showlegend:false}); }
+    const flat=z.flat(), zmin=Math.min(...flat), zmax=Math.max(...flat), pad=(zmax-zmin||1)*.10;
+    const layout={margin:{l:0,r:0,t:0,b:0},paper_bgcolor:'white',scene:{xaxis:{title:'x',tickvals:[rect.xmin,rect.xmax],backgroundcolor:'rgba(0,0,0,0)'},yaxis:{title:'y',tickvals:[rect.ymin,rect.ymax],backgroundcolor:'rgba(0,0,0,0)'},zaxis:{title:'',showticklabels:false,range:[zmin-pad,zmax+pad],backgroundcolor:'rgba(0,0,0,0)'},aspectmode:'manual',aspectratio:{x:1.35,y:1,z:.78},camera:{eye:{x:1.45,y:-1.55,z:1.05}}},showlegend:false};
+    Plotly.newPlot(divId,traces,layout,{displayModeBar:true,responsive:true});
+  }
+
+  renderPreview(); typesetMath(document);
+  $('#startBtn').addEventListener('click',newQuest);
+  $('#newTopBtn').addEventListener('click',newQuest);
+  $('#mapTopBtn').addEventListener('click',()=>{ if(state){showScreen('mapScreen'); renderMap();} });
+  $('#satchelTopBtn').addEventListener('click',()=>{ if(state) openSatchel(); });
+})();
+</script>
+</body>
+</html>

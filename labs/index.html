@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="data:,">
+  <title>MATH 345 Lab Notebooks</title>
+  <meta name="description" content="MATH 345 Python lab notebooks for linear algebra, optimization, and computation.">
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #18202f;
+      --muted: #5c6676;
+      --line: #d8dde6;
+      --paper: #ffffff;
+      --wash: #f5f7fa;
+      --accent: #146b83;
+      --accent-strong: #0c4f63;
+      --focus: #b63f2f;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: linear-gradient(180deg, #f8fafc 0%, #ffffff 32rem);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.5;
+    }
+
+    main {
+      width: min(72rem, calc(100% - 2rem));
+      margin: 0 auto;
+      padding: 2rem 0 3rem;
+    }
+
+    .masthead {
+      display: grid;
+      gap: 0.65rem;
+      max-width: 52rem;
+      margin-bottom: 1.75rem;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-top: 0;
+    }
+
+    h1 {
+      margin-bottom: 0;
+      font-size: clamp(2.15rem, 6vw, 4.4rem);
+      line-height: 0.98;
+      letter-spacing: 0;
+    }
+
+    .lede {
+      max-width: 44rem;
+      margin-bottom: 0;
+      color: var(--muted);
+      font-size: clamp(1rem, 2vw, 1.15rem);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+      gap: 1rem;
+      padding: 0;
+      margin: 0;
+      list-style: none;
+    }
+
+    .lab-card {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      min-height: 100%;
+      padding: 1.05rem;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper);
+      box-shadow: 0 10px 28px rgba(24, 32, 47, 0.07);
+    }
+
+    .card-heading {
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-start;
+      margin-bottom: 0.85rem;
+    }
+
+    .unit {
+      display: inline-grid;
+      min-width: 2.25rem;
+      min-height: 2.25rem;
+      place-items: center;
+      border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+      border-radius: 6px;
+      color: var(--accent-strong);
+      background: color-mix(in srgb, var(--accent) 8%, #ffffff);
+      font-weight: 750;
+      line-height: 1;
+    }
+
+    h2 {
+      margin-bottom: 0.2rem;
+      font-size: 1.12rem;
+      line-height: 1.25;
+      letter-spacing: 0;
+    }
+
+    .description {
+      margin-bottom: 1.1rem;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      align-self: end;
+    }
+
+    .actions a {
+      display: inline-flex;
+      min-height: 2.35rem;
+      align-items: center;
+      justify-content: center;
+      padding: 0.45rem 0.75rem;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      color: var(--accent-strong);
+      background: var(--wash);
+      font-weight: 650;
+      text-decoration: none;
+      transition: border-color 160ms ease, background-color 160ms ease, color 160ms ease;
+    }
+
+    .actions a:hover {
+      border-color: var(--accent);
+      color: #ffffff;
+      background: var(--accent);
+    }
+
+    .actions a:focus-visible {
+      outline: 3px solid color-mix(in srgb, var(--focus) 36%, transparent);
+      outline-offset: 3px;
+      border-color: var(--focus);
+    }
+
+    @media (min-width: 54rem) {
+      main {
+        padding-top: 2.75rem;
+      }
+
+      .grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header class="masthead">
+      <h1>Lab Notebooks</h1>
+      <p class="lede">Guided Python notebooks for computation, interpretation, and code-reading in linear algebra and optimization. Read the <a href="https://sebroc.github.io/MATH345-Textbook/">textbook</a>.</p>
+    </header>
+
+    <ul class="grid" aria-label="MATH 345 lab notebooks">
+      <li class="lab-card" id="lab-u1">
+        <div class="card-heading">
+          <span class="unit">U1</span>
+          <h2>Vectors, Similarity, Attention, and Matrix Actions</h2>
+        </div>
+        <p class="description">Cosine similarity, document vectors, attention-style weighted averages, matrix actions, composition, and affine maps.</p>
+        <div class="actions">
+          <a href="https://colab.research.google.com/github/sebroc/MATH345-Course-Materials/blob/main/labs/notebooks/lab-u1-vectors-similarity-attention-matrix-actions.ipynb" aria-label="Open U1 notebook in Google Colab">Notebook</a>
+          <a href="notebooks/lab-u1-vectors-similarity-attention-matrix-actions.html" aria-label="Open U1 HTML view">HTML view</a>
+        </div>
+      </li>
+      <li class="lab-card" id="lab-u2">
+        <div class="card-heading">
+          <span class="unit">U2</span>
+          <h2>Auditing a Linear Map</h2>
+        </div>
+        <p class="description">Reachable outputs, forgotten directions, rank, null space, and consistency checks for linear systems.</p>
+        <div class="actions">
+          <a href="https://colab.research.google.com/github/sebroc/MATH345-Course-Materials/blob/main/labs/notebooks/lab-u2-auditing-a-linear-map.ipynb" aria-label="Open U2 notebook in Google Colab">Notebook</a>
+          <a href="notebooks/lab-u2-auditing-a-linear-map.html" aria-label="Open U2 HTML view">HTML view</a>
+        </div>
+      </li>
+      <li class="lab-card" id="lab-u3">
+        <div class="card-heading">
+          <span class="unit">U3</span>
+          <h2>Jacobians and Local Linearization</h2>
+        </div>
+        <p class="description">Jacobian matrices, shape checks, local predictions, and nonlinear functions read through linear approximations.</p>
+        <div class="actions">
+          <a href="https://colab.research.google.com/github/sebroc/MATH345-Course-Materials/blob/main/labs/notebooks/lab-u3-jacobians-local-linearization.ipynb" aria-label="Open U3 notebook in Google Colab">Notebook</a>
+          <a href="notebooks/lab-u3-jacobians-local-linearization.html" aria-label="Open U3 HTML view">HTML view</a>
+        </div>
+      </li>
+      <li class="lab-card" id="lab-u4">
+        <div class="card-heading">
+          <span class="unit">U4</span>
+          <h2>Regression as Projection</h2>
+        </div>
+        <p class="description">Design matrices, projection, residual orthogonality, normal equations, and least-squares interpretation.</p>
+        <div class="actions">
+          <a href="https://colab.research.google.com/github/sebroc/MATH345-Course-Materials/blob/main/labs/notebooks/lab-u4-regression-as-projection.ipynb" aria-label="Open U4 notebook in Google Colab">Notebook</a>
+          <a href="notebooks/lab-u4-regression-as-projection.html" aria-label="Open U4 HTML view">HTML view</a>
+        </div>
+      </li>
+      <li class="lab-card" id="lab-u5">
+        <div class="card-heading">
+          <span class="unit">U5</span>
+          <h2>Gradient Descent and Tiny Training</h2>
+        </div>
+        <p class="description">Gradient descent loops, learning-rate behavior, loss functions, and a small fixed-hidden-layer training model.</p>
+        <div class="actions">
+          <a href="https://colab.research.google.com/github/sebroc/MATH345-Course-Materials/blob/main/labs/notebooks/lab-u5-gradient-descent-tiny-training.ipynb" aria-label="Open U5 notebook in Google Colab">Notebook</a>
+          <a href="notebooks/lab-u5-gradient-descent-tiny-training.html" aria-label="Open U5 HTML view">HTML view</a>
+        </div>
+      </li>
+      <li class="lab-card" id="lab-u6">
+        <div class="card-heading">
+          <span class="unit">U6</span>
+          <h2>SVD and Compression</h2>
+        </div>
+        <p class="description">Singular values, dominant directions, rank-k reconstruction, compression, and low-rank error.</p>
+        <div class="actions">
+          <a href="https://colab.research.google.com/github/sebroc/MATH345-Course-Materials/blob/main/labs/notebooks/lab-u6-svd-compression.ipynb" aria-label="Open U6 notebook in Google Colab">Notebook</a>
+          <a href="notebooks/lab-u6-svd-compression.html" aria-label="Open U6 HTML view">HTML view</a>
+        </div>
+      </li>
+      <li class="lab-card" id="lab-u7">
+        <div class="card-heading">
+          <span class="unit">U7</span>
+          <h2>Polynomial Approximation</h2>
+        </div>
+        <p class="description">Polynomials as vectors, inner products, projection equations, Taylor approximation, and least squares.</p>
+        <div class="actions">
+          <a href="https://colab.research.google.com/github/sebroc/MATH345-Course-Materials/blob/main/labs/notebooks/lab-u7-polynomial-approximation.ipynb" aria-label="Open U7 notebook in Google Colab">Notebook</a>
+          <a href="notebooks/lab-u7-polynomial-approximation.html" aria-label="Open U7 HTML view">HTML view</a>
+        </div>
+      </li>
+      <li class="lab-card" id="lab-transformer-wrap-up">
+        <div class="card-heading">
+          <span class="unit">A</span>
+          <h2>Transformer Wrap-up Lab</h2>
+        </div>
+        <p class="description">A synthesis lab connecting token embeddings, attention scores, weighted averages, affine layers, nonlinear blocks, gradients, and low-rank updates.</p>
+        <div class="actions">
+          <a href="https://colab.research.google.com/github/sebroc/MATH345-Course-Materials/blob/main/labs/notebooks/lab-transformers-wrap-up.ipynb" aria-label="Open transformer wrap-up notebook in Google Colab">Notebook</a>
+          <a href="notebooks/lab-transformers-wrap-up.html" aria-label="Open transformer wrap-up HTML view">HTML view</a>
+        </div>
+      </li>
+    </ul>
+  </main>
+</body>
+</html>

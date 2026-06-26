@@ -1,0 +1,1222 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-060RZGCFFW"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-060RZGCFFW');
+</script>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Order matters!</title>
+<style>
+  :root{
+    --paper:#fffdf8;
+    --ink:#182033;
+    --muted:#6b7280;
+    --line:#e5e7eb;
+    --soft:#f8fafc;
+    --blue:#2563eb;
+    --blue2:#93c5fd;
+    --pink:#db2777;
+    --good:#059669;
+    --bad:#e11d48;
+    --amber:#f59e0b;
+    --e1:#ef4444;
+    --e2:#10b981;
+    --target:#111827;
+    --current:#111827;
+    --shadow:0 24px 60px rgba(30,41,59,.24);
+  }
+  *{box-sizing:border-box}
+  html,body{min-height:100%;height:100%}
+  body{
+    margin:0;
+    font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(circle at 15% 12%, rgba(255,255,255,.55), transparent 27%),
+      radial-gradient(circle at 86% 16%, rgba(253,224,71,.38), transparent 18%),
+      radial-gradient(circle at 78% 90%, rgba(45,212,191,.28), transparent 26%),
+      linear-gradient(135deg,#2563eb 0%,#7c3aed 50%,#ec4899 100%);
+    display:grid;
+    place-items:center;
+    padding:8px;
+    overflow:hidden;
+  }
+  .game{
+    --tile:84px;
+    --boardH:280px;
+    --hintH:78px;
+    width:min(100%, 480px);
+    height:min(820px, calc(100dvh - 16px));
+    background:rgba(255,253,248,.97);
+    border:1px solid rgba(255,255,255,.7);
+    border-radius:28px;
+    box-shadow:var(--shadow);
+    padding:12px;
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    position:relative;
+  }
+  .top{
+    display:grid;
+    grid-template-columns:1fr;
+    align-items:start;
+    gap:10px;
+  }
+  h1{
+    margin:0;
+    font-size:26px;
+    line-height:.95;
+    letter-spacing:-.055em;
+    max-width:none;
+  }
+  .levelbar{
+    display:flex;
+    gap:4px;
+    background:#f1f5f9;
+    border:1px solid #e2e8f0;
+    border-radius:999px;
+    padding:3px;
+    width:100%;
+  }
+  button{
+    border:0;
+    font:inherit;
+    font-weight:850;
+    cursor:pointer;
+    user-select:none;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .level{
+    color:#475569;
+    background:transparent;
+    padding:6px 6px;
+    border-radius:999px;
+    font-size:10.5px;
+    white-space:nowrap;
+    line-height:1;
+    flex:1;
+    text-align:center;
+  }
+  .level.active{
+    color:white;
+    background:#111827;
+    box-shadow:0 2px 8px rgba(17,24,39,.22);
+  }
+  .quick-actions{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    margin-top:0;
+  }
+  .right-actions{
+    display:flex;
+    align-items:center;
+    gap:7px;
+  }
+  .quick-actions .tool{
+    min-height:34px;
+    border-radius:999px;
+    font-size:12px;
+    padding:0 14px;
+  }
+  .quick-actions #newBtn{
+    min-width:88px;
+    color:white;
+    background:linear-gradient(135deg,#ff7a18,#ec4899);
+    border:0;
+    box-shadow:0 8px 18px rgba(236,72,153,.28), inset 0 1px 0 rgba(255,255,255,.32);
+  }
+  .quick-actions #newBtn:hover{filter:saturate(1.08) brightness(1.02);transform:translateY(-1px)}
+  .quick-actions #sprintBtn,
+  .quick-actions #namesBtn{
+    min-width:78px;
+    background:#fff;
+    color:#111827;
+    border:1px solid #dbe2ee;
+    box-shadow:0 1px 0 rgba(255,255,255,.85), inset 0 -1px 0 rgba(15,23,42,.05);
+  }
+  .instruction{
+    margin:6px 2px 8px;
+    min-height:18px;
+    font-size:13px;
+    line-height:1.25;
+    font-weight:760;
+    color:#374151;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    flex:0 0 auto;
+  }
+  .board{
+    border-radius:22px;
+    border:1px solid #e7eaf2;
+    background:linear-gradient(180deg,#fff,#f7f9ff);
+    padding:7px;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.95);
+    flex:0 0 auto;
+  }
+  svg{
+    display:block;
+    width:100%;
+    height:var(--boardH);
+    border-radius:17px;
+    background:#fff;
+  }
+  .legend{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:10px;
+    min-height:24px;
+    margin-top:5px;
+    font-size:11px;
+    font-weight:900;
+    color:#64748b;
+  }
+  .key{display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+  .swatch{width:24px;height:0;border-top:3px solid;border-radius:10px}
+  .swatch.original{width:18px;height:12px;border:1px solid rgba(147,197,253,.55);background:rgba(147,197,253,.22);border-radius:4px}
+  .stylemark{display:inline-flex;flex-direction:column;justify-content:center;gap:4px;width:26px}
+  .stylemark span{height:0;border-top:3px solid;border-radius:10px}
+  .stylemark .outline{border-color:#111827}
+  .stylemark .e1{border-color:var(--e1)}
+  .stylemark .e2{border-color:var(--e2)}
+  .stylemark.dashed span{border-top-style:dashed;opacity:.78}
+
+  .product-head{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    margin:8px 4px 5px;
+    font-size:10px;
+    font-weight:950;
+    text-transform:uppercase;
+    letter-spacing:.12em;
+    color:#64748b;
+  }
+  .product{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+  }
+  .times{
+    font-size:24px;
+    line-height:1;
+    color:#94a3b8;
+    font-weight:900;
+    margin:0 -1px;
+  }
+  .slot{
+    width:var(--tile);
+    aspect-ratio:1/1;
+    border-radius:19px;
+    border:2px dashed #cbd5e1;
+    background:linear-gradient(180deg,#fbfcff,#eef2ff);
+    display:grid;
+    place-items:center;
+    color:#a4afc3;
+    position:relative;
+    transition:transform .14s ease, border-color .14s ease, background .14s ease;
+  }
+  .slot.drop{transform:translateY(-2px);border-color:#2563eb;background:#eff6ff}
+  .slot.empty::after{content:""}
+  .slot .tile{width:100%;height:100%;box-shadow:none}
+
+  .bank-head{
+    margin:7px 4px 5px;
+    text-align:center;
+    font-size:10px;
+    font-weight:950;
+    text-transform:uppercase;
+    letter-spacing:.12em;
+    color:#64748b;
+  }
+  .bank{
+    display:flex;
+    justify-content:center;
+    gap:8px;
+    min-height:var(--tile);
+  }
+  .prelim-mode .product-head,
+  .prelim-mode .product{
+    display:none;
+  }
+  .repair-mode .bank-head,
+  .repair-mode .bank{
+    display:none;
+  }
+  .repair-mode .product{
+    margin-bottom:8px;
+  }
+  .bank-cell{
+    width:var(--tile);
+    aspect-ratio:1/1;
+    border-radius:19px;
+    display:grid;
+    place-items:center;
+  }
+  .bank-cell.empty{
+    border:1px solid rgba(226,232,240,.75);
+    background:rgba(248,250,252,.55);
+  }
+  .tile{
+    width:var(--tile);
+    aspect-ratio:1/1;
+    border-radius:19px;
+    color:white;
+    padding:7px 6px 6px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    cursor:grab;
+    touch-action:manipulation;
+    position:relative;
+    overflow:hidden;
+    box-shadow:0 10px 20px rgba(17,24,39,.2), inset 0 1px 0 rgba(255,255,255,.34);
+    transition:transform .13s ease, box-shadow .13s ease, filter .13s ease;
+  }
+  .tile::after{
+    content:"";
+    position:absolute;
+    right:-26px;
+    bottom:-30px;
+    width:76px;
+    height:76px;
+    border-radius:999px;
+    background:rgba(255,255,255,.18);
+  }
+  .tile:hover{transform:translateY(-2px);box-shadow:0 13px 23px rgba(17,24,39,.24), inset 0 1px 0 rgba(255,255,255,.38)}
+  .tile:active{cursor:grabbing;transform:scale(.98)}
+  .tile.selected{outline:4px solid white;box-shadow:0 0 0 4px rgba(17,24,39,.22),0 13px 23px rgba(17,24,39,.23)}
+  .tile.dragging{opacity:.45;filter:saturate(.75)}
+  .matbox{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    line-height:1;
+    z-index:1;
+  }
+  .matbox:before,.matbox:after{
+    content:"";
+    width:7px;height:43px;
+    border-top:2.5px solid rgba(255,255,255,.98);
+    border-bottom:2.5px solid rgba(255,255,255,.98);
+    flex:none;
+  }
+  .matbox:before{border-left:2.5px solid rgba(255,255,255,.98);border-radius:5px 0 0 5px;margin-right:4px}
+  .matbox:after{border-right:2.5px solid rgba(255,255,255,.98);border-radius:0 5px 5px 0;margin-left:4px}
+  .matrix{
+    display:grid;
+    grid-template-columns:repeat(2, 20px);
+    grid-template-rows:repeat(2, 20px);
+    align-items:center;
+    justify-items:center;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+    font-size:17px;
+    font-weight:950;
+    letter-spacing:-.055em;
+    text-shadow:0 1px 0 rgba(0,0,0,.16);
+  }
+  .name{
+    display:none;
+    z-index:1;
+    max-width:84px;
+    margin-top:4px;
+    padding:2px 5px;
+    border-radius:999px;
+    background:rgba(255,255,255,.18);
+    font-size:9px;
+    line-height:1.05;
+    font-weight:950;
+    text-align:center;
+    letter-spacing:-.02em;
+  }
+  .show-names .name{display:block}
+  .show-names .matbox:before,.show-names .matbox:after{height:36px}
+  .show-names .matrix{font-size:15px;grid-template-rows:repeat(2, 17px)}
+
+  .tool{
+    min-height:38px;
+    border-radius:14px;
+    color:#111827;
+    background:#fff;
+    border:1px solid #dbe2ee;
+    box-shadow:0 1px 0 rgba(255,255,255,.8), inset 0 -1px 0 rgba(15,23,42,.05);
+    font-size:13px;
+  }
+  .tool.dark{
+    color:#fff;
+    background:#111827;
+    border-color:#111827;
+  }
+  .tool.active{
+    background:#0f172a;
+    color:#fff;
+  }
+  .tool.warn.active{
+    background:#f59e0b;
+    border-color:#f59e0b;
+    color:#111827;
+  }
+  .quick-actions #sprintBtn.active,
+  .quick-actions #namesBtn.active{
+    background:#fff;
+    color:#111827;
+    border-color:#111827;
+    box-shadow:0 0 0 2px rgba(17,24,39,.08), inset 0 -1px 0 rgba(15,23,42,.05);
+  }
+  .scorebar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    height:28px;
+    min-height:28px;
+    margin:6px 4px 0;
+    color:#475569;
+    font-size:12px;
+    font-weight:850;
+    flex:0 0 auto;
+  }
+  .message{
+    display:block;
+    flex:1;
+    min-width:0;
+    color:#334155;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    visibility:hidden;
+  }
+  .message.good,.message.bad{visibility:visible}
+  .message.good{color:var(--good)}
+  .message.bad{color:var(--bad)}
+  .timerbox{display:flex;gap:8px;align-items:center;color:#0f172a;white-space:nowrap;visibility:hidden}
+  .sprint-on .timerbox{visibility:visible}
+  .hint-row{
+    margin-top:auto;
+    display:block;
+    flex:0 0 auto;
+    padding-top:7px;
+  }
+  .prelim-mode .hint-row{
+    visibility:hidden;
+    pointer-events:none;
+  }
+  .prelim-mode .hint,
+  .prelim-mode .hint.open{
+    visibility:hidden;
+    opacity:0;
+    pointer-events:none;
+  }
+  .hint-toggle{
+    width:100%;
+    min-height:39px;
+    border-radius:16px;
+    color:#111827;
+    background:#fff;
+    border:1px solid #dbe2ee;
+    box-shadow:0 1px 0 rgba(255,255,255,.8), inset 0 -1px 0 rgba(15,23,42,.05);
+    font-size:13px;
+    font-weight:900;
+  }
+  .hint-toggle.active{
+    color:#fff;
+    background:#111827;
+    border-color:#111827;
+  }
+  .hint{
+    display:block;
+    position:absolute;
+    left:12px;
+    right:12px;
+    bottom:58px;
+    height:var(--hintH);
+    border-radius:16px;
+    background:#f8fafc;
+    border:1px solid #e2e8f0;
+    box-shadow:0 18px 40px rgba(15,23,42,.22);
+    padding:9px 11px;
+    color:#475569;
+    font-size:12.2px;
+    line-height:1.28;
+    font-weight:650;
+    overflow:auto;
+    visibility:hidden;
+    opacity:0;
+    transform:translateY(6px);
+    transition:opacity .12s ease, transform .12s ease;
+    z-index:20;
+    pointer-events:none;
+  }
+  .hint.open{visibility:visible;opacity:1;transform:none;pointer-events:auto}
+  .hint b{color:#111827}
+  .formula{
+    display:inline-block;
+    padding:1px 5px;
+    border-radius:7px;
+    background:#eef2ff;
+    color:#1e293b;
+    font-weight:900;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+  }
+  @media(max-width:420px){
+    .game{--tile:76px;--boardH:240px;--hintH:68px;padding:11px;border-radius:24px}
+    h1{font-size:23px;max-width:none}
+    .level{padding:6px 6px;font-size:10px}
+    .bank{gap:6px}
+    .product{gap:4px}
+    .times{font-size:20px}
+    .matbox:before,.matbox:after{height:40px}
+    .matrix{grid-template-columns:repeat(2, 18px);grid-template-rows:repeat(2, 19px);font-size:15px}
+    .name{font-size:8px;max-width:70px}
+    .quick-actions{gap:6px}
+    .quick-actions .tool{font-size:11px;min-height:32px;padding:0 10px}
+    .tool{font-size:12px;min-height:36px}
+    .legend{font-size:10px;gap:8px}
+    .hint{left:11px;right:11px;bottom:56px}
+  }
+  @media(max-height:720px){
+    .game{--tile:74px;--boardH:215px;--hintH:60px;height:calc(100dvh - 16px);padding:10px;border-radius:24px}
+    h1{font-size:23px}
+    .top{gap:7px}
+    .quick-actions .tool{min-height:30px;font-size:11px;padding:0 10px}
+    .level{padding:5px 5px;font-size:10px}
+    .instruction{margin:5px 2px 6px;font-size:12px}
+    .board{padding:6px;border-radius:19px}
+    svg{border-radius:15px}
+    .legend{margin-top:4px;font-size:10px;gap:9px;height:16px}
+    .product-head{margin:6px 4px 4px}
+    .bank-head{margin:5px 4px 4px}
+    .bank{gap:6px}
+    .times{font-size:20px}
+    .matbox:before,.matbox:after{height:38px;width:6px}
+    .matrix{grid-template-columns:repeat(2, 18px);grid-template-rows:repeat(2, 18px);font-size:15px}
+    .name{font-size:8px;max-width:68px}
+    .show-names .matbox:before,.show-names .matbox:after{height:31px}
+    .show-names .matrix{font-size:13px;grid-template-rows:repeat(2, 15px)}
+    .scorebar{height:23px;min-height:23px;margin-top:4px;font-size:11px}
+    .hint-row{padding-top:5px}
+    .hint-toggle{min-height:35px;font-size:12px;border-radius:14px}
+    .hint{bottom:51px;font-size:11.2px;line-height:1.2;padding:7px 9px;border-radius:14px}
+  }
+  @media(max-height:650px){
+    body{padding:8px}
+    .game{height:calc(100svh - 16px);padding:10px;border-radius:22px}
+    h1{font-size:20px}
+    .top{gap:5px}
+    .level{font-size:9.5px;padding:5px 4px}
+    .quick-actions .tool{min-height:29px;font-size:10.5px;padding:0 9px}
+    .instruction{margin:4px 2px 5px;font-size:11.5px;line-height:1.15}
+    .board{padding:6px;border-radius:18px}
+    svg{height:185px;border-radius:14px}
+    .legend{gap:7px;margin-top:3px;font-size:9.5px}
+    .swatch{width:18px;border-top-width:3px}
+    .stylemark{width:22px}.stylemark span{border-top-width:3px}
+    .product-head{margin:5px 4px 4px;font-size:9px}
+    .bank-head{margin:5px 4px 4px;font-size:9px}
+    .slot,.bank-cell,.tile{width:64px;border-radius:14px}
+    .bank{min-height:64px;gap:5px}
+    .product{gap:3px}.times{font-size:17px}
+    .tile{padding:5px 4px}
+    .matbox:before,.matbox:after{height:34px;width:6px}
+    .matrix{grid-template-columns:repeat(2, 16px);grid-template-rows:repeat(2, 17px);font-size:13.5px}
+    .name{font-size:7.5px;max-width:58px}
+    .scorebar{height:22px;min-height:22px;margin-top:3px;font-size:11px}
+    .hint-toggle{min-height:30px;border-radius:14px;font-size:12px}
+    .hint{bottom:45px;font-size:10.5px;line-height:1.12;padding:5px 8px;height:46px}
+  }
+
+  @media(max-height:610px){
+    body{padding:6px}
+    .game{--tile:60px;--boardH:160px;--hintH:52px;height:calc(100dvh - 12px);padding:8px;border-radius:20px}
+    h1{font-size:20px}
+    .top{gap:5px}
+    .quick-actions .tool{min-height:27px;font-size:10px;padding:0 9px}
+    .quick-actions #newBtn{min-width:76px}
+    .quick-actions #sprintBtn,.quick-actions #namesBtn{min-width:64px}
+    .level{padding:4px 3px;font-size:8.5px}
+    .levelbar{padding:2px}
+    .instruction{margin:4px 2px 4px;font-size:11px}
+    .board{padding:5px;border-radius:16px}
+    svg{border-radius:12px}
+    .legend{margin-top:2px;font-size:9px;gap:6px;height:12px}
+    .swatch{width:16px;border-top-width:3px}
+    .stylemark{width:20px}.stylemark span{border-top-width:3px}
+    .product-head,.bank-head{margin:4px 4px 3px;font-size:8.5px}
+    .bank{gap:5px}
+    .slot,.bank-cell,.tile{border-radius:14px}
+    .tile{padding:5px 4px}
+    .times{font-size:17px}
+    .matbox:before,.matbox:after{height:30px;width:5px;border-width:2px}
+    .matrix{grid-template-columns:repeat(2, 15px);grid-template-rows:repeat(2, 15px);font-size:12.5px}
+    .name{font-size:7px;max-width:54px}
+    .show-names .matbox:before,.show-names .matbox:after{height:25px}
+    .show-names .matrix{font-size:11px;grid-template-rows:repeat(2, 12px)}
+    .scorebar{height:18px;min-height:18px;margin-top:3px;font-size:10px}
+    .hint-row{padding-top:3px}
+    .hint-toggle{min-height:29px;font-size:11px;border-radius:12px}
+    .hint{bottom:42px;font-size:10px;line-height:1.16;padding:6px 8px;border-radius:12px}
+  }
+
+  .swatch.original{width:18px;height:13px;border:0;border-radius:4px;background:rgba(147,197,253,.22);box-shadow:inset 0 0 0 1px rgba(147,197,253,.45)}
+
+</style>
+</head>
+<body>
+  <main class="game" id="game">
+    <div class="top">
+      <h1>Order matters!</h1>
+      <div class="quick-actions" aria-label="Game controls">
+        <button class="tool" id="newBtn">New</button>
+        <div class="right-actions">
+          <button class="tool" id="sprintBtn">Sprint</button>
+          <button class="tool" id="namesBtn">Names</button>
+        </div>
+      </div>
+      <div class="levelbar" aria-label="Level">
+        <button class="level active" id="prelimBtn" title="One move">Prelim</button>
+        <button class="level" id="basicBtn">Basic</button>
+        <button class="level" id="challengeBtn" title="Repair mode">Challenge</button>
+        <button class="level" id="superBtn" title="Three matrices">Super challenge</button>
+      </div>
+    </div>
+
+    <p class="instruction" id="instruction">Match the dashed target.</p>
+
+    <section class="board" aria-label="Geometric transformation picture">
+      <svg id="canvas" viewBox="0 0 420 240" role="img" aria-label="Original unit square, target transformation, and your current result"></svg>
+      <div class="legend">
+        <span class="key"><span class="swatch original"></span>original</span>
+        <span class="key"><span class="stylemark dashed"><span class="outline"></span><span class="e1"></span><span class="e2"></span></span>target</span>
+        <span class="key"><span class="stylemark"><span class="outline"></span><span class="e1"></span><span class="e2"></span></span>yours</span>
+      </div>
+    </section>
+
+    <div class="product-head">
+      <span>matrix product order</span>
+    </div>
+    <section class="product" id="product" aria-label="Product slots"></section>
+
+    <div class="bank-head" id="bankHead">use each matrix once</div>
+    <section class="bank" id="bank" aria-label="Use each matrix once"></section>
+
+    <div class="scorebar">
+      <div class="message" id="message" aria-live="polite"></div>
+      <div class="timerbox"><span>✓ <b id="score">0</b></span><span>⏱ <b id="time">60</b></span></div>
+    </div>
+
+    <div class="hint-row">
+      <button class="hint-toggle" id="hintBtn" aria-expanded="false">Hint</button>
+    </div>
+    <div class="hint" id="hint">
+      <b>Hint.</b> In <span class="formula">A × B × C</span>, the square is touched by <span class="formula">C</span> first, then <span class="formula">B</span>, then <span class="formula">A</span>. The rightmost matrix acts first.
+    </div>
+  </main>
+
+<script>
+const I = [[1,0],[0,1]];
+const square = [[0,0],[1,0],[1,1],[0,1],[0,0]];
+const transformations = [
+  {id:'Sx', name:'horizontal stretch', M:[[2,0],[0,1]], bg:'linear-gradient(135deg,#f97316,#ef4444)'},
+  {id:'Sy', name:'vertical stretch', M:[[1,0],[0,2]], bg:'linear-gradient(135deg,#14b8a6,#06b6d4)'},
+  {id:'R', name:'90° rotation', M:[[0,-1],[1,0]], bg:'linear-gradient(135deg,#6366f1,#8b5cf6)'},
+  {id:'Hx', name:'horizontal shear', M:[[1,1],[0,1]], bg:'linear-gradient(135deg,#ec4899,#be185d)'},
+  {id:'Hy', name:'vertical shear', M:[[1,0],[1,1]], bg:'linear-gradient(135deg,#22c55e,#16a34a)'},
+  {id:'Fy', name:'flip y-axis', M:[[-1,0],[0,1]], bg:'linear-gradient(135deg,#0ea5e9,#2563eb)'},
+  {id:'Fx', name:'flip x-axis', M:[[1,0],[0,-1]], bg:'linear-gradient(135deg,#a855f7,#d946ef)'}
+];
+
+
+// Session randomness: seed from the current date/time down to milliseconds.
+// This gives each page load a different pseudo-random rollout without needing
+// server-side state or synchronization across users.
+const rngSeedText = new Date().toISOString();
+function xmur3(str){
+  let h = 1779033703 ^ str.length;
+  for(let i=0;i<str.length;i++){
+    h = Math.imul(h ^ str.charCodeAt(i), 3432918353);
+    h = (h << 13) | (h >>> 19);
+  }
+  return function(){
+    h = Math.imul(h ^ (h >>> 16), 2246822507);
+    h = Math.imul(h ^ (h >>> 13), 3266489909);
+    return (h ^= h >>> 16) >>> 0;
+  };
+}
+function mulberry32(a){
+  return function(){
+    a |= 0;
+    a = (a + 0x6D2B79F5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+const seededRandom = mulberry32(xmur3(rngSeedText)());
+window.orderMattersSeed = rngSeedText;
+function randInt(n){ return Math.floor(seededRandom() * n); }
+let level = 'prelim';
+let slotCount = 2;
+let bankCards = [];
+let slots = [];
+let answer = [];
+let targetProduct = I;
+let selectedId = null;
+let selectedFromSlot = null;
+let showNames = false;
+let sprint = false;
+let score = 0;
+let timeLeft = 60;
+let timer = null;
+let checkingLock = false;
+let plotBounds = null;
+
+const game = document.getElementById('game');
+const svg = document.getElementById('canvas');
+const productEl = document.getElementById('product');
+const bankEl = document.getElementById('bank');
+const msgEl = document.getElementById('message');
+const prelimBtn = document.getElementById('prelimBtn');
+const basicBtn = document.getElementById('basicBtn');
+const challengeBtn = document.getElementById('challengeBtn');
+const superBtn = document.getElementById('superBtn');
+const namesBtn = document.getElementById('namesBtn');
+const hintBtn = document.getElementById('hintBtn');
+const sprintBtn = document.getElementById('sprintBtn');
+const newBtn = document.getElementById('newBtn');
+const hintEl = document.getElementById('hint');
+const instructionEl = document.getElementById('instruction');
+const scoreEl = document.getElementById('score');
+const timeEl = document.getElementById('time');
+const bankHeadEl = document.getElementById('bankHead');
+
+function cloneM(A){ return A.map(row => row.slice()); }
+function matmul(A,B){
+  return [
+    [A[0][0]*B[0][0]+A[0][1]*B[1][0], A[0][0]*B[0][1]+A[0][1]*B[1][1]],
+    [A[1][0]*B[0][0]+A[1][1]*B[1][0], A[1][0]*B[0][1]+A[1][1]*B[1][1]]
+  ];
+}
+function apply(A, pts){ return pts.map(([x,y]) => [A[0][0]*x + A[0][1]*y, A[1][0]*x + A[1][1]*y]); }
+function eqM(A,B){ return A.flat().every((v,i) => v === B.flat()[i]); }
+function keyM(A){ return A.flat().join(','); }
+function productFromIds(ids){
+  return ids.reduce((P,id) => {
+    if(!id) return P;
+    const t = transformations.find(x => x.id === id);
+    return matmul(P, t.M);
+  }, cloneM(I));
+}
+function productFromSlots(){ return productFromIds(slots); }
+function shuffle(a){
+  const arr = a.slice();
+  for(let i=arr.length-1;i>0;i--){ const j=randInt(i+1); [arr[i],arr[j]]=[arr[j],arr[i]]; }
+  return arr;
+}
+function orderedSelections(items, k){
+  const out=[];
+  function rec(prefix, rest){
+    if(prefix.length===k){ out.push(prefix); return; }
+    for(let i=0;i<rest.length;i++) rec(prefix.concat(rest[i]), rest.slice(0,i).concat(rest.slice(i+1)));
+  }
+  rec([], items);
+  return out;
+}
+function uniqueIds(ids){ return [...new Set(ids.filter(Boolean))]; }
+function computePlotBounds(){
+  const ids = uniqueIds(bankCards.concat(answer, slots.filter(Boolean)));
+  const pts = square.concat([[0,0],[1,0],[0,1],[-0.55,0.5],[0.5,-0.55]]);
+
+  function includeProduct(seq){
+    if(!seq || !seq.length) return;
+    const P = productFromIds(seq);
+    pts.push(...apply(P, square));
+    pts.push(apply(P, [[1,0]])[0], apply(P, [[0,1]])[0]);
+  }
+
+  // Always include the actual target.
+  includeProduct(answer);
+
+  if(level === 'prelim'){
+    // In Prelim, the target is the puzzle. Do not let distractor matrices
+    // determine the scale; otherwise a tall distractor can make a small target tiny.
+    if(slots[0]) includeProduct([slots[0]]);
+  }else{
+    // In product-order levels, students may reorder the allowed matrices, but may
+    // use each matrix at most once. Include every complete product order so the
+    // figure does not rescale when a different order is tested.
+    const k = Math.min(slotCount, ids.length);
+    for(const seq of orderedSelections(ids, k)) includeProduct(seq);
+
+    // Also include the one-matrix partial moves, so the immediate feedback after
+    // placing the first tile remains visible without using an oversized window.
+    for(const id of ids) includeProduct([id]);
+
+    // Include the current partial product as a final safeguard.
+    includeProduct(slots.filter(Boolean));
+  }
+
+  let minX = Math.min(...pts.map(p => p[0]));
+  let maxX = Math.max(...pts.map(p => p[0]));
+  let minY = Math.min(...pts.map(p => p[1]));
+  let maxY = Math.max(...pts.map(p => p[1]));
+
+  // Modest coordinate buffer, then snap outward to integer grid limits.
+  // This keeps integer grid lines honest without creating a huge empty window.
+  const spanX = Math.max(1, maxX-minX);
+  const spanY = Math.max(1, maxY-minY);
+  const padX = Math.max(0.35, 0.10*spanX);
+  const padY = Math.max(0.35, 0.10*spanY);
+  minX = Math.floor(minX - padX);
+  maxX = Math.ceil(maxX + padX);
+  minY = Math.floor(minY - padY);
+  maxY = Math.ceil(maxY + padY);
+
+  // Leave room for the original e1/e2 labels without forcing the top of the grid too high.
+  minX = Math.min(minX, -1);
+  minY = Math.min(minY, -1);
+  maxX = Math.max(maxX, 2);
+  maxY = Math.max(maxY, 1.5);
+
+  // Avoid extremely tight windows on simple one-move puzzles.
+  if(maxX-minX < 3){ const c=(minX+maxX)/2; minX=Math.floor(c-1.5); maxX=Math.ceil(c+1.5); }
+  if(maxY-minY < 3){ const c=(minY+maxY)/2; minY=Math.floor(c-1.5); maxY=Math.ceil(c+1.5); }
+
+  return {minX, maxX, minY, maxY, gridX0:Math.ceil(minX), gridX1:Math.floor(maxX), gridY0:Math.ceil(minY), gridY1:Math.floor(maxY)};
+}
+function randomChoice(arr){ return arr[randInt(arr.length)]; }
+function generatePuzzle(){
+  if(level === 'prelim'){
+    slotCount = 1;
+    const answerId = randomChoice(transformations).id;
+    const distractors = shuffle(transformations.filter(t => t.id !== answerId)).slice(0,3).map(t => t.id);
+    answer = [answerId];
+    targetProduct = productFromIds(answer);
+    bankCards = shuffle([answerId, ...distractors]);
+    slots = [null];
+    selectedId = null;
+    selectedFromSlot = null;
+    checkingLock = false;
+    plotBounds = computePlotBounds();
+    render();
+    setMessage('');
+    return;
+  }
+
+  slotCount = level === 'basic' ? 2 : 3;
+
+  for(let attempts=0; attempts<700; attempts++){
+    const pool = shuffle(transformations).slice(0, slotCount);
+    const bankIds = pool.map(t => t.id);
+    const candidates = orderedSelections(bankIds, slotCount);
+    const targetSeq = randomChoice(candidates);
+    const targetKey = keyM(productFromIds(targetSeq));
+    const matches = candidates.filter(seq => keyM(productFromIds(seq)) === targetKey);
+
+    // Reject ambiguous puzzles, so matching the picture means finding the intended order.
+    if(matches.length !== 1) continue;
+
+    answer = targetSeq;
+    targetProduct = productFromIds(answer);
+    bankCards = shuffle(bankIds);
+    selectedId = null;
+    selectedFromSlot = null;
+    checkingLock = false;
+
+    if(level === 'repair'){
+      // Challenge: start with all matrices placed, but in a wrong order one swap away.
+      const swapPairs = shuffle([[0,1],[0,2],[1,2]]);
+      let repaired = null;
+      for(const [i,j] of swapPairs){
+        const trial = answer.slice();
+        [trial[i], trial[j]] = [trial[j], trial[i]];
+        if(!eqM(productFromIds(trial), targetProduct)){
+          repaired = trial;
+          break;
+        }
+      }
+      if(!repaired) continue;
+      slots = repaired;
+      plotBounds = computePlotBounds();
+      render();
+      setMessage('');
+    }else{
+      slots = Array(slotCount).fill(null);
+      plotBounds = computePlotBounds();
+      render();
+      setMessage('');
+    }
+    return;
+  }
+  console.warn('Fallback puzzle used.');
+}
+function closeHint(){
+  hintEl.classList.remove('open');
+  hintBtn.classList.remove('active');
+  hintBtn.setAttribute('aria-expanded', 'false');
+}
+function setLevel(next){
+  level = next;
+  closeHint();
+  prelimBtn.classList.toggle('active', level === 'prelim');
+  basicBtn.classList.toggle('active', level === 'basic');
+  challengeBtn.classList.toggle('active', level === 'repair');
+  superBtn.classList.toggle('active', level === 'super');
+  generatePuzzle();
+}
+function setMessage(text, kind=''){
+  const isFeedback = kind === 'good' || kind === 'bad';
+  msgEl.textContent = isFeedback ? text : '';
+  msgEl.className = 'message' + (kind ? ' ' + kind : '');
+  game.classList.toggle('has-feedback', isFeedback);
+}
+function render(){
+  game.classList.toggle('show-names', showNames);
+  game.classList.toggle('prelim-mode', level === 'prelim');
+  game.classList.toggle('repair-mode', level === 'repair');
+  if(level === 'prelim') closeHint();
+  if(level === 'prelim') instructionEl.textContent = 'Which matrix made the dashed target?';
+  else if(level === 'basic') instructionEl.textContent = 'Match the dashed target.';
+  else if(level === 'repair') instructionEl.textContent = 'Swap two matrices to match the dashed target.';
+  else instructionEl.textContent = 'Match the dashed target.';
+  bankHeadEl.textContent = level === 'prelim' ? 'choose the matching matrix' : 'use each matrix once';
+  renderProductSlots();
+  renderBank();
+  draw();
+  scoreEl.textContent = score;
+  timeEl.textContent = timeLeft;
+}
+function makeTile(id, sourceSlot=null){
+  const t = transformations.find(x => x.id === id);
+  const tile = document.createElement('div');
+  tile.className = 'tile' + (selectedId === id ? ' selected' : '');
+  tile.draggable = true;
+  tile.dataset.id = id;
+  if(sourceSlot !== null) tile.dataset.slot = sourceSlot;
+  tile.style.background = t.bg;
+  tile.innerHTML = `
+    <div class="matbox" aria-hidden="true">
+      <div class="matrix">
+        <span>${fmt(t.M[0][0])}</span><span>${fmt(t.M[0][1])}</span>
+        <span>${fmt(t.M[1][0])}</span><span>${fmt(t.M[1][1])}</span>
+      </div>
+    </div>
+    <div class="name">${t.name}</div>`;
+  tile.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if(sourceSlot !== null) handleTileInSlotClick(sourceSlot, id);
+    else selectTile(id);
+  });
+  tile.addEventListener('dragstart', (e) => { selectedId = id; selectedFromSlot = sourceSlot; e.dataTransfer.setData('text/plain', id); tile.classList.add('dragging'); });
+  tile.addEventListener('dragend', () => { document.querySelectorAll('.dragging').forEach(x => x.classList.remove('dragging')); });
+  return tile;
+}
+function fmt(x){ return x === -1 ? '−1' : String(x); }
+function renderProductSlots(){
+  productEl.innerHTML = '';
+  for(let i=0;i<slotCount;i++){
+    const slot = document.createElement('div');
+    slot.className = 'slot' + (slots[i] ? '' : ' empty');
+    slot.dataset.index = i;
+    slot.addEventListener('click', () => handleSlotClick(i));
+    slot.addEventListener('dragover', e => { e.preventDefault(); slot.classList.add('drop'); });
+    slot.addEventListener('dragleave', () => slot.classList.remove('drop'));
+    slot.addEventListener('drop', e => { e.preventDefault(); slot.classList.remove('drop'); placeTile(e.dataTransfer.getData('text/plain'), i); });
+    if(slots[i]) slot.appendChild(makeTile(slots[i], i));
+    productEl.appendChild(slot);
+    if(i < slotCount-1){
+      const times = document.createElement('div');
+      times.className = 'times';
+      times.textContent = '×';
+      productEl.appendChild(times);
+    }
+  }
+}
+function renderBank(){
+  bankEl.innerHTML = '';
+  bankCards.forEach(id => {
+    const cell = document.createElement('div');
+    const used = level !== 'prelim' && slots.includes(id);
+    cell.className = 'bank-cell' + (used ? ' empty' : '');
+    cell.dataset.id = id;
+    cell.addEventListener('click', () => {
+      if(level === 'prelim' || !slots.includes(id)) selectTile(id);
+    });
+    cell.addEventListener('dragover', e => { e.preventDefault(); });
+    cell.addEventListener('drop', e => { e.preventDefault(); if(level !== 'prelim') returnToBank(e.dataTransfer.getData('text/plain')); });
+    if(!used) cell.appendChild(makeTile(id));
+    bankEl.appendChild(cell);
+  });
+}
+function handleTileInSlotClick(i, id){
+  if(level === 'repair'){
+    if(selectedFromSlot !== null && selectedFromSlot !== i){
+      [slots[selectedFromSlot], slots[i]] = [slots[i], slots[selectedFromSlot]];
+      selectedId = null;
+      selectedFromSlot = null;
+      setMessage('Checking...');
+      render();
+      if(slots.every(Boolean)) setTimeout(checkAnswer, 130);
+      return;
+    }
+    if(selectedFromSlot === i){
+      selectedId = null;
+      selectedFromSlot = null;
+      setMessage('');
+      renderProductSlots();
+      return;
+    }
+    selectedId = id;
+    selectedFromSlot = i;
+    setMessage('');
+    renderProductSlots();
+    return;
+  }
+
+  if(selectedId && selectedId !== id){
+    placeTile(selectedId, i);
+    return;
+  }
+  selectedId = id;
+  selectedFromSlot = i;
+  setMessage('');
+  renderProductSlots();
+  renderBank();
+}
+function selectTile(id){
+  if(level === 'prelim'){
+    selectedId = id;
+    selectedFromSlot = null;
+    slots = [id];
+    setMessage('Checking...');
+    render();
+    setTimeout(checkAnswer, 130);
+    return;
+  }
+  if(selectedId === id){
+    selectedId = null;
+    selectedFromSlot = null;
+    if(level === 'repair') setMessage('');
+  }
+  else {
+    selectedId = id;
+    selectedFromSlot = null;
+    if(level === 'repair') setMessage('');
+  }
+  renderProductSlots();
+  renderBank();
+}
+function handleSlotClick(i){
+  if(selectedId){ placeTile(selectedId, i); return; }
+  if(slots[i]){
+    selectedId = slots[i];
+    selectedFromSlot = i;
+    if(level === 'repair'){
+      setMessage('');
+      renderProductSlots();
+      return;
+    }
+    slots[i] = null;
+    setMessage('');
+    render();
+  }
+}
+function placeTile(id, index){
+  if(!id || !bankCards.includes(id)) return;
+  const oldIndex = slots.indexOf(id);
+  if(oldIndex !== -1) slots[oldIndex] = null;
+  const replacing = slots[index];
+  slots[index] = id;
+  if(replacing && oldIndex !== -1){
+    slots[oldIndex] = replacing;
+  }else if(replacing && selectedFromSlot !== null && selectedFromSlot !== index){
+    slots[selectedFromSlot] = replacing;
+  }
+  selectedId = null;
+  selectedFromSlot = null;
+  setMessage(slots.every(Boolean) ? 'Checking...' : '');
+  render();
+  if(slots.every(Boolean)) setTimeout(checkAnswer, 130);
+}
+function returnToBank(id){
+  const idx = slots.indexOf(id);
+  if(idx !== -1){ slots[idx] = null; selectedId = null; selectedFromSlot = null; render(); }
+}
+function checkAnswer(){
+  if(checkingLock) return;
+  const current = productFromSlots();
+  if(eqM(current, targetProduct)){
+    setMessage('Matched!', 'good');
+    score += 1;
+    scoreEl.textContent = score;
+    checkingLock = true;
+    setTimeout(generatePuzzle, sprint ? 520 : 780);
+  }else{
+    const rightCards = slots.slice().sort().join(',') === answer.slice().sort().join(',');
+    if(sprint){
+      stopSprint(false);
+      setMessage(level === 'prelim' ? 'Not that matrix.' : (rightCards ? 'Same matrices, wrong order.' : 'Wrong product.'), 'bad');
+    }else{
+      setMessage(level === 'prelim' ? 'Not that matrix. Try another one.' : (level === 'repair' ? 'Still not repaired. Try another swap.' : (rightCards ? 'Same matrices, wrong order.' : 'Not the target yet.')), 'bad');
+    }
+  }
+}
+function startSprint(){
+  sprint = true;
+  score = 0;
+  timeLeft = 60;
+  game.classList.add('sprint-on');
+  sprintBtn.classList.add('active');
+  sprintBtn.textContent = 'Stop';
+  generatePuzzle();
+  render();
+  timer = setInterval(() => {
+    timeLeft -= 1;
+    timeEl.textContent = timeLeft;
+    if(timeLeft <= 0) stopSprint(true);
+  }, 1000);
+}
+function stopSprint(finished){
+  sprint = false;
+  clearInterval(timer);
+  timer = null;
+  game.classList.remove('sprint-on');
+  sprintBtn.classList.remove('active');
+  sprintBtn.textContent = 'Sprint';
+  if(finished) setMessage(`Time! Score: ${score}.`, 'good');
+}
+function draw(){
+  const currentProduct = productFromSlots();
+  const originalPts = square;
+  const targetPts = apply(targetProduct, square);
+  const showCurrent = !(level === 'prelim' && !slots[0]);
+  const currentPts = apply(currentProduct, square);
+  const curE1 = apply(currentProduct, [[1,0]])[0];
+  const curE2 = apply(currentProduct, [[0,1]])[0];
+  const tarE1 = apply(targetProduct, [[1,0]])[0];
+  const tarE2 = apply(targetProduct, [[0,1]])[0];
+
+  if(!plotBounds) plotBounds = computePlotBounds();
+  const {minX, maxX, minY, maxY, gridX0, gridX1, gridY0, gridY1} = plotBounds;
+
+  const W=420, H=310;
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  const sx = W/(maxX-minX), sy = H/(maxY-minY);
+  const s = Math.min(sx,sy);
+  const ox = (W - s*(maxX-minX))/2;
+  const oy = (H - s*(maxY-minY))/2;
+  function map([x,y]){ return [ox + (x-minX)*s, H - (oy + (y-minY)*s)]; }
+  function dPath(pts){
+    return pts.map((p,i) => `${i?'L':'M'} ${map(p)[0].toFixed(1)} ${map(p)[1].toFixed(1)}`).join(' ');
+  }
+  function line(p,q, cls, width=1.2){
+    const a=map(p), b=map(q);
+    return `<line x1="${a[0].toFixed(1)}" y1="${a[1].toFixed(1)}" x2="${b[0].toFixed(1)}" y2="${b[1].toFixed(1)}" class="${cls}" stroke-width="${width}" />`;
+  }
+  function clamp(v, lo, hi){ return Math.max(lo, Math.min(hi, v)); }
+
+  const grid=[];
+  for(let x=gridX0; x<=gridX1; x++) grid.push(line([x,minY],[x,maxY], x===0 ? 'axis' : 'grid', x===0 ? 1.45 : 1));
+  for(let y=gridY0; y<=gridY1; y++) grid.push(line([minX,y],[maxX,y], y===0 ? 'axis' : 'grid', y===0 ? 1.45 : 1));
+
+  const origin = map([0,0]);
+  const tickPieces = [];
+  const xAxisVisible = origin[1] > 8 && origin[1] < H-8;
+  const yAxisVisible = origin[0] > 8 && origin[0] < W-8;
+  const tick = 4;
+  if(xAxisVisible){
+    for(let x=gridX0; x<=gridX1; x++){
+      const p=map([x,0]);
+      tickPieces.push(`<line class="tick" x1="${p[0].toFixed(1)}" y1="${(p[1]-tick).toFixed(1)}" x2="${p[0].toFixed(1)}" y2="${(p[1]+tick).toFixed(1)}"/>`);
+      if(x!==0 && p[1] < H-18) tickPieces.push(`<text class="tickLabel" x="${p[0].toFixed(1)}" y="${(p[1]+15).toFixed(1)}" text-anchor="middle">${x}</text>`);
+    }
+  }
+  if(yAxisVisible){
+    for(let y=gridY0; y<=gridY1; y++){
+      const p=map([0,y]);
+      tickPieces.push(`<line class="tick" x1="${(p[0]-tick).toFixed(1)}" y1="${p[1].toFixed(1)}" x2="${(p[0]+tick).toFixed(1)}" y2="${p[1].toFixed(1)}"/>`);
+      if(y!==0 && p[0] > 24) tickPieces.push(`<text class="tickLabel" x="${(p[0]-8).toFixed(1)}" y="${(p[1]+3).toFixed(1)}" text-anchor="end">${y}</text>`);
+    }
+  }
+
+  const currentMarkup = showCurrent ? `
+    <path class="currentPoly" d="${dPath(currentPts)}" />
+    ${line([0,0], curE1, 'e1 currentEdge', 5.2)}
+    ${line([0,0], curE2, 'e2 currentEdge', 5.2)}
+  ` : '';
+
+  const e1Base = map([0.5, -0.42]);
+  const e2Base = map([-0.42, 0.5]);
+  const e1X = clamp(e1Base[0], 22, W-22).toFixed(1);
+  const e1Y = clamp(e1Base[1], 26, H-10).toFixed(1);
+  const e2X = clamp(e2Base[0], 34, W-10).toFixed(1);
+  const e2Y = clamp(e2Base[1], 26, H-20).toFixed(1);
+
+  svg.innerHTML = `
+    <defs>
+      <filter id="softShadow" x="-25%" y="-25%" width="150%" height="150%">
+        <feDropShadow dx="0" dy="5" stdDeviation="5" flood-color="#0f172a" flood-opacity=".12"/>
+      </filter>
+    </defs>
+    <style>
+      .grid{stroke:#edf1f7;stroke-width:1;vector-effect:non-scaling-stroke}
+      .axis{stroke:#d6dbea;stroke-width:1.45;stroke-linecap:round;vector-effect:non-scaling-stroke}
+      .tick{stroke:#cbd5e1;stroke-width:1.35;vector-effect:non-scaling-stroke}
+      .tickLabel{font:700 9px system-ui;fill:#94a3b8}
+      .original{fill:rgba(147,197,253,.18);stroke:none;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+      .targetPoly{fill:rgba(17,24,39,.018);stroke:#111827;stroke-width:2.6;stroke-dasharray:15 10;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+      .currentPoly{fill:rgba(51,65,85,.045);stroke:#111827;stroke-width:3.15;stroke-linejoin:round;filter:url(#softShadow);vector-effect:non-scaling-stroke}
+      .e1{stroke:var(--e1);stroke-linecap:round;vector-effect:non-scaling-stroke}
+      .e2{stroke:var(--e2);stroke-linecap:round;vector-effect:non-scaling-stroke}
+      .targetEdge{stroke-dasharray:15 10;opacity:.78}
+      .currentEdge{opacity:.98}
+      .origin{fill:#111827;stroke:#fff;stroke-width:2}
+      .basisAxisLabel{font:950 22px system-ui;dominant-baseline:middle;paint-order:stroke;stroke:#fff;stroke-width:4px;stroke-linejoin:round}
+      .basisAxisLabel.e1Text{fill:var(--e1)}
+      .basisAxisLabel.e2Text{fill:var(--e2)}
+    </style>
+    ${grid.join('')}
+    ${tickPieces.join('')}
+    <path class="original" d="${dPath(originalPts)}" />
+    <path class="targetPoly" d="${dPath(targetPts)}" />
+    ${line([0,0], tarE1, 'e1 targetEdge', 5.2)}
+    ${line([0,0], tarE2, 'e2 targetEdge', 5.2)}
+    ${currentMarkup}
+    <circle class="origin" cx="${origin[0].toFixed(1)}" cy="${origin[1].toFixed(1)}" r="4.7" />
+    <text x="${e1X}" y="${e1Y}" class="basisAxisLabel e1Text" text-anchor="middle">e₁</text>
+    <text x="${e2X}" y="${e2Y}" class="basisAxisLabel e2Text" text-anchor="end">e₂</text>
+  `;
+}
+
+prelimBtn.addEventListener('click', () => setLevel('prelim'));
+basicBtn.addEventListener('click', () => setLevel('basic'));
+challengeBtn.addEventListener('click', () => setLevel('repair'));
+superBtn.addEventListener('click', () => setLevel('super'));
+newBtn.addEventListener('click', generatePuzzle);
+namesBtn.addEventListener('click', () => { showNames = !showNames; namesBtn.classList.toggle('active', showNames); render(); });
+hintBtn.addEventListener('click', () => {
+  const open = hintEl.classList.toggle('open');
+  hintBtn.classList.toggle('active', open);
+  hintBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+});
+sprintBtn.addEventListener('click', () => sprint ? stopSprint(false) : startSprint());
+window.addEventListener('keydown', (e) => {
+  if(e.key === 'Escape'){ selectedId = null; selectedFromSlot = null; renderProductSlots(); renderBank(); }
+  if(e.key.toLowerCase() === 'n') generatePuzzle();
+});
+
+generatePuzzle();
+</script>
+</body>
+</html>
