@@ -11,7 +11,7 @@ Static public course materials for MATH 345.
 The PreTeXt textbook remains separate and public at:
 
 ```text
-https://sebroc.github.io/MATH345-Textbook/
+https://math345-textbook.github.io/
 ```
 
 Canonical lab notebooks live in the textbook repo:
