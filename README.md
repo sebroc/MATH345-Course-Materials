@@ -5,7 +5,7 @@ Static public course materials for MATH 345.
 ## Layout
 
 - `site/`: department-site files for manual upload.
-- `games/`: static puzzle games published by GitHub Pages.
+- `games/`: static puzzle games published from the MATH345-Games organization site.
 - `scripts/`: local maintenance helpers.
 
 The PreTeXt textbook remains separate and public at:
@@ -35,11 +35,17 @@ Games:
 
 1. Add each game under `games/<game-slug>/index.html`.
 2. Record it in `games/games.json`.
-3. Publish through GitHub Pages.
+3. Publish the `games/` subtree to the MATH345-Games organization site:
 
-Expected games URL after creating the public GitHub repo:
-
-```text
-https://sebroc.github.io/MATH345-Course-Materials/games/
+```zsh
+git subtree push --prefix games games-pages main
 ```
 
+Canonical games URL:
+
+```text
+https://math345-games.github.io/
+```
+
+The `games/` directory is excluded from this repository's GitHub Pages build so
+the games are not also published under `sebroc.github.io/MATH345-Course-Materials`.
