@@ -13,6 +13,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>MatriX Match</title>
+<link rel="icon" href="data:," />
 <style>
 :root{
   --ink:#202124;
@@ -36,8 +37,8 @@
   --opW:18px;
   --gap:12px;
   --cardH:88px;
-  --cardGap:10px;
-  --labelH:34px;
+  --cardGap:14px;
+  --labelH:38px;
   --dot-size:5px;
   --dot-gap:3.2px;
 }
@@ -65,19 +66,24 @@ body{
   box-shadow:var(--shadow);
   overflow:hidden;
 }
-.app.matchLevel{
-  --gap:16px;
+.app.repairLevel{
+  --colW:64px;
+  --opW:14px;
+  --gap:8px;
   --cardGap:14px;
+  --dot-size:4.5px;
+  --dot-gap:2.8px;
 }
 .top{
-  padding:10px 16px 6px;
+  padding:16px 18px 12px;
   display:grid;
   grid-template-columns:1fr auto;
-  gap:10px 14px;
+  gap:12px 16px;
   align-items:start;
 }
 h1{
   margin:0;
+  color:#1478d4;
   font-size:clamp(25px,5vw,39px);
   letter-spacing:-.06em;
   line-height:.9;
@@ -92,11 +98,12 @@ h1{
 }
 .xmark{
   display:inline-block;
-  color:#202124;
+  color:#ff1493;
+  font-weight:1000;
   transform:translateY(-.01em) rotate(-4deg);
 }
 .instruction{
-  margin:6px 0 0;
+  margin:8px 0 0;
   font-size:14px;
   color:#45484e;
   font-weight:750;
@@ -129,6 +136,7 @@ h1{
   flex-wrap:wrap;
 }
 .levels,.tools{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.app:not(.introMode) .controls{display:none}
 .shapeControl{
   display:inline-flex;
   align-items:center;
@@ -226,42 +234,335 @@ button{
 }
 button:hover{transform:translateY(-1px)}
 button.active{background:#202124;color:#fff;box-shadow:none}
-.hintRow{
-  display:flex;
-  justify-content:center;
+.app.introMode{
+  width:min(760px,100%);
+  padding:24px 26px 30px;
+}
+.intro{padding:0}
+.introTitle{
+  margin:0 0 10px;
+  font-size:22px;
+  line-height:1;
+  font-weight:1000;
+  letter-spacing:-.03em;
+}
+.introCopy{
+  margin:0 0 22px;
+  color:#5b554e;
+  font-size:15px;
+  font-weight:900;
+  line-height:1.25;
+}
+.versionGrid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:13px;
+}
+.versionChoice{
+  min-height:146px;
+  border-radius:20px;
+  padding:16px;
+  text-align:left;
+  white-space:normal;
+  display:grid;
+  grid-template-columns:minmax(175px,1fr) minmax(270px,42%);
+  grid-template-areas:
+    "title snapshot"
+    "copy snapshot";
+  gap:8px 16px;
   align-items:center;
-  min-height:46px;
-  padding:16px 22px 0;
+  background:#fff;
+}
+.versionChoice > strong{
+  display:block;
+  grid-area:title;
+  margin:0;
+  align-self:end;
+  font-size:20px;
+  line-height:1;
+  letter-spacing:-.03em;
+}
+.versionChoice > span{
+  display:block;
+  grid-area:copy;
+  min-height:0;
+  max-width:310px;
+  margin:0;
+  align-self:start;
+  color:#5f574f;
+  font-size:13px;
+  line-height:1.2;
+  font-weight:900;
+}
+.versionChoice.basic{box-shadow:inset 0 0 0 1px #b6e8ff,0 2px 0 rgba(0,0,0,.04);background:linear-gradient(160deg,#fff,#e8f8ff)}
+.versionChoice.chain{box-shadow:inset 0 0 0 1px #cfbfff,0 2px 0 rgba(0,0,0,.04);background:linear-gradient(160deg,#fff,#f0ebff)}
+.versionChoice.repair{box-shadow:inset 0 0 0 1px #a8edb5,0 2px 0 rgba(0,0,0,.04);background:linear-gradient(160deg,#fff,#e8faeb)}
+.versionChoice.link{box-shadow:inset 0 0 0 1px #f4e6a5,0 2px 0 rgba(0,0,0,.04);background:linear-gradient(160deg,#fffefb,#fffbe6)}
+.introSnapshot{
+  grid-area:snapshot;
+  width:100%;
+  height:108px;
+  margin-top:0;
+  min-width:0;
+  border-radius:16px;
+  background:rgba(255,255,255,.72);
+  box-shadow:inset 0 0 0 1px rgba(234,223,205,.78);
+  display:grid;
+  place-items:center;
+  padding:8px;
+}
+.introExpr{
+  width:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+}
+.introExpr.chain{gap:2px}
+.introExpr.chain .introOp{font-size:14px}
+.introExpr.repair{gap:4px}
+.introExpr.repair .introOp{font-size:14px}
+.introExpr.repair .introMini{width:34px;height:50px;border-radius:10px}
+.introExpr.repair .introMini.targetMini{width:48px}
+.introExpr.repair .introMiniLabel{font-size:9px}
+.introExpr.repair .introMatrix{gap:1px}
+.introExpr.repair .introBracket{width:4px;height:21px;border-top-width:1.8px;border-bottom-width:1.8px}
+.introExpr.repair .introBracket.left{border-left-width:1.8px}
+.introExpr.repair .introBracket.right{border-right-width:1.8px}
+.introExpr.repair .introDots{gap:1.5px}
+.introExpr.repair .introDot{width:2.5px;height:2.5px}
+.introOp{
+  font-size:17px;
+  line-height:1;
+  font-weight:1000;
+  color:#3f3831;
+}
+.introMini{
+  width:38px;
+  height:54px;
+  border-radius:11px;
+  display:grid;
+  grid-template-rows:13px 1fr;
+  align-items:center;
+  justify-items:center;
+  position:relative;
+  box-shadow:inset 0 -3px 0 rgba(0,0,0,.05),0 2px 0 rgba(0,0,0,.05);
+}
+.introMini.noLabel{grid-template-rows:1fr}
+.introMini.introTransposed{
+  box-shadow:0 0 0 3px rgba(32,33,36,.88),inset 0 -3px 0 rgba(0,0,0,.06),0 4px 8px rgba(0,0,0,.11);
+}
+.chain .introMini{width:36px;height:50px;border-radius:10px}
+.introMini.blue{background:linear-gradient(160deg,var(--blue),var(--blue2))}
+.introMini.pink{background:linear-gradient(160deg,var(--pink),var(--pink2))}
+.introMini.purple{background:linear-gradient(160deg,var(--purple),var(--purple2))}
+.introMini.green{background:linear-gradient(160deg,var(--green),var(--green2))}
+.introMini.yellow{background:linear-gradient(160deg,var(--yellow),var(--yellow2))}
+.introMiniLabel{
+  font-size:10px;
+  line-height:1;
+  font-weight:1000;
+  color:rgba(32,33,36,.72);
+}
+.introTransposeBadge{
+  position:absolute;
+  top:-7px;
+  right:-7px;
+  width:20px;
+  height:20px;
+  border-radius:999px;
+  display:grid;
+  place-items:center;
+  background:#202124;
+  color:#fff;
+  font-size:11px;
+  line-height:1;
+  font-weight:1000;
+  box-shadow:0 2px 5px rgba(0,0,0,.18);
+}
+.introMatrix{
+  display:flex;
+  align-items:center;
+  gap:3px;
+}
+.chain .introMatrix{gap:2px}
+.introBracket{
+  width:5px;
+  height:25px;
+  border-top:2px solid rgba(32,33,36,.62);
+  border-bottom:2px solid rgba(32,33,36,.62);
+}
+.introBracket.left{border-left:2px solid rgba(32,33,36,.62);border-radius:3px 0 0 3px}
+.introBracket.right{border-right:2px solid rgba(32,33,36,.62);border-radius:0 3px 3px 0}
+.introDots{
+  display:grid;
+  gap:2px;
+  justify-content:center;
+  align-content:center;
+}
+.introDot{
+  display:block;
+  width:3px;
+  height:3px;
+  border-radius:50%;
+  background:#202124;
+  opacity:.76;
+}
+.intro2x3{grid-template-columns:repeat(3,3px);grid-template-rows:repeat(2,3px)}
+.intro3x2{grid-template-columns:repeat(2,3px);grid-template-rows:repeat(3,3px)}
+.intro3x4{grid-template-columns:repeat(4,3px);grid-template-rows:repeat(3,3px)}
+.intro2x4{grid-template-columns:repeat(4,3px);grid-template-rows:repeat(2,3px)}
+.introMatchBoard{
+  position:relative;
+  width:100%;
+  max-width:190px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:6px 9px;
+  align-items:center;
+}
+.introMatchHead{
+  text-align:center;
+  font-size:10px;
+  font-weight:1000;
+  color:#3f3831;
+}
+.introMatchMini{
+  width:36px;
+  height:24px;
+  border-radius:8px;
+  justify-self:center;
+  display:grid;
+  place-items:center;
+  box-shadow:inset 0 -2px 0 rgba(0,0,0,.05);
+}
+.introMatchMini.blue{background:linear-gradient(160deg,var(--blue),var(--blue2))}
+.introMatchMini.pink{background:linear-gradient(160deg,var(--pink),var(--pink2))}
+.introMatchMini.green{background:linear-gradient(160deg,var(--green),var(--green2))}
+.introMiniDots{
+  display:grid;
+  grid-template-columns:repeat(3,3px);
+  grid-template-rows:repeat(2,3px);
+  gap:2px;
+}
+.introLinkLine{
+  grid-column:1/-1;
+  height:0;
+  border-top:3px solid var(--intro-line-color);
+  border-radius:999px;
+  transform:translateY(-17px);
+  opacity:.7;
+}
+.introLinkLine.one{--intro-line-color:#ff5a8a}
+.introLinkLine.two{--intro-line-color:#2fafff}
+.introLinkBoard{
+  --intro-link-tile:34px;
+  --intro-link-gap:5px;
+  --intro-link-pad:9px;
+  position:relative;
+  width:max-content;
+  max-width:100%;
+  display:grid;
+  grid-template-columns:repeat(4,var(--intro-link-tile));
+  grid-template-rows:repeat(2,var(--intro-link-tile));
+  gap:var(--intro-link-gap);
+  padding:var(--intro-link-pad);
+  border-radius:16px;
+  background:rgba(255,255,255,.72);
+  box-shadow:inset 0 0 0 1px rgba(234,223,205,.78);
+}
+.introLinkTile{
+  border-radius:8px;
+  box-shadow:inset 0 -2px 0 rgba(0,0,0,.05);
+}
+.introLinkTile.blue{background:linear-gradient(160deg,var(--blue),var(--blue2))}
+.introLinkTile.pink{background:linear-gradient(160deg,var(--pink),var(--pink2))}
+.introLinkTile.purple{background:linear-gradient(160deg,var(--purple),var(--purple2))}
+.introLinkTile.green{background:linear-gradient(160deg,var(--green),var(--green2))}
+.introLinkTile.yellow{background:linear-gradient(160deg,var(--yellow),var(--yellow2))}
+.introLinkPath{
+  position:absolute;
+  inset:var(--intro-link-pad);
+  pointer-events:none;
+  overflow:visible;
+}
+.introLinkPath polyline{
+  fill:none;
+  stroke:#5f5f5f;
+  stroke-width:5;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  opacity:.42;
+}
+.introMode .hud,
+.introMode .controls,
+.introMode .feedback,
+.introMode .boardWrap,
+.introMode .matchTray,
+.introMode .hintRow,
+.introMode .footer{
+  display:none;
+}
+.introMode .top{
+  grid-template-columns:1fr;
+  padding:0;
+  margin-bottom:22px;
+}
+.introMode h1{font-size:clamp(32px,5vw,48px);line-height:.86}
+.introMode .instruction{display:none}
+.app:not(.introMode) .intro{display:none}
+.hintRow{
+  position:relative;
+  z-index:20;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  min-height:56px;
+  padding:24px 18px 22px;
 }
 .hintBtn{
   background:linear-gradient(180deg,var(--yellow),var(--yellow2));
   box-shadow:inset 0 0 0 1px #efd25e,0 2px 0 rgba(0,0,0,.04);
   min-width:58px;
-  max-width:min(430px, calc(100% - 28px));
-  white-space:normal;
+  max-width:58px;
+  white-space:nowrap;
   overflow:hidden;
   text-align:center;
   line-height:1.12;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  flex:0 1 auto;
 }
 .hintLabel{
-  display:block;
+  display:inline-block;
 }
 .hintText{
   display:none;
-  margin-top:5px;
+  margin-top:0;
   color:#51483f;
   font-size:12px;
   line-height:1.18;
   font-weight:950;
 }
 .hintBtn.expanded{
-  padding-left:14px;
-  padding-right:14px;
+  min-width:min(470px, calc(100vw - 190px));
+  max-width:min(470px, calc(100vw - 190px));
+  padding:10px 14px;
+  white-space:normal;
+  overflow:visible;
+  text-align:left;
+  flex-direction:column;
+  align-items:flex-start;
+  justify-content:center;
+  gap:3px;
 }
 .hintBtn.expanded .hintText{
   display:block;
 }
-.boardWrap{padding:0 12px 0;position:relative}
+.boardWrap{padding:6px 12px 0;position:relative}
 .boardRel{position:relative;display:flex;justify-content:center}
 .lines{
   position:absolute;
@@ -284,9 +585,54 @@ button.active{background:#202124;color:#fff;box-shadow:none}
 .productGrid.three{
   grid-template-columns:var(--colW) var(--opW) var(--colW) var(--opW) var(--colW) var(--opW) var(--colW);
 }
+.productGrid.repair{
+  grid-template-columns:var(--colW) var(--opW) var(--colW) var(--opW) var(--colW) var(--opW) var(--colW);
+}
+.repairBoard{
+  display:grid;
+  justify-items:center;
+  align-items:start;
+  align-content:start;
+  gap:22px;
+  position:relative;
+  z-index:1;
+}
+.repairTargetRow{
+  display:grid;
+  justify-items:center;
+  align-items:start;
+  align-content:start;
+  gap:7px;
+}
+.repairEquals{
+  color:#3f3831;
+  font-size:28px;
+  line-height:1;
+  font-weight:1000;
+  margin-bottom:8px;
+}
+.repairTargetRow .groupTitle{
+  height:auto;
+  margin:0 0 12px;
+  font-size:22px;
+  letter-spacing:-.04em;
+}
+.repairTargetBlock{
+  display:grid;
+  justify-items:center;
+  align-content:start;
+}
+.repairTargetRow .cardColumn{
+  width:max-content;
+  min-width:var(--colW);
+  grid-template-rows:var(--cardH);
+  gap:0;
+  align-content:start;
+  justify-items:center;
+}
 .groupTitle{
   height:var(--labelH);
-  margin:0 0 8px;
+  margin:0 0 12px;
   text-align:center;
   font-size:28px;
   line-height:1;
@@ -299,8 +645,18 @@ button.active{background:#202124;color:#fff;box-shadow:none}
   justify-content:center;
 }
 .cardColumn{display:grid;grid-template-rows:repeat(3,var(--cardH));gap:var(--cardGap)}
-.opColumn{display:grid;grid-template-rows:calc(var(--labelH) + 6px) auto;align-items:stretch}
+.opColumn{display:grid;grid-template-rows:calc(var(--labelH) + 10px) auto;align-items:stretch}
 .opStack{display:grid;grid-template-rows:repeat(3,var(--cardH));gap:var(--cardGap)}
+.productGrid.repair .cardColumn,
+.productGrid.repair .opStack{
+  grid-template-rows:var(--cardH);
+}
+.productGrid.repair .groupTitle{
+  font-size:23px;
+}
+.productGrid.repair .opSymbol{
+  grid-row:auto;
+}
 .opSymbol{
   grid-row:2;
   display:flex;
@@ -330,6 +686,7 @@ button.active{background:#202124;color:#fff;box-shadow:none}
 .card.first{background:linear-gradient(160deg,var(--blue),var(--blue2))}
 .card.second{background:linear-gradient(160deg,var(--pink),var(--pink2))}
 .card.third{background:linear-gradient(160deg,var(--purple),var(--purple2))}
+.card.fourth{background:linear-gradient(160deg,var(--yellow),var(--yellow2))}
 .card.target{background:linear-gradient(160deg,var(--green),var(--green2))}
 .card.selected{
   transform:translateY(-2px) scale(1.02);
@@ -338,6 +695,160 @@ button.active{background:#202124;color:#fff;box-shadow:none}
 .card.matched{
   box-shadow:0 0 0 4px var(--match-color,#202124),inset 0 -4px 0 rgba(0,0,0,.05),0 8px 16px rgba(0,0,0,.12);
   cursor:default;
+}
+.repairCard{
+  overflow:hidden;
+}
+.repairCard .transposeBadge{
+  position:absolute;
+  top:6px;
+  right:6px;
+  width:22px;
+  height:22px;
+  border-radius:999px;
+  display:grid;
+  place-items:center;
+  background:rgba(255,255,255,.78);
+  color:#202124;
+  font-size:12px;
+  line-height:1;
+  font-weight:1000;
+  box-shadow:0 1px 3px rgba(0,0,0,.12),inset 0 0 0 1px rgba(32,33,36,.08);
+}
+.repairCard.transposed{
+  box-shadow:0 0 0 4px rgba(32,33,36,.86),inset 0 -4px 0 rgba(0,0,0,.055),0 8px 15px rgba(0,0,0,.12);
+}
+.repairCard.transposed .transposeBadge{
+  background:#202124;
+  color:#fff;
+}
+.repairTarget{
+  cursor:default;
+}
+.app.linkLevel{
+  width:min(820px,100%);
+  --linkTile:72px;
+  --linkGap:9px;
+  --dot-size:4.4px;
+  --dot-gap:2.6px;
+}
+.app.chainLevel .shapeControl,
+.app.repairLevel .shapeControl,
+.app.linkLevel .shapeControl{display:none}
+.app.linkLevel .scorePill{display:none}
+.app.linkLevel .boardRel{
+  touch-action:none;
+  user-select:none;
+  isolation:isolate;
+}
+.app.linkLevel .lines{
+  z-index:8;
+  pointer-events:none;
+  overflow:visible;
+}
+.linkBoard{
+  display:grid;
+  justify-items:center;
+  align-items:start;
+  position:relative;
+  z-index:1;
+}
+.linkGrid{
+  display:grid;
+  grid-template-columns:repeat(var(--linkN), var(--linkTile));
+  grid-auto-rows:var(--linkTile);
+  gap:var(--linkGap);
+  justify-content:center;
+  position:relative;
+  z-index:1;
+  padding:10px;
+}
+.linkTile{
+  width:var(--linkTile);
+  height:var(--linkTile);
+  border:0;
+  border-radius:20px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  position:relative;
+  cursor:pointer;
+  user-select:none;
+  transition:transform .12s ease, filter .12s ease, box-shadow .12s ease, opacity .12s ease;
+  box-shadow:inset 0 -4px 0 rgba(0,0,0,.055),0 2px 0 rgba(0,0,0,.06);
+  padding:0;
+  overflow:visible;
+}
+.linkTile:hover{transform:translateY(-1px)}
+.linkTile.c0{background:linear-gradient(160deg,var(--blue),var(--blue2))}
+.linkTile.c1{background:linear-gradient(160deg,var(--pink),var(--pink2))}
+.linkTile.c2{background:linear-gradient(160deg,var(--purple),var(--purple2))}
+.linkTile.c3{background:linear-gradient(160deg,var(--yellow),var(--yellow2))}
+.linkTile.c4{background:linear-gradient(160deg,var(--green),var(--green2))}
+.linkTile.c5{background:linear-gradient(160deg,var(--purple),var(--purple2))}
+.linkTile.start,
+.linkTile.inPath,
+.linkTile.current,
+.linkTile.solved{
+  transform:translateY(-1px);
+  z-index:3;
+  box-shadow:
+    0 0 0 2px rgba(145,145,145,.66),
+    inset 0 -4px 0 rgba(0,0,0,.055),
+    0 4px 10px rgba(32,33,36,.08);
+}
+.linkTile.current{
+  transform:translateY(-2px);
+  z-index:4;
+  box-shadow:
+    0 0 0 2px rgba(108,108,108,.78),
+    inset 0 -4px 0 rgba(0,0,0,.07),
+    0 5px 12px rgba(32,33,36,.10);
+}
+.linkTile.start::after{
+  content:"start";
+  position:absolute;
+  top:-11px;
+  left:50%;
+  transform:translateX(-50%);
+  padding:3px 8px 4px;
+  border-radius:999px;
+  background:#202124;
+  color:#fff;
+  font-size:10px;
+  font-weight:1000;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+  box-shadow:0 2px 5px rgba(0,0,0,.18);
+}
+.linkTile.badFlash{animation:shake .28s ease}
+.linkTile.goodFlash{animation:pop .28s ease}
+.linkOrderBadge{
+  position:absolute;
+  right:-8px;
+  bottom:-8px;
+  min-width:24px;
+  height:24px;
+  padding:0 6px;
+  border-radius:999px;
+  display:none;
+  place-items:center;
+  background:#202124;
+  color:#fff;
+  font-size:12px;
+  line-height:1;
+  font-weight:1000;
+  box-shadow:0 2px 5px rgba(0,0,0,.18);
+  z-index:9;
+}
+.linkTile.inPath .linkOrderBadge,
+.linkTile.current .linkOrderBadge,
+.linkTile.start .linkOrderBadge{
+  display:grid;
+}
+.linkPathStroke{
+  stroke-width:8px;
+  vector-effect:non-scaling-stroke;
 }
 .card.used{opacity:.72}
 .card.goodFlash{animation:pop .28s ease}
@@ -428,16 +939,16 @@ button.active{background:#202124;color:#fff;box-shadow:none}
   font-size:14px;
 }
 .feedback{
-  min-height:48px;
+  min-height:68px;
   display:flex;
   align-items:center;
   justify-content:center;
-  padding:4px 14px 8px;
+  padding:8px 14px 12px;
 }
 .msg{
   width:min(500px,100%);
   border-radius:20px;
-  padding:10px 14px;
+  padding:13px 16px;
   text-align:center;
   font-weight:1000;
   background:#fff;
@@ -447,20 +958,71 @@ button.active{background:#202124;color:#fff;box-shadow:none}
 .msg.good{background:#eaffef;border-color:#99ecb9;color:#087a42}
 .msg.bad{background:#fff0f0;border-color:#ffb4b6;color:#b82025}
 .msg.done{background:#202124;color:#fff;border-color:#202124}
-.footer{display:flex;justify-content:center;align-items:center;padding:0 16px 17px}
-.restart{background:#202124;color:#fff;display:none}
-.restart.show{display:inline-block}
+.footer{display:none}
+.restart{
+  position:static;
+  background:#202124;
+  color:#fff;
+  display:none;
+  flex:0 0 auto;
+  box-shadow:0 10px 28px rgba(32,33,36,.22);
+}
+.restart.show{display:inline-flex}
+.confirmOverlay{
+  position:fixed;
+  inset:0;
+  z-index:30;
+  display:grid;
+  place-items:center;
+  padding:18px;
+  background:rgba(32,33,36,.28);
+  backdrop-filter:blur(5px);
+}
+.confirmDialog{
+  width:min(360px,100%);
+  border-radius:22px;
+  background:#fff;
+  border:1px solid var(--line);
+  box-shadow:var(--shadow);
+  padding:18px;
+}
+.confirmDialog h2{
+  margin:0 0 8px;
+  font-size:22px;
+  line-height:1.05;
+  letter-spacing:-.04em;
+}
+.confirmDialog p{
+  margin:0;
+  color:#5f574f;
+  font-size:14px;
+  line-height:1.35;
+  font-weight:850;
+}
+.confirmActions{
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
+  margin-top:16px;
+}
+.confirmPrimary{background:#202124;color:#fff}
+[hidden]{display:none!important}
 @media(max-width:520px){
   :root{--colW:65px;--opW:14px;--gap:7px;--cardH:78px;--cardGap:7px;--labelH:28px;--dot-size:4.5px;--dot-gap:3px}
   body{padding:8px}
   .app{border-radius:24px}
+  .app.introMode{padding:20px 16px 24px}
+  .introMode .top{margin-bottom:18px}
   .top{padding:10px 13px 6px;grid-template-columns:1fr;gap:8px}
   .hud{justify-content:flex-start}
   .controls{gap:7px}
   button{font-size:12px;padding:7px 9px}
-  .app.matchLevel{--gap:9px;--cardGap:11px}
-  .hintRow{padding:14px 16px 0;min-height:44px}
-  .hintBtn.expanded{max-width:min(330px, calc(100% - 16px));white-space:normal;text-align:center;line-height:1.15}
+  .app.repairLevel{--colW:54px;--opW:10px;--gap:5px;--cardGap:11px;--dot-size:3.9px;--dot-gap:2.4px}
+  .app.linkLevel{--linkTile:60px;--linkGap:6px;--dot-size:3.8px;--dot-gap:2.2px}
+  .linkGrid{padding:8px}
+  .linkTile{border-radius:16px}
+  .hintRow{min-height:54px;padding:22px 12px 18px;gap:10px}
+  .hintBtn.expanded{min-width:min(300px, calc(100vw - 140px));max-width:min(300px, calc(100vw - 140px));line-height:1.15}
   .boardWrap{padding-left:7px;padding-right:7px}
   .groupTitle{font-size:22px;height:var(--labelH);margin-bottom:5px;letter-spacing:-.06em}
   .opColumn{grid-template-rows:calc(var(--labelH) + 5px) auto}
@@ -470,6 +1032,26 @@ button.active{background:#202124;color:#fff;box-shadow:none}
   .bracket.left{border-left-width:2.5px}.bracket.right{border-right-width:2.5px}
   .sizeLabel{font-size:10px}
   .instruction{font-size:13px}
+  .introMode .intro{padding:0}
+  .versionGrid{gap:10px}
+  .versionChoice{
+    min-height:0;
+    grid-template-columns:1fr;
+    grid-template-areas:
+      "title"
+      "copy"
+      "snapshot";
+    gap:9px;
+    padding:15px;
+  }
+  .versionChoice > strong{align-self:auto;font-size:18px}
+  .versionChoice > span{min-height:0;max-width:none;font-size:12px}
+  .introSnapshot{height:96px}
+  .introExpr.repair{gap:2px}
+  .introExpr.repair .introMini{width:30px;height:46px}
+  .introExpr.repair .introMini.targetMini{width:42px}
+  .introExpr.repair .introTransposeBadge{width:18px;height:18px;top:-6px;right:-6px;font-size:10px}
+  .introLinkBoard{--intro-link-tile:19px;--intro-link-gap:2.8px;--intro-link-pad:5px}
 }
 @media(max-width:355px){
   :root{--colW:60px;--opW:12px;--gap:5px;--cardH:74px;--cardGap:6px;--labelH:25px;--dot-size:4.25px;--dot-gap:2.75px}
@@ -477,26 +1059,26 @@ button.active{background:#202124;color:#fff;box-shadow:none}
   .groupTitle{font-size:20px;height:var(--labelH);margin-bottom:4px;letter-spacing:-.06em}
   .opColumn{grid-template-rows:calc(var(--labelH) + 5px) auto}
   .productGrid.three{gap:4px}
+  .app.repairLevel{--colW:48px;--opW:8px;--gap:3px;--dot-size:3.5px;--dot-gap:2.1px}
+  .app.linkLevel{--linkTile:54px;--linkGap:5px;--dot-size:3.4px;--dot-gap:1.9px}
+  .repairCard .transposeBadge{width:18px;height:18px;top:5px;right:5px;font-size:10px}
+  .introExpr.repair{gap:1px}
+  .introExpr.repair .introOp{font-size:12px}
+  .introExpr.repair .introMini{width:27px;height:43px}
+  .introExpr.repair .introMini.targetMini{width:38px}
 }
 </style>
 </head>
 <body>
-  <main class="app dotsOnly" id="app" aria-live="polite">
+  <main class="app dotsOnly introMode" id="app" aria-live="polite">
     <section class="top">
       <div>
         <h1>Matri<span class="xmark">X</span> Match</h1>
         <p class="instruction" id="instruction">Choose matching shapes for A, B, and AB.</p>
       </div>
-      <div class="hud" aria-label="score and timer">
-        <div class="pill"><span>score</span><b id="score">0</b></div>
-        <div class="pill"><span>time</span><b id="time">45</b></div>
-      </div>
-      <div class="controls">
-        <div class="levels" aria-label="level choices">
-          <button id="basicLevel" class="active" type="button">Basic: AB</button>
-          <button id="challenge1" type="button">Challenge 1: ABC</button>
-          <button id="challenge2" type="button">Challenge 2: Match All</button>
-        </div>
+      <div class="hud" aria-label="score timer and display tools">
+        <div class="pill scorePill"><span>score</span><b id="score">0</b></div>
+        <div class="pill timePill"><span>time</span><b id="time">120</b></div>
         <div class="tools" aria-label="display tools">
           <div class="shapeControl">
             <span class="shapeLabel">show shape</span>
@@ -513,8 +1095,119 @@ button.active{background:#202124;color:#fff;box-shadow:none}
           </div>
         </div>
       </div>
+      <div class="controls">
+        <div class="levels" aria-label="level choices">
+          <button id="basicLevel" class="active" type="button">Basic: AB</button>
+          <button id="challenge1" type="button">Challenge 1: ABC</button>
+          <button id="challenge2" type="button">Challenge 2: Repair</button>
+          <button id="challenge3" type="button">Challenge 3: Link</button>
+        </div>
+      </div>
     </section>
 
+    <section class="intro" id="intro">
+      <h2 class="introTitle">Choose a level</h2>
+      <p class="introCopy">The timer starts as soon as you pick. Good luck!</p>
+      <div class="versionGrid">
+        <button class="versionChoice basic" type="button" data-start-level="basic">
+          <strong>Basic: AB</strong>
+          <span>Choose A, B, and AB so the product is valid and has the correct final shape.</span>
+          <div class="introSnapshot" aria-hidden="true">
+            <div class="introExpr">
+              <div class="introMini blue">
+                <span class="introMiniLabel">A</span>
+                <span class="introMatrix"><span class="introBracket left"></span><span class="introDots intro2x3"><i class="introDot"></i><i class="introDot"></i><i class="introDot"></i><i class="introDot"></i><i class="introDot"></i><i class="introDot"></i></span><span class="introBracket right"></span></span>
+              </div>
+              <span class="introOp">×</span>
+              <div class="introMini pink">
+                <span class="introMiniLabel">B</span>
+                <span class="introMatrix"><span class="introBracket left"></span><span class="introDots intro3x4"><i class="introDot"></i><i class="introDot"></i><i class="introDot"></i><i class="introDot"></i><i class="introDot"></i><i class="introDot"></i><i class="introDot"></i><i class="introDot"></i><i class="introDot"></i><i class="introDot"></i><i class="introDot"></i><i class="introDot"></i></span><span class="introBracket right"></span></span>
+              </div>
+              <span class="introOp">=</span>
+              <div class="introMini green">
+                <span class="introMiniLabel">AB</span>
+                <span class="introMatrix"><span class="introBracket left"></span><span class="introDots intro2x4"><i class="introDot"></i><i class="introDot"></i><i class="introDot"></i><i class="introDot"></i><i class="introDot"></i><i class="introDot"></i><i class="introDot"></i><i class="introDot"></i></span><span class="introBracket right"></span></span>
+              </div>
+            </div>
+          </div>
+        </button>
+        <button class="versionChoice chain" type="button" data-start-level="chain">
+          <strong>Challenge 1: ABC</strong>
+          <span>Build a three-matrix valid chain and match the final ABC shape.</span>
+          <div class="introSnapshot" aria-hidden="true">
+            <div class="introExpr chain">
+              <div class="introMini blue">
+                <span class="introMiniLabel">A</span>
+                <span class="introMatrix"><span class="introBracket left"></span><span class="introDots intro2x3"><i class="introDot"></i><i class="introDot"></i><i class="introDot"></i><i class="introDot"></i><i class="introDot"></i><i class="introDot"></i></span><span class="introBracket right"></span></span>
+              </div>
+              <span class="introOp">×</span>
+              <div class="introMini pink">
+                <span class="introMiniLabel">B</span>
+                <span class="introMatrix"><span class="introBracket left"></span><span class="introDots intro3x2"><i class="introDot"></i><i class="introDot"></i><i class="introDot"></i><i class="introDot"></i><i class="introDot"></i><i class="introDot"></i></span><span class="introBracket right"></span></span>
+              </div>
+              <span class="introOp">×</span>
+              <div class="introMini purple">
+                <span class="introMiniLabel">C</span>
+                <span class="introMatrix"><span class="introBracket left"></span><span class="introDots intro2x4"><i class="introDot"></i><i class="introDot"></i><i class="introDot"></i><i class="introDot"></i><i class="introDot"></i><i class="introDot"></i><i class="introDot"></i><i class="introDot"></i></span><span class="introBracket right"></span></span>
+              </div>
+              <span class="introOp">=</span>
+              <div class="introMini green">
+                <span class="introMiniLabel">ABC</span>
+                <span class="introMatrix"><span class="introBracket left"></span><span class="introDots intro2x4"><i class="introDot"></i><i class="introDot"></i><i class="introDot"></i><i class="introDot"></i><i class="introDot"></i><i class="introDot"></i><i class="introDot"></i><i class="introDot"></i></span><span class="introBracket right"></span></span>
+              </div>
+            </div>
+          </div>
+        </button>
+        <button class="versionChoice repair" type="button" data-start-level="repair">
+          <strong>Challenge 2: Repair</strong>
+          <span>Transpose the right tiles so four matrices make the target final shape.</span>
+          <div class="introSnapshot" aria-hidden="true">
+            <div class="introExpr repair">
+              <div class="introMini blue">
+                <span class="introMiniLabel">A</span>
+                <span class="introMatrix"><span class="introBracket left"></span><span class="introDots intro2x3"><i class="introDot"></i><i class="introDot"></i><i class="introDot"></i><i class="introDot"></i><i class="introDot"></i><i class="introDot"></i></span><span class="introBracket right"></span></span>
+              </div>
+              <span class="introOp">×</span>
+              <div class="introMini pink introTransposed">
+                <span class="introMiniLabel">B</span>
+                <span class="introMatrix"><span class="introBracket left"></span><span class="introDots intro3x2"><i class="introDot"></i><i class="introDot"></i><i class="introDot"></i><i class="introDot"></i><i class="introDot"></i><i class="introDot"></i></span><span class="introBracket right"></span></span>
+                <span class="introTransposeBadge" aria-hidden="true">T</span>
+              </div>
+              <span class="introOp">×</span>
+              <div class="introMini purple">
+                <span class="introMiniLabel">C</span>
+                <span class="introMatrix"><span class="introBracket left"></span><span class="introDots intro2x4"><i class="introDot"></i><i class="introDot"></i><i class="introDot"></i><i class="introDot"></i><i class="introDot"></i><i class="introDot"></i><i class="introDot"></i><i class="introDot"></i></span><span class="introBracket right"></span></span>
+              </div>
+              <span class="introOp">×</span>
+              <div class="introMini yellow introTransposed">
+                <span class="introMiniLabel">D</span>
+                <span class="introMatrix"><span class="introBracket left"></span><span class="introDots intro3x2"><i class="introDot"></i><i class="introDot"></i><i class="introDot"></i><i class="introDot"></i><i class="introDot"></i><i class="introDot"></i></span><span class="introBracket right"></span></span>
+                <span class="introTransposeBadge" aria-hidden="true">T</span>
+              </div>
+            </div>
+          </div>
+        </button>
+        <button class="versionChoice link" type="button" data-start-level="link">
+          <strong>Challenge 3: Link</strong>
+          <span>Trace one path through every matrix tile. Each link must be a valid matrix product.</span>
+          <div class="introSnapshot" aria-hidden="true">
+            <div class="introLinkBoard">
+              <div class="introLinkTile blue"></div>
+              <div class="introLinkTile pink"></div>
+              <div class="introLinkTile purple"></div>
+              <div class="introLinkTile yellow"></div>
+              <div class="introLinkTile green"></div>
+              <div class="introLinkTile purple"></div>
+              <div class="introLinkTile pink"></div>
+              <div class="introLinkTile blue"></div>
+              <svg class="introLinkPath" viewBox="0 0 151 73" aria-hidden="true">
+                <polyline points="17,17 56,17 56,56 95,56 95,17 134,17 134,56"></polyline>
+              </svg>
+            </div>
+          </div>
+        </button>
+      </div>
+    </section>
     <section class="feedback"><div id="msg" class="msg">Tap exactly one card in each column to make a valid product.</div></section>
     <section class="boardWrap">
       <div class="boardRel" id="boardRel">
@@ -523,9 +1216,28 @@ button.active{background:#202124;color:#fff;box-shadow:none}
       </div>
     </section>
     <section class="matchTray" id="matchTray"></section>
-    <section class="hintRow"><button id="hintBtn" class="hintBtn" type="button" aria-expanded="false"><span class="hintLabel">hint</span><span class="hintText">Inner numbers match; outer numbers survive.</span></button></section>
-    <section class="footer"><button id="restart" class="restart" type="button">play again</button></section>
+    <section class="hintRow"><button id="hintBtn" class="hintBtn" type="button" aria-expanded="false"><span class="hintLabel">hint</span><span class="hintText">Inner numbers match; outer numbers survive.</span></button><button id="restart" class="restart" type="button">new game</button></section>
+    <section class="footer"></section>
   </main>
+  <div class="confirmOverlay" id="newGameModal" hidden>
+    <div class="confirmDialog" role="dialog" aria-modal="true" aria-labelledby="newGameTitle">
+      <h2 id="newGameTitle">Start a new game?</h2>
+      <p>This will reset the board, score, and timer.</p>
+      <div class="confirmActions">
+        <button id="cancelNewGame" type="button">Cancel</button>
+        <button id="confirmNewGame" class="confirmPrimary" type="button">New game</button>
+      </div>
+    </div>
+  </div>
+  <div class="confirmOverlay" id="endGameModal" hidden>
+    <div class="confirmDialog" role="dialog" aria-modal="true" aria-labelledby="endGameTitle">
+      <h2 id="endGameTitle">Great run!</h2>
+      <p id="endGameScore">Your score: 0</p>
+      <div class="confirmActions">
+        <button id="endNewGame" class="confirmPrimary" type="button">New game</button>
+      </div>
+    </div>
+  </div>
 
 <script>
 (() => {
@@ -538,18 +1250,32 @@ button.active{background:#202124;color:#fff;box-shadow:none}
   const timeEl = document.getElementById('time');
   const msgEl = document.getElementById('msg');
   const restartBtn = document.getElementById('restart');
+  const newGameModal = document.getElementById('newGameModal');
+  const cancelNewGameBtn = document.getElementById('cancelNewGame');
+  const confirmNewGameBtn = document.getElementById('confirmNewGame');
+  const endGameModal = document.getElementById('endGameModal');
+  const endGameScore = document.getElementById('endGameScore');
+  const endNewGameBtn = document.getElementById('endNewGame');
   const matchTray = document.getElementById('matchTray');
   const hintBtn = document.getElementById('hintBtn');
   const shapeToggle = document.getElementById('shapeToggle');
+  const introBtns = document.querySelectorAll('[data-start-level]');
   const levelBtns = {
     basic: document.getElementById('basicLevel'),
     chain: document.getElementById('challenge1'),
-    match: document.getElementById('challenge2')
+    repair: document.getElementById('challenge2'),
+    link: document.getElementById('challenge3')
   };
 
+  const GAME_SECONDS = 120;
+  const LINK_GRID_SIZE = 5;
+  const maxDim = 5;
+  const lineColors = ['#ff5a8a', '#2fafff', '#22b865', '#8b6cff', '#f2b600'];
+
+  let mode = 'intro';
   let level = 'basic';
   let score = 0;
-  let time = 45;
+  let time = GAME_SECONDS;
   let timer = null;
   let started = false;
   let locked = false;
@@ -557,9 +1283,18 @@ button.active{background:#202124;color:#fff;box-shadow:none}
   let round = null;
   let selected = {};
   let matches = [];
-
-  const maxDim = 6;
-  const lineColors = ['#ff5a8a', '#2fafff', '#22b865', '#8b6cff', '#f2b600'];
+  let playSession = 0;
+  let virtualTimerRemainder = 0;
+  let linkPath = [];
+  let linkUsed = new Set();
+  let linkSolved = false;
+  let linkDragging = false;
+  let linkActivePointerId = null;
+  let linkLastHoverIndex = null;
+  let linkPreviewPoint = null;
+  let linkLastTracePoint = null;
+  let linkSuppressNextClick = false;
+  let linkLastDragInvalidAt = 0;
 
   function timestampSeed(){
     const now = new Date();
@@ -587,7 +1322,7 @@ button.active{background:#202124;color:#fff;box-shadow:none}
   const sessionSeed = urlSeed || timestampSeed();
   const useRecentFilter = !urlSeed;
   const rng = mulberry32(hashSeed(sessionSeed));
-  const recentKey = 'matriXMatchRecentBoards:v3';
+  const recentKey = 'matriXMatchRecentBoards:v5';
   let matchIdCounter = 0;
 
   const rand = (lo, hi) => lo + Math.floor(rng() * (hi - lo + 1));
@@ -606,58 +1341,233 @@ button.active{background:#202124;color:#fff;box-shadow:none}
   const cloneShape = s => ({r:s.r, c:s.c});
   console.info(`MatriX Match seed: ${sessionSeed}`);
 
-  function levelTime(){ return level === 'match' ? 60 : 45; }
-  function requiredKinds(){ return level === 'chain' ? ['first','second','third','target'] : ['first','second','target']; }
-  function productName(){ return level === 'chain' ? 'ABC' : 'AB'; }
+  function levelTime(){ return level === 'link' ? 0 : GAME_SECONDS; }
+  function requiredKinds(){
+    if(level === 'repair' || level === 'link') return [];
+    return level === 'chain' ? ['first','second','third','target'] : ['first','second','target'];
+  }
+  function productName(){
+    if(level === 'repair') return 'ABCD';
+    if(level === 'link') return 'path';
+    return level === 'chain' ? 'ABC' : 'AB';
+  }
   function roleLabel(kind){
     if(kind === 'first') return 'A';
     if(kind === 'second') return 'B';
     if(kind === 'third') return 'C';
+    if(kind === 'fourth') return 'D';
     if(kind === 'target') return productName();
     return kind;
+  }
+  function repairBreakCount(){
+    const roll = rng();
+    if(roll < 0.55) return 2;
+    if(roll < 0.9) return 3;
+    return 1;
   }
   function setInstruction(){
     instructionEl.textContent = level === 'basic'
       ? 'Choose matching shapes for A, B, and AB.'
       : level === 'chain'
         ? 'Choose matching shapes for A, B, C, and ABC.'
-        : 'Match every valid product';
+        : level === 'repair'
+          ? 'Use transposes to reach the target.'
+          : 'Start at the highlighted tile and trace a path of valid matrix products.';
+    hintBtn.querySelector('.hintText').textContent = level === 'repair'
+      ? 'Transposing flips rows and columns.'
+      : level === 'link'
+        ? 'Current columns must match next rows.'
+        : 'Inner numbers match; outer numbers survive.';
   }
 
   function setMessage(text, type=''){
     msgEl.textContent = text;
     msgEl.className = `msg ${type}`.trim();
+    syncGameState();
   }
+
+  function gameStatePayload(){
+    const payload = {
+      mode,
+      level,
+      score,
+      time,
+      maxDimension: maxDim,
+      selected,
+      matches: matches.length,
+      introVisible: app.classList.contains('introMode'),
+      newGamePromptVisible: !newGameModal.hidden,
+      endCardVisible: !endGameModal.hidden
+    };
+    if(level === 'repair' && round && round.repair){
+      const status = repairStatus();
+      payload.repair = {
+        target: cloneShape(round.target),
+        tiles: round.repair.map(tile => ({
+          id: tile.id,
+          name: tile.name,
+          baseShape: {r:tile.r, c:tile.c},
+          displayedShape: displayedShape(tile),
+          transposed: !!tile.t
+        })),
+        currentProduct: status.product,
+        valid: status.valid,
+        solved: status.solved,
+        repairsNeeded: Array.isArray(round.brokenIndexes) ? round.brokenIndexes.length : null
+      };
+    }
+    if(level === 'link' && round && round.link){
+      payload.link = {
+        size: round.size,
+        solved: linkSolved,
+        progress: linkPath.length,
+        total: round.tiles.length,
+        timerStarted: started,
+        elapsedSeconds: time,
+        scoreMode: 'elapsed time',
+        currentIndex: linkCurrentIndex(),
+        currentProduct: linkProductShape(),
+        userPath: linkPath.slice(),
+        nextExpected: linkExpectedNextIndex(),
+        tiles: round.tiles.map(t => ({
+          index: t.hiddenIndex,
+          row: t.row,
+          col: t.col,
+          shape: {r:t.r, c:t.c}
+        }))
+      };
+    }
+    return payload;
+  }
+
+  function syncGameState(){
+    app.dataset.gameState = JSON.stringify(gameStatePayload());
+  }
+
+  function setActiveLevel(next){
+    for(const [k,btn] of Object.entries(levelBtns)) btn.classList.toggle('active', k === next);
+  }
+
+  function isActiveSession(token){
+    return mode === 'playing' && token === playSession && (level === 'link' || time > 0);
+  }
+
+  function tickTimer(seconds=1){
+    if(mode !== 'playing' || !started) return;
+    if(level === 'link'){
+      time += seconds;
+      timeEl.textContent = time;
+      syncGameState();
+      return;
+    }
+    if(time <= 0) return;
+    time = Math.max(0, time - seconds);
+    timeEl.textContent = time;
+    if(time <= 0) endGame();
+    else syncGameState();
+  }
+
   function startTimer(){
     if(started) return;
     started = true;
-    timer = setInterval(() => {
-      time--;
-      timeEl.textContent = time;
-      if(time <= 0) endGame();
-    }, 1000);
+    virtualTimerRemainder = 0;
+    timer = setInterval(() => tickTimer(1), 1000);
   }
+
   function endGame(){
     clearInterval(timer);
     timer = null;
+    mode = 'ended';
+    started = false;
     locked = true;
-    setMessage(`Time. Score: ${score}.`, 'done');
+    endGameScore.textContent = level === 'link'
+      ? `Your score: ${time} second${time === 1 ? '' : 's'}`
+      : `Your score: ${score}`;
+    endGameModal.hidden = false;
     restartBtn.classList.add('show');
+    syncGameState();
+    endNewGameBtn.focus();
   }
+
   function resetGame(){
+    playSession++;
+    mode = 'playing';
     clearInterval(timer);
     timer = null;
     started = false;
     locked = false;
     score = 0;
     time = levelTime();
+    virtualTimerRemainder = 0;
     scoreEl.textContent = score;
     timeEl.textContent = time;
-    restartBtn.classList.remove('show');
+    restartBtn.classList.add('show');
+    app.classList.remove('introMode');
     setInstruction();
-    app.classList.toggle('matchLevel', level === 'match');
+    setActiveLevel(level);
+    app.classList.toggle('chainLevel', level === 'chain');
+    app.classList.toggle('repairLevel', level === 'repair');
+    app.classList.toggle('linkLevel', level === 'link');
     collapseHint();
     renderRound();
+    startTimer();
+    syncGameState();
+  }
+
+  function beginGame(next){
+    level = next;
+    closeNewGamePrompt();
+    closeEndGamePrompt();
+    resetGame();
+    requestAnimationFrame(drawLines);
+  }
+
+  function showIntro(){
+    playSession++;
+    clearInterval(timer);
+    timer = null;
+    mode = 'intro';
+    started = false;
+    locked = true;
+    score = 0;
+    time = levelTime();
+    virtualTimerRemainder = 0;
+    selected = {};
+    matches = [];
+    round = null;
+    scoreEl.textContent = score;
+    timeEl.textContent = time;
+    board.innerHTML = '';
+    linesSvg.innerHTML = '';
+    matchTray.innerHTML = '';
+    matchTray.classList.remove('show');
+    restartBtn.classList.remove('show');
+    app.classList.add('introMode');
+    app.classList.remove('chainLevel');
+    app.classList.remove('repairLevel');
+    app.classList.remove('linkLevel');
+    instructionEl.textContent = '';
+    collapseHint();
+    closeNewGamePrompt();
+    closeEndGamePrompt();
+    syncGameState();
+  }
+
+  function openNewGamePrompt(){
+    if(mode !== 'playing') return;
+    newGameModal.hidden = false;
+    syncGameState();
+    cancelNewGameBtn.focus();
+  }
+
+  function closeNewGamePrompt(){
+    newGameModal.hidden = true;
+    syncGameState();
+  }
+
+  function closeEndGamePrompt(){
+    endGameModal.hidden = true;
+    syncGameState();
   }
 
   function uniquePush(arr, s){
@@ -681,11 +1591,267 @@ button.active{background:#202124;color:#fff;box-shadow:none}
     }
     return count;
   }
+  function displayedShape(tile){
+    return tile && tile.t ? {r:tile.c, c:tile.r} : {r:tile.r, c:tile.c};
+  }
+  function repairProduct(tiles){
+    if(!tiles || tiles.length !== 4) return {valid:false};
+    const shapes = tiles.map(displayedShape);
+    const seams = ['AB','BC','CD'];
+    for(let i=0; i<shapes.length-1; i++){
+      if(shapes[i].c !== shapes[i+1].r){
+        return {valid:false, where:seams[i], seam:[shapes[i].c, shapes[i+1].r], shapes};
+      }
+    }
+    return {valid:true, product:{r:shapes[0].r, c:shapes[3].c}, shapes};
+  }
+  function repairStatusFor(tiles, target){
+    const result = repairProduct(tiles);
+    return {
+      ...result,
+      solved: !!(result.valid && same(result.product, target))
+    };
+  }
+  function repairStatus(){
+    if(!round || !round.repair) return {valid:false, solved:false, product:null};
+    return repairStatusFor(round.repair, round.target);
+  }
+  function repairShapeKey(tiles){
+    return tiles.map(tile => {
+      const s = displayedShape(tile);
+      return `${tile.name}:${s.r}x${s.c}`;
+    }).join('>');
+  }
+  function countRepairSolutions(baseTiles, target){
+    const solutions = new Set();
+    for(let mask=0; mask<16; mask++){
+      const candidate = baseTiles.map((tile, i) => ({...tile, t:!!(mask & (1 << i))}));
+      const status = repairStatusFor(candidate, target);
+      if(status.solved) solutions.add(repairShapeKey(candidate));
+    }
+    return solutions.size;
+  }
+  function makeRepairRound(){
+    for(let attempt=0; attempt<12000; attempt++){
+      const dims = Array.from({length:5}, () => rand(1,maxDim));
+      if(dims.some((value, i) => i > 0 && value === dims[i-1])) continue;
+      const id = `r${attempt}_${rand(1000,9999)}`;
+      const solutionIndexes = shuffle([0,1,2,3]).slice(0, repairBreakCount());
+      const names = ['A','B','C','D'];
+      const colors = ['first','second','third','fourth'];
+      const base = names.map((name, i) => {
+        const solvedShape = {r:dims[i], c:dims[i+1]};
+        const shouldTranspose = solutionIndexes.includes(i);
+        return {
+          id:`${id}${name.toLowerCase()}`,
+          name,
+          r:shouldTranspose ? solvedShape.c : solvedShape.r,
+          c:shouldTranspose ? solvedShape.r : solvedShape.c,
+          color:colors[i],
+          t:false
+        };
+      });
+      const target = {id:`${id}t`, r:dims[0], c:dims[4]};
+      if(countRepairSolutions(base, target) !== 1) continue;
+      const solvedRepair = base.map((tile, i) => ({...tile, t:solutionIndexes.includes(i)}));
+      if(!repairStatusFor(solvedRepair, target).solved) continue;
+      if(repairStatusFor(base, target).solved) continue;
+      return {repair:base, target, brokenIndexes:solutionIndexes};
+    }
+    return {
+      repair: [
+        {id:'fallbackA', name:'A', r:2, c:3, color:'first', t:false},
+        {id:'fallbackB', name:'B', r:4, c:3, color:'second', t:false},
+        {id:'fallbackC', name:'C', r:4, c:5, color:'third', t:false},
+        {id:'fallbackD', name:'D', r:1, c:5, color:'fourth', t:false}
+      ],
+      target: {id:'fallbackT', r:2, c:1},
+      brokenIndexes: [1,3]
+    };
+  }
+
+  function linkCellKey(cell){ return `${cell.row},${cell.col}`; }
+  function linkNeighbors(cell, n=LINK_GRID_SIZE){
+    const out = [];
+    for(const [dr, dc] of [[1,0],[-1,0],[0,1],[0,-1]]){
+      const row = cell.row + dr;
+      const col = cell.col + dc;
+      if(row >= 0 && row < n && col >= 0 && col < n) out.push({row, col});
+    }
+    return out;
+  }
+  function linkManhattan(a, b){
+    return Math.abs(a.row - b.row) + Math.abs(a.col - b.col);
+  }
+  function linkSnakePath(n){
+    const path = [];
+    for(let row=0; row<n; row++){
+      if(row % 2 === 0){
+        for(let col=0; col<n; col++) path.push({row, col});
+      }else{
+        for(let col=n-1; col>=0; col--) path.push({row, col});
+      }
+    }
+    return path;
+  }
+  function linkRandomHamiltonianPath(n){
+    const cells = [];
+    for(let row=0; row<n; row++){
+      for(let col=0; col<n; col++) cells.push({row, col});
+    }
+
+    for(let attempt=0; attempt<180; attempt++){
+      const start = cells[rand(0, cells.length - 1)];
+      const path = [{...start}];
+      const seen = new Set([linkCellKey(start)]);
+
+      function onwardCount(cell){
+        return linkNeighbors(cell, n).filter(nb => !seen.has(linkCellKey(nb))).length;
+      }
+
+      function dfs(cell){
+        if(path.length === n*n) return true;
+        const opts = shuffle(linkNeighbors(cell, n).filter(nb => !seen.has(linkCellKey(nb))));
+        opts.sort((a, b) => onwardCount(a) - onwardCount(b));
+        for(const nb of opts){
+          seen.add(linkCellKey(nb));
+          path.push({...nb});
+          if(dfs(nb)) return true;
+          path.pop();
+          seen.delete(linkCellKey(nb));
+        }
+        return false;
+      }
+
+      if(dfs(start)) return path;
+    }
+
+    return linkSnakePath(n);
+  }
+  function linkColorDimensions(path, n){
+    const N = path.length;
+    const indexByCell = new Map(path.map((cell, i) => [linkCellKey(cell), i]));
+    const adj = Array.from({length:N+1}, () => new Set());
+
+    for(let i=0; i<N; i++){
+      for(const nb of linkNeighbors(path[i], n)){
+        const j = indexByCell.get(linkCellKey(nb));
+        if(j === undefined) continue;
+        if(j === i + 1) continue;
+        const a = i + 1;
+        const b = j;
+        if(a !== b){
+          adj[a].add(b);
+          adj[b].add(a);
+        }
+      }
+    }
+
+    const order = Array.from({length:N+1}, (_, i) => i)
+      .sort((a, b) => adj[b].size - adj[a].size);
+    const dims = Array(N+1).fill(0);
+
+    function backtrack(k){
+      if(k === order.length) return true;
+      const v = order[k];
+      const colors = shuffle(Array.from({length:maxDim}, (_, i) => i + 1));
+      for(const color of colors){
+        let ok = true;
+        for(const u of adj[v]){
+          if(dims[u] === color){
+            ok = false;
+            break;
+          }
+        }
+        if(!ok) continue;
+        dims[v] = color;
+        if(backtrack(k + 1)) return true;
+        dims[v] = 0;
+      }
+      return false;
+    }
+
+    return backtrack(0) ? dims : null;
+  }
+  function makeLinkRound(){
+    const n = LINK_GRID_SIZE;
+
+    for(let attempt=0; attempt<80; attempt++){
+      const hiddenPath = linkRandomHamiltonianPath(n);
+      const dims = linkColorDimensions(hiddenPath, n);
+      if(!dims) continue;
+
+      const tiles = [];
+      const indexByCell = new Map();
+      hiddenPath.forEach((cell, i) => {
+        const tile = {
+          id: `l${i}`,
+          hiddenIndex: i,
+          row: cell.row,
+          col: cell.col,
+          r: dims[i],
+          c: dims[i+1],
+          color: i % 6
+        };
+        tiles.push(tile);
+        indexByCell.set(linkCellKey(cell), i);
+      });
+
+      const byGrid = Array(n*n).fill(null);
+      tiles.forEach(tile => {
+        byGrid[tile.row*n + tile.col] = tile;
+      });
+
+      return {
+        link: true,
+        size: n,
+        hiddenPath,
+        dims,
+        tiles,
+        byGrid,
+        indexByCell
+      };
+    }
+
+    const hiddenPath = linkSnakePath(n);
+    const dims = linkColorDimensions(hiddenPath, n);
+    if(!dims) throw new Error('Could not generate a matrix-link puzzle.');
+    const tiles = hiddenPath.map((cell, i) => ({
+      id: `l${i}`,
+      hiddenIndex: i,
+      row: cell.row,
+      col: cell.col,
+      r: dims[i],
+      c: dims[i+1],
+      color: i % 6
+    }));
+    const byGrid = Array(n*n).fill(null);
+    const indexByCell = new Map();
+    tiles.forEach(tile => {
+      byGrid[tile.row*n + tile.col] = tile;
+      indexByCell.set(linkCellKey(tile), tile.hiddenIndex);
+    });
+    return {link:true, size:n, hiddenPath, dims, tiles, byGrid, indexByCell};
+  }
 
   function groupSignature(shapes){
     return (shapes || []).map(shapeKey).sort().join(',');
   }
   function roundSignature(data){
+    if(data.link){
+      return [
+        level,
+        `N:${data.size}`,
+        data.tiles.map(t => `${t.row},${t.col}:${t.r}x${t.c}`).join('|')
+      ].join('|');
+    }
+    if(data.repair){
+      return [
+        level,
+        `R:${data.repair.map(t => `${t.name}:${t.r}x${t.c}:${t.t?'T':'N'}`).join('>')}`,
+        `T:${shapeKey(data.target)}`
+      ].join('|');
+    }
     return [
       level,
       `A:${groupSignature(data.first)}`,
@@ -839,13 +2005,89 @@ button.active{background:#202124;color:#fff;box-shadow:none}
     return card;
   }
 
+  function linkMatrixDots(shape){
+    const stack = document.createElement('span');
+    stack.className = 'shapeStack';
+
+    const matrix = document.createElement('span');
+    matrix.className = 'matrix';
+
+    const left = document.createElement('span');
+    left.className = 'bracket left';
+
+    const dots = document.createElement('span');
+    dots.className = 'dots';
+    dots.style.gridTemplateColumns = `repeat(${shape.c}, var(--dot-size))`;
+    dots.style.gridTemplateRows = `repeat(${shape.r}, var(--dot-size))`;
+
+    for(let i=0; i<shape.r*shape.c; i++){
+      const d = document.createElement('span');
+      d.className = 'dot';
+      dots.appendChild(d);
+    }
+
+    const right = document.createElement('span');
+    right.className = 'bracket right';
+    matrix.append(left, dots, right);
+
+    const size = document.createElement('span');
+    size.className = 'sizeLabel';
+    size.textContent = shapeText(shape);
+    stack.append(matrix, size);
+    return stack;
+  }
+
+  function renderLinkBoard(){
+    board.innerHTML = '';
+    board.className = 'linkBoard';
+    board.style.setProperty('--linkN', round.size);
+
+    const grid = document.createElement('div');
+    grid.className = 'linkGrid';
+    grid.setAttribute('role', 'grid');
+    grid.setAttribute('aria-label', 'matrix link grid');
+
+    for(let row=0; row<round.size; row++){
+      for(let col=0; col<round.size; col++){
+        const tile = round.byGrid[row*round.size + col];
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = `linkTile c${tile.color}`;
+        btn.dataset.linkIndex = tile.hiddenIndex;
+        btn.dataset.row = tile.row;
+        btn.dataset.col = tile.col;
+        btn.setAttribute('role', 'gridcell');
+        btn.setAttribute('aria-label', `matrix tile ${shapeText(tile)}, row ${row+1}, column ${col+1}`);
+        btn.appendChild(linkMatrixDots(tile));
+
+        const badge = document.createElement('span');
+        badge.className = 'linkOrderBadge';
+        btn.appendChild(badge);
+
+        btn.addEventListener('click', event => {
+          event.preventDefault();
+          if(linkSuppressNextClick){
+            linkSuppressNextClick = false;
+            return;
+          }
+          linkAttemptTile(tile.hiddenIndex);
+        });
+
+        grid.appendChild(btn);
+      }
+    }
+
+    board.appendChild(grid);
+    linkUpdatePathDisplay();
+  }
+
   function op(symbol){
     const wrap = document.createElement('div');
     wrap.className = 'opColumn';
     const spacer = document.createElement('div');
     const stack = document.createElement('div');
     stack.className = 'opStack';
-    stack.innerHTML = `<span></span><span class="opSymbol">${symbol}</span><span></span>`;
+    stack.innerHTML = level === 'repair' ? `<span class="opSymbol">${symbol}</span>` : `<span></span><span class="opSymbol">${symbol}</span><span></span>`;
     wrap.append(spacer, stack);
     return wrap;
   }
@@ -860,18 +2102,300 @@ button.active{background:#202124;color:#fff;box-shadow:none}
     wrap.append(p, col);
     return wrap;
   }
+  function repairMatrixCard(tile, index){
+    const shape = displayedShape(tile);
+    const card = document.createElement('button');
+    card.className = `card ${tile.color} repairCard${tile.t ? ' transposed' : ''}`;
+    card.type = 'button';
+    card.dataset.repairIndex = index;
+    card.setAttribute('aria-label', `Transpose ${tile.name}${tile.t ? ' transposed' : ''}, ${shapeText(shape)}`);
+
+    const stack = document.createElement('span');
+    stack.className = 'shapeStack';
+    const matrix = document.createElement('span');
+    matrix.className = 'matrix';
+    const left = document.createElement('span'); left.className = 'bracket left';
+    const dots = document.createElement('span'); dots.className = 'dots';
+    dots.style.gridTemplateColumns = `repeat(${shape.c}, var(--dot-size))`;
+    dots.style.gridTemplateRows = `repeat(${shape.r}, var(--dot-size))`;
+    for(let i=0; i<shape.r*shape.c; i++){
+      const d = document.createElement('span');
+      d.className = 'dot';
+      dots.appendChild(d);
+    }
+    const right = document.createElement('span'); right.className = 'bracket right';
+    matrix.append(left, dots, right);
+    const size = document.createElement('span');
+    size.className = 'sizeLabel';
+    size.textContent = shapeText(shape);
+    stack.append(matrix, size);
+
+    const badge = document.createElement('span');
+    badge.className = 'transposeBadge';
+    badge.textContent = 'T';
+    badge.setAttribute('aria-hidden', 'true');
+
+    card.append(stack, badge);
+    card.addEventListener('click', () => toggleRepairTranspose(index));
+    return card;
+  }
+  function repairTargetCard(target){
+    const card = document.createElement('div');
+    card.className = 'card target repairTarget';
+    card.setAttribute('role', 'img');
+    card.setAttribute('aria-label', `Target final shape ${shapeText(target)}`);
+
+    const stack = document.createElement('span');
+    stack.className = 'shapeStack';
+    const matrix = document.createElement('span');
+    matrix.className = 'matrix';
+    const left = document.createElement('span'); left.className = 'bracket left';
+    const dots = document.createElement('span'); dots.className = 'dots';
+    dots.style.gridTemplateColumns = `repeat(${target.c}, var(--dot-size))`;
+    dots.style.gridTemplateRows = `repeat(${target.r}, var(--dot-size))`;
+    for(let i=0; i<target.r*target.c; i++){
+      const d = document.createElement('span');
+      d.className = 'dot';
+      dots.appendChild(d);
+    }
+    const right = document.createElement('span'); right.className = 'bracket right';
+    matrix.append(left, dots, right);
+    const size = document.createElement('span');
+    size.className = 'sizeLabel';
+    size.textContent = shapeText(target);
+    stack.append(matrix, size);
+    card.appendChild(stack);
+    return card;
+  }
+  function repairColumn(tile, index){
+    const wrap = document.createElement('div');
+    const p = document.createElement('p');
+    p.className = 'groupTitle';
+    p.textContent = `${tile.name}${tile.t ? 'ᵀ' : ''}`;
+    const col = document.createElement('div');
+    col.className = 'cardColumn';
+    col.appendChild(repairMatrixCard(tile, index));
+    wrap.append(p, col);
+    return wrap;
+  }
+  function repairTargetColumn(target){
+    const wrap = document.createElement('div');
+    wrap.className = 'repairTargetBlock';
+    const p = document.createElement('p');
+    p.className = 'groupTitle';
+    p.textContent = 'Target';
+    const col = document.createElement('div');
+    col.className = 'cardColumn';
+    col.appendChild(repairTargetCard(target));
+    wrap.append(p, col);
+    return wrap;
+  }
+  function renderRepairBoard(){
+    board.innerHTML = '';
+    board.className = 'repairBoard';
+    const productRow = document.createElement('div');
+    productRow.className = 'productGrid repair';
+    productRow.append(
+      repairColumn(round.repair[0], 0), op('×'),
+      repairColumn(round.repair[1], 1), op('×'),
+      repairColumn(round.repair[2], 2), op('×'),
+      repairColumn(round.repair[3], 3)
+    );
+    const targetRow = document.createElement('div');
+    targetRow.className = 'repairTargetRow';
+    const equals = document.createElement('div');
+    equals.className = 'repairEquals';
+    equals.textContent = '=';
+    equals.setAttribute('aria-hidden', 'true');
+    targetRow.append(
+      equals,
+      repairTargetColumn(round.target)
+    );
+    board.append(productRow, targetRow);
+    drawLines();
+  }
+
+  function linkResetPathState(){
+    linkSolved = false;
+    linkPath = [0];
+    linkUsed = new Set([0]);
+    linkPreviewPoint = null;
+    linkLastHoverIndex = null;
+    linkLastTracePoint = null;
+    linkDragging = false;
+    linkActivePointerId = null;
+    linkSuppressNextClick = false;
+    linkLastDragInvalidAt = 0;
+  }
+  function linkTileEl(index){
+    return board.querySelector(`.linkTile[data-link-index="${index}"]`);
+  }
+  function linkCurrentIndex(){
+    return linkPath.length ? linkPath[linkPath.length - 1] : null;
+  }
+  function linkCurrentTile(){
+    return round && round.tiles ? round.tiles[linkCurrentIndex()] : null;
+  }
+  function linkProductShape(){
+    if(!round || !round.link || !linkPath.length) return null;
+    const first = round.tiles[linkPath[0]];
+    const last = round.tiles[linkCurrentIndex()];
+    return {r:first.r, c:last.c};
+  }
+  function linkExpectedNextIndex(){
+    const cur = linkCurrentIndex();
+    return cur !== null && cur + 1 < round.tiles.length ? cur + 1 : null;
+  }
+  function linkIsAdjacent(aIndex, bIndex){
+    const a = round.tiles[aIndex];
+    const b = round.tiles[bIndex];
+    return !!(a && b && linkManhattan(a, b) === 1);
+  }
+  function linkIsValidProductMove(aIndex, bIndex){
+    const a = round.tiles[aIndex];
+    const b = round.tiles[bIndex];
+    return !!(a && b && a.c === b.r);
+  }
+  function linkFormatBadProduct(aIndex, bIndex){
+    const a = round.tiles[aIndex];
+    const b = round.tiles[bIndex];
+    return showSizes
+      ? `${a.c} ≠ ${b.r}. Current columns must match next rows.`
+      : 'Those inner counts do not match.';
+  }
+  function linkFlashBad(index, alsoCurrent=false){
+    const bad = linkTileEl(index);
+    const cur = linkTileEl(linkCurrentIndex());
+    [bad, alsoCurrent ? cur : null].filter(Boolean).forEach(el => {
+      el.classList.remove('badFlash');
+      void el.offsetWidth;
+      el.classList.add('badFlash');
+      setTimeout(() => el.classList.remove('badFlash'), 340);
+    });
+    if(navigator.vibrate) navigator.vibrate(35);
+  }
+  function linkFlashGood(index){
+    const el = linkTileEl(index);
+    if(!el) return;
+    el.classList.remove('goodFlash');
+    void el.offsetWidth;
+    el.classList.add('goodFlash');
+    setTimeout(() => el.classList.remove('goodFlash'), 300);
+  }
+  function linkSignalInvalid(index, message, alsoCurrent=false, fromDrag=false){
+    const now = performance && performance.now ? performance.now() : Date.now();
+    if(fromDrag && now - linkLastDragInvalidAt < 220) return;
+    if(fromDrag) linkLastDragInvalidAt = now;
+    linkFlashBad(index, alsoCurrent);
+    setMessage(message, 'bad');
+  }
+  function linkBacktrack(){
+    if(level !== 'link' || locked || linkSolved) return;
+    if(linkPath.length <= 1){
+      setMessage('You are already at the start tile.');
+      return;
+    }
+
+    const removed = linkPath.pop();
+    linkUsed.delete(removed);
+    linkUpdatePathDisplay();
+    setMessage('Backtracked one step.');
+  }
+  function linkAttemptTile(index, options={}){
+    if(level !== 'link' || locked || linkSolved || !round || !round.link) return false;
+    if(index === linkCurrentIndex()) return false;
+
+    const fromDrag = !!options.fromDrag;
+    const previous = linkPath.length > 1 ? linkPath[linkPath.length - 2] : null;
+
+    if(index === previous){
+      linkBacktrack();
+      return true;
+    }
+
+    if(linkUsed.has(index)){
+      linkSignalInvalid(index, 'That matrix is already in the path. Backtrack one tile at a time.', false, fromDrag);
+      return false;
+    }
+
+    if(!linkIsAdjacent(linkCurrentIndex(), index)){
+      linkSignalInvalid(index, 'Move to an orthogonal neighboring tile.', false, fromDrag);
+      return false;
+    }
+
+    if(!linkIsValidProductMove(linkCurrentIndex(), index)){
+      linkSignalInvalid(index, linkFormatBadProduct(linkCurrentIndex(), index), true, fromDrag);
+      return false;
+    }
+
+    linkPath.push(index);
+    linkUsed.add(index);
+    linkFlashGood(index);
+    linkUpdatePathDisplay();
+
+    if(linkPath.length === round.tiles.length){
+      const token = playSession;
+      linkSolved = true;
+      locked = true;
+      score = time;
+      scoreEl.textContent = score;
+      linkUpdatePathDisplay();
+      setMessage('Solved. Every link is a valid product chain.', 'done');
+      setTimeout(() => {
+        if(mode !== 'playing' || token !== playSession) return;
+        endGame();
+      }, 350);
+      return true;
+    }
+
+    setMessage(`Good link. ${linkPath.length}/${round.tiles.length} tiles.`, 'good');
+    return true;
+  }
+  function linkUpdatePathDisplay(){
+    const pathPosition = new Map(linkPath.map((idx, i) => [idx, i+1]));
+    board.querySelectorAll('.linkTile').forEach(el => {
+      const idx = Number(el.dataset.linkIndex);
+      const inPath = pathPosition.has(idx);
+      const isCurrent = idx === linkCurrentIndex();
+      const isStart = idx === 0;
+
+      el.classList.toggle('inPath', inPath);
+      el.classList.toggle('current', isCurrent && !linkSolved);
+      el.classList.toggle('start', isStart);
+      el.classList.toggle('solved', linkSolved && inPath);
+
+      const badge = el.querySelector('.linkOrderBadge');
+      if(badge) badge.textContent = inPath ? pathPosition.get(idx) : '';
+    });
+    drawLines();
+    syncGameState();
+  }
 
   function renderRound(){
     selected = {};
     matches = [];
     linesSvg.innerHTML = '';
     matchTray.innerHTML = '';
-    matchTray.classList.toggle('show', level === 'match');
+    matchTray.classList.remove('show');
     board.innerHTML = '';
     board.className = `productGrid${level === 'chain' ? ' three' : ''}`;
-    round = freshRound(level === 'basic' ? makeBasicRound : level === 'chain' ? makeChainRound : makeMatchRound);
+    const generator = level === 'basic'
+      ? makeBasicRound
+      : level === 'chain'
+        ? makeChainRound
+        : level === 'repair'
+          ? makeRepairRound
+          : makeLinkRound;
+    round = freshRound(generator);
 
-    if(level === 'chain'){
+    if(level === 'link'){
+      linkResetPathState();
+      renderLinkBoard();
+      setMessage('Start at the highlighted tile. Press and drag through neighboring matrices which form a valid product chain.');
+    }else if(level === 'repair'){
+      renderRepairBoard();
+      setMessage('Repair the broken product.');
+    }else if(level === 'chain'){
       board.append(
         column('first','A',round.first), op('×'),
         column('second','B',round.second), op('×'),
@@ -884,16 +2408,15 @@ button.active{background:#202124;color:#fff;box-shadow:none}
         column('second','B',round.second), op('='),
         column('target','AB',round.target)
       );
+      setMessage('Tap exactly one card in each column to make a valid product.');
     }
-    setMessage(level === 'match' ? 'Match every valid product.' : 'Tap exactly one card in each column to make a valid product.');
     drawLines();
   }
 
   function pick(kind, id, shape){
-    if(locked || time <= 0) return;
+    if(mode !== 'playing' || locked || time <= 0) return;
     const card = findCard(kind, id);
     if(card && card.classList.contains('matched')) return;
-    startTimer();
     selected[kind] = {...cloneShape(shape), id};
     document.querySelectorAll(`.card[data-kind="${kind}"]`).forEach(c => c.classList.remove('selected'));
     if(card) card.classList.add('selected');
@@ -915,6 +2438,7 @@ button.active{background:#202124;color:#fff;box-shadow:none}
 
   function checkAnswer(){
     locked = true;
+    const token = playSession;
     const result = productOfSelection();
     const chosenCards = [...document.querySelectorAll('.card.selected')];
     let good = false;
@@ -942,6 +2466,7 @@ button.active{background:#202124;color:#fff;box-shadow:none}
       score++;
       scoreEl.textContent = score;
       setTimeout(() => {
+        if(!isActiveSession(token)) return;
         clearSelectedOnly();
         if(matches.length === 2){
           autoLockRemainingMatch();
@@ -949,8 +2474,13 @@ button.active{background:#202124;color:#fff;box-shadow:none}
         if(matches.length === 3){
           locked = true;
           setTimeout(() => {
+            if(!isActiveSession(token)) return;
             setMessage('Board clear.', 'good');
-            setTimeout(() => { locked=false; renderRound(); }, 750);
+            setTimeout(() => {
+              if(!isActiveSession(token)) return;
+              locked=false;
+              renderRound();
+            }, 750);
           }, matches.some(m => m.auto) ? 620 : 0);
         }else{
           locked = false;
@@ -960,13 +2490,58 @@ button.active{background:#202124;color:#fff;box-shadow:none}
     }else if(good){
       score++;
       scoreEl.textContent = score;
-      setTimeout(() => { locked=false; renderRound(); }, 520);
+      setTimeout(() => {
+        if(!isActiveSession(token)) return;
+        locked=false;
+        renderRound();
+      }, 520);
     }else{
       setTimeout(() => {
+        if(!isActiveSession(token)) return;
         clearSelectedOnly();
         locked=false;
       }, 620);
     }
+  }
+  function repairFeedback(status){
+    if(!status.valid){
+      return showSizes && status.seam
+        ? `Not fixed yet: ${status.where} has ${status.seam[0]} meeting ${status.seam[1]}.`
+        : 'Not fixed yet.';
+    }
+    if(!same(status.product, round.target)){
+      return showSizes
+        ? `Product is ${shapeText(status.product)}, not ${shapeText(round.target)}.`
+        : 'Product works, but not the target shape.';
+    }
+    return 'Not fixed yet.';
+  }
+  function toggleRepairTranspose(index){
+    if(mode !== 'playing' || level !== 'repair' || locked || time <= 0 || !round || !round.repair) return;
+    const tile = round.repair[index];
+    if(!tile) return;
+    if(tile.r === tile.c){
+      setMessage('That square matrix looks the same transposed.');
+      return;
+    }
+    tile.t = !tile.t;
+    renderRepairBoard();
+    const status = repairStatus();
+    if(status.solved){
+      const token = playSession;
+      locked = true;
+      score++;
+      scoreEl.textContent = score;
+      setMessage('Fixed. Nice repair.', 'good');
+      setTimeout(() => {
+        if(!isActiveSession(token)) return;
+        locked = false;
+        renderRound();
+      }, 650);
+    }else{
+      setMessage(repairFeedback(status));
+    }
+    syncGameState();
   }
 
   function clearSelectedOnly(){
@@ -1058,7 +2633,74 @@ button.active{background:#202124;color:#fff;box-shadow:none}
     });
   }
 
+  function linkTileCenter(index){
+    const el = linkTileEl(index);
+    if(!el) return null;
+    const wrap = boardRel.getBoundingClientRect();
+    const rect = el.getBoundingClientRect();
+    return {
+      x: rect.left - wrap.left + rect.width / 2,
+      y: rect.top - wrap.top + rect.height / 2
+    };
+  }
+  function linkClamp(value, min, max){
+    return Math.min(max, Math.max(min, value));
+  }
+  function linkAxisLockedPoint(from, to){
+    const dx = to.x - from.x;
+    const dy = to.y - from.y;
+    return Math.abs(dx) >= Math.abs(dy)
+      ? {x:to.x, y:from.y}
+      : {x:from.x, y:to.y};
+  }
+  function linkAlignedNeighborPoint(from, to, fromIndex, toIndex){
+    const fromTile = round && round.tiles ? round.tiles[fromIndex] : null;
+    const toTile = round && round.tiles ? round.tiles[toIndex] : null;
+    if(fromTile && toTile){
+      if(fromTile.row === toTile.row) return {x:to.x, y:from.y};
+      if(fromTile.col === toTile.col) return {x:from.x, y:to.y};
+    }
+    return linkAxisLockedPoint(from, to);
+  }
+  function linkCommittedPathPoints(){
+    const pts = linkPath.map(linkTileCenter);
+    for(let i=1; i<pts.length; i++){
+      if(!pts[i] || !pts[i-1]) continue;
+      pts[i] = linkAlignedNeighborPoint(pts[i-1], pts[i], linkPath[i-1], linkPath[i]);
+    }
+    return pts.filter(Boolean);
+  }
+  function drawLinkPath(){
+    linesSvg.innerHTML = '';
+    if(!round || !round.link || !linkPath.length) return;
+    const wrap = boardRel.getBoundingClientRect();
+    if(!wrap.width || !wrap.height) return;
+
+    linesSvg.setAttribute('viewBox', `0 0 ${wrap.width} ${wrap.height}`);
+    const pts = linkCommittedPathPoints();
+    const livePts = pts.slice();
+    if(linkDragging && linkPreviewPoint && livePts.length){
+      livePts.push(linkPreviewPoint);
+    }
+    if(livePts.length < 2) return;
+
+    const poly = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+    poly.setAttribute('points', livePts.map(p => `${p.x},${p.y}`).join(' '));
+    poly.setAttribute('fill', 'none');
+    poly.setAttribute('stroke', '#5f5f5f');
+    poly.setAttribute('stroke-width', '8');
+    poly.setAttribute('stroke-linecap', 'round');
+    poly.setAttribute('stroke-linejoin', 'round');
+    poly.setAttribute('opacity', '.42');
+    poly.classList.add('linkPathStroke');
+    linesSvg.appendChild(poly);
+  }
+
   function drawLines(){
+    if(level === 'link'){
+      drawLinkPath();
+      return;
+    }
     linesSvg.innerHTML = '';
     if(level !== 'match' || !matches.length) return;
     const wrap = boardRel.getBoundingClientRect();
@@ -1082,14 +2724,122 @@ button.active{background:#202124;color:#fff;box-shadow:none}
     }
   }
 
+  function linkTileFromPoint(clientX, clientY){
+    const el = document.elementFromPoint(clientX, clientY);
+    const tile = el ? el.closest('.linkTile') : null;
+    if(!tile || !board.contains(tile)) return null;
+    return Number(tile.dataset.linkIndex);
+  }
+  function linkConstrainedPreviewPoint(clientX, clientY){
+    const wrap = boardRel.getBoundingClientRect();
+    const center = linkTileCenter(linkCurrentIndex());
+    if(!center){
+      return {x:clientX - wrap.left, y:clientY - wrap.top};
+    }
+
+    const hoverIndex = linkTileFromPoint(clientX, clientY);
+    if(hoverIndex === linkCurrentIndex()) return center;
+    const previous = linkPath.length > 1 ? linkPath[linkPath.length - 2] : null;
+
+    if(hoverIndex !== null && linkIsAdjacent(linkCurrentIndex(), hoverIndex)){
+      const canPreviewToCenter =
+        hoverIndex === previous ||
+        (!linkUsed.has(hoverIndex) && linkIsValidProductMove(linkCurrentIndex(), hoverIndex));
+      const hoverCenter = linkTileCenter(hoverIndex);
+      if(canPreviewToCenter && hoverCenter){
+        return linkAlignedNeighborPoint(center, hoverCenter, linkCurrentIndex(), hoverIndex);
+      }
+    }
+
+    const raw = {
+      x: linkClamp(clientX - wrap.left, 0, wrap.width),
+      y: linkClamp(clientY - wrap.top, 0, wrap.height)
+    };
+    return linkAxisLockedPoint(center, raw);
+  }
+  function linkTraceThroughPoint(clientX, clientY){
+    const point = {clientX, clientY};
+    const samples = [];
+
+    if(linkLastTracePoint){
+      const dx = point.clientX - linkLastTracePoint.clientX;
+      const dy = point.clientY - linkLastTracePoint.clientY;
+      const steps = Math.max(1, Math.ceil(Math.hypot(dx, dy) / 10));
+      for(let i=1; i<=steps; i++){
+        const t = i / steps;
+        samples.push({
+          clientX: linkLastTracePoint.clientX + dx * t,
+          clientY: linkLastTracePoint.clientY + dy * t
+        });
+      }
+    }else{
+      samples.push(point);
+    }
+
+    for(const sample of samples){
+      const idx = linkTileFromPoint(sample.clientX, sample.clientY);
+      if(idx !== null && idx !== linkLastHoverIndex){
+        linkLastHoverIndex = idx;
+        linkAttemptTile(idx, {fromDrag:true});
+      }
+    }
+
+    linkPreviewPoint = linkConstrainedPreviewPoint(clientX, clientY);
+    linkLastTracePoint = point;
+    drawLines();
+  }
+  function linkEndDrag(event){
+    if(level !== 'link') return;
+    if(linkActivePointerId !== null && event && event.pointerId !== linkActivePointerId) return;
+    try{
+      if(linkActivePointerId !== null) board.releasePointerCapture(linkActivePointerId);
+    }catch(err){}
+    linkDragging = false;
+    linkActivePointerId = null;
+    linkPreviewPoint = null;
+    linkLastTracePoint = null;
+    linkLastHoverIndex = null;
+    drawLines();
+  }
+
   function setLevel(next){
-    level = next;
-    for(const [k,btn] of Object.entries(levelBtns)) btn.classList.toggle('active', k === next);
-    resetGame();
+    beginGame(next);
   }
   levelBtns.basic.addEventListener('click', () => setLevel('basic'));
   levelBtns.chain.addEventListener('click', () => setLevel('chain'));
-  levelBtns.match.addEventListener('click', () => setLevel('match'));
+  levelBtns.repair.addEventListener('click', () => setLevel('repair'));
+  levelBtns.link.addEventListener('click', () => setLevel('link'));
+  introBtns.forEach(btn => btn.addEventListener('click', () => beginGame(btn.dataset.startLevel)));
+
+  board.addEventListener('pointerdown', event => {
+    if(level !== 'link' || locked || linkSolved) return;
+    const tile = event.target.closest('.linkTile');
+    if(!tile || !board.contains(tile)) return;
+
+    event.preventDefault();
+    linkSuppressNextClick = true;
+    linkDragging = true;
+    linkActivePointerId = event.pointerId;
+    linkLastDragInvalidAt = 0;
+    linkLastHoverIndex = Number(tile.dataset.linkIndex);
+
+    try{ board.setPointerCapture(event.pointerId); }catch(err){}
+
+    linkAttemptTile(linkLastHoverIndex, {fromDrag:true});
+    linkPreviewPoint = linkConstrainedPreviewPoint(event.clientX, event.clientY);
+    linkLastTracePoint = {clientX:event.clientX, clientY:event.clientY};
+    drawLines();
+  });
+
+  window.addEventListener('pointermove', event => {
+    if(level !== 'link' || !linkDragging || locked || linkSolved) return;
+    if(linkActivePointerId !== null && event.pointerId !== linkActivePointerId) return;
+    event.preventDefault();
+    linkTraceThroughPoint(event.clientX, event.clientY);
+  }, {passive:false});
+
+  window.addEventListener('pointerup', linkEndDrag);
+  window.addEventListener('pointercancel', linkEndDrag);
 
   function updateShapeToggle(){
     app.classList.toggle('dotsOnly', !showSizes);
@@ -1100,21 +2850,57 @@ button.active{background:#202124;color:#fff;box-shadow:none}
   shapeToggle.addEventListener('click', () => {
     showSizes = !showSizes;
     updateShapeToggle();
+    drawLines();
   });
   function collapseHint(){
     hintBtn.classList.remove('expanded');
+    hintBtn.closest('.hintRow').classList.remove('hintExpanded');
     hintBtn.setAttribute('aria-expanded', 'false');
   }
   hintBtn.addEventListener('click', () => {
     const expanded = !hintBtn.classList.contains('expanded');
     hintBtn.classList.toggle('expanded', expanded);
+    hintBtn.closest('.hintRow').classList.toggle('hintExpanded', expanded);
     hintBtn.setAttribute('aria-expanded', expanded ? 'true' : 'false');
   });
-  restartBtn.addEventListener('click', resetGame);
+  restartBtn.addEventListener('click', openNewGamePrompt);
+  cancelNewGameBtn.addEventListener('click', closeNewGamePrompt);
+  confirmNewGameBtn.addEventListener('click', showIntro);
+  endNewGameBtn.addEventListener('click', showIntro);
+  newGameModal.addEventListener('click', event => {
+    if(event.target === newGameModal) closeNewGamePrompt();
+  });
+  window.addEventListener('keydown', event => {
+    if(event.key === 'Escape' && !newGameModal.hidden) closeNewGamePrompt();
+    if(level === 'link' && (event.key === 'Backspace' || event.key.toLowerCase() === 'u') && !event.metaKey && !event.ctrlKey){
+      event.preventDefault();
+      linkBacktrack();
+    }
+  });
   window.addEventListener('resize', () => requestAnimationFrame(drawLines));
 
+  window.advanceTime = (ms) => {
+    if(mode !== 'playing' || !started) return;
+    if(level !== 'link' && time <= 0) return;
+    virtualTimerRemainder += Math.max(0, ms);
+    const seconds = Math.floor(virtualTimerRemainder / 1000);
+    if(seconds > 0){
+      virtualTimerRemainder -= seconds * 1000;
+      tickTimer(seconds);
+    }
+    drawLines();
+    syncGameState();
+  };
+
+  window.addEventListener('matrix-match-advance-time', event => {
+    const ms = Number(event.detail && event.detail.ms ? event.detail.ms : event.detail);
+    window.advanceTime(Number.isFinite(ms) ? ms : 0);
+  });
+
+  window.render_game_to_text = () => JSON.stringify(gameStatePayload());
+
   updateShapeToggle();
-  resetGame();
+  showIntro();
 })();
 </script>
 </body>

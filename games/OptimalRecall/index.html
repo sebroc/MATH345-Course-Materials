@@ -1,0 +1,2099 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-060RZGCFFW"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-060RZGCFFW');
+</script>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Optimal Recall</title>
+<link rel="icon" href="data:," />
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['\\(', '\\)']],
+    displayMath: [['\\[', '\\]']],
+    processEscapes: true
+  },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<style>
+
+:root{
+  --paper:#fffdf8;
+  --paper-2:#fffaf2;
+  --ink:#24324d;
+  --muted:#5f6f8b;
+  --blue:#3d6cf4;
+  --blue-soft:#e8efff;
+  --pink:#f27ea5;
+  --pink-soft:#fff0f5;
+  --mint:#59c5af;
+  --mint-soft:#ecfaf5;
+  --orange:#f5a24d;
+  --gold:#f2d86c;
+  --line:#dbe5fb;
+  --warm-border:rgba(108,86,58,.15);
+  --warm-shadow:rgba(82,58,28,.16);
+  --shadow:0 18px 42px rgba(80,60,28,.18);
+  --shadow-sm:0 10px 22px rgba(80,60,28,.10);
+  --radius:26px;
+  --card-radius:2px;
+}
+*{box-sizing:border-box}
+html,body{min-height:100%}
+body{
+  margin:0;
+  font-family:Inter,ui-rounded,"SF Pro Rounded","Segoe UI",system-ui,sans-serif;
+  color:var(--ink);
+  background-color:#b97a43;
+  background-image:
+    radial-gradient(circle at 18% 22%, rgba(82,45,20,.20) 0 1px, transparent 1.8px),
+    radial-gradient(circle at 75% 64%, rgba(255,222,158,.18) 0 1px, transparent 1.7px),
+    radial-gradient(circle at 42% 78%, rgba(96,54,25,.15) 0 1.2px, transparent 2px),
+    radial-gradient(circle at 64% 18%, rgba(246,198,127,.16) 0 .9px, transparent 1.7px),
+    linear-gradient(22deg, rgba(78,43,20,.12) 0 1px, transparent 1px),
+    linear-gradient(112deg, rgba(255,226,170,.08) 0 1px, transparent 1px),
+    linear-gradient(135deg,#c9925a 0%, #ad6f3d 58%, #8e542f 100%);
+  background-size:13px 15px,17px 19px,23px 21px,29px 27px,34px 34px,42px 42px,auto;
+  background-position:0 0,7px 3px,13px 9px,5px 14px,0 0,11px 8px,0 0;
+  display:grid;
+  place-items:start center;
+  padding:18px 12px 28px;
+}
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  background:
+    repeating-linear-gradient(11deg, rgba(255,236,190,.04) 0 3px, rgba(80,46,22,.045) 3px 10px),
+    repeating-linear-gradient(101deg, rgba(255,255,255,.018) 0 24px, rgba(66,39,20,.04) 24px 26px);
+  mix-blend-mode:multiply;
+  opacity:.72;
+}
+button,input{font:inherit}
+button{cursor:pointer}
+[hidden]{display:none!important}
+
+.app{
+  position:relative;
+  width:min(1180px,100%);
+  background:linear-gradient(180deg, rgba(249,245,236,.96), rgba(244,239,229,.97));
+  border:1px solid rgba(105,82,52,.16);
+  border-radius:34px;
+  box-shadow:0 34px 70px rgba(75,52,25,.22);
+  overflow:hidden;
+}
+.app::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at top left, rgba(255,255,255,.72), transparent 26%),
+    radial-gradient(circle at bottom right, rgba(255,255,255,.18), transparent 22%);
+}
+.appInner{position:relative;z-index:1}
+
+.hero{
+  padding:34px 32px 18px 36px;
+  border-bottom:1px dashed rgba(109,86,57,.18);
+}
+.eyebrow{
+  margin:0 0 6px;
+  font-size:12px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.18em;
+  color:#9c7b48;
+}
+.hero h1{
+  margin:0;
+  font-family:"Marker Felt","Comic Sans MS","Bradley Hand","Segoe Print",cursive;
+  color:var(--blue);
+  font-size:78px;
+  line-height:.95;
+  letter-spacing:0;
+  font-weight:900;
+  text-shadow:.6px 0 0 currentColor,0 .6px 0 currentColor,0 2px 0 rgba(36,50,77,.08);
+}
+.tagline{
+  margin:12px 0 0;
+  font-size:28px;
+  line-height:1.15;
+  font-weight:500;
+  letter-spacing:-.03em;
+  color:#6f6f6f;
+}
+.subtag{
+  margin:10px 0 0;
+  font-size:17px;
+  line-height:1.45;
+  color:var(--muted);
+  max-width:760px;
+}
+.screen{padding:22px 24px 28px 36px}
+
+.setupShell{
+  display:grid;
+  grid-template-columns:1fr;
+  align-items:start;
+  gap:18px;
+}
+.setupCard,
+.modal,
+.summaryPanel{
+  position:relative;
+  background:rgba(255,250,244,.92);
+  border:1px solid var(--warm-border);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow-sm);
+}
+.setupCard::before,
+.modal::before,
+.summaryPanel::before{
+  content:"";
+  position:absolute;
+  top:-8px;
+  left:24px;
+  width:54px;
+  height:18px;
+  background:rgba(255,255,255,.45);
+  border-radius:5px;
+  transform:rotate(-3deg);
+}
+.setupCard{
+  padding:18px 18px 20px;
+}
+.howCard{
+  padding:0;
+  min-height:0;
+  border:none;
+  border-radius:0;
+  background:transparent;
+  box-shadow:none;
+}
+.howCard::before{display:none}
+.howCard h2{
+  display:flex;
+  align-items:center;
+  margin:0;
+  min-height:34px;
+  padding:0 2px;
+  border-bottom:none;
+  color:#101010;
+  font-size:28px;
+  line-height:1;
+  letter-spacing:-.04em;
+}
+.instructionStack{
+  display:grid;
+  gap:0;
+  min-height:232px;
+  margin-top:0;
+  padding:22px 18px 58px 58px;
+  border:1px solid rgba(113,92,67,.20);
+  border-radius:8px;
+  background:
+    linear-gradient(to right, transparent 0 38px, rgba(214,52,52,.78) 38px 42px, transparent 42px),
+    repeating-linear-gradient(to bottom, #fffef9 0 33px, rgba(61,108,244,.20) 33px 34px);
+  box-shadow:var(--shadow-sm);
+}
+.instructionCard{
+  display:flex;
+  align-items:center;
+  min-height:34px;
+  margin:0;
+  padding:0 2px;
+  border-radius:0;
+  background:transparent;
+  border:none;
+  color:#101010;
+  font-size:15px;
+  line-height:1.2;
+  font-weight:800;
+}
+.instructionCard strong{font-weight:800}
+.helperStrip{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-top:16px;
+  padding:10px 12px;
+  border-radius:16px;
+  background:rgba(89,197,175,.1);
+  color:#2e6f62;
+  font-size:14px;
+  font-weight:700;
+}
+.sectionLabel{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  margin:0 0 8px;
+  font-size:15px;
+  font-weight:800;
+  color:#3a4760;
+}
+.deckChoiceCard .sectionLabel.needs-choice{
+  color:#d94d6f;
+}
+.deckChoiceCard .sectionLabel.is-alerting{
+  animation:deckInstructionJiggle .38s ease;
+}
+@keyframes deckInstructionJiggle{
+  0%,100%{transform:translateX(0)}
+  20%{transform:translateX(-5px)}
+  40%{transform:translateX(5px)}
+  60%{transform:translateX(-3px)}
+  80%{transform:translateX(3px)}
+}
+.optionGrid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:10px;
+  align-items:stretch;
+}
+.optionGrid .optionLabel{height:100%}
+.optionGrid .optionFace{height:100%;min-height:96px}
+.optionLabel{display:block;cursor:pointer}
+.optionLabel input{position:absolute;opacity:0;pointer-events:none}
+.optionFace{
+  position:relative;
+  display:grid;
+  gap:5px;
+  padding:12px 12px 12px 42px;
+  min-height:78px;
+  border:1px solid rgba(113,92,67,.15);
+  border-radius:18px;
+  background:rgba(255,255,255,.86);
+  transition:transform .12s ease, box-shadow .12s ease, border-color .12s ease, background .12s ease;
+}
+.optionLabel:hover .optionFace{transform:translateY(-1px)}
+.optionLabel input:checked + .optionFace{
+  border-color:rgba(61,108,244,.32);
+  background:linear-gradient(180deg,rgba(255,255,255,.98),rgba(250,248,243,.96));
+  box-shadow:0 0 0 3px rgba(61,108,244,.10), var(--shadow-sm);
+}
+.optionCheck{
+  position:absolute;
+  left:12px;top:12px;
+  width:22px;height:22px;
+  border-radius:999px;
+  border:2px solid rgba(61,108,244,.45);
+  background:#fff;
+  display:grid;place-items:center;
+}
+.optionCheck::after{
+  content:"";
+  width:9px;height:9px;
+  border-radius:999px;
+  background:transparent;
+}
+.optionLabel input:checked + .optionFace .optionCheck::after{background:var(--blue)}
+.optionTitle{
+  font-size:17px;
+  line-height:1.05;
+  font-weight:850;
+  letter-spacing:0;
+}
+.optionCopy{
+  font-size:12px;
+  line-height:1.25;
+  color:var(--muted);
+  font-weight:650;
+}
+.deckChoiceCard .optionTitle{color:#111}
+.deckChoiceCard .optionCheck{border-color:rgba(104,111,124,.52)}
+.deckChoiceCard .optionLabel input:checked + .optionFace .optionCheck::after{background:#697281}
+.jointChoiceGrid{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  gap:14px;
+  align-items:start;
+}
+.choiceGroup{min-width:0}
+.choiceGroup .sectionLabel{margin-bottom:8px}
+.choiceGroup .modeGrid,
+.choiceGroup .pairGrid{margin-bottom:0}
+.modeGrid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:10px;
+  margin:0 0 14px;
+}
+.modeOption .optionTitle{color:#836034}
+.modeOption .optionFace{min-height:68px}
+.pairGrid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:10px;
+}
+.pairOption .optionFace{
+  min-height:58px;
+  padding-left:42px;
+}
+.pairOption .optionTitle{font-size:17px;color:var(--blue)}
+.actionsRow{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-top:18px;
+  flex-wrap:wrap;
+}
+.startActions{
+  justify-content:center;
+  margin-top:0;
+}
+.modeLaunchGrid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(128px,220px));
+  gap:12px;
+}
+.startActions .errorMsg{
+  grid-column:1 / -1;
+  margin:0;
+  text-align:center;
+}
+.startActions .errorMsg:empty{display:none}
+.errorMsg{
+  color:#c55d7d;
+  font-size:14px;
+  font-weight:700;
+  min-height:20px;
+  margin-right:auto;
+}
+.primaryBtn,
+.ghostBtn,
+.secondaryBtn{
+  appearance:none;
+  border:none;
+  border-radius:18px;
+  padding:0 18px;
+  min-height:50px;
+  font-weight:800;
+  letter-spacing:-.01em;
+}
+.primaryBtn{
+  background:linear-gradient(180deg,var(--blue),#2956d6);
+  color:#fff;
+  box-shadow:0 10px 22px rgba(61,108,244,.26);
+}
+.ghostBtn{
+  background:linear-gradient(180deg,#fffefb,#fffaf2);
+  color:var(--ink);
+  border:1px solid rgba(112,92,67,.18);
+  box-shadow:0 10px 18px rgba(82,58,28,.10);
+}
+.secondaryBtn{
+  background:#f4f7ff;
+  color:var(--ink);
+}
+.primaryBtn:active,.ghostBtn:active,.secondaryBtn:active{transform:translateY(1px)}
+.startBtn{
+  min-width:172px;
+  min-height:58px;
+  font-size:22px;
+}
+.modeLaunchBtn{
+  min-height:60px;
+  display:grid;
+  align-content:center;
+  justify-items:center;
+  gap:3px;
+  padding:8px 14px;
+  font-size:20px;
+}
+.modeLaunchBtn small{
+  font-size:11px;
+  line-height:1.25;
+  font-weight:750;
+  opacity:.9;
+}
+.modeLaunchBtn[data-mode="prelim"]{
+  background:linear-gradient(180deg,#fff2a8,#f5de73);
+  color:#3556c4;
+  border:1px solid rgba(128,104,43,.18);
+  box-shadow:0 14px 24px rgba(82,58,28,.16);
+}
+.recallLaunchBtn{
+  background:linear-gradient(180deg,#d6f7e0,#aee9c4);
+  color:#3556c4;
+  border:1px solid rgba(46,111,98,.18);
+  box-shadow:0 14px 24px rgba(82,58,28,.16);
+}
+
+#gameScreen{
+  display:grid;
+  gap:8px;
+  padding-top:18px;
+}
+.topbar{
+  --stat-note-w:152px;
+  position:relative;
+  z-index:3;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) var(--stat-note-w) var(--stat-note-w);
+  justify-content:stretch;
+  align-items:flex-start;
+  gap:12px 14px;
+  padding:0;
+  margin:0;
+}
+.topbar .statChip:nth-child(1){grid-column:2}
+.topbar .statChip:nth-child(2){grid-column:3}
+.statChip{
+  position:relative;
+  width:100%;
+  min-width:0;
+  min-height:82px;
+  border-radius:0;
+  background:linear-gradient(180deg,#fff2a8,#f5de73);
+  border:1px solid rgba(128,104,43,.18);
+  display:grid;
+  place-items:center;
+  padding:14px 16px;
+  text-align:center;
+  box-shadow:0 14px 24px rgba(82,58,28,.16);
+  transform:rotate(-1.2deg);
+}
+.statChip:nth-child(2){
+  background:linear-gradient(180deg,#d6f7e0,#aee9c4);
+  border-color:rgba(46,111,98,.18);
+  transform:rotate(.9deg);
+}
+.statChip::after{
+  content:"";
+  position:absolute;
+  top:0;right:0;
+  width:0;height:0;
+  border-style:solid;
+  border-width:0 18px 18px 0;
+  border-color:transparent rgba(90,67,34,.10) transparent transparent;
+}
+.statChip::before{
+  content:"";
+  position:absolute;
+  top:8px;
+  left:50%;
+  transform:translateX(-50%);
+  width:36px;
+  height:10px;
+  border-radius:999px;
+  background:rgba(255,255,255,.46);
+}
+.statChip span{
+  display:block;
+  font-size:11px;
+  line-height:1;
+  text-transform:uppercase;
+  letter-spacing:.12em;
+  color:#726247;
+  font-weight:800;
+}
+.statChip strong{
+  display:block;
+  margin-top:9px;
+  font-size:33px;
+  line-height:1;
+  color:#3556c4;
+  font-variant-numeric:tabular-nums;
+}
+.topActions{
+  grid-column:1;
+  grid-row:1;
+  display:grid;
+  justify-items:center;
+  align-content:start;
+  gap:12px;
+  justify-self:start;
+  align-self:start;
+  width:min(470px,100%);
+  min-width:0;
+  max-width:100%;
+  margin:0;
+  padding:0;
+}
+.gameHint{
+  position:relative;
+  justify-self:stretch;
+  margin:0;
+  min-height:58px;
+  padding:17px 20px 15px;
+  background:linear-gradient(180deg,#fffdf8,#fbf3e8);
+  border:1px solid rgba(112,92,67,.16);
+  box-shadow:0 12px 24px rgba(82,58,28,.10);
+  color:#344567;
+  font-size:18px;
+  line-height:1.25;
+  font-weight:850;
+  transform:rotate(-.4deg);
+}
+.gameHint::after{
+  content:"";
+  position:absolute;
+  top:0;
+  right:0;
+  width:0;
+  height:0;
+  border-style:solid;
+  border-width:0 18px 18px 0;
+  border-color:transparent rgba(90,67,34,.08) transparent transparent;
+}
+#newBtn{
+  justify-self:center;
+  background:linear-gradient(180deg,#f27ea5,#de5d96);
+  color:#fff;
+  border-color:rgba(181,65,122,.24);
+  box-shadow:0 10px 18px rgba(222,93,150,.18);
+}
+.boardActions{
+  display:flex;
+  justify-content:flex-end;
+  margin-top:16px;
+}
+.deckTags{display:none}
+.deckTag{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  min-height:34px;
+  padding:0 14px;
+  border-radius:999px;
+  background:rgba(255,250,243,.84);
+  border:1px solid rgba(111,91,64,.14);
+  color:#5f684f;
+  font-size:13px;
+  font-weight:800;
+  box-shadow:0 6px 14px rgba(82,58,28,.06);
+}
+.deckTag::before{content:"";width:8px;height:8px;border-radius:999px;background:var(--mint)}
+.feedback{
+  min-height:0;
+  display:none;
+  text-align:center;
+  padding:0 4px;
+  color:#2f6c60;
+  background:transparent;
+  border:none;
+  box-shadow:none;
+  border-radius:0;
+  font-size:13px;
+  line-height:1.2;
+  font-weight:800;
+  white-space:nowrap;
+}
+.feedback.good{background:transparent;color:#216f5d}
+.feedback.bad{background:transparent;color:#b14d74;border-color:transparent}
+.feedback.done{background:transparent;color:#2c5acb}
+.board{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  gap:18px;
+  margin-top:4px;
+  position:relative;
+}
+.board::before{
+  content:"";
+  position:absolute;
+  top:34px;
+  bottom:0;
+  left:50%;
+  border-left:2px dashed rgba(76,58,36,.42);
+  transform:translateX(-50%);
+}
+.sidePanel{
+  min-width:0;
+  padding:4px 0 0;
+  background:transparent;
+  border:none;
+  box-shadow:none;
+}
+.meaningPanel{
+  border-left:none;
+  padding-left:0;
+}
+.sideHead{
+  display:flex;
+  align-items:flex-end;
+  justify-content:flex-end;
+  gap:12px;
+  margin-bottom:8px;
+}
+.sidePanel:first-child .sideHead{
+  justify-content:flex-start;
+}
+.sideHead h2{
+  margin:0;
+  font-size:24px;
+  line-height:1;
+  letter-spacing:-.05em;
+}
+.sideHead span{
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:.12em;
+  color:var(--muted);
+  font-weight:800;
+}
+.sidePanel:first-child .sideHead span{color:var(--blue)}
+.meaningPanel .sideHead span{color:var(--pink)}
+.sidePanel:first-child .sideHead h2{color:var(--blue)}
+.meaningPanel .sideHead h2{color:var(--pink)}
+
+.cardGrid{
+  display:grid;
+  gap:10px;
+  grid-template-columns:1fr;
+}
+.cardGrid.count3,
+.cardGrid.count4,
+.cardGrid.count5{grid-template-columns:1fr}
+.memoryCard{
+  position:relative;
+  padding:0;
+  border:none;
+  background:transparent;
+  perspective:1200px;
+  width:100%;
+  aspect-ratio:2.15 / 1;
+  transition:transform .12s ease;
+}
+.memoryCard:hover{transform:translateY(-1px)}
+.cardInner{
+  position:absolute;
+  inset:0;
+  transform-style:preserve-3d;
+  transition:transform .36s cubic-bezier(.2,.8,.2,1);
+}
+.memoryCard.is-flipped .cardInner,
+.memoryCard.is-matched .cardInner{transform:rotateY(180deg)}
+.face{
+  position:absolute;
+  inset:0;
+  backface-visibility:hidden;
+  border-radius:var(--card-radius);
+  overflow:hidden;
+  border:1px solid rgba(113,92,67,.20);
+  box-shadow:0 10px 18px rgba(84,62,32,.11);
+}
+.back{
+  display:grid;
+  place-items:center;
+}
+.memoryCard[data-side="term"] .back,
+.memoryCard[data-side="term"] .front{
+  background:
+    linear-gradient(to right, transparent 0 22px, rgba(61,108,244,.18) 22px 23px, transparent 23px),
+    repeating-linear-gradient(to bottom, #fffef9 0 25px, rgba(61,108,244,.15) 25px 26px);
+}
+.memoryCard[data-side="meaning"] .back,
+.memoryCard[data-side="meaning"] .front{
+  background:
+    linear-gradient(to right, transparent 0 22px, rgba(242,126,165,.18) 22px 23px, transparent 23px),
+    repeating-linear-gradient(to bottom, #fffef9 0 25px, rgba(242,126,165,.15) 25px 26px);
+}
+.backEmblem{
+  width:48px;height:48px;
+  display:grid;place-items:center;
+  border-radius:10px;
+  background:rgba(255,255,255,.84);
+  border:1px solid rgba(36,50,77,.08);
+  box-shadow:0 6px 12px rgba(82,58,28,.08);
+}
+.memoryCard[data-side="term"] .backEmblem{color:var(--blue)}
+.memoryCard[data-side="meaning"] .backEmblem{color:var(--pink)}
+.backEmblem svg{width:24px;height:24px}
+.front{
+  transform:rotateY(180deg);
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:12px 14px 12px 24px;
+}
+.front::before{
+  content:"";
+  position:absolute;
+  top:0;left:0;
+  width:0;height:0;
+  border-top:18px solid transparent;
+  border-right:18px solid transparent;
+}
+.memoryCard[data-side="term"] .front::before{border-top-color:rgba(61,108,244,.90)}
+.memoryCard[data-side="meaning"] .front::before{border-top-color:rgba(242,126,165,.90)}
+.cardText{
+  width:100%;
+  display:block;
+  text-align:center;
+  padding:10px 16px 10px 22px;
+  font-size:clamp(15px,.92rem + .18vw,19px);
+  line-height:1.32;
+  font-weight:760;
+  color:var(--ink);
+  text-wrap:balance;
+  overflow-wrap:normal;
+  word-break:normal;
+  hyphens:none;
+}
+.memoryCard[data-side="term"] .cardText{
+  font-size:clamp(16px,.96rem + .2vw,20px);
+  font-weight:700;
+}
+.cardText mjx-container,
+.feedback mjx-container,
+.summaryDecks mjx-container{
+  max-width:100%;
+  overflow:visible!important;
+  white-space:normal!important;
+}
+.cardText mjx-container{margin:0 .14em}
+.cardText mjx-container svg,
+.feedback mjx-container svg,
+.summaryDecks mjx-container svg{
+  max-width:100%;
+  height:auto!important;
+}
+.memoryCard.is-selected .face.front{
+  box-shadow:0 0 0 4px rgba(89,197,175,.42), 0 0 22px rgba(89,197,175,.48), 0 14px 28px rgba(84,62,32,.18);
+}
+.memoryCard.is-matched .face.front{
+  opacity:.56;
+  box-shadow:0 6px 10px rgba(84,62,32,.06);
+}
+.memoryCard.wrong .face.front{animation:shake .28s ease}
+@keyframes shake{
+  20%{transform:rotateY(180deg) translateX(-4px)}
+  40%{transform:rotateY(180deg) translateX(4px)}
+  60%{transform:rotateY(180deg) translateX(-3px)}
+  80%{transform:rotateY(180deg) translateX(2px)}
+}
+@keyframes matchPulse{
+  0%{box-shadow:0 0 0 0 rgba(89,197,175,.75),0 12px 24px rgba(84,62,32,.14)}
+  35%{box-shadow:0 0 0 10px rgba(89,197,175,0),0 0 30px rgba(89,197,175,.60),0 16px 28px rgba(84,62,32,.18)}
+  100%{box-shadow:0 0 0 4px rgba(89,197,175,.40),0 0 26px rgba(89,197,175,.60),0 14px 26px rgba(84,62,32,.18)}
+}
+@keyframes haloFade{
+  0%{opacity:.95;transform:scale(.96)}
+  100%{opacity:0;transform:scale(1.08)}
+}
+.overlay{
+  position:fixed;
+  inset:0;
+  z-index:70;
+  background:rgba(45,34,21,.28);
+  display:grid;
+  place-items:center;
+  padding:20px;
+  backdrop-filter:blur(4px);
+}
+.summaryOverlay{z-index:80}
+.modal,
+.summaryPanel{
+  width:min(480px,100%);
+  padding:22px;
+}
+.modal h2,
+.summaryPanel h2{
+  margin:0;
+  font-size:32px;
+  line-height:.95;
+  letter-spacing:-.06em;
+}
+.modal p,
+.summaryPanel p{
+  margin:12px 0 0;
+  color:#4b5873;
+  font-size:15px;
+  line-height:1.45;
+}
+.summaryBadge{
+  width:58px;height:58px;
+  display:grid;place-items:center;
+  border-radius:18px;
+  background:rgba(89,197,175,.12);
+  color:var(--mint);
+  margin-bottom:14px;
+}
+.summaryBadge svg{width:30px;height:30px}
+.modalActions{
+  display:flex;
+  justify-content:flex-end;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:18px;
+}
+.summaryStats{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:12px;
+  margin-top:16px;
+}
+.summaryStat{
+  padding:14px 12px;
+  border-radius:18px;
+  background:#fffaf2;
+  border:1px solid rgba(111,91,64,.14);
+  text-align:center;
+}
+.summaryStat span{
+  display:block;
+  font-size:11px;
+  line-height:1;
+  text-transform:uppercase;
+  letter-spacing:.12em;
+  color:var(--muted);
+  font-weight:800;
+}
+.summaryStat strong{
+  display:block;
+  margin-top:8px;
+  font-size:26px;
+  line-height:1;
+  color:var(--blue);
+}
+.summaryDecks{
+  margin-top:14px;
+  padding:12px 14px;
+  border-radius:18px;
+  background:#fff8ee;
+  color:#7a5928;
+  font-size:14px;
+  line-height:1.45;
+}
+.summaryActions{
+  display:flex;
+  justify-content:flex-end;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:18px;
+}
+.mjx-container{max-width:100%;overflow:visible}
+.cardText mjx-container{font-size:100%!important}
+.feedback mjx-container,.summaryDecks mjx-container{font-size:100%!important}
+.memoryCard.prelim-card .cardInner{transform:rotateY(180deg)}
+
+@media (max-width: 1040px){
+  .screen,.hero{padding-left:24px;padding-right:20px}
+  .setupShell{grid-template-columns:1fr}
+  .summaryStats{grid-template-columns:1fr}
+}
+@media (max-width: 720px){
+  body{padding:10px 8px 18px}
+  .hero h1{font-size:56px}
+  .tagline{font-size:22px}
+  .screen{padding-top:18px}
+  .optionGrid,
+  .pairGrid,
+  .modeGrid,
+  .jointChoiceGrid{grid-template-columns:1fr}
+  .topbar{
+    --stat-note-w:168px;
+    position:static;
+    grid-template-columns:minmax(0,1fr) var(--stat-note-w) var(--stat-note-w);
+    justify-content:stretch;
+    gap:10px;
+    align-items:start;
+    margin-bottom:12px;
+  }
+  #gameScreen{padding-top:18px}
+  .topbar .statChip:nth-child(1){grid-column:2}
+  .topbar .statChip:nth-child(2){grid-column:3}
+  .topActions{grid-column:1;grid-row:1}
+  .gameHint{
+    min-height:52px;
+    padding:13px 14px 12px;
+    font-size:15px;
+  }
+  .statChip{
+    min-width:0;
+    min-height:80px;
+    padding:12px 8px;
+  }
+  .statChip span{
+    font-size:8px;
+    letter-spacing:.08em;
+  }
+  .statChip strong{
+    margin-top:7px;
+    font-size:28px;
+  }
+  #newBtn{
+    min-height:52px;
+    padding:0 14px;
+  }
+  .cardGrid.count3,
+  .cardGrid.count4,
+  .cardGrid.count5{grid-template-columns:1fr}
+  .memoryCard{aspect-ratio:2 / 1}
+  .cardText{font-size:16px;padding:10px 14px 10px 20px}
+  .memoryCard[data-side="term"] .cardText{font-size:18px}
+  .modal,
+  .summaryPanel{padding:20px 18px}
+}
+@media (max-width: 560px){
+  .topbar{
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  }
+  .topbar .statChip:nth-child(1){grid-column:1;grid-row:2}
+  .topbar .statChip:nth-child(2){grid-column:2;grid-row:2}
+  .topActions{
+    grid-column:1 / -1;
+    grid-row:1;
+    width:min(470px,100%);
+  }
+}
+@media (max-width: 460px){
+  .hero,.screen{padding-left:18px;padding-right:14px}
+  .topbar{
+    --stat-note-w:108px;
+    gap:8px;
+  }
+  .topActions{max-width:100%;gap:10px}
+  .gameHint{font-size:13px;padding:11px 12px 10px}
+  .feedback{white-space:normal}
+  #newBtn{
+    min-height:48px;
+    padding:0 10px;
+  }
+  .statChip strong{font-size:24px}
+  .statChip span{font-size:7px}
+  .cardGrid.count3,
+  .cardGrid.count4,
+  .cardGrid.count5{grid-template-columns:1fr}
+  .memoryCard{aspect-ratio:1.75 / 1}
+  .sideHead{align-items:flex-start;flex-direction:column}
+  .cardText{font-size:15px;padding:10px 12px 10px 18px}
+  .memoryCard[data-side="term"] .cardText{font-size:17px}
+}
+
+</style>
+</head>
+<body>
+<main class="app">
+  <div class="appInner">
+    <header class="hero" id="introHero">
+      <h1>Optimal Recall</h1>
+      <p class="tagline">Identify all matching pairs from memory.</p>
+    </header>
+
+    <section class="screen" id="introScreen">
+      <div class="setupShell">
+        <section class="setupCard howCard">
+          <div class="instructionStack">
+            <h2>How it works</h2>
+            <p class="instructionCard">Match one card from each side.</p>
+            <p class="instructionCard">Clear three pairs to get a fresh set.</p>
+            <p class="instructionCard">You have 2 minutes to match as many as you can.</p>
+          </div>
+        </section>
+
+        <section class="setupCard deckChoiceCard">
+          <div class="sectionLabel"><span>Choose one or more deck(s) of cards</span></div>
+          <div class="optionGrid">
+            <label class="optionLabel deckLocal">
+              <input type="checkbox" name="deck" value="local" checked />
+              <span class="optionFace">
+                <span class="optionCheck" aria-hidden="true"></span>
+                <span class="optionTitle">Beyond linear functions</span>
+                <span class="optionCopy">Derivatives, gradients, Hessians, Jacobians.</span>
+              </span>
+            </label>
+            <label class="optionLabel deckOpt">
+              <input type="checkbox" name="deck" value="opt" />
+              <span class="optionFace">
+                <span class="optionCheck" aria-hidden="true"></span>
+                <span class="optionTitle">Optimization &amp; training</span>
+                <span class="optionCopy">Critical points, gradient descent, Hessian tests.</span>
+              </span>
+            </label>
+            <label class="optionLabel deckConstraint">
+              <input type="checkbox" name="deck" value="unit6" />
+              <span class="optionFace">
+                <span class="optionCheck" aria-hidden="true"></span>
+                <span class="optionTitle">Constrained optimization</span>
+                <span class="optionCopy">Constraints, Lagrange multipliers.</span>
+              </span>
+            </label>
+          </div>
+        </section>
+
+        <div class="actionsRow startActions modeLaunchGrid">
+          <span class="errorMsg" id="startMsg" role="status"></span>
+          <button class="primaryBtn modeLaunchBtn" data-mode="prelim" type="button">
+            <span>Practice Mode</span>
+            <small>Cards face up.</small>
+          </button>
+          <button class="primaryBtn modeLaunchBtn recallLaunchBtn" data-mode="recall" type="button">
+            <span>Recall Mode</span>
+            <small>Cards face down.</small>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen" id="gameScreen" hidden>
+      <div class="topbar">
+        <div class="statChip"><span>Time</span><strong id="timer">0:00</strong></div>
+        <div class="statChip"><span>Pairs matched</span><strong id="found">0</strong></div>
+        <div class="topActions">
+          <p class="gameHint">Matching all pairs reveals a new set. Find as many pairs as you can in 2 minutes.</p>
+          <div class="feedback" id="feedback">Match all pairs.</div>
+        </div>
+      </div>
+      <div class="deckTags" id="gameInfo"></div>
+
+      <div class="board" aria-label="Memory board">
+        <section class="sidePanel">
+          <div class="sideHead"><span>pick one</span></div>
+          <div class="cardGrid" id="termGrid"></div>
+        </section>
+        <section class="sidePanel meaningPanel">
+          <div class="sideHead"><span>pick one</span></div>
+          <div class="cardGrid" id="meaningGrid"></div>
+        </section>
+      </div>
+      <div class="boardActions">
+        <button class="ghostBtn" id="newBtn" type="button">New game</button>
+      </div>
+    </section>
+  </div>
+</main>
+
+<div class="overlay" id="confirmOverlay" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+    <h2 id="confirmTitle">Start a new game?</h2>
+    <p>This will end the current round.</p>
+    <div class="modalActions">
+      <button class="secondaryBtn" id="cancelNewBtn" type="button">Cancel</button>
+      <button class="primaryBtn" id="confirmNewBtn" type="button">Start over</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay summaryOverlay" id="summaryOverlay" hidden>
+  <div class="summaryPanel" role="dialog" aria-modal="true" aria-labelledby="summaryTitle">
+    <div class="summaryBadge" aria-hidden="true">
+      <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M14 34l11 11 25-25"/><circle cx="32" cy="32" r="22"/></svg>
+    </div>
+    <h2 id="summaryTitle">Time's up!</h2>
+    <p id="summaryMessage">Congratulations — you matched pairs.</p>
+    <div class="summaryStats">
+      <div class="summaryStat"><span>Time</span><strong id="summaryTime">0:00</strong></div>
+      <div class="summaryStat"><span>Pairs matched</span><strong id="summaryPairs">0</strong></div>
+      <div class="summaryStat"><span>Sets</span><strong id="summaryTurns">0</strong></div>
+    </div>
+    <div class="summaryDecks" id="summaryDecks"></div>
+    <div class="summaryActions">
+      <button class="secondaryBtn" id="summaryIntroBtn" type="button">Back to intro</button>
+      <button class="primaryBtn" id="summaryReplayBtn" type="button">Play again</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const DECKS = {
+  "local": {
+    "label": "Beyond linear functions",
+    "badge": "gradients · Hessians · Jacobians",
+    "pairs": [
+      {
+        "id": "u3-scalar",
+        "left": "scalar-valued function",
+        "right": "\\(f:\\mathbb{R}^n\\to\\mathbb{R}\\)",
+        "note": "One-number output."
+      },
+      {
+        "id": "u3-vector",
+        "left": "vector-valued map",
+        "right": "\\(F:\\mathbb{R}^n\\to\\mathbb{R}^m\\)",
+        "note": "Vector output."
+      },
+      {
+        "id": "u3-component",
+        "left": "component function \\(F_i\\)",
+        "right": "\\(i\\)-th coordinate of \\(F\\)",
+        "note": "One scalar output."
+      },
+      {
+        "id": "u3-domain",
+        "left": "domain",
+        "right": "allowed inputs",
+        "note": "Input set."
+      },
+      {
+        "id": "u3-range",
+        "left": "range",
+        "right": "possible outputs",
+        "note": "Outputs that occur."
+      },
+      {
+        "id": "u3-graph",
+        "left": "graph of \\(f:\\mathbb{R}^2\\to\\mathbb{R}\\)",
+        "right": "\\(\\{(x,y,z):z=f(x,y)\\}\\)",
+        "note": "Inputs plus output height."
+      },
+      {
+        "id": "u3-level",
+        "left": "level curve",
+        "right": "\\(f(x,y)=c\\)",
+        "note": "Output fixed."
+      },
+      {
+        "id": "u3-ball",
+        "left": "\\(B_r(a)\\)",
+        "right": "\\(\\{x:\\lVert x-a\\rVert \\lt r\\}\\)",
+        "note": "Ball centered at \\(a\\)."
+      },
+      {
+        "id": "u3-interior",
+        "left": "interior point",
+        "right": "small ball stays inside set",
+        "note": "Local inside point."
+      },
+      {
+        "id": "u3-boundary",
+        "left": "boundary point",
+        "right": "every small ball hits set and outside",
+        "note": "Edge point."
+      },
+      {
+        "id": "u3-closed",
+        "left": "closed set",
+        "right": "contains boundary points",
+        "note": "Boundary included."
+      },
+      {
+        "id": "u3-bounded",
+        "left": "bounded set",
+        "right": "inside some large ball",
+        "note": "Does not go to infinity."
+      },
+      {
+        "id": "u3-limit",
+        "left": "limit at \\(a\\)",
+        "right": "values approach one number as \\(x\\to a\\)",
+        "note": "Nearby behavior."
+      },
+      {
+        "id": "u3-continuous",
+        "left": "continuous at \\(a\\)",
+        "right": "\\(\\lim_{x\\to a}f(x)=f(a)\\)",
+        "note": "Limit equals value."
+      },
+      {
+        "id": "u3-partial-limit",
+        "left": "\\(\\dfrac{\\partial f}{\\partial x_i}(a)\\)",
+        "right": "\\(\\lim_{h\\to0}\\dfrac{f(a+h e_i)-f(a)}{h}\\)",
+        "note": "Coordinate-direction limit."
+      },
+      {
+        "id": "u3-gradient",
+        "left": "\\(\\nabla f(a)\\)",
+        "right": "vector of first partials",
+        "note": "Gradient."
+      },
+      {
+        "id": "u3-hessian",
+        "left": "\\(Hf(a)\\)",
+        "right": "matrix of second partials",
+        "note": "Hessian."
+      },
+      {
+        "id": "u3-jacobian",
+        "left": "\\(J_F(a)\\)",
+        "right": "matrix of component partials",
+        "note": "Jacobian matrix."
+      },
+      {
+        "id": "u3-jshape",
+        "left": "\\(F:\\mathbb{R}^n\\to\\mathbb{R}^m\\)",
+        "right": "\\(J_F(a)\\) is \\(m\\times n\\)",
+        "note": "Rows output; columns input."
+      },
+      {
+        "id": "u3-scalar-local",
+        "left": "scalar local linearization",
+        "right": "\\(f(a+h)\\approx f(a)+\\nabla f(a)^T h\\)",
+        "note": "Gradient dot displacement."
+      },
+      {
+        "id": "u3-vector-local",
+        "left": "vector local linearization",
+        "right": "\\(F(a+h)\\approx F(a)+J_F(a)h\\)",
+        "note": "Jacobian times displacement."
+      },
+      {
+        "id": "u3-h",
+        "left": "displacement \\(h\\)",
+        "right": "nearby input \\(a+h\\)",
+        "note": "Input change."
+      },
+      {
+        "id": "u3-tangent",
+        "left": "tangent plane",
+        "right": "first-order affine model",
+        "note": "Scalar local model geometry."
+      },
+      {
+        "id": "u3-differentiability",
+        "left": "differentiability",
+        "right": "local linear model works to first order",
+        "note": "Justifies local linearization."
+      },
+      {
+        "id": "u3-chain",
+        "left": "chain rule",
+        "right": "\\(J_{F\\circ G}(a)=J_F(G(a))J_G(a)\\)",
+        "note": "Composition order."
+      },
+      {
+        "id": "u3-curve",
+        "left": "\\(r'(t)\\)",
+        "right": "velocity / tangent vector",
+        "note": "Derivative of curve."
+      },
+      {
+        "id": "u3-forgotten",
+        "left": "locally forgotten direction",
+        "right": "nonzero \\(h\\) with \\(J_F(a)h=0\\)",
+        "note": "Jacobian predicts no first-order change."
+      }
+    ]
+  },
+  "opt": {
+    "label": "Optimization & training",
+    "badge": "critical points · descent · Hessians",
+    "pairs": [
+      {
+        "id": "u5-optproblem",
+        "left": "optimization problem",
+        "right": "minimize or maximize objective",
+        "note": "Search for best input."
+      },
+      {
+        "id": "u5-feasible",
+        "left": "feasible region",
+        "right": "allowed inputs",
+        "note": "Where search is allowed."
+      },
+      {
+        "id": "u5-localmin",
+        "left": "local minimum",
+        "right": "\\(f(a)\\le f(x)\\) nearby",
+        "note": "Compare nearby points."
+      },
+      {
+        "id": "u5-localmax",
+        "left": "local maximum",
+        "right": "\\(f(a)\\ge f(x)\\) nearby",
+        "note": "Compare nearby points."
+      },
+      {
+        "id": "u5-globalmin",
+        "left": "global minimum",
+        "right": "\\(f(a)\\le f(x)\\) on domain",
+        "note": "Compare whole domain."
+      },
+      {
+        "id": "u5-globalmax",
+        "left": "global maximum",
+        "right": "\\(f(a)\\ge f(x)\\) on domain",
+        "note": "Compare whole domain."
+      },
+      {
+        "id": "u5-localextremum",
+        "left": "local extremum",
+        "right": "local minimum or maximum",
+        "note": "Umbrella term."
+      },
+      {
+        "id": "u5-critical",
+        "left": "critical point",
+        "right": "\\(\\nabla f(a)=0\\)",
+        "note": "Candidate."
+      },
+      {
+        "id": "u5-extreme-thm",
+        "left": "local extremum theorem",
+        "right": "differentiable local extremum \\(\\Rightarrow\\) critical point",
+        "note": "One-way implication."
+      },
+      {
+        "id": "u5-candidate",
+        "left": "critical point warning",
+        "right": "candidate, not conclusion",
+        "note": "May be saddle."
+      },
+      {
+        "id": "u5-directional",
+        "left": "directional derivative \\(D_v f(a)\\)",
+        "right": "rate in unit direction \\(v\\)",
+        "note": "Change along direction."
+      },
+      {
+        "id": "u5-directional-limit",
+        "left": "limit definition of \\(D_v f(a)\\)",
+        "right": "\\(\\lim_{h\\to0}\\dfrac{f(a+h v)-f(a)}{h}\\)",
+        "note": "Derivative along line."
+      },
+      {
+        "id": "u5-dot",
+        "left": "\\(D_v f(a)=\\nabla f(a)\\cdot v\\)",
+        "right": "gradient formula",
+        "note": "Differentiable \\(f\\), unit \\(v\\)."
+      },
+      {
+        "id": "u5-unitv",
+        "left": "unit direction",
+        "right": "\\(\\|v\\|=1\\)",
+        "note": "Directional derivative direction."
+      },
+      {
+        "id": "u5-partialdir",
+        "left": "\\(D_{e_i}f(a)\\)",
+        "right": "\\(\\partial f/\\partial x_i(a)\\)",
+        "note": "Coordinate direction."
+      },
+      {
+        "id": "u5-zerograd",
+        "left": "\\(\\nabla f(a)=0\\)",
+        "right": "\\(D_v f(a)=0\\) for all unit \\(v\\)",
+        "note": "No first-order change."
+      },
+      {
+        "id": "u5-steepestup",
+        "left": "steepest increase direction",
+        "right": "\\(\\nabla f(a)\\)",
+        "note": "Gradient direction."
+      },
+      {
+        "id": "u5-steepestdown",
+        "left": "steepest decrease direction",
+        "right": "\\(-\\nabla f(a)\\)",
+        "note": "Negative gradient direction."
+      },
+      {
+        "id": "u5-maxdir",
+        "left": "maximizing direction",
+        "right": "\\(\\nabla f(a)/\\|\\nabla f(a)\\|\\)",
+        "note": "When gradient nonzero."
+      },
+      {
+        "id": "u5-mindir",
+        "left": "minimizing direction",
+        "right": "\\(-\\nabla f(a)/\\|\\nabla f(a)\\|\\)",
+        "note": "Opposite gradient."
+      },
+      {
+        "id": "u5-maxval",
+        "left": "maximum value of \\(D_v f(a)\\)",
+        "right": "\\(\\|\\nabla f(a)\\|\\)",
+        "note": "Unit directions."
+      },
+      {
+        "id": "u5-minval",
+        "left": "minimum value of \\(D_v f(a)\\)",
+        "right": "\\(-\\|\\nabla f(a)\\|\\)",
+        "note": "Unit directions."
+      },
+      {
+        "id": "u5-gd",
+        "left": "gradient descent",
+        "right": "move opposite gradient",
+        "note": "Descent direction."
+      },
+      {
+        "id": "u5-update",
+        "left": "\\(x_{k+1}=x_k-\\alpha\\nabla f(x_k)\\)",
+        "right": "gradient descent update",
+        "note": "Minus sign matters."
+      },
+      {
+        "id": "u5-alpha",
+        "left": "learning rate \\(\\alpha\\)",
+        "right": "step size",
+        "note": "Update length."
+      },
+      {
+        "id": "u5-loss",
+        "left": "loss \\(L(\\theta)\\)",
+        "right": "training objective",
+        "note": "Quantity minimized."
+      },
+      {
+        "id": "u5-eigenvector",
+        "left": "eigenvector",
+        "right": "nonzero direction preserved",
+        "note": "Special direction."
+      },
+      {
+        "id": "u5-eigenvalue",
+        "left": "eigenvalue",
+        "right": "stretch factor",
+        "note": "Eigenvector stretch."
+      },
+      {
+        "id": "u5-qform",
+        "left": "quadratic form",
+        "right": "\\(h^THh\\)",
+        "note": "Second-order behavior."
+      },
+      {
+        "id": "u5-posdef",
+        "left": "positive definite matrix",
+        "right": "\\(h^THh>0\\) for \\(h\\ne0\\)",
+        "note": "Positive all directions."
+      },
+      {
+        "id": "u5-negdef",
+        "left": "negative definite matrix",
+        "right": "\\(h^THh<0\\) for \\(h\\ne0\\)",
+        "note": "Negative all directions."
+      },
+      {
+        "id": "u5-indef",
+        "left": "indefinite matrix",
+        "right": "\\(h^THh\\) has both signs",
+        "note": "Mixed signs."
+      },
+      {
+        "id": "u5-saddle",
+        "left": "saddle point",
+        "right": "critical, not local min/max",
+        "note": "Mixed local behavior."
+      },
+      {
+        "id": "u5-hmin",
+        "left": "positive definite Hessian at critical point",
+        "right": "local minimum",
+        "note": "Second derivative test."
+      },
+      {
+        "id": "u5-hmax",
+        "left": "negative definite Hessian at critical point",
+        "right": "local maximum",
+        "note": "Second derivative test."
+      },
+      {
+        "id": "u5-hsaddle",
+        "left": "indefinite Hessian at critical point",
+        "right": "saddle point",
+        "note": "Second derivative test."
+      },
+      {
+        "id": "u5-inconclusive",
+        "left": "zero Hessian eigenvalue",
+        "right": "test inconclusive",
+        "note": "Flat quadratic direction."
+      },
+      {
+        "id": "u5-discriminant",
+        "left": "\\(D=f_{xx}f_{yy}-f_{xy}^2\\)",
+        "right": "two-variable discriminant",
+        "note": "At critical point."
+      },
+      {
+        "id": "u5-dmin",
+        "left": "\\(D>0\\) and \\(f_{xx}>0\\)",
+        "right": "local minimum",
+        "note": "Two-variable test."
+      },
+      {
+        "id": "u5-dmax",
+        "left": "\\(D>0\\) and \\(f_{xx}<0\\)",
+        "right": "local maximum",
+        "note": "Two-variable test."
+      },
+      {
+        "id": "u5-dsaddle",
+        "left": "\\(D<0\\)",
+        "right": "saddle point",
+        "note": "Two-variable test."
+      },
+      {
+        "id": "u5-dzero",
+        "left": "\\(D=0\\)",
+        "right": "inconclusive",
+        "note": "No conclusion."
+      },
+      {
+        "id": "u5-lsgrad",
+        "left": "\\(\\nabla\\|Ax-b\\|^2=2A^T(Ax-b)\\)",
+        "right": "least-squares gradient formula",
+        "note": "Set to zero."
+      },
+      {
+        "id": "u5-normal",
+        "left": "normal equations",
+        "right": "\\(A^TAx=A^Tb\\)",
+        "note": "Gradient zero."
+      },
+      {
+        "id": "u5-residual",
+        "left": "\\(A^T r=0\\)",
+        "right": "residual orthogonality",
+        "note": "Residual orthogonal to columns."
+      },
+      {
+        "id": "u5-fixedfeatures",
+        "left": "fixed feature",
+        "right": "feature held fixed while coefficients train",
+        "note": "Final coefficients fit by least squares."
+      }
+    ]
+  },
+  "unit6": {
+    "label": "Constrained optimization",
+    "badge": "closed bounded · boundary · Lagrange",
+    "pairs": [
+      {
+        "id": "u6-closedbounded",
+        "left": "closed bounded region",
+        "right": "closed and bounded feasible set",
+        "note": "Boundary included; finite size."
+      },
+      {
+        "id": "u6-globalextrema",
+        "left": "global extrema on \\(D\\)",
+        "right": "largest/smallest values on \\(D\\)",
+        "note": "Compare whole region."
+      },
+      {
+        "id": "u6-existence",
+        "left": "continuous on closed bounded \\(D\\)",
+        "right": "global max/min values exist",
+        "note": "Existence theorem."
+      },
+      {
+        "id": "u6-interiorcand",
+        "left": "interior candidate",
+        "right": "critical point in \\(\\operatorname{int}(D)\\)",
+        "note": "Interior search."
+      },
+      {
+        "id": "u6-boundarycand",
+        "left": "boundary candidate",
+        "right": "candidate from boundary piece",
+        "note": "Boundary search."
+      },
+      {
+        "id": "u6-boundaryrestrict",
+        "left": "boundary restriction",
+        "right": "reduce to one-variable problem",
+        "note": "One boundary piece at a time."
+      },
+      {
+        "id": "u6-corner",
+        "left": "endpoint or corner",
+        "right": "boundary point to check",
+        "note": "Corners can decide."
+      },
+      {
+        "id": "u6-candtable",
+        "left": "candidate table",
+        "right": "candidate, source, value",
+        "note": "Organize comparison."
+      },
+      {
+        "id": "u6-largest",
+        "left": "largest candidate value",
+        "right": "global maximum value",
+        "note": "Compare all values."
+      },
+      {
+        "id": "u6-smallest",
+        "left": "smallest candidate value",
+        "right": "global minimum value",
+        "note": "Compare all values."
+      },
+      {
+        "id": "u6-compare",
+        "left": "compare all candidates",
+        "right": "choose largest/smallest value",
+        "note": "Final step."
+      },
+      {
+        "id": "u6-surface",
+        "left": "\\(S=\\{x:g(x)=k\\}\\)",
+        "right": "constraint surface",
+        "note": "Allowed level set."
+      },
+      {
+        "id": "u6-constraint",
+        "left": "constraint \\(g(x)=k\\)",
+        "right": "allowed inputs",
+        "note": "Feasible points."
+      },
+      {
+        "id": "u6-regconstraint",
+        "left": "\\(\\nabla g(a)\\ne0\\)",
+        "right": "regular constraint condition",
+        "note": "Needed for usual Lagrange condition."
+      },
+      {
+        "id": "u6-constrcrit",
+        "left": "constrained critical point",
+        "right": "\\(a\\in S\\), \\(\\nabla f(a)=\\lambda\\nabla g(a)\\)",
+        "note": "Lagrange candidate."
+      },
+      {
+        "id": "u6-lagrangecondition",
+        "left": "\\(\\nabla f=\\lambda\\nabla g\\)",
+        "right": "parallel gradients",
+        "note": "Lagrange condition."
+      },
+      {
+        "id": "u6-lambda",
+        "left": "Lagrange multiplier \\(\\lambda\\)",
+        "right": "scalar relating gradients",
+        "note": "Scales \\(\\nabla g\\)."
+      },
+      {
+        "id": "u6-lagrangian",
+        "left": "\\(\\mathcal L(x,\\lambda)=f(x)-\\lambda(g(x)-k)\\)",
+        "right": "Lagrangian",
+        "note": "Combines objective and constraint."
+      },
+      {
+        "id": "u6-stationary",
+        "left": "\\(\\nabla_x\\mathcal L(a,\\lambda)=0\\)",
+        "right": "stationarity equations",
+        "note": "Differentiate in input variables."
+      },
+      {
+        "id": "u6-lambdaderiv",
+        "left": "\\(\\partial\\mathcal L/\\partial\\lambda=0\\)",
+        "right": "constraint equation",
+        "note": "Recovers \\(g(a)=k\\)."
+      },
+      {
+        "id": "u6-tangent",
+        "left": "allowed tangent direction",
+        "right": "tangent to constraint",
+        "note": "First-order motion along constraint."
+      },
+      {
+        "id": "u6-tangentcond",
+        "left": "allowed tangent direction \\(u\\)",
+        "right": "\\(\\nabla g(a)\\cdot u=0\\)",
+        "note": "Tangent condition."
+      },
+      {
+        "id": "u6-nochange",
+        "left": "constrained optimum",
+        "right": "no first-order change along constraint",
+        "note": "Along allowed tangent directions."
+      },
+      {
+        "id": "u6-parallel",
+        "left": "parallel gradients",
+        "right": "scalar multiples",
+        "note": "Same line direction."
+      },
+      {
+        "id": "u6-unitsphere",
+        "left": "\\(\\|x\\|=1\\)",
+        "right": "unit-sphere constraint",
+        "note": "Constrained optimization set."
+      },
+      {
+        "id": "u6-qfsphere",
+        "left": "\\(x^TBx\\) on \\(\\|x\\|=1\\)",
+        "right": "constrained quadratic-form problem",
+        "note": "Optimize on unit sphere."
+      },
+      {
+        "id": "u6-eigencands",
+        "left": "eigenvectors of symmetric \\(B\\)",
+        "right": "unit-sphere candidates for \\(x^TBx\\)",
+        "note": "Constrained extrema occur in eigenvector directions."
+      },
+      {
+        "id": "u6-maxeig",
+        "left": "largest eigenvalue of symmetric \\(B\\)",
+        "right": "maximum of \\(x^TBx\\) on \\(\\|x\\|=1\\)",
+        "note": "Principal-axis viewpoint."
+      },
+      {
+        "id": "u6-mistake",
+        "left": "wrong Lagrange equation",
+        "right": "\\(\\nabla f=\\lambda\\nabla f\\)",
+        "note": "Use \\(\\nabla g\\), not another \\(\\nabla f\\)."
+      },
+      {
+        "id": "u6-finalwarning",
+        "left": "constrained critical points",
+        "right": "candidates, then compare values",
+        "note": "Solve, then compare."
+      }
+    ]
+  }
+};
+
+const ROUND_MS = 120000;
+const BATCH_SIZE = 3;
+const ALL_DECK_IDS = Object.keys(DECKS);
+
+let state = {
+  pairCount: BATCH_SIZE,
+  deckIds: [...ALL_DECK_IDS],
+  mode: 'prelim',
+  cards: {terms: [], meanings: []},
+  activePairs: [],
+  selected: {term:null, meaning:null},
+  score: 0,
+  batchMatches: 0,
+  attempts: 0,
+  setsCleared: 0,
+  startTime: null,
+  endTime: null,
+  timerId: null,
+  locked: false,
+  finished: false,
+  usedPairIds: new Set()
+};
+
+const termBackIcon = `<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M26 10h12"/><path d="M30 10v12L18 47a8 8 0 0 0 7 11h14a8 8 0 0 0 7-11L34 22V10"/><path d="M23 37h18"/></svg>`;
+const meaningBackIcon = `<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M26 10h12"/><path d="M30 10v12L18 47a8 8 0 0 0 7 11h14a8 8 0 0 0 7-11L34 22V10"/><path d="M23 37h18"/></svg>`;
+
+const introHero = document.getElementById('introHero');
+const introScreen = document.getElementById('introScreen');
+const gameScreen = document.getElementById('gameScreen');
+const timerEl = document.getElementById('timer');
+const foundEl = document.getElementById('found');
+const termGrid = document.getElementById('termGrid');
+const meaningGrid = document.getElementById('meaningGrid');
+const feedback = document.getElementById('feedback');
+const gameInfo = document.getElementById('gameInfo');
+const startMsg = document.getElementById('startMsg');
+const deckInstruction = document.querySelector('.deckChoiceCard .sectionLabel');
+const confirmOverlay = document.getElementById('confirmOverlay');
+const summaryOverlay = document.getElementById('summaryOverlay');
+
+function shuffle(arr){
+  const a = [...arr];
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+function sample(arr, n){ return shuffle(arr).slice(0, n); }
+function formatTime(ms){
+  const sec = Math.max(0, Math.ceil(ms / 1000));
+  const m = Math.floor(sec / 60);
+  const s = String(sec % 60).padStart(2, '0');
+  return `${m}:${s}`;
+}
+function updateTimer(){
+  if(!state.endTime || state.finished) return;
+  const remaining = state.endTime - Date.now();
+  timerEl.textContent = formatTime(remaining);
+  if(remaining <= 0) endTimedRound();
+}
+function startTimer(){
+  stopTimer();
+  state.startTime = Date.now();
+  state.endTime = state.startTime + ROUND_MS;
+  updateTimer();
+  state.timerId = setInterval(updateTimer, 250);
+}
+function stopTimer(){
+  if(state.timerId) clearInterval(state.timerId);
+  state.timerId = null;
+}
+function typeset(node, tries=0){
+  if(window.MathJax && MathJax.typesetPromise){
+    MathJax.typesetPromise([node]).catch(()=>{});
+  }else if(tries < 40){
+    setTimeout(()=>typeset(node, tries + 1), 150);
+  }
+}
+function selectedDeckIds(){
+  return [...document.querySelectorAll('input[name="deck"]:checked')].map(input => input.value);
+}
+function showDeckChoicePrompt(){
+  startMsg.textContent = '';
+  if(!deckInstruction) return;
+  deckInstruction.classList.add('needs-choice');
+  deckInstruction.classList.remove('is-alerting');
+  void deckInstruction.offsetWidth;
+  deckInstruction.classList.add('is-alerting');
+}
+function clearDeckChoicePrompt(){
+  startMsg.textContent = '';
+  if(deckInstruction) deckInstruction.classList.remove('needs-choice', 'is-alerting');
+}
+function activeDeckPairs(){
+  return state.deckIds.flatMap(id => DECKS[id].pairs);
+}
+function unusedPairs(){
+  return activeDeckPairs().filter(pair => !state.usedPairIds.has(pair.id));
+}
+function chooseBatch(){
+  let pool = unusedPairs();
+  if(pool.length < BATCH_SIZE){
+    state.usedPairIds.clear();
+    pool = unusedPairs();
+  }
+  const selected = sample(pool, BATCH_SIZE);
+  selected.forEach(pair => state.usedPairIds.add(pair.id));
+  return selected;
+}
+function buildCards(pairs){
+  const terms = pairs.map((p, idx) => ({ key:`t-${idx}-${p.id}`, id:p.id, side:'term', html:p.left, note:p.note }));
+  const meanings = pairs.map((p, idx) => ({ key:`m-${idx}-${p.id}`, id:p.id, side:'meaning', html:p.right, note:p.note }));
+  return { terms: shuffle(terms), meanings: shuffle(meanings) };
+}
+function safeInlineMath(html){
+  return String(html).replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+function createCard(card){
+  const btn = document.createElement('button');
+  btn.className = 'memoryCard';
+  if(state.mode === 'prelim') btn.classList.add('prelim-card', 'is-flipped');
+  btn.type = 'button';
+  btn.dataset.id = card.id;
+  btn.dataset.key = card.key;
+  btn.dataset.side = card.side;
+  btn.setAttribute('aria-label', card.side === 'term' ? 'notation or concept card' : 'definition card');
+  btn.innerHTML = `
+    <span class="cardInner">
+      <span class="face back"></span>
+      <span class="face front">
+        <span class="cardText">${safeInlineMath(card.html)}</span>
+      </span>
+    </span>`;
+  btn.addEventListener('click', () => selectCard(btn, card));
+  return btn;
+}
+function renderBoard(){
+  termGrid.innerHTML = '';
+  meaningGrid.innerHTML = '';
+  termGrid.className = `cardGrid count${state.pairCount}`;
+  meaningGrid.className = `cardGrid count${state.pairCount}`;
+  state.cards.terms.forEach(card => termGrid.appendChild(createCard(card)));
+  state.cards.meanings.forEach(card => meaningGrid.appendChild(createCard(card)));
+  typeset(termGrid);
+  typeset(meaningGrid);
+}
+function updateHud(){
+  foundEl.textContent = `${state.score}`;
+}
+function setFeedback(text, cls=''){
+  feedback.className = `feedback ${cls}`.trim();
+  feedback.innerHTML = text;
+  typeset(feedback);
+}
+function setDeckTags(){
+  gameInfo.innerHTML = '';
+  const modeTag = document.createElement('span');
+  modeTag.className = 'deckTag';
+  modeTag.textContent = state.mode === 'prelim' ? 'Practice' : 'Recall';
+  gameInfo.appendChild(modeTag);
+  state.deckIds.forEach(id => {
+    const deckTag = document.createElement('span');
+    deckTag.className = 'deckTag';
+    deckTag.textContent = DECKS[id].label;
+    gameInfo.appendChild(deckTag);
+  });
+}
+function dealNextBatch(message='Match all pairs.'){
+  if(state.finished) return;
+  state.activePairs = chooseBatch();
+  state.cards = buildCards(state.activePairs);
+  state.batchMatches = 0;
+  state.selected = {term:null, meaning:null};
+  state.locked = false;
+  renderBoard();
+  setFeedback(message);
+}
+function launchGame(mode=state.mode, deckIds=state.deckIds){
+  state.deckIds = [...deckIds];
+  state.pairCount = BATCH_SIZE;
+  state.mode = mode;
+  state.cards = {terms: [], meanings: []};
+  state.activePairs = [];
+  state.selected = {term:null, meaning:null};
+  state.score = 0;
+  state.batchMatches = 0;
+  state.attempts = 0;
+  state.setsCleared = 0;
+  state.locked = false;
+  state.finished = false;
+  state.usedPairIds = new Set();
+  hideConfirm();
+  hideSummary();
+  introHero.hidden = true;
+  introScreen.hidden = true;
+  gameScreen.hidden = false;
+  window.scrollTo(0, 0);
+  timerEl.textContent = formatTime(ROUND_MS);
+  updateHud();
+  setDeckTags();
+  dealNextBatch('Match all pairs.');
+  startTimer();
+}
+function startGame(mode){
+  const deckIds = selectedDeckIds();
+  if(deckIds.length === 0){
+    showDeckChoicePrompt();
+    return;
+  }
+  clearDeckChoicePrompt();
+  launchGame(mode, deckIds);
+}
+function cardFromButton(btn){
+  const sideKey = btn.dataset.side === 'term' ? 'terms' : 'meanings';
+  return state.cards[sideKey].find(card => card.key === btn.dataset.key);
+}
+function resetCardVisual(btn){
+  btn.classList.remove('is-selected', 'wrong');
+  if(state.mode !== 'prelim') btn.classList.remove('is-flipped');
+}
+function unselectSameSide(side){
+  const current = state.selected[side];
+  if(current && !current.classList.contains('is-matched')) resetCardVisual(current);
+  state.selected[side] = null;
+}
+function selectCard(btn, card){
+  if(state.locked || state.finished || btn.classList.contains('is-matched')) return;
+  const side = card.side;
+  if(btn === state.selected[side]){
+    resetCardVisual(btn);
+    state.selected[side] = null;
+    setFeedback('Match all pairs.');
+    return;
+  }
+  unselectSameSide(side);
+  btn.classList.add('is-flipped', 'is-selected');
+  state.selected[side] = btn;
+  setFeedback(side === 'term' ? 'Now choose a definition.' : 'Now choose a notation card.');
+  if(state.selected.term && state.selected.meaning) checkSelected();
+}
+function checkSelected(){
+  state.locked = true;
+  const termBtn = state.selected.term;
+  const meaningBtn = state.selected.meaning;
+  const termCard = cardFromButton(termBtn);
+  const meaningCard = cardFromButton(meaningBtn);
+  state.attempts += 1;
+  if(termCard.id === meaningCard.id){
+    termBtn.classList.remove('is-selected');
+    meaningBtn.classList.remove('is-selected');
+    termBtn.classList.add('is-matched');
+    meaningBtn.classList.add('is-matched');
+    state.score += 1;
+    state.batchMatches += 1;
+    updateHud();
+    setFeedback('Nice match', 'good');
+    state.selected = {term:null, meaning:null};
+    if(state.batchMatches === BATCH_SIZE){
+      state.setsCleared += 1;
+      setFeedback('Set cleared. New cards coming.', 'good');
+      setTimeout(() => dealNextBatch('New cards. Keep matching.'), 650);
+    }else{
+      state.locked = false;
+    }
+  } else {
+    termBtn.classList.add('wrong');
+    meaningBtn.classList.add('wrong');
+    setFeedback(state.mode === 'prelim' ? 'Not a match.' : 'Not a match — read both cards before they flip back.', 'bad');
+    setTimeout(() => {
+      if(state.finished) return;
+      resetCardVisual(termBtn);
+      resetCardVisual(meaningBtn);
+      state.selected = {term:null, meaning:null};
+      state.locked = false;
+      setFeedback('Match all pairs.');
+    }, state.mode === 'prelim' ? 900 : 3500);
+  }
+}
+function buildCongratulation(){
+  if(state.score === 0) return 'Time is up. Start another round and get the first match.';
+  if(state.score === 1) return 'Congratulations — you matched 1 pair.';
+  return `Congratulations — you matched ${state.score} pairs.`;
+}
+function fillSummary(){
+  document.getElementById('summaryTime').textContent = formatTime(ROUND_MS);
+  document.getElementById('summaryPairs').textContent = `${state.score}`;
+  document.getElementById('summaryTurns').textContent = `${state.setsCleared}`;
+  document.getElementById('summaryMessage').textContent = buildCongratulation();
+  const modeName = state.mode === 'prelim' ? 'Practice' : 'Recall';
+  const deckNames = state.deckIds.map(id => DECKS[id].label).join(' · ');
+  document.getElementById('summaryDecks').innerHTML = `<strong>Mode:</strong> ${modeName}<br><strong>Decks:</strong> ${deckNames}<br><strong>Pairs matched:</strong> ${state.score}`;
+}
+function endTimedRound(){
+  if(state.finished) return;
+  state.finished = true;
+  state.locked = true;
+  stopTimer();
+  timerEl.textContent = '0:00';
+  setFeedback('Time is up.', 'done');
+  fillSummary();
+  showSummary();
+}
+function showConfirm(){
+  if(summaryOverlay.hidden === false) return;
+  confirmOverlay.hidden = false;
+  document.getElementById('cancelNewBtn').focus();
+}
+function hideConfirm(){ confirmOverlay.hidden = true; }
+function showSummary(){
+  summaryOverlay.hidden = false;
+  document.getElementById('summaryReplayBtn').focus();
+}
+function hideSummary(){ summaryOverlay.hidden = true; }
+function returnIntro(){
+  hideConfirm();
+  hideSummary();
+  stopTimer();
+  state.finished = true;
+  gameScreen.hidden = true;
+  introHero.hidden = false;
+  introScreen.hidden = false;
+  setTimeout(() => typeset(introScreen), 20);
+}
+function replayCurrent(){
+  hideSummary();
+  launchGame(state.mode, state.deckIds);
+}
+
+document.querySelectorAll('.modeLaunchBtn').forEach(btn => {
+  btn.addEventListener('click', () => startGame(btn.dataset.mode));
+});
+document.querySelectorAll('input[name="deck"]').forEach(input => {
+  input.addEventListener('change', () => {
+    if(selectedDeckIds().length > 0) clearDeckChoicePrompt();
+  });
+});
+if(deckInstruction){
+  deckInstruction.addEventListener('animationend', () => deckInstruction.classList.remove('is-alerting'));
+}
+document.getElementById('newBtn').addEventListener('click', showConfirm);
+document.getElementById('cancelNewBtn').addEventListener('click', hideConfirm);
+document.getElementById('confirmNewBtn').addEventListener('click', returnIntro);
+document.getElementById('summaryIntroBtn').addEventListener('click', returnIntro);
+document.getElementById('summaryReplayBtn').addEventListener('click', replayCurrent);
+confirmOverlay.addEventListener('click', e => { if(e.target === confirmOverlay) hideConfirm(); });
+document.addEventListener('keydown', e => {
+  if(e.key === 'Escape'){
+    if(!confirmOverlay.hidden) hideConfirm();
+  }
+});
+
+typeset(document.body);
+</script>
+</body>
+</html>

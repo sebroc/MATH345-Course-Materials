@@ -7,12 +7,6 @@
       "image": "matrix-match-small.jpg"
     },
     {
-      "title": "Matrix Dominoes",
-      "slug": "MatrixDominoes",
-      "href": "MatrixDominoes/",
-      "image": "matrix-dominoes-small.jpg"
-    },
-    {
       "title": "Order Matters!",
       "slug": "OrderMatters",
       "href": "OrderMatters/",
@@ -37,10 +31,16 @@
       "image": "differential-diagnosis-small.jpg"
     },
     {
-      "title": "Unlocking Gram-Schmidt",
-      "slug": "UnlockingGramSchmidt",
-      "href": "UnlockingGramSchmidt/",
-      "image": "unlocking-gram-schmidt-small.jpg"
+      "title": "Optimal Recall",
+      "slug": "OptimalRecall",
+      "href": "OptimalRecall/",
+      "image": "optimal-recall-small.jpg"
+    },
+    {
+      "title": "Gram-Schmidt 3D",
+      "slug": "GramSchmidt3D",
+      "href": "GramSchmidt3D/",
+      "image": "gram-schmidt-3d-small.jpg"
     },
     {
       "title": "Extreme Quest",

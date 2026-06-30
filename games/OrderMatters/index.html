@@ -13,6 +13,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Order matters!</title>
+<link rel="icon" href="data:," />
 <style>
   :root{
     --paper:#fffdf8;
@@ -66,18 +67,39 @@
   }
   .top{
     display:grid;
-    grid-template-columns:1fr;
+    grid-template-columns:minmax(0, 1fr) auto;
+    grid-template-areas:
+      "title tools"
+      "levels levels";
     align-items:start;
-    gap:10px;
+    gap:6px 10px;
+  }
+  .title-stack{grid-area:title;min-width:0}
+  .top-tools{
+    grid-area:tools;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:5px;
   }
   h1{
     margin:0;
-    font-size:26px;
+    display:inline-block;
+    font-size:36px;
+    font-weight:1000;
     line-height:.95;
     letter-spacing:-.055em;
     max-width:none;
+    padding:2px 8px 5px;
+    border-radius:12px;
+    color:#fff;
+    background:linear-gradient(110deg,#ff2f92 0%,#b832e6 44%,#0f2c75 100%);
+    -webkit-text-fill-color:#fff;
+    text-shadow:0 2px 0 rgba(15,23,42,.52);
+    box-shadow:0 0 0 1px rgba(15,23,42,.7),0 0 16px rgba(255,47,146,.28),0 8px 18px rgba(15,44,117,.18);
   }
   .levelbar{
+    grid-area:levels;
     display:flex;
     gap:4px;
     background:#f1f5f9;
@@ -111,43 +133,49 @@
     box-shadow:0 2px 8px rgba(17,24,39,.22);
   }
   .quick-actions{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:10px;
-    margin-top:0;
+    display:block;
+    margin-top:8px;
   }
-  .right-actions{
-    display:flex;
-    align-items:center;
-    gap:7px;
-  }
-  .quick-actions .tool{
+  .top-tools .tool{
     min-height:34px;
     border-radius:999px;
     font-size:12px;
     padding:0 14px;
   }
-  .quick-actions #newBtn{
-    min-width:88px;
-    color:white;
-    background:linear-gradient(135deg,#ff7a18,#ec4899);
-    border:0;
-    box-shadow:0 8px 18px rgba(236,72,153,.28), inset 0 1px 0 rgba(255,255,255,.32);
+  .start-prompt{
+    color:#64748b;
+    font-size:15px;
+    font-weight:900;
+    line-height:1.18;
   }
-  .quick-actions #newBtn:hover{filter:saturate(1.08) brightness(1.02);transform:translateY(-1px)}
-  .quick-actions #sprintBtn,
-  .quick-actions #namesBtn{
-    min-width:78px;
+  .timed-prompt{
+    display:none;
+    margin-top:2px;
+    color:#64748b;
+    font-size:15px;
+    font-weight:900;
+    line-height:1.18;
+  }
+  .timed-mode .timed-prompt{display:block}
+  .top-tools #namesBtn{
+    width:118px;
+    min-height:48px;
     background:#fff;
     color:#111827;
     border:1px solid #dbe2ee;
     box-shadow:0 1px 0 rgba(255,255,255,.85), inset 0 -1px 0 rgba(15,23,42,.05);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:1px;
+    white-space:normal;
+    line-height:1.04;
   }
   .instruction{
     margin:6px 2px 8px;
-    min-height:18px;
-    font-size:13px;
+    min-height:23px;
+    font-size:17px;
     line-height:1.25;
     font-weight:760;
     color:#374151;
@@ -251,12 +279,20 @@
   .prelim-mode .product{
     display:none;
   }
-  .repair-mode .bank-head,
-  .repair-mode .bank{
-    display:none;
-  }
-  .repair-mode .product{
-    margin-bottom:8px;
+  @media(max-height:760px){
+    .bank-mode{
+      --tile:84px;
+      --boardH:205px;
+      --hintH:60px;
+    }
+    .bank-mode .product-head{margin:6px 4px 4px}
+    .bank-mode .bank-head{margin:4px 4px 3px}
+    .bank-mode .bank{gap:8px}
+    .bank-mode .tile{padding:7px 6px 6px}
+    .bank-mode .matbox:before,
+    .bank-mode .matbox:after{height:43px;width:7px}
+    .bank-mode .matrix{grid-template-columns:repeat(2, 20px);grid-template-rows:repeat(2, 20px);font-size:17px}
+    .bank-mode .scorebar{margin-top:2px}
   }
   .bank-cell{
     width:var(--tile);
@@ -369,8 +405,72 @@
     border-color:#f59e0b;
     color:#111827;
   }
-  .quick-actions #sprintBtn.active,
-  .quick-actions #namesBtn.active{
+  .confirm-overlay{
+    position:absolute;
+    inset:0;
+    display:grid;
+    place-items:center;
+    padding:18px;
+    background:rgba(15,23,42,.28);
+    opacity:0;
+    visibility:hidden;
+    pointer-events:none;
+    transition:opacity .12s ease;
+    z-index:40;
+  }
+  .confirm-overlay.open{
+    opacity:1;
+    visibility:visible;
+    pointer-events:auto;
+  }
+  .confirm-panel{
+    width:min(100%, 330px);
+    border-radius:18px;
+    background:#fffdf8;
+    border:1px solid rgba(226,232,240,.95);
+    box-shadow:0 24px 60px rgba(15,23,42,.3);
+    padding:18px;
+    text-align:center;
+  }
+  .confirm-title{
+    margin:0 0 6px;
+    font-size:20px;
+    line-height:1.1;
+    font-weight:950;
+    color:#111827;
+  }
+  .confirm-text{
+    margin:0 0 16px;
+    font-size:13px;
+    line-height:1.35;
+    font-weight:750;
+    color:#64748b;
+  }
+  .confirm-actions{
+    display:flex;
+    gap:9px;
+  }
+  .confirm-actions .tool{
+    flex:1;
+    min-height:38px;
+    font-weight:900;
+  }
+  .round-over-overlay{
+    background:rgba(15,23,42,.24);
+    backdrop-filter:blur(4px);
+  }
+  .round-score{
+    margin:0 0 16px;
+    font-size:15px;
+    line-height:1.25;
+    font-weight:900;
+    color:#334155;
+  }
+  .round-score strong{
+    color:#111827;
+    font-size:24px;
+  }
+  .top-tools #namesBtn.active{
     background:#fff;
     color:#111827;
     border-color:#111827;
@@ -378,19 +478,21 @@
   }
   .scorebar{
     display:flex;
-    justify-content:space-between;
+    justify-content:center;
     align-items:center;
-    height:28px;
-    min-height:28px;
-    margin:6px 4px 0;
+    height:26px;
+    min-height:26px;
+    margin:0;
     color:#475569;
-    font-size:12px;
+    font-size:13px;
     font-weight:850;
     flex:0 0 auto;
   }
   .message{
     display:block;
-    flex:1;
+    height:18px;
+    min-height:18px;
+    margin:3px 4px 0;
     min-width:0;
     color:#334155;
     white-space:nowrap;
@@ -401,8 +503,19 @@
   .message.good,.message.bad{visibility:visible}
   .message.good{color:var(--good)}
   .message.bad{color:var(--bad)}
-  .timerbox{display:flex;gap:8px;align-items:center;color:#0f172a;white-space:nowrap;visibility:hidden}
-  .sprint-on .timerbox{visibility:visible}
+  .timerbox{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:10px;
+    color:#0f172a;
+    white-space:nowrap;
+    font-size:15px;
+    font-weight:950;
+  }
+  .timerbox b{font-size:17px}
+  .waiting-mode .timerbox,
+  .untimed-mode .timerbox{visibility:hidden}
   .hint-row{
     margin-top:auto;
     display:block;
@@ -441,7 +554,8 @@
     left:12px;
     right:12px;
     bottom:58px;
-    height:var(--hintH);
+    height:auto;
+    max-height:var(--hintH);
     border-radius:16px;
     background:#f8fafc;
     border:1px solid #e2e8f0;
@@ -472,7 +586,7 @@
   }
   @media(max-width:420px){
     .game{--tile:76px;--boardH:240px;--hintH:68px;padding:11px;border-radius:24px}
-    h1{font-size:23px;max-width:none}
+    h1{font-size:30px;max-width:none}
     .level{padding:6px 6px;font-size:10px}
     .bank{gap:6px}
     .product{gap:4px}
@@ -480,19 +594,20 @@
     .matbox:before,.matbox:after{height:40px}
     .matrix{grid-template-columns:repeat(2, 18px);grid-template-rows:repeat(2, 19px);font-size:15px}
     .name{font-size:8px;max-width:70px}
-    .quick-actions{gap:6px}
-    .quick-actions .tool{font-size:11px;min-height:32px;padding:0 10px}
+    .top{gap:5px 8px}
+    .top-tools .tool{font-size:11px;min-height:32px;padding:0 10px}
+    .top-tools #namesBtn{width:98px;min-height:44px}
     .tool{font-size:12px;min-height:36px}
     .legend{font-size:10px;gap:8px}
     .hint{left:11px;right:11px;bottom:56px}
   }
   @media(max-height:720px){
     .game{--tile:74px;--boardH:215px;--hintH:60px;height:calc(100dvh - 16px);padding:10px;border-radius:24px}
-    h1{font-size:23px}
+    h1{font-size:31px}
     .top{gap:7px}
-    .quick-actions .tool{min-height:30px;font-size:11px;padding:0 10px}
+    .top-tools .tool{min-height:30px;font-size:11px;padding:0 10px}
     .level{padding:5px 5px;font-size:10px}
-    .instruction{margin:5px 2px 6px;font-size:12px}
+    .instruction{margin:5px 2px 6px;font-size:15px;min-height:20px}
     .board{padding:6px;border-radius:19px}
     svg{border-radius:15px}
     .legend{margin-top:4px;font-size:10px;gap:9px;height:16px}
@@ -505,7 +620,9 @@
     .name{font-size:8px;max-width:68px}
     .show-names .matbox:before,.show-names .matbox:after{height:31px}
     .show-names .matrix{font-size:13px;grid-template-rows:repeat(2, 15px)}
-    .scorebar{height:23px;min-height:23px;margin-top:4px;font-size:11px}
+    .scorebar{height:23px;min-height:23px;font-size:11px}
+    .message{height:16px;min-height:16px;margin-top:2px;font-size:10.5px}
+    .timerbox{font-size:14px;gap:9px}.timerbox b{font-size:16px}
     .hint-row{padding-top:5px}
     .hint-toggle{min-height:35px;font-size:12px;border-radius:14px}
     .hint{bottom:51px;font-size:11.2px;line-height:1.2;padding:7px 9px;border-radius:14px}
@@ -513,11 +630,11 @@
   @media(max-height:650px){
     body{padding:8px}
     .game{height:calc(100svh - 16px);padding:10px;border-radius:22px}
-    h1{font-size:20px}
+    h1{font-size:29px}
     .top{gap:5px}
     .level{font-size:9.5px;padding:5px 4px}
-    .quick-actions .tool{min-height:29px;font-size:10.5px;padding:0 9px}
-    .instruction{margin:4px 2px 5px;font-size:11.5px;line-height:1.15}
+    .top-tools .tool{min-height:29px;font-size:10.5px;padding:0 9px}
+    .instruction{margin:4px 2px 5px;font-size:14px;line-height:1.15;min-height:18px}
     .board{padding:6px;border-radius:18px}
     svg{height:185px;border-radius:14px}
     .legend{gap:7px;margin-top:3px;font-size:9.5px}
@@ -532,22 +649,23 @@
     .matbox:before,.matbox:after{height:34px;width:6px}
     .matrix{grid-template-columns:repeat(2, 16px);grid-template-rows:repeat(2, 17px);font-size:13.5px}
     .name{font-size:7.5px;max-width:58px}
-    .scorebar{height:22px;min-height:22px;margin-top:3px;font-size:11px}
+    .scorebar{height:22px;min-height:22px;font-size:11px}
+    .message{height:15px;min-height:15px;margin-top:2px;font-size:10px}
+    .timerbox{font-size:13px;gap:8px}.timerbox b{font-size:15px}
     .hint-toggle{min-height:30px;border-radius:14px;font-size:12px}
-    .hint{bottom:45px;font-size:10.5px;line-height:1.12;padding:5px 8px;height:46px}
+    .hint{bottom:45px;font-size:10.5px;line-height:1.12;padding:5px 8px;max-height:46px}
   }
 
   @media(max-height:610px){
     body{padding:6px}
     .game{--tile:60px;--boardH:160px;--hintH:52px;height:calc(100dvh - 12px);padding:8px;border-radius:20px}
-    h1{font-size:20px}
+    h1{font-size:27px}
     .top{gap:5px}
-    .quick-actions .tool{min-height:27px;font-size:10px;padding:0 9px}
-    .quick-actions #newBtn{min-width:76px}
-    .quick-actions #sprintBtn,.quick-actions #namesBtn{min-width:64px}
+    .top-tools .tool{min-height:27px;font-size:10px;padding:0 9px}
+    .top-tools #namesBtn{width:88px;min-height:40px;font-size:10px}
     .level{padding:4px 3px;font-size:8.5px}
     .levelbar{padding:2px}
-    .instruction{margin:4px 2px 4px;font-size:11px}
+    .instruction{margin:4px 2px 4px;font-size:13px;min-height:16px}
     .board{padding:5px;border-radius:16px}
     svg{border-radius:12px}
     .legend{margin-top:2px;font-size:9px;gap:6px;height:12px}
@@ -563,7 +681,9 @@
     .name{font-size:7px;max-width:54px}
     .show-names .matbox:before,.show-names .matbox:after{height:25px}
     .show-names .matrix{font-size:11px;grid-template-rows:repeat(2, 12px)}
-    .scorebar{height:18px;min-height:18px;margin-top:3px;font-size:10px}
+    .scorebar{height:20px;min-height:20px;font-size:10px}
+    .message{height:14px;min-height:14px;margin-top:1px;font-size:9.5px}
+    .timerbox{font-size:12px;gap:7px}.timerbox b{font-size:14px}
     .hint-row{padding-top:3px}
     .hint-toggle{min-height:29px;font-size:11px;border-radius:12px}
     .hint{bottom:42px;font-size:10px;line-height:1.16;padding:6px 8px;border-radius:12px}
@@ -576,19 +696,23 @@
 <body>
   <main class="game" id="game">
     <div class="top">
-      <h1>Order matters!</h1>
-      <div class="quick-actions" aria-label="Game controls">
-        <button class="tool" id="newBtn">New</button>
-        <div class="right-actions">
-          <button class="tool" id="sprintBtn">Sprint</button>
-          <button class="tool" id="namesBtn">Names</button>
+      <div class="title-stack">
+        <h1>Order matters!</h1>
+        <div class="quick-actions" aria-label="Game controls">
+          <div class="start-prompt" id="startPrompt">Pick a level.</div>
+          <div class="timed-prompt" id="timedPrompt">Complete as many as you can in 2 minutes.</div>
+        </div>
+      </div>
+      <div class="top-tools">
+        <button class="tool" id="namesBtn"><span>Show</span><span>Transformations</span></button>
+        <div class="scorebar">
+          <div class="timerbox"><span>✓ <b id="score">0</b></span><span>⏱ <b id="time">2:00</b></span></div>
         </div>
       </div>
       <div class="levelbar" aria-label="Level">
-        <button class="level active" id="prelimBtn" title="One move">Prelim</button>
+        <button class="level active" id="prelimBtn" title="One move">Practice</button>
         <button class="level" id="basicBtn">Basic</button>
-        <button class="level" id="challengeBtn" title="Repair mode">Challenge</button>
-        <button class="level" id="superBtn" title="Three matrices">Super challenge</button>
+        <button class="level" id="superBtn" title="Three matrices">Challenge</button>
       </div>
     </div>
 
@@ -611,16 +735,33 @@
     <div class="bank-head" id="bankHead">use each matrix once</div>
     <section class="bank" id="bank" aria-label="Use each matrix once"></section>
 
-    <div class="scorebar">
-      <div class="message" id="message" aria-live="polite"></div>
-      <div class="timerbox"><span>✓ <b id="score">0</b></span><span>⏱ <b id="time">60</b></span></div>
-    </div>
+    <div class="message" id="message" aria-live="polite"></div>
 
     <div class="hint-row">
       <button class="hint-toggle" id="hintBtn" aria-expanded="false">Hint</button>
     </div>
-    <div class="hint" id="hint">
-      <b>Hint.</b> In <span class="formula">A × B × C</span>, the square is touched by <span class="formula">C</span> first, then <span class="formula">B</span>, then <span class="formula">A</span>. The rightmost matrix acts first.
+    <div class="hint" id="hint"></div>
+
+    <div class="confirm-overlay" id="newConfirm" aria-hidden="true">
+      <div class="confirm-panel" role="dialog" aria-modal="true" aria-labelledby="newConfirmTitle">
+        <h2 class="confirm-title" id="newConfirmTitle">Start this level?</h2>
+        <p class="confirm-text">Your timer, score, and current puzzle will reset.</p>
+        <div class="confirm-actions">
+          <button class="tool" id="cancelNewBtn">Cancel</button>
+          <button class="tool dark" id="confirmNewBtn">Start Level</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="confirm-overlay round-over-overlay" id="roundOver" aria-hidden="true">
+      <div class="confirm-panel" role="dialog" aria-modal="true" aria-labelledby="roundOverTitle">
+        <h2 class="confirm-title" id="roundOverTitle">Congratulations!</h2>
+        <p class="round-score">Your score: <strong id="finalScore">0</strong></p>
+        <p class="confirm-text">Completed tasks in two minutes.</p>
+        <div class="confirm-actions">
+          <button class="tool dark" id="roundNewBtn">Pick a Level</button>
+        </div>
+      </div>
     </div>
   </main>
 
@@ -675,10 +816,13 @@ let targetProduct = I;
 let selectedId = null;
 let selectedFromSlot = null;
 let showNames = false;
-let sprint = false;
+const ROUND_SECONDS = 120;
 let score = 0;
-let timeLeft = 60;
+let timeLeft = ROUND_SECONDS;
 let timer = null;
+let roundActive = false;
+let roundEnded = false;
+let pendingLevel = null;
 let checkingLock = false;
 let plotBounds = null;
 
@@ -689,12 +833,15 @@ const bankEl = document.getElementById('bank');
 const msgEl = document.getElementById('message');
 const prelimBtn = document.getElementById('prelimBtn');
 const basicBtn = document.getElementById('basicBtn');
-const challengeBtn = document.getElementById('challengeBtn');
 const superBtn = document.getElementById('superBtn');
 const namesBtn = document.getElementById('namesBtn');
 const hintBtn = document.getElementById('hintBtn');
-const sprintBtn = document.getElementById('sprintBtn');
-const newBtn = document.getElementById('newBtn');
+const newConfirm = document.getElementById('newConfirm');
+const cancelNewBtn = document.getElementById('cancelNewBtn');
+const confirmNewBtn = document.getElementById('confirmNewBtn');
+const roundOver = document.getElementById('roundOver');
+const finalScoreEl = document.getElementById('finalScore');
+const roundNewBtn = document.getElementById('roundNewBtn');
 const hintEl = document.getElementById('hint');
 const instructionEl = document.getElementById('instruction');
 const scoreEl = document.getElementById('score');
@@ -834,29 +981,10 @@ function generatePuzzle(){
     selectedFromSlot = null;
     checkingLock = false;
 
-    if(level === 'repair'){
-      // Challenge: start with all matrices placed, but in a wrong order one swap away.
-      const swapPairs = shuffle([[0,1],[0,2],[1,2]]);
-      let repaired = null;
-      for(const [i,j] of swapPairs){
-        const trial = answer.slice();
-        [trial[i], trial[j]] = [trial[j], trial[i]];
-        if(!eqM(productFromIds(trial), targetProduct)){
-          repaired = trial;
-          break;
-        }
-      }
-      if(!repaired) continue;
-      slots = repaired;
-      plotBounds = computePlotBounds();
-      render();
-      setMessage('');
-    }else{
-      slots = Array(slotCount).fill(null);
-      plotBounds = computePlotBounds();
-      render();
-      setMessage('');
-    }
+    slots = Array(slotCount).fill(null);
+    plotBounds = computePlotBounds();
+    render();
+    setMessage('');
     return;
   }
   console.warn('Fallback puzzle used.');
@@ -866,14 +994,122 @@ function closeHint(){
   hintBtn.classList.remove('active');
   hintBtn.setAttribute('aria-expanded', 'false');
 }
-function setLevel(next){
+function formatTime(seconds){
+  const safeSeconds = Math.max(0, seconds);
+  const minutes = Math.floor(safeSeconds / 60);
+  const remainder = String(safeSeconds % 60).padStart(2, '0');
+  return `${minutes}:${remainder}`;
+}
+function updateRoundHud(){
+  scoreEl.textContent = score;
+  timeEl.textContent = formatTime(timeLeft);
+}
+function isTimedLevel(next=level){
+  return next === 'basic' || next === 'super';
+}
+function updateHint(){
+  const labels = ['A', 'B', 'C'].slice(0, slotCount);
+  const formula = labels.join('');
+  const order = labels.slice().reverse();
+  const orderText = order.map((label, index) => {
+    const prefix = index === 0 ? '' : 'then ';
+    const suffix = index === 0 ? ' first' : '';
+    return `${prefix}<span class="formula">${label}</span>${suffix}`;
+  }).join(', ');
+  hintEl.innerHTML = `<b>Hint.</b> In <span class="formula">${formula}</span>, the square is modified by ${orderText}.`;
+}
+function levelButton(next){
+  if(next === 'prelim') return prelimBtn;
+  if(next === 'basic') return basicBtn;
+  return superBtn;
+}
+function applyLevel(next){
   level = next;
   closeHint();
   prelimBtn.classList.toggle('active', level === 'prelim');
   basicBtn.classList.toggle('active', level === 'basic');
-  challengeBtn.classList.toggle('active', level === 'repair');
   superBtn.classList.toggle('active', level === 'super');
+}
+function openLevelConfirm(next){
+  pendingLevel = next;
+  closeHint();
+  newConfirm.classList.add('open');
+  newConfirm.setAttribute('aria-hidden', 'false');
+  confirmNewBtn.focus();
+}
+function closeNewConfirm(){
+  const focusLevel = pendingLevel || level;
+  newConfirm.classList.remove('open');
+  newConfirm.setAttribute('aria-hidden', 'true');
+  pendingLevel = null;
+  levelButton(focusLevel).focus();
+}
+function closeRoundOver(){
+  roundOver.classList.remove('open');
+  roundOver.setAttribute('aria-hidden', 'true');
+}
+function waitForLevelPick(){
+  closeRoundOver();
+  closeHint();
+  clearInterval(timer);
+  timer = null;
+  roundActive = false;
+  roundEnded = false;
+  checkingLock = false;
+  selectedId = null;
+  selectedFromSlot = null;
+  score = 0;
+  timeLeft = ROUND_SECONDS;
+  updateRoundHud();
+  render();
+  setMessage('');
+}
+function endRound(){
+  if(roundEnded) return;
+  roundEnded = true;
+  roundActive = false;
+  clearInterval(timer);
+  timer = null;
+  closeHint();
+  if(newConfirm.classList.contains('open')) closeNewConfirm();
+  finalScoreEl.textContent = score;
+  roundOver.classList.add('open');
+  roundOver.setAttribute('aria-hidden', 'false');
+  roundNewBtn.focus();
+}
+function startRound(next=level){
+  const timed = isTimedLevel(next);
+  closeRoundOver();
+  closeHint();
+  clearInterval(timer);
+  timer = null;
+  applyLevel(next);
+  score = 0;
+  timeLeft = ROUND_SECONDS;
+  roundActive = true;
+  roundEnded = false;
+  updateRoundHud();
   generatePuzzle();
+  if(timed){
+    timer = setInterval(() => {
+      if(roundEnded) return;
+      timeLeft = Math.max(0, timeLeft - 1);
+      updateRoundHud();
+      if(timeLeft <= 0) endRound();
+    }, 1000);
+  }
+}
+function confirmNewGame(){
+  const next = pendingLevel || level;
+  closeNewConfirm();
+  startRound(next);
+}
+function requestLevel(next){
+  if(roundActive && !roundEnded){
+    openLevelConfirm(next);
+    return;
+  }
+  startRound(next);
 }
 function setMessage(text, kind=''){
   const isFeedback = kind === 'good' || kind === 'bad';
@@ -884,18 +1120,19 @@ function setMessage(text, kind=''){
 function render(){
   game.classList.toggle('show-names', showNames);
   game.classList.toggle('prelim-mode', level === 'prelim');
-  game.classList.toggle('repair-mode', level === 'repair');
+  game.classList.toggle('bank-mode', level === 'basic' || level === 'super');
+  game.classList.toggle('waiting-mode', !roundActive);
+  game.classList.toggle('timed-mode', isTimedLevel(level));
+  game.classList.toggle('untimed-mode', !isTimedLevel(level));
+  updateHint();
   if(level === 'prelim') closeHint();
-  if(level === 'prelim') instructionEl.textContent = 'Which matrix made the dashed target?';
-  else if(level === 'basic') instructionEl.textContent = 'Match the dashed target.';
-  else if(level === 'repair') instructionEl.textContent = 'Swap two matrices to match the dashed target.';
+  if(level === 'prelim') instructionEl.textContent = 'Which matrix produces the dashed target?';
   else instructionEl.textContent = 'Match the dashed target.';
   bankHeadEl.textContent = level === 'prelim' ? 'choose the matching matrix' : 'use each matrix once';
   renderProductSlots();
   renderBank();
   draw();
-  scoreEl.textContent = score;
-  timeEl.textContent = timeLeft;
+  updateRoundHud();
 }
 function makeTile(id, sourceSlot=null){
   const t = transformations.find(x => x.id === id);
@@ -915,10 +1152,17 @@ function makeTile(id, sourceSlot=null){
     <div class="name">${t.name}</div>`;
   tile.addEventListener('click', (e) => {
     e.stopPropagation();
+    if(!roundActive) return;
     if(sourceSlot !== null) handleTileInSlotClick(sourceSlot, id);
     else selectTile(id);
   });
-  tile.addEventListener('dragstart', (e) => { selectedId = id; selectedFromSlot = sourceSlot; e.dataTransfer.setData('text/plain', id); tile.classList.add('dragging'); });
+  tile.addEventListener('dragstart', (e) => {
+    if(!roundActive){ e.preventDefault(); return; }
+    selectedId = id;
+    selectedFromSlot = sourceSlot;
+    e.dataTransfer.setData('text/plain', id);
+    tile.classList.add('dragging');
+  });
   tile.addEventListener('dragend', () => { document.querySelectorAll('.dragging').forEach(x => x.classList.remove('dragging')); });
   return tile;
 }
@@ -930,9 +1174,9 @@ function renderProductSlots(){
     slot.className = 'slot' + (slots[i] ? '' : ' empty');
     slot.dataset.index = i;
     slot.addEventListener('click', () => handleSlotClick(i));
-    slot.addEventListener('dragover', e => { e.preventDefault(); slot.classList.add('drop'); });
+    slot.addEventListener('dragover', e => { if(!roundActive) return; e.preventDefault(); slot.classList.add('drop'); });
     slot.addEventListener('dragleave', () => slot.classList.remove('drop'));
-    slot.addEventListener('drop', e => { e.preventDefault(); slot.classList.remove('drop'); placeTile(e.dataTransfer.getData('text/plain'), i); });
+    slot.addEventListener('drop', e => { e.preventDefault(); slot.classList.remove('drop'); if(roundActive) placeTile(e.dataTransfer.getData('text/plain'), i); });
     if(slots[i]) slot.appendChild(makeTile(slots[i], i));
     productEl.appendChild(slot);
     if(i < slotCount-1){
@@ -951,39 +1195,17 @@ function renderBank(){
     cell.className = 'bank-cell' + (used ? ' empty' : '');
     cell.dataset.id = id;
     cell.addEventListener('click', () => {
+      if(!roundActive) return;
       if(level === 'prelim' || !slots.includes(id)) selectTile(id);
     });
-    cell.addEventListener('dragover', e => { e.preventDefault(); });
-    cell.addEventListener('drop', e => { e.preventDefault(); if(level !== 'prelim') returnToBank(e.dataTransfer.getData('text/plain')); });
+    cell.addEventListener('dragover', e => { if(roundActive) e.preventDefault(); });
+    cell.addEventListener('drop', e => { e.preventDefault(); if(roundActive && level !== 'prelim') returnToBank(e.dataTransfer.getData('text/plain')); });
     if(!used) cell.appendChild(makeTile(id));
     bankEl.appendChild(cell);
   });
 }
 function handleTileInSlotClick(i, id){
-  if(level === 'repair'){
-    if(selectedFromSlot !== null && selectedFromSlot !== i){
-      [slots[selectedFromSlot], slots[i]] = [slots[i], slots[selectedFromSlot]];
-      selectedId = null;
-      selectedFromSlot = null;
-      setMessage('Checking...');
-      render();
-      if(slots.every(Boolean)) setTimeout(checkAnswer, 130);
-      return;
-    }
-    if(selectedFromSlot === i){
-      selectedId = null;
-      selectedFromSlot = null;
-      setMessage('');
-      renderProductSlots();
-      return;
-    }
-    selectedId = id;
-    selectedFromSlot = i;
-    setMessage('');
-    renderProductSlots();
-    return;
-  }
-
+  if(!roundActive) return;
   if(selectedId && selectedId !== id){
     placeTile(selectedId, i);
     return;
@@ -995,6 +1217,7 @@ function handleTileInSlotClick(i, id){
   renderBank();
 }
 function selectTile(id){
+  if(!roundActive) return;
   if(level === 'prelim'){
     selectedId = id;
     selectedFromSlot = null;
@@ -1007,32 +1230,27 @@ function selectTile(id){
   if(selectedId === id){
     selectedId = null;
     selectedFromSlot = null;
-    if(level === 'repair') setMessage('');
   }
   else {
     selectedId = id;
     selectedFromSlot = null;
-    if(level === 'repair') setMessage('');
   }
   renderProductSlots();
   renderBank();
 }
 function handleSlotClick(i){
+  if(!roundActive) return;
   if(selectedId){ placeTile(selectedId, i); return; }
   if(slots[i]){
     selectedId = slots[i];
     selectedFromSlot = i;
-    if(level === 'repair'){
-      setMessage('');
-      renderProductSlots();
-      return;
-    }
     slots[i] = null;
     setMessage('');
     render();
   }
 }
 function placeTile(id, index){
+  if(!roundActive) return;
   if(!id || !bankCards.includes(id)) return;
   const oldIndex = slots.indexOf(id);
   if(oldIndex !== -1) slots[oldIndex] = null;
@@ -1050,51 +1268,25 @@ function placeTile(id, index){
   if(slots.every(Boolean)) setTimeout(checkAnswer, 130);
 }
 function returnToBank(id){
+  if(!roundActive) return;
   const idx = slots.indexOf(id);
   if(idx !== -1){ slots[idx] = null; selectedId = null; selectedFromSlot = null; render(); }
 }
 function checkAnswer(){
-  if(checkingLock) return;
+  if(!roundActive || roundEnded || checkingLock) return;
   const current = productFromSlots();
   if(eqM(current, targetProduct)){
     setMessage('Matched!', 'good');
     score += 1;
-    scoreEl.textContent = score;
+    updateRoundHud();
     checkingLock = true;
-    setTimeout(generatePuzzle, sprint ? 520 : 780);
+    setTimeout(() => {
+      if(!roundEnded) generatePuzzle();
+    }, 780);
   }else{
     const rightCards = slots.slice().sort().join(',') === answer.slice().sort().join(',');
-    if(sprint){
-      stopSprint(false);
-      setMessage(level === 'prelim' ? 'Not that matrix.' : (rightCards ? 'Same matrices, wrong order.' : 'Wrong product.'), 'bad');
-    }else{
-      setMessage(level === 'prelim' ? 'Not that matrix. Try another one.' : (level === 'repair' ? 'Still not repaired. Try another swap.' : (rightCards ? 'Same matrices, wrong order.' : 'Not the target yet.')), 'bad');
-    }
+    setMessage(level === 'prelim' ? 'Not that matrix. Try another one.' : (rightCards ? 'Same matrices, wrong order.' : 'Not the target yet.'), 'bad');
   }
-}
-function startSprint(){
-  sprint = true;
-  score = 0;
-  timeLeft = 60;
-  game.classList.add('sprint-on');
-  sprintBtn.classList.add('active');
-  sprintBtn.textContent = 'Stop';
-  generatePuzzle();
-  render();
-  timer = setInterval(() => {
-    timeLeft -= 1;
-    timeEl.textContent = timeLeft;
-    if(timeLeft <= 0) stopSprint(true);
-  }, 1000);
-}
-function stopSprint(finished){
-  sprint = false;
-  clearInterval(timer);
-  timer = null;
-  game.classList.remove('sprint-on');
-  sprintBtn.classList.remove('active');
-  sprintBtn.textContent = 'Sprint';
-  if(finished) setMessage(`Time! Score: ${score}.`, 'good');
 }
 function draw(){
   const currentProduct = productFromSlots();
@@ -1199,21 +1391,28 @@ function draw(){
   `;
 }
 
-prelimBtn.addEventListener('click', () => setLevel('prelim'));
-basicBtn.addEventListener('click', () => setLevel('basic'));
-challengeBtn.addEventListener('click', () => setLevel('repair'));
-superBtn.addEventListener('click', () => setLevel('super'));
-newBtn.addEventListener('click', generatePuzzle);
+prelimBtn.addEventListener('click', () => requestLevel('prelim'));
+basicBtn.addEventListener('click', () => requestLevel('basic'));
+superBtn.addEventListener('click', () => requestLevel('super'));
+cancelNewBtn.addEventListener('click', closeNewConfirm);
+confirmNewBtn.addEventListener('click', confirmNewGame);
+roundNewBtn.addEventListener('click', waitForLevelPick);
+newConfirm.addEventListener('click', (e) => {
+  if(e.target === newConfirm) closeNewConfirm();
+});
 namesBtn.addEventListener('click', () => { showNames = !showNames; namesBtn.classList.toggle('active', showNames); render(); });
 hintBtn.addEventListener('click', () => {
   const open = hintEl.classList.toggle('open');
   hintBtn.classList.toggle('active', open);
   hintBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
 });
-sprintBtn.addEventListener('click', () => sprint ? stopSprint(false) : startSprint());
 window.addEventListener('keydown', (e) => {
+  if(newConfirm.classList.contains('open')){
+    if(e.key === 'Escape') closeNewConfirm();
+    return;
+  }
+  if(roundOver.classList.contains('open')) return;
   if(e.key === 'Escape'){ selectedId = null; selectedFromSlot = null; renderProductSlots(); renderBank(); }
-  if(e.key.toLowerCase() === 'n') generatePuzzle();
 });
 
 generatePuzzle();
