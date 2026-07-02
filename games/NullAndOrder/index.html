@@ -111,6 +111,13 @@ body{
 .pill.gold{background:#f6e7bf}
 .pill.teal{background:#dce9e4}
 .pill.rose{background:#f1dde1}
+.restartPill{
+  appearance:none;
+  cursor:pointer;
+  color:var(--ink);
+  font:1000 12px/1 ui-sans-serif, system-ui, sans-serif;
+}
+.restartPill:active{transform:translateY(2px);box-shadow:0 1px 0 var(--line)}
 .caseBar{
   display:block;
   padding:13px 18px;
@@ -131,33 +138,6 @@ body{
   color:#2d3444;
   font-weight:850;
 }
-.caseTools{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:10px}
-.inlineBtn{
-  appearance:none;
-  border:2px solid var(--line);
-  border-radius:999px;
-  background:#fff;
-  box-shadow:0 3px 0 var(--line);
-  color:var(--ink);
-  cursor:pointer;
-  font:900 12px/1 ui-sans-serif, system-ui, sans-serif;
-  padding:8px 11px;
-}
-.inlineBtn:active{transform:translateY(2px);box-shadow:0 1px 0 var(--line)}
-.mathHintPanel{
-  display:none;
-  margin-top:10px;
-  padding:11px 12px;
-  border:2px solid var(--line);
-  border-radius:16px;
-  background:#eff3f4;
-  box-shadow:0 4px 0 var(--line);
-  font-size:13px;
-  line-height:1.35;
-  color:#2d3444;
-  font-weight:850;
-}
-.mathHintPanel.show{display:block}
 .mathCode,.mono{
   font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   font-weight:900;
@@ -281,6 +261,19 @@ body{
 }
 .boardTitle{font-size:18px;line-height:1;font-weight:1000;letter-spacing:-.03em}
 .boardNote{font-size:12px;line-height:1.3;color:var(--muted);font-weight:800;text-align:right}
+.boardNoteBubble{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:30px;
+  padding:7px 12px;
+  border:2px solid var(--line);
+  border-radius:999px;
+  background:var(--gold);
+  color:var(--ink);
+  box-shadow:0 3px 0 var(--line);
+  font-weight:1000;
+}
 .clueTable{
   width:100%;
   border-collapse:separate;
@@ -304,8 +297,9 @@ body{
 .suspectCardMini{
   min-height:134px;
   display:grid;
-  grid-template-rows:auto 1fr;
-  gap:14px;
+  grid-template-rows:auto auto auto;
+  gap:12px;
+  align-content:center;
   align-items:center;
   justify-items:center;
   padding:16px 12px 14px;
@@ -331,11 +325,11 @@ body{
   display:inline-flex;
   align-items:center;
   justify-content:center;
-  padding:4px 9px;
+  padding:5px 10px;
   border:1.5px solid var(--line);
   border-radius:999px;
   background:rgba(255,255,255,.78);
-  font-size:12px;
+  font-size:16px;
   line-height:1;
   font-weight:950;
   color:var(--muted);
@@ -351,7 +345,22 @@ body{
 }
 .questionCell{width:31%;padding:0}
 .answerCell{width:34.5%;padding:12px 14px;font-size:14px;line-height:1.35;font-weight:850;color:#2b3342;background:#fff}
+.answerCell sub{font-size:.72em;line-height:0;vertical-align:sub}
 .answerCell.empty{background:#fbf9f5;color:#9da4b2}
+.vectorPairAnswer{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  width:100%;
+}
+.vectorPairAnd{
+  display:inline-flex;
+  align-items:center;
+  align-self:center;
+  font-weight:1000;
+  color:var(--ink);
+}
 .askBtn{
   width:100%;
   min-height:66px;
@@ -419,10 +428,11 @@ body{
   font-weight:900;
 }
 .cluePenalty{
-  position:absolute;
-  left:16px;
-  right:16px;
-  top:68px;
+  position:fixed;
+  left:50%;
+  top:86px;
+  transform:translateX(-50%);
+  width:min(620px, calc(100vw - 32px));
   z-index:30;
   border:2px solid var(--line);
   border-radius:18px;
@@ -462,6 +472,7 @@ body{
   margin-top:10px;
   background:#f6e7bf;
 }
+.cluePenaltyActions{display:flex;justify-content:flex-end}
 .resultWrap{margin-top:12px}
 .resultCard{
   border:2px solid var(--line);
@@ -533,6 +544,43 @@ body{
 }
 .startBtns,.endBtns{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:18px}
 .startBtn{min-height:56px;padding:14px 20px;font-size:22px;box-shadow:0 5px 0 var(--line)}
+.restartOverlay{
+  position:fixed;
+  inset:0;
+  z-index:100;
+  display:grid;
+  place-items:center;
+  padding:20px;
+  background:rgba(5,8,13,.58);
+}
+.restartDialog{
+  width:min(430px, calc(100vw - 40px));
+  border:2px solid var(--line);
+  border-radius:22px;
+  background:#fff;
+  box-shadow:0 8px 0 var(--line), 0 24px 54px rgba(0,0,0,.34);
+  overflow:hidden;
+}
+.restartDialogHead{
+  padding:16px 18px;
+  border-bottom:2px solid var(--line);
+  background:linear-gradient(135deg,#efe6d2,#faf7ef 60%,#ede8de);
+}
+.restartDialogHead h2{
+  margin:0;
+  font-size:28px;
+  line-height:.98;
+  letter-spacing:-.05em;
+}
+.restartDialogBody{padding:16px 18px 18px}
+.restartDialogBody p{
+  margin:0;
+  font-size:14px;
+  line-height:1.42;
+  font-weight:850;
+  color:#2e3746;
+}
+.restartActions{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap;margin-top:16px}
 .summaryGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
 .summaryBox{border:2px solid var(--line);border-radius:18px;background:#fbf8f1;padding:12px;text-align:center}
 .summaryBox span{display:block;font-size:11px;line-height:1;color:#6a7383;text-transform:uppercase;letter-spacing:.09em;font-weight:1000}
@@ -549,9 +597,9 @@ body{
   .top{padding-right:14px}
   .glassArt{display:none}
   .caseBar{grid-template-columns:1fr}
-  .decisionRow{grid-template-columns:1fr 1fr}
-  .decisionSpacer{display:none}
-  .decisionBtn{width:100%;font-size:20px}
+  .decisionRow{grid-template-columns:31% 34.5% 34.5%}
+  .decisionSpacer{display:block}
+  .decisionBtn{width:calc(100% - 10px);font-size:20px;line-height:1.08}
   .summaryGrid{grid-template-columns:1fr}
 }
 </style>
@@ -559,59 +607,61 @@ body{
 
 <style>
 
-/* Color mock-up: Night court */
+/* Color mock-up: Night court, brightened for classroom projection */
 :root{
-  --bg:#090d13;
-  --paper:#d9dde1;
-  --paper2:#eef0f2;
-  --ink:#0e141d;
-  --muted:#586170;
-  --line:#0e141d;
-  --gold:#c6aa68;
-  --teal:#c7d6dd;
-  --rose:#dcc7ce;
-  --green:#315f61;
-  --wine:#703a4a;
-  --shadow:0 26px 62px rgba(0,0,0,.46);
+  --bg:#253241;
+  --paper:#e7ecf1;
+  --paper2:#f8f8f5;
+  --ink:#101722;
+  --muted:#465366;
+  --line:#111722;
+  --gold:#d7b76c;
+  --teal:#d8ebe8;
+  --rose:#efd9e1;
+  --green:#466f69;
+  --wine:#94384d;
+  --shadow:0 24px 54px rgba(17,24,34,.3);
 }
 body{
   background:
-    radial-gradient(circle at 10% 12%, rgba(27,78,128,.24) 0 13rem, transparent 13.2rem),
-    radial-gradient(circle at 86% 14%, rgba(128,29,45,.22) 0 12rem, transparent 12.2rem),
-    linear-gradient(135deg,#05070b,#101722 50%,#030406);
+    radial-gradient(circle at 10% 12%, rgba(74,122,168,.28) 0 13rem, transparent 13.2rem),
+    radial-gradient(circle at 86% 14%, rgba(174,63,83,.26) 0 12rem, transparent 12.2rem),
+    radial-gradient(circle at 14% 88%, rgba(215,183,108,.18) 0 11rem, transparent 11.2rem),
+    linear-gradient(135deg,#2d3d4d,#253241 52%,#1d2937);
 }
-.game{background:#d9dde1}
+.game{background:#e7ecf1}
 .top{
   background:
-    linear-gradient(135deg, rgba(7,12,19,.96), rgba(16,31,49,.96) 48%, rgba(71,25,36,.94));
-  color:#eef0f2;
+    linear-gradient(135deg, #1d5b8c 0%, #4b5d86 49%, #a33447 100%);
+  color:#fbfcff;
 }
-.title{color:#eef0f2}
-.subtitle{color:#b8c0cd}
-.glassArt{opacity:.82;filter:grayscale(.25) drop-shadow(0 8px 14px rgba(0,0,0,.35))}
-.pill{background:#eef0f2;color:#0e141d;border-color:#0e141d}
-.pill.gold{background:#c6aa68}
-.pill.teal{background:#17364f;color:#eaf1f6}
-.pill.rose{background:#702c42;color:#fff}
-.caseBar{background:linear-gradient(90deg,#f3f1ec,#d9dde1 55%,#ccd3d8)}
-.evidenceCard,.board,.resultCard,.startCard,.endCard{background:#f8f8f5}
+.title{color:#fbfcff;text-shadow:0 2px 0 rgba(17,23,34,.28)}
+.subtitle{color:#e6edf7}
+.glassArt{opacity:.9;filter:grayscale(.14) drop-shadow(0 8px 14px rgba(0,0,0,.26))}
+.pill{background:#f8f8f5;color:#101722;border-color:#111722}
+.pill.gold{background:#d7b76c}
+.pill.teal{background:#d8ebe8;color:#101722}
+.pill.rose{background:#efd9e1;color:#101722}
+.caseBar{background:linear-gradient(90deg,#fbf8ef,#e7ecf1 55%,#d8e1e7)}
+.evidenceCard,.board,.resultCard,.startCard,.endCard{background:#fffdf7}
 .boardHead{
-  background:linear-gradient(90deg,#121b27,#0c1119 62%,#3b1c28);
-  color:#eef0f2;
+  background:linear-gradient(90deg,#1d5b8c,#4b5d86 52%,#a33447);
+  color:#fbfcff;
 }
-.boardNote{color:#c4cad4}
-.leftHead,.clueTable > thead > tr > th{background:#ece9e2}
-.askBtn{background:#f8f8f5}
-.askBtn:hover{background:#e5e8eb}
-.suspectCardMini.a{background:linear-gradient(180deg,#c7d6dd,#f8f8f5)}
-.suspectCardMini.b{background:linear-gradient(180deg,#dcc7ce,#f8f8f5)}
-.btn.gold{background:#c6aa68}
-.btn.teal{background:#234c65;color:#fff}
-.btn.rose{background:#733548;color:#fff}
-.resultTop.good{background:#c7d6dd}
-.resultTop.bad{background:#dcc7ce}
-.cluePenalty{background:#ead2bf}
-.footer{background:#cfd4d8}
+.boardNote{color:#e6edf7}
+.leftHead,.clueTable > thead > tr > th{background:#f1efe8}
+.askBtn{background:#fffdf7}
+.askBtn:hover{background:#edf2f4}
+.suspectCardMini.a{background:linear-gradient(180deg,#d8ebe8,#fffdf7)}
+.suspectCardMini.b{background:linear-gradient(180deg,#efd9e1,#fffdf7)}
+.btn.gold{background:#d7b76c}
+.startHead{background:#d7b76c}
+.btn.teal{background:#d8ebe8;color:#101722}
+.btn.rose{background:#efd9e1;color:#101722}
+.resultTop.good{background:#d8ebe8}
+.resultTop.bad{background:#efd9e1}
+.cluePenalty{background:#fff0dc}
+.footer{background:#dbe3e8}
 
 </style>
 
@@ -625,7 +675,7 @@ sup{
 .aliasLine{
   display:block !important;
   width:auto !important;
-  margin:4px auto 2px !important;
+  margin:0 auto 8px !important;
   padding:0 !important;
   border:0 !important;
   border-radius:0 !important;
@@ -633,9 +683,9 @@ sup{
   box-shadow:none !important;
   text-align:center !important;
   color:var(--muted) !important;
-  font-size:12px !important;
-  font-weight:900 !important;
-  line-height:1.12 !important;
+  font-size:16px !important;
+  font-weight:950 !important;
+  line-height:1.15 !important;
 }
 .aliasChip .vec,
 .aliasLine .vec,
@@ -643,6 +693,155 @@ sup{
 .aliasLine .mono{
   color:var(--ink) !important;
   font-weight:1000 !important;
+}
+</style>
+
+
+<style id="course-alignment-revision-styles">
+.feedbackReport{
+  margin-top:18px;
+  display:grid;
+  gap:12px;
+}
+.feedbackCase{
+  border:2px solid var(--line);
+  border-radius:18px;
+  background:#fbf8f1;
+  padding:20px 22px;
+}
+.feedbackCase.caseReport{
+  display:grid;
+  gap:18px;
+}
+.feedbackCase h3{
+  margin:0;
+  font-size:20px;
+  letter-spacing:-.03em;
+}
+.caseReport section{
+  display:grid;
+  gap:12px;
+  margin:0;
+}
+.caseReport h4{
+  margin:0;
+  font-size:16px;
+  line-height:1.15;
+  font-weight:1000;
+  letter-spacing:-.03em;
+}
+.feedbackMeta,
+.feedbackText{
+  margin:6px 0;
+  font-size:13px;
+  line-height:1.4;
+  font-weight:850;
+  color:#2e3746;
+}
+.feedbackClues{
+  margin:9px 0 0;
+  padding-left:18px;
+  font-size:13px;
+  line-height:1.4;
+  font-weight:850;
+}
+.feedbackClues li{margin:5px 0}
+.reportObjectList,
+.reportSuspectList{
+  display:grid;
+  gap:18px;
+}
+.reportObjectBlock,
+.reportSuspectItem{
+  display:grid;
+  align-items:start;
+  justify-items:start;
+  gap:10px;
+}
+.reportSuspectItem{
+  grid-template-columns:minmax(92px, max-content) minmax(0, 1fr);
+  column-gap:18px;
+}
+.reportObjectLabel{
+  font-size:14px;
+  line-height:1.2;
+  font-weight:1000;
+  color:var(--ink);
+}
+.reportObject{
+  min-width:0;
+  max-width:100%;
+}
+.caseReport .objWrap{
+  width:auto;
+  justify-content:flex-start;
+}
+.caseReport .matrixFrame{
+  margin:8px 10px 10px 0;
+  vertical-align:top;
+}
+.caseReport .setWrap{
+  justify-content:flex-start;
+  align-items:flex-start;
+  gap:12px;
+}
+.caseReport .setItems{
+  justify-content:flex-start;
+  align-items:flex-start;
+  gap:16px;
+}
+.clueReport{
+  display:grid;
+  gap:8px;
+  padding:4px 0 12px;
+}
+.clueReport + .clueReport{
+  border-top:1.5px solid rgba(17,23,34,.18);
+  padding-top:12px;
+}
+.clueReportQuestion{
+  margin:0;
+}
+.reportAnswer{
+  display:grid;
+  grid-template-columns:minmax(86px, max-content) minmax(0, 1fr);
+  align-items:start;
+  gap:12px;
+}
+.reportAnswer > strong{
+  padding-top:8px;
+  line-height:1.25;
+}
+.reportAnswer .matrixFrame{
+  margin-top:0;
+}
+.seedBox{
+  word-break:break-word;
+  font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size:12px;
+  border:1.5px solid var(--line);
+  border-radius:12px;
+  padding:8px;
+  background:#fff;
+  margin-top:8px;
+}
+@media (max-width:680px){
+  .reportSuspectItem,
+  .reportAnswer{
+    grid-template-columns:1fr;
+  }
+  .reportAnswer > strong{
+    padding-top:0;
+  }
+}
+@media print{
+  body{background:#fff !important;padding:0 !important;color:#111 !important}
+  .game{width:100% !important;border:0 !important;border-radius:0 !important;box-shadow:none !important}
+  .top,.footer,.startBtns,.endBtns,.restartPill,.btn,.glassArt{display:none !important}
+  .endScreen{padding:0 !important;display:block !important}
+  .endCard{border:0 !important;box-shadow:none !important;width:100% !important}
+  .endHead{border-bottom:1px solid #999 !important;background:#fff !important;color:#111 !important}
+  .feedbackCase{break-inside:avoid;background:#fff !important;border:1px solid #888 !important}
 }
 </style>
 
@@ -840,11 +1039,21 @@ function oneREFHTML(A, opts={}) {
   return rrefHTML(A, opts);
 }
 
+function matrixPlain(rows, augCol=null) {
+  return rows.map(row => '[' + row.map((cell, idx) => {
+    const s = fmtVal(cell);
+    return augCol !== null && idx === augCol ? '| ' + s : s;
+  }).join(' ') + ']').join('\n');
+}
+function escapeAttr(text) {
+  return escapeHTML(text);
+}
 function matrixHTML(rows, opts={}) {
   const augCol = opts.augCol ?? null;
   const compact = opts.compact ? ' compact' : '';
   const augmented = augCol !== null ? ' augmented' : '';
-  let html = `<div class="matrixFrame${compact}${augmented}"><table class="matrixTable">`;
+  const plain = escapeAttr(matrixPlain(rows, augCol));
+  let html = `<div class="matrixFrame${compact}${augmented}" data-plain="${plain}"><table class="matrixTable">`;
   rows.forEach(row => {
     html += '<tr>';
     row.forEach((cell, idx) => {
@@ -858,6 +1067,9 @@ function matrixHTML(rows, opts={}) {
 }
 function colVectorHTML(values, compact=false) {
   return matrixHTML(values.map(v => [fmtVal(v)]), {compact});
+}
+function vectorPairAnswerHTML(v1, v2) {
+  return `<div class="vectorPairAnswer">${colVectorHTML(v1, true)}<span class="vectorPairAnd">and</span>${colVectorHTML(v2, true)}</div>`;
 }
 function rowVectorHTML(values, compact=false) {
   return matrixHTML([values.map(fmtVal)], {compact});
@@ -884,43 +1096,173 @@ function listCols(cols) {
   return cols.length ? cols.map(j => j + 1).join(', ') : 'none';
 }
 function answerSame(text) { return {A:text, B:text}; }
-function question(label, answers, kind='neutral') { return {label, answers, kind, why: wrongClueReason(label, kind)}; }
+function homogeneousAug(A) {
+  return augment(A, zeroVec(A.length));
+}
+function attemptedBadAugmentInput(A, vectorName='z') {
+  return answerSame(shapeError(
+    `not defined: ${vectorName} is an input vector with ${A[0].length} entries, not a right-hand side with ${A.length} entries`
+  ));
+}
+function fixedVector(n) {
+  return Array.from({length:n}, (_, i) => i === 0 ? 1 : (i === n - 1 ? 1 : 0));
+}
+function question(label, answers, kind='neutral', opts={}) {
+  const meta = typeof opts === 'string' ? {why:opts} : (opts || {});
+  return {
+    label,
+    answers,
+    kind,
+    why: kind === 'decisive' ? '' : (meta.why || wrongClueReason(label, kind)),
+    live: meta.live !== false,
+    allowWeak: !!meta.allowWeak,
+    auditTag: meta.auditTag || ''
+  };
+}
 
 function wrongClueReason(label, kind) {
   if (kind === 'decisive') return '';
   const plain = stripTags(label).replace(/\s+/g, ' ').trim();
-  if (plain.includes('A^Tz') || plain.includes('Aᵀz') || plain.includes('ATz')) return 'This uses the transpose. To test membership in null(A), the direct test is Az = 0.';
-  if (plain.includes('A^Tb') || plain.includes('Aᵀb') || plain.includes('ATb')) return 'This computes a different object. Reachability of b is tested by the augmented system [A | b], not by Aᵀb.';
-  if (plain.includes('Ab') || plain.includes('A b')) return 'This treats b like an input vector. In this case b is a target output, so the relevant question is whether Ax = b is consistent.';
-  if (plain.includes('linear combination of the columns')) return 'That is a column-space question. It does not test whether the suspect is killed by A.';
-  if (plain.includes('rank(A) only')) return 'Rank(A) alone does not tell whether the augmented system is consistent or whether a free variable remains.';
-  if (plain === 'Compute rank(A).') return 'Rank(A) is useful background, but by itself it does not identify this suspect.';
-  if (plain.includes('rank([A | b]) only')) return 'The augmented rank is only useful when compared with rank(A). Alone, it does not classify the system.';
-  if (plain.includes('RREF(A).')) return 'RREF(A) ignores the augmented column. It can miss the difference between a reachable and unreachable target.';
-  if (plain.includes('RREF(C)')) return 'This checks the suspect set internally, but not whether it spans the required subspace.';
-  if (plain.includes('rank(C).')) return 'This checks independence or size of the suspect set, but not whether it is the right subspace.';
-  if (plain.includes('nullity(A)')) return 'Nullity tells how many null-space basis vectors are needed, but not whether this suspect set is the right basis.';
-  if (plain.includes('col(A)')) return 'This is checking the wrong subspace. Null-space and row-space questions live in the input space, not the output space.';
-  if (plain.includes('AC') || plain.includes('CA')) return 'This product is not the right diagnostic here; it mixes up the role of the suspect set.';
-  if (plain.includes('A^TA') || plain.includes('AᵀA') || plain.includes('C^TC') || plain.includes('CᵀC')) return 'This produces a related matrix, but it is not the direct test for the crime.';
-  if (plain.includes('trace') || plain.includes('sum')) return 'This arithmetic summary loses the structural information needed for rank, null space, or column space.';
-  if (plain.includes('det(A)')) return 'The determinant is not a safe general diagnostic here; it only applies cleanly to square coefficient matrices and does not replace the augmented-system test.';
+  const compact = plain.replace(/\s+/g, '').replaceAll('ᵀ','^T');
+
+  if (/RREF\(\[A\s*\|\s*z\]\)/i.test(plain)) {
+    return 'This treats z as a right-hand side. For null(A), z is an input vector; the direct test is Az.';
+  }
+  if (/free variable/i.test(plain)) {
+    return 'Free variables matter only after you have checked consistency. In an augmented system, a non-pivot variable column gives non-uniqueness only when there is no contradiction row.';
+  }
+  if (/contradiction row/i.test(plain)) {
+    return 'A contradiction row is decisive for inconsistency. If none appears, you still need pivot/free-variable information to decide between a unique solution and infinitely many solutions.';
+  }
+  if (/trace|row sums|column sums|sum of all entries|sum of entries|first row sum|entry by entry|all entries are nonzero|every vector is nonzero|nonzero\?/i.test(plain)) {
+    return 'This is an entry-level summary. It can change when rows or columns are rewritten, and it does not track pivots, consistency, span, or membership in null(A) or col(A).';
+  }
+  if (/number of columns|number of rows|count the suspect vectors/i.test(plain)) {
+    return 'This is visible from the display and is not a mathematical test. It must be combined with row-reduction information such as pivot columns or free variables.';
+  }
+  if (/A\^Tz|ATz|A\^T\s*z|A<sup>T<\/sup>.*z/i.test(compact) || plain.includes('Aᵀz')) {
+    return 'This uses A^T instead of A. To test whether z is in null(A), the relevant product is Az, because null(A) consists of input vectors sent to zero by A.';
+  }
+  if (/A\^Tb|ATb|A\^T\s*b|A<sup>T<\/sup>.*b/i.test(compact) || plain.includes('Aᵀb')) {
+    return 'This uses the transpose and changes the question. For b in col(A), b is a target output, so the relevant computation is the augmented system [A | b].';
+  }
+  if (/X\^Tc-X\^Tc′|X\^T\(c-c′\)/i.test(compact)) {
+    return 'This applies X^T to coefficient vectors and has the wrong role or shape here. To compare predictions, compute Xc and Xc′, or compute X(c−c′).';
+  }
+  if (/X\^Tc|XTc|X\^T\s*c/i.test(compact)) {
+    return 'This uses X^T on a coefficient vector and reverses the roles of inputs and outputs. To compare predictions, compute Xc and Xc′, or compute X(c−c′).';
+  }
+  if (/A\s*b|Ab/i.test(compact) && plain.includes('b')) {
+    return 'This treats b as an input vector. In a system Ax=b, b is the right-hand side output, so row-reduce [A | b] instead.';
+  }
+  if (/rank\(A\) only/i.test(plain) || plain === 'Compute rank(A).' || plain === 'Compute rank(A)') {
+    return 'rank(A) is useful background, but it does not by itself decide this crime. Pair it with consistency, pivot/free-variable information, or a subspace-membership check.';
+  }
+  if (/rank\(\[A \| b\]\) only/i.test(plain)) {
+    return 'The augmented rank only becomes meaningful when compared with rank(A) and the number of variable columns.';
+  }
+  if (/RREF\(A\)/i.test(plain) && /\[A \| b\]|system|consistent|solution|target|col\(A\)/i.test(plain) === false) {
+    return 'RREF(A) can be important, but if the crime involves a right-hand side b, reducing A alone ignores the augmented column.';
+  }
+  if (/RREF\(A\)/i.test(plain)) {
+    return 'For a system Ax=b, reducing A alone ignores the right-hand side. The augmented column is where contradictions and consistency show up.';
+  }
+  if (/RREF\(C\)/i.test(plain)) {
+    return 'RREF(C) checks the suspect vectors internally. A basis claim also needs the right ambient subspace, such as row(A), col(A), or null(A).';
+  }
+  if (/rank\(C\)/i.test(plain)) {
+    return 'rank(C) checks independence or size of the suspect set, but a basis test also needs membership in the intended subspace.';
+  }
+  if (/nullity\(A\)/i.test(plain)) {
+    return 'nullity(A) gives the number of independent null-space directions, but it does not say whether the displayed suspect vectors are actually in null(A).';
+  }
+  if (/col\(A\)/i.test(plain) && /suspect vectors|z|d|row/i.test(plain)) {
+    return 'This checks the wrong subspace. null(A) and row(A) live in the input space; col(A) lives in the output space.';
+  }
+  if (/linear combination of the columns/i.test(plain)) {
+    return 'This is a column-space question. It does not test whether a vector is in null(A), and it may even be a dimension mismatch.';
+  }
+  if (/AC|CA/i.test(plain)) {
+    return 'This product can be useful only when C has been set up in the right orientation. Here it risks confusing rows with columns or membership with independence.';
+  }
+  if (/A\^TA|C\^TC|X\^TX|AᵀA|CᵀC/i.test(plain)) {
+    return 'This Gram-type product is related to later orthogonality and least-squares ideas, but it is not the direct Unit 2 test for null-space, column-space, or system consistency.';
+  }
+  if (/det\(A\)/i.test(plain)) {
+    return 'det(A) only applies directly to square coefficient matrices. It is not a substitute for reading an augmented matrix or testing a non-square map.';
+  }
+  if (/left sides/i.test(plain)) {
+    return 'Looking only at the coefficient side ignores the right-hand side. Parallel left sides can represent either the same line or inconsistent parallel lines.';
+  }
+  if (/free variables/i.test(plain)) {
+    return 'Free-variable information must be read from the row-reduced augmented matrix and checked together with consistency.';
+  }
   return kind === 'misleading'
-    ? 'This clue checks the wrong object or confuses two related concepts. It is not enough to identify the guilty suspect.'
-    : 'This clue gives only partial information. It is not enough by itself to identify the guilty suspect.';
+    ? 'This clue checks a related but wrong object. It is included because it reflects a common course mistake, not because it should settle the case.'
+    : 'This clue gives partial information. It needs another row-reduction, membership, or independence check before it can identify the guilty suspect.';
 }
 
-function selectQuestions(bank) {
-  const decisive = shuffle(bank.filter(q => q.kind === 'decisive'));
-  const misleading = shuffle(bank.filter(q => q.kind === 'misleading'));
-  const chosen = [];
-  if (decisive.length) chosen.push(decisive[0]);
-  if (misleading.length) chosen.push(misleading[0]);
-  const chosenSet = new Set(chosen);
-  const pool = shuffle(bank.filter(q => !chosenSet.has(q)));
-  while (chosen.length < 4 && pool.length) chosen.push(pool.shift());
-  return shuffle(chosen);
+
+function clueIsPedagogicallyWeak(q) {
+  const plain = stripTags(q.label).replace(/\s+/g, ' ').trim();
+  const weak = [
+    /trace/i,
+    /row sums/i,
+    /column sums/i,
+    /sum of all entries/i,
+    /sum of entries in each vector/i,
+    /first row sum/i,
+    /number of columns/i,
+    /number of rows/i,
+    /count the suspect vectors/i,
+    /column 3 nonzero/i,
+    /all entries are nonzero/i,
+    /every vector is nonzero/i,
+    /Compare .* entry by entry/i,
+    /Compare the entries/i,
+    /^Check whether/i,
+    /^Are the suspect vectors/i,
+    /^Is /i,
+    /^Is .* nonzero\?/i,
+    /^Find a basis for null\(/i,
+    /^Find a basis for col\(/i,
+    /^Find a basis for row\(/i,
+    /^Compute <span class="mono">nullity\(A\)<\/span>\.$/i,
+    /^Compute nullity\(A\)\.$/i,
+    /^Compute <span class="mono">rank\(A\)<\/span>\.$/i,
+    /^Compute rank\(A\)\.$/i
+  ];
+  return weak.some(rx => rx.test(q.label) || rx.test(plain));
 }
+function slugify(text) {
+  return String(text || 'case')
+    .toLowerCase()
+    .replace(/&amp;/g, 'and')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '') || 'case';
+}
+function selectQuestions(bank) {
+  const live = bank.filter(q => q.live !== false);
+  const strong = live.filter(q => !clueIsPedagogicallyWeak(q));
+  const weakFillers = shuffle(live.filter(q => clueIsPedagogicallyWeak(q) && q.allowWeak));
+  const source = strong.length ? strong : live;
+  const decisive = shuffle(source.filter(q => q.kind === 'decisive'));
+  const misleading = shuffle(source.filter(q => q.kind === 'misleading'));
+  const neutral = shuffle(source.filter(q => q.kind === 'neutral'));
+  const chosen = [];
+  if (decisive.length) chosen.push(decisive.shift());
+  while (chosen.length < 3 && misleading.length) chosen.push(misleading.shift());
+  while (chosen.length < 4 && neutral.length) chosen.push(neutral.shift());
+  const chosenSet = new Set(chosen);
+  const pool = shuffle(source.filter(q => !chosenSet.has(q)));
+  while (chosen.length < 4 && pool.length) chosen.push(pool.shift());
+  while (chosen.length < 4 && weakFillers.length) chosen.push(weakFillers.shift());
+  if (!chosen.some(q => q.kind === 'decisive')) {
+    throw new Error('Generated case has no decisive live clue.');
+  }
+  return shuffle(chosen.slice(0, 4));
+}
+
 function maybeSwapCase(c) {
   if (rand() < 0.5) return c;
   const swapAnswers = ans => ({A:ans.B, B:ans.A});
@@ -936,7 +1278,12 @@ function maybeSwapCase(c) {
   };
 }
 function finalizeCase(c) {
+  c.id = c.id || slugify(stripTags(c.title || 'case'));
+  c.learningGoal = c.learningGoal || stripTags(c.math || c.crime || '');
+  c.decisionRule = c.decisionRule || stripTags(c.math || c.explanation || '');
   c.questions = selectQuestions(c.questions);
+  if (c.questions.length !== 4) throw new Error(`${c.id} must produce exactly 4 live clues`);
+  if (!c.questions.some(q => q.kind === 'decisive')) throw new Error(`${c.id} has no decisive live clue`);
   return maybeSwapCase(c);
 }
 
@@ -994,7 +1341,6 @@ function caseNullMembership() {
   let bad = randomVector(3, true);
   while (isZeroVec(matVec(A, bad))) bad = randomVector(3, true);
   const good = z;
-  const rrAug = rref(augment(A, zeroVec(A.length)));
   const basis = nullspaceBasis(A);
   const bank = [
     question('Compute <span class="mono">A<span class="vec">z</span></span>.',
@@ -1005,16 +1351,16 @@ function caseNullMembership() {
       {A:shapeError('not defined: A<sup>T</sup> has 2 columns but z has 3 entries'), B:shapeError('not defined: A<sup>T</sup> has 2 columns but z has 3 entries')}, 'misleading'),
     question('Is <span class="vec">z</span> a linear combination of the columns of <span class="mono">A</span>?',
       {A:'wrong space: columns of <span class="mono">A</span> are in <span class="mono">R²</span>, but <span class="vec">z</span> is in <span class="mono">R³</span>', B:'wrong space: columns of <span class="mono">A</span> are in <span class="mono">R²</span>, but <span class="vec">z</span> is in <span class="mono">R³</span>'}, 'misleading'),
-    question('Compute <span class="mono">RREF([A | 0])</span>.',
-      answerSame(rrefHTML(augment(A, zeroVec(A.length)), {augCol:A[0].length})), 'decisive'),
+    question('Attempt to form <span class="mono">RREF([A | z])</span>.',
+      attemptedBadAugmentInput(A, 'z'), 'misleading'),
     question('Find a basis for <span class="mono">null(A)</span>.',
-      answerSame(setOfColumnVectors(basis)), 'decisive'),
+      answerSame(setOfColumnVectors(basis)), 'decisive', {live:false, auditTag:'review-leave-out'}),
     question('Compute <span class="mono">rank(A)</span>.',
       answerSame('<span class="mono">' + rank(A) + '</span>'), 'neutral'),
     question('Compute <span class="mono">A A<sup>T</sup></span>.',
       answerSame(matrixHTML(matMul(A, transpose(A)), {compact:true})), 'misleading'),
     question('Compute the sum of the entries of <span class="vec">z</span>.',
-      {A:'<span class="mono">' + good.reduce((s,x)=>s+x,0) + '</span>', B:'<span class="mono">' + bad.reduce((s,x)=>s+x,0) + '</span>'}, 'misleading')
+      {A:'<span class="mono">' + good.reduce((s,x)=>s+x,0) + '</span>', B:'<span class="mono">' + bad.reduce((s,x)=>s+x,0) + '</span>'}, 'misleading', {live:false, allowWeak:true, auditTag:'trivial-filler'})
   ];
   return finalizeCase({
     title:'The hidden direction',
@@ -1024,7 +1370,7 @@ function caseNullMembership() {
     suspects:{A:{html:colVectorHTML(good)}, B:{html:colVectorHTML(bad)}},
     questions:bank,
     guilty:'A',
-    explanation:'Suspect A is guilty because <span class="mono">A<span class="vec">z</span> = 0</span>. The other suspect is not killed by the matrix.',
+    explanation:'Suspect A is guilty because <span class="mono">A<span class="vec">z</span> = 0</span>. The other suspect is not sent to zero by the matrix.',
     fastRoute:'The fastest decisive clue is to compute <span class="mono">A<span class="vec">z</span></span>.'
   });
 }
@@ -1044,32 +1390,32 @@ function caseColumnMembership() {
     question('Compute <span class="mono">REF([A | b])</span>.',
       {A:oneREFHTML(augGood, {augCol:A[0].length}), B:oneREFHTML(augBad, {augCol:A[0].length})}, 'decisive'),
     question('Compare <span class="mono">rank(A)</span> and <span class="mono">rank([A | b])</span>.',
-      {A:`<span class="mono">${rankA}</span> and <span class="mono">${rank(augGood)}</span>`, B:`<span class="mono">${rankA}</span> and <span class="mono">${rank(augBad)}</span>`}, 'decisive'),
+      {A:`<span class="mono">${rankA}</span> and <span class="mono">${rank(augGood)}</span>`, B:`<span class="mono">${rankA}</span> and <span class="mono">${rank(augBad)}</span>`}, 'decisive', {live:false, auditTag:'review-leave-out'}),
     question('Solve <span class="mono">A<span class="vec">x</span> = <span class="vec">b</span></span> by row reduction.',
       {A:colVectorHTML(x, true), B:'no solution'}, 'decisive'),
     question('Compute <span class="mono">rank(A)</span>.',
-      answerSame('<span class="mono">' + rankA + '</span>'), 'misleading'),
+      answerSame('<span class="mono">' + rankA + '</span>'), 'neutral'),
     question('Compute <span class="mono">A<sup>T</sup><span class="vec">b</span></span>.',
       {A:colVectorHTML(matVec(transpose(A), good), true), B:colVectorHTML(matVec(transpose(A), bad), true)}, 'misleading'),
     question('Compute <span class="mono">A<span class="vec">b</span></span>.',
       {A:shapeError('not defined: A has 2 columns but b has 3 entries'), B:shapeError('not defined: A has 2 columns but b has 3 entries')}, 'misleading'),
     question('Compute <span class="mono">RREF(A)</span>.',
       answerSame(rrefHTML(A)), 'neutral'),
-    question('Check the output rule <span class="mono">b₃ = ' + p + 'b₁ + ' + q + 'b₂</span>.',
-      {A:'true', B:'false'}, 'decisive'),
-    question('Compute <span class="mono">b<sup>T</sup>b</span>.',
-      {A:'<span class="mono">' + dot(good, good) + '</span>', B:'<span class="mono">' + dot(bad, bad) + '</span>'}, 'misleading')
+    question('Compute <span class="mono">RREF(A)</span> without the augmented column.',
+      answerSame(rrefHTML(A)), 'misleading', {live:false, auditTag:'redundant-with-rref-a'}),
+    question('Compute <span class="mono">A<sup>T</sup>A</span>.',
+      answerSame(matrixHTML(matMul(transpose(A), A), {compact:true})), 'misleading')
   ];
   return finalizeCase({
-    title:'The reachable output',
+    title:'The column-space target',
     crime:'Being in <span class="mono">col(A)</span>.',
     math:'A suspect is guilty if the system <span class="mono">A<span class="vec">x</span> = <span class="vec">b</span></span> is consistent.',
     evidence:[{label:'Evidence A', html:matrixHTML(A)}],
     suspects:{A:{html:colVectorHTML(good)}, B:{html:colVectorHTML(bad)}},
     questions:bank,
     guilty:'A',
-    explanation:'Suspect A is guilty because the augmented system is consistent. The other target creates a contradiction, so it is not reachable.',
-    fastRoute:'A row reduction of <span class="mono">[A | b]</span> or a rank comparison is decisive.'
+    explanation:'Suspect A is guilty because the augmented system is consistent, so the target is in <span class="mono">col(A)</span>. The other target creates a contradiction, so it is outside <span class="mono">col(A)</span>.',
+    fastRoute:'Row-reduce <span class="mono">[A | b]</span> or solve <span class="mono">A<span class="vec">x</span>=<span class="vec">b</span></span>.'
   });
 }
 
@@ -1140,6 +1486,11 @@ function freeVariablesFromAug(M) {
   for (let j=0; j<n; j++) if (!piv.includes(j)) free.push(j+1);
   return free;
 }
+function solutionSetFreeVarText(M) {
+  if (classifyAug(M) === 'none') return 'inconsistent; no solution set';
+  const free = freeVariablesFromAug(M).map(j => 'x' + j);
+  return free.length ? free.join(', ') : 'none';
+}
 function contradictionRow(M) {
   const rr = rref(M).M;
   const n = M[0].length - 1;
@@ -1156,21 +1507,21 @@ function caseInfiniteSolutions() {
     question('Compute <span class="mono">RREF([A | b])</span>.',
       {A:rrefHTML(inf, {augCol:n}), B:rrefHTML(other, {augCol:n})}, 'decisive'),
     question('Compute <span class="mono">rank(A)</span> and <span class="mono">rank([A | b])</span>.',
-      {A:`<span class="mono">${rank(infSplit.A)}</span> and <span class="mono">${rank(inf)}</span>`, B:`<span class="mono">${rank(otherSplit.A)}</span> and <span class="mono">${rank(other)}</span>`}, 'decisive'),
+      {A:`<span class="mono">${rank(infSplit.A)}</span> and <span class="mono">${rank(inf)}</span>`, B:`<span class="mono">${rank(otherSplit.A)}</span> and <span class="mono">${rank(other)}</span>`}, 'decisive', {live:false, auditTag:'review-leave-out'}),
     question('List the pivot columns of <span class="mono">[A | b]</span>.',
       {A:'columns <span class="mono">' + listCols(pivotColumns(inf)) + '</span>', B:'columns <span class="mono">' + listCols(pivotColumns(other)) + '</span>'}, 'decisive'),
-    question('Compute <span class="mono">rank(A)</span> only.',
-      {A:'<span class="mono">' + rank(infSplit.A) + '</span>', B:'<span class="mono">' + rank(otherSplit.A) + '</span>'}, 'misleading'),
+    question('Compute <span class="mono">rank(A)</span>.',
+      {A:'<span class="mono">' + rank(infSplit.A) + '</span>', B:'<span class="mono">' + rank(otherSplit.A) + '</span>'}, 'neutral'),
     question('Compute <span class="mono">rank([A | b])</span> only.',
-      {A:'<span class="mono">' + rank(inf) + '</span>', B:'<span class="mono">' + rank(other) + '</span>'}, 'misleading'),
+      {A:'<span class="mono">' + rank(inf) + '</span>', B:'<span class="mono">' + rank(other) + '</span>'}, 'misleading', {live:false, auditTag:'review-leave-out'}),
     question('Compute <span class="mono">RREF(A)</span>.',
       {A:rrefHTML(infSplit.A), B:rrefHTML(otherSplit.A)}, 'misleading'),
     question('Compute <span class="mono">det(A)</span>.',
       {A:'<span class="mono">' + fmtVal(det(infSplit.A)) + '</span>', B:'<span class="mono">' + fmtVal(det(otherSplit.A)) + '</span>'}, 'misleading'),
     question('Compute <span class="mono">A<sup>T</sup>b</span>.',
       {A:colVectorHTML(matVec(transpose(infSplit.A), infSplit.b), true), B:colVectorHTML(matVec(transpose(otherSplit.A), otherSplit.b), true)}, 'misleading'),
-    question('List free variables after row reduction.',
-      {A:'<span class="mono">' + (freeVariablesFromAug(inf).map(j=>'x'+j).join(', ') || 'none') + '</span>', B:'<span class="mono">' + (freeVariablesFromAug(other).map(j=>'x'+j).join(', ') || 'none') + '</span>'}, 'neutral')
+    question('Check consistency; if consistent, list the free variables of the solution set.',
+      {A:'<span class="mono">' + solutionSetFreeVarText(inf) + '</span>', B:'<span class="mono">' + solutionSetFreeVarText(other) + '</span>'}, 'neutral', {live:false, auditTag:'review-deferred'})
   ];
   return finalizeCase({
     title:'The endless alibi',
@@ -1202,13 +1553,13 @@ function caseColumnSpaceBasis() {
     question('List the original columns of <span class="mono">A</span> corresponding to the pivot columns.',
       answerSame(setOfColumnVectors(good)), 'decisive'),
     question('Compute <span class="mono">rank(A)</span>, <span class="mono">rank(C)</span>, and <span class="mono">rank([A C])</span>, where columns of <span class="mono">C</span> are the suspect vectors.',
-      {A:`<span class="mono">${rank(A)}, ${rank(Sgood)}, ${rank(hcat(A,Sgood))}</span>`, B:`<span class="mono">${rank(A)}, ${rank(Sbad)}, ${rank(hcat(A,Sbad))}</span>`}, 'decisive'),
+      {A:`<span class="mono">${rank(A)}, ${rank(Sgood)}, ${rank(hcat(A,Sgood))}</span>`, B:`<span class="mono">${rank(A)}, ${rank(Sbad)}, ${rank(hcat(A,Sbad))}</span>`}, 'decisive', {live:false, auditTag:'review-leave-out'}),
     question('Compute <span class="mono">rank(C)</span>, where <span class="mono">C</span> is the suspect matrix.',
       {A:'<span class="mono">' + rank(Sgood) + '</span>', B:'<span class="mono">' + rank(Sbad) + '</span>'}, 'misleading'),
     question('Compute <span class="mono">RREF(C)</span>, where <span class="mono">C</span> is the suspect matrix.',
       {A:rrefHTML(Sgood), B:rrefHTML(Sbad)}, 'misleading'),
     question('Are the suspect vectors columns of the original matrix <span class="mono">A</span>?',
-      {A:'yes', B:'no'}, 'decisive'),
+      {A:'yes', B:'no'}, 'neutral'),
     question('Are the suspect vectors columns of <span class="mono">RREF(A)</span>?',
       {A:'no', B:'yes'}, 'misleading'),
     question('Compute <span class="mono">AC</span>, where columns of <span class="mono">C</span> are the suspect vectors.',
@@ -1249,36 +1600,34 @@ function caseNullspaceBasis() {
   }
   const Sgood = colsToMatrix(goodNums);
   const Sbad = colsToMatrix(bad);
+  const pivots = pivotColumns(A);
+  const freeVars = [];
+  for (let j=0; j<A[0].length; j++) if (!pivots.includes(j)) freeVars.push('x' + (j+1));
+  const rrefAndFree = rrefHTML(A) + '<div class="qSub">free variables: <span class="mono">' + (freeVars.join(', ') || 'none') + '</span></div>';
   const bank = [
-    question('Solve <span class="mono">A<span class="vec">x</span> = 0</span>.',
-      answerSame(setOfColumnVectors(good)), 'decisive'),
-    question('Compute <span class="mono">RREF(A)</span>.',
-      answerSame(rrefHTML(A)), 'decisive'),
+    question('Compute <span class="mono">RREF(A)</span> and identify the free variables.',
+      answerSame(rrefAndFree), 'neutral', 'Free variables tell the size of null(A), but they do not verify that the suspect vectors are in null(A) or independent.'),
+    question('Compute <span class="mono">AC</span> and <span class="mono">rank(C)</span>, where columns of <span class="mono">C</span> are the suspect vectors.',
+      {A:`${matrixHTML(matMul(A,Sgood), {compact:true})}<div class="qSub">rank(C) = <span class="mono">${rank(Sgood)}</span></div>`, B:`${matrixHTML(matMul(A,Sbad), {compact:true})}<div class="qSub">rank(C) = <span class="mono">${rank(Sbad)}</span></div>`}, 'decisive'),
     question('Compute <span class="mono">AC</span>, where columns of <span class="mono">C</span> are the suspect vectors.',
-      {A:matrixHTML(matMul(A,Sgood), {compact:true}), B:matrixHTML(matMul(A,Sbad), {compact:true})}, badType === 'nonnul' ? 'decisive' : 'neutral'),
+      {A:matrixHTML(matMul(A,Sgood), {compact:true}), B:matrixHTML(matMul(A,Sbad), {compact:true})}, 'neutral'),
     question('Compute <span class="mono">rank(C)</span>, where <span class="mono">C</span> is the suspect matrix.',
-      {A:'<span class="mono">' + rank(Sgood) + '</span>', B:'<span class="mono">' + rank(Sbad) + '</span>'}, badType === 'dependent' ? 'decisive' : 'neutral'),
-    question('Compute <span class="mono">nullity(A)</span>.',
-      answerSame('<span class="mono">' + nullity(A) + '</span>'), 'misleading'),
-    question('Compute <span class="mono">AC</span>, <span class="mono">rank(C)</span>, and <span class="mono">nullity(A)</span>, where columns of <span class="mono">C</span> are the suspect vectors.',
-      {A:`${matrixHTML(matMul(A,Sgood), {compact:true})}<div class="qSub">rank(C) = <span class="mono">${rank(Sgood)}</span>, nullity(A) = <span class="mono">${nullity(A)}</span></div>`, B:`${matrixHTML(matMul(A,Sbad), {compact:true})}<div class="qSub">rank(C) = <span class="mono">${rank(Sbad)}</span>, nullity(A) = <span class="mono">${nullity(A)}</span></div>`}, 'decisive'),
-    question('Compute <span class="mono">rank(A)</span> and the number of columns of <span class="mono">A</span>.',
-      answerSame(`<span class="mono">${rank(A)}</span> and <span class="mono">${A[0].length}</span>`), 'neutral'),
-    question('Are the suspect vectors in <span class="mono">col(A)</span>?',
-      {A:'wrong test: these vectors live in input space <span class="mono">R⁴</span>', B:'wrong test: these vectors live in input space <span class="mono">R⁴</span>'}, 'misleading'),
+      {A:'<span class="mono">' + rank(Sgood) + '</span>', B:'<span class="mono">' + rank(Sbad) + '</span>'}, 'neutral'),
+    question('Compute <span class="mono">RREF(C)</span>, where <span class="mono">C</span> is the suspect matrix.',
+      {A:rrefHTML(Sgood), B:rrefHTML(Sbad)}, 'misleading'),
     question('Compute <span class="mono">C<sup>T</sup>C</span>, where <span class="mono">C</span> is the suspect matrix.',
       {A:matrixHTML(matMul(transpose(Sgood), Sgood), {compact:true}), B:matrixHTML(matMul(transpose(Sbad), Sbad), {compact:true})}, 'misleading')
   ];
   return finalizeCase({
     title:'The null-space lineup',
     crime:'Being a basis for <span class="mono">null(A)</span>.',
-    math:'A suspect set is guilty if its vectors lie in <span class="mono">null(A)</span>, are independent, and there are exactly <span class="mono">nullity(A)</span> of them.',
+    math:'A suspect set is guilty if its vectors lie in <span class="mono">null(A)</span> and form a full independent set for that null space.',
     evidence:[{label:'Evidence A', html:matrixHTML(A)}],
     suspects:{A:{html:setOfColumnVectors(goodNums)}, B:{html:setOfColumnVectors(bad)}},
     questions:bank,
     guilty:'A',
-    explanation:'Suspect A is guilty because its vectors form a full independent basis for <span class="mono">null(A)</span>.',
-    fastRoute:'Solving <span class="mono">A<span class="vec">x</span>=0</span>, or checking <span class="mono">AC=0</span> together with rank and nullity, is decisive.'
+    explanation:'Suspect A is guilty because its vectors are sent to zero by <span class="mono">A</span> and form a full independent set for <span class="mono">null(A)</span>.',
+    fastRoute:'Use <span class="mono">RREF(A)</span> to identify free variables and basic solution directions, or check <span class="mono">AC=0</span> together with independence of the columns of <span class="mono">C</span>.'
   });
 }
 
@@ -1299,7 +1648,7 @@ function caseRowspaceBasis() {
     question('List the nonzero rows of <span class="mono">RREF(A)</span>.',
       answerSame(setOfRowVectors(good)), 'decisive'),
     question('Compute <span class="mono">rank(A)</span>.',
-      answerSame('<span class="mono">' + rank(A) + '</span>'), 'misleading'),
+      answerSame('<span class="mono">' + rank(A) + '</span>'), 'neutral'),
     question('Compute <span class="mono">rank(C)</span>, where <span class="mono">C</span> is the suspect matrix.',
       {A:'<span class="mono">' + rank(Sgood) + '</span>', B:'<span class="mono">' + rank(Sbad) + '</span>'}, 'misleading'),
     question('Compute <span class="mono">rank(C)</span> and the rank after stacking rows of <span class="mono">A</span> and <span class="mono">C</span>, where rows of <span class="mono">C</span> are the suspect vectors.',
@@ -1352,8 +1701,8 @@ function firstContradictionText(M) {
   if (cr) return `<span class="mono">${cr}</span>`;
   return 'none';
 }
-function matrixPairHTML(label1, v1, label2, v2) {
-  return `<div class="setWrap"><div class="setItems"><div><div class="qSub">${label1}</div>${colVectorHTML(v1, true)}</div><div><div class="qSub">${label2}</div>${colVectorHTML(v2, true)}</div></div></div>`;
+function matrixPairHTML(_label1, v1, _label2, v2) {
+  return `<div class="setWrap"><div class="setItems"><div>${colVectorHTML(v1, true)}</div><div>${colVectorHTML(v2, true)}</div></div></div>`;
 }
 function nonzeroColumns(A) {
   return A[0].map((_,j) => col(A,j)).every(v => !isZeroVec(v));
@@ -1440,17 +1789,17 @@ function systemQuestionBank(good, bad, crimeKind='generic') {
     question('Compute <span class="mono">RREF([A | b])</span>.',
       {A:rrefHTML(good, {augCol:n}), B:rrefHTML(bad, {augCol:n})}, 'decisive'),
     question('Compute <span class="mono">rank(A)</span>, <span class="mono">rank([A | b])</span>, and the number of variables.',
-      {A:rankCompareHTML(good), B:rankCompareHTML(bad)}, 'decisive'),
+      {A:rankCompareHTML(good), B:rankCompareHTML(bad)}, 'decisive', {live:false, auditTag:'review-leave-out'}),
     question('List the pivot columns of <span class="mono">[A | b]</span>.',
       {A:'columns <span class="mono">' + listCols(pivotColumns(good)) + '</span>', B:'columns <span class="mono">' + listCols(pivotColumns(bad)) + '</span>'}, 'decisive'),
     question('Show the contradiction row, if any.',
       {A:firstContradictionText(good), B:firstContradictionText(bad)}, crimeKind === 'inconsistent' || crimeKind === 'none' ? 'decisive' : 'neutral'),
-    question('List the free variables after row reduction.',
-      {A:'<span class="mono">' + freeVarText(good) + '</span>', B:'<span class="mono">' + freeVarText(bad) + '</span>'}, crimeKind === 'free' || crimeKind === 'inf' ? 'decisive' : 'neutral'),
-    question('Compute <span class="mono">rank(A)</span> only.',
-      {A:'<span class="mono">' + rank(gSplit.A) + '</span>', B:'<span class="mono">' + rank(bSplit.A) + '</span>'}, 'misleading'),
+    question('Check consistency; if consistent, list the free variables of the solution set.',
+      {A:'<span class="mono">' + solutionSetFreeVarText(good) + '</span>', B:'<span class="mono">' + solutionSetFreeVarText(bad) + '</span>'}, crimeKind === 'free' || crimeKind === 'inf' ? 'decisive' : 'neutral'),
+    question('Compute <span class="mono">rank(A)</span>.',
+      {A:'<span class="mono">' + rank(gSplit.A) + '</span>', B:'<span class="mono">' + rank(bSplit.A) + '</span>'}, 'neutral'),
     question('Compute <span class="mono">rank([A | b])</span> only.',
-      {A:'<span class="mono">' + rank(good) + '</span>', B:'<span class="mono">' + rank(bad) + '</span>'}, 'misleading'),
+      {A:'<span class="mono">' + rank(good) + '</span>', B:'<span class="mono">' + rank(bad) + '</span>'}, 'misleading', {live:false, auditTag:'review-leave-out'}),
     question('Compute <span class="mono">RREF(A)</span>.',
       {A:rrefHTML(gSplit.A), B:rrefHTML(bSplit.A)}, 'misleading'),
     question('Compute <span class="mono">A<sup>T</sup>b</span>.',
@@ -1553,13 +1902,15 @@ function caseOutsideNull() {
     question('Compute the row dot products with <span class="vec">z</span>.',
       {A:'<span class="mono">' + matVec(A, outside).map(fmtVal).join(', ') + '</span>', B:'<span class="mono">' + matVec(A, inNull).map(fmtVal).join(', ') + '</span>'}, 'decisive'),
     question('Find a basis for <span class="mono">null(A)</span>.',
-      answerSame(setOfColumnVectors(basis)), 'decisive'),
+      answerSame(setOfColumnVectors(basis)), 'decisive', {live:false, auditTag:'review-leave-out'}),
+    question('Attempt to form <span class="mono">RREF([A | z])</span>.',
+      attemptedBadAugmentInput(A, 'z'), 'misleading'),
     question('Compute <span class="mono">A<sup>T</sup><span class="vec">z</span></span>.',
       answerSame(shapeError('not defined: A<sup>T</sup> has 2 columns but z has 3 entries')), 'misleading'),
     question('Is <span class="vec">z</span> a linear combination of the columns of <span class="mono">A</span>?',
       answerSame('wrong space: columns of <span class="mono">A</span> are in <span class="mono">R²</span>, but <span class="vec">z</span> is in <span class="mono">R³</span>'), 'misleading'),
     question('Compute <span class="mono">rank(A)</span>.',
-      answerSame('<span class="mono">' + rank(A) + '</span>'), 'misleading')
+      answerSame('<span class="mono">' + rank(A) + '</span>'), 'neutral')
   ];
   return finalizeCase({
     title:'The noisy direction',
@@ -1569,7 +1920,7 @@ function caseOutsideNull() {
     suspects:{A:{html:colVectorHTML(outside)}, B:{html:colVectorHTML(inNull)}},
     questions:bank,
     guilty:'A',
-    explanation:'Suspect A is guilty because it is not killed by <span class="mono">A</span>; its product <span class="mono">A z</span> is nonzero.',
+    explanation:'Suspect A is guilty because <span class="mono">A z</span> is nonzero, so the vector is outside <span class="mono">null(A)</span>.',
     fastRoute:'Compute <span class="mono">A<span class="vec">z</span></span>.'
   });
 }
@@ -1586,18 +1937,18 @@ function caseOutsideCol() {
     question('Compute <span class="mono">REF([A | b])</span>.',
       {A:oneREFHTML(augU,{augCol:2}), B:oneREFHTML(augR,{augCol:2})}, 'decisive'),
     question('Compare <span class="mono">rank(A)</span> and <span class="mono">rank([A | b])</span>.',
-      {A:`<span class="mono">${rankA}</span> and <span class="mono">${rank(augU)}</span>`, B:`<span class="mono">${rankA}</span> and <span class="mono">${rank(augR)}</span>`}, 'decisive'),
+      {A:`<span class="mono">${rankA}</span> and <span class="mono">${rank(augU)}</span>`, B:`<span class="mono">${rankA}</span> and <span class="mono">${rank(augR)}</span>`}, 'decisive', {live:false, auditTag:'review-leave-out'}),
     question('Solve <span class="mono">A<span class="vec">x</span> = <span class="vec">b</span></span> by row reduction.',
       {A:'no solution', B:colVectorHTML(x, true)}, 'decisive'),
     question('Compute <span class="mono">rank(A)</span>.',
-      answerSame('<span class="mono">' + rankA + '</span>'), 'misleading'),
+      answerSame('<span class="mono">' + rankA + '</span>'), 'neutral'),
     question('Compute <span class="mono">A<sup>T</sup><span class="vec">b</span></span>.',
       {A:colVectorHTML(matVec(transpose(A), unreachable), true), B:colVectorHTML(matVec(transpose(A), reachable), true)}, 'misleading'),
     question('Compute <span class="mono">A<span class="vec">b</span></span>.',
       answerSame(shapeError('not defined: A has 2 columns but b has 3 entries')), 'misleading')
   ];
   return finalizeCase({
-    title:'The unreachable target',
+    title:'The target outside col(A)',
     crime:'Being outside <span class="mono">col(A)</span>.',
     math:'A suspect is guilty if the system <span class="mono">A x = b</span> is inconsistent.',
     evidence:[{label:'Evidence A', html:matrixHTML(A)}],
@@ -1605,7 +1956,7 @@ function caseOutsideCol() {
     questions:bank,
     guilty:'A',
     explanation:'Suspect A is guilty because <span class="mono">A x = b</span> is inconsistent, so the target is not in <span class="mono">col(A)</span>.',
-    fastRoute:'Row-reduce <span class="mono">[A|b]</span> or compare the two ranks.'
+    fastRoute:'Row-reduce <span class="mono">[A|b]</span> or solve <span class="mono">A x=b</span>.'
   });
 }
 
@@ -1711,8 +2062,8 @@ function caseFullRowRank() {
       {A:'<span class="mono">' + nullity(good) + '</span>', B:'<span class="mono">' + nullity(bad) + '</span>'}, 'neutral'),
     question('Compute the number of columns.',
       answerSame('<span class="mono">3</span>'), 'misleading'),
-    question('Compute row sums.',
-      {A:'<span class="mono">' + good.map(r=>r.reduce((s,x)=>s+x,0)).join(', ') + '</span>', B:'<span class="mono">' + bad.map(r=>r.reduce((s,x)=>s+x,0)).join(', ') + '</span>'}, 'misleading')
+    question('Compute <span class="mono">A<sup>T</sup>A</span>.',
+      {A:matrixHTML(matMul(transpose(good), good), {compact:true}), B:matrixHTML(matMul(transpose(bad), bad), {compact:true})}, 'misleading')
   ];
   return finalizeCase({
     title:'The full-row file',
@@ -1767,8 +2118,8 @@ function caseNontrivialNullSpace() {
       {A:`<span class="mono">${rank(good)}</span> and <span class="mono">3</span>`, B:`<span class="mono">${rank(bad)}</span> and <span class="mono">3</span>`}, 'decisive'),
     question('Compute <span class="mono">RREF(A)</span>.',
       {A:rrefHTML(good), B:rrefHTML(bad)}, 'decisive'),
-    question('Compute row sums.',
-      {A:'<span class="mono">' + good.map(r=>r.reduce((s,x)=>s+x,0)).join(', ') + '</span>', B:'<span class="mono">' + bad.map(r=>r.reduce((s,x)=>s+x,0)).join(', ') + '</span>'}, 'misleading'),
+    question('Compute <span class="mono">A<sup>T</sup>A</span>.',
+      {A:matrixHTML(matMul(transpose(good), good), {compact:true}), B:matrixHTML(matMul(transpose(bad), bad), {compact:true})}, 'misleading'),
     question('Compute <span class="mono">A<sup>T</sup>A</span>.',
       {A:matrixHTML(matMul(transpose(good), good), {compact:true}), B:matrixHTML(matMul(transpose(bad), bad), {compact:true})}, 'misleading')
   ];
@@ -1819,29 +2170,31 @@ function caseRedundantColumn() {
   const good = colsToMatrix([c1,c2,c3]);
   const bad = randomInvertible3();
   const bank = [
-    question('Compute <span class="mono">rank(A)</span>.',
-      {A:'<span class="mono">' + rank(good) + '</span>', B:'<span class="mono">' + rank(bad) + '</span>'}, 'decisive'),
-    question('List pivot columns of <span class="mono">A</span>.',
+    question('Compute <span class="mono">RREF(A)</span>.',
+      {A:rrefHTML(good), B:rrefHTML(bad)}, 'decisive'),
+    question('List pivot columns of <span class="mono">A</span> after row reduction.',
       {A:'columns <span class="mono">' + listCols(pivotColumns(good)) + '</span>', B:'columns <span class="mono">' + listCols(pivotColumns(bad)) + '</span>'}, 'decisive'),
     question('Compute ranks before and after deleting column 3.',
-      {A:`<span class="mono">${rank(good)}</span> and <span class="mono">${rank(deleteCol(good,2))}</span>`, B:`<span class="mono">${rank(bad)}</span> and <span class="mono">${rank(deleteCol(bad,2))}</span>`}, 'decisive'),
-    question('Solve <span class="mono">A<span class="vec">x</span> = 0</span>.',
-      {A:setOfColumnVectors(nullspaceBasis(good)), B:'only the zero solution'}, 'decisive'),
-    question('Is column 3 nonzero?',
-      {A:!isZeroVec(col(good,2)) ? 'yes' : 'no', B:!isZeroVec(col(bad,2)) ? 'yes' : 'no'}, 'misleading'),
-    question('Compute column sums.',
-      {A:'<span class="mono">' + columnSumsText(good) + '</span>', B:'<span class="mono">' + columnSumsText(bad) + '</span>'}, 'misleading')
+      {A:`<span class="mono">${rank(good)}</span> and <span class="mono">${rank(deleteCol(good,2))}</span>`, B:`<span class="mono">${rank(bad)}</span> and <span class="mono">${rank(deleteCol(bad,2))}</span>`}, 'decisive', {live:false, auditTag:'review-leave-out'}),
+    question('Compute <span class="mono">REF([A | 0])</span>.',
+      {A:oneREFHTML(homogeneousAug(good), {augCol:good[0].length}), B:oneREFHTML(homogeneousAug(bad), {augCol:bad[0].length})}, 'decisive'),
+    question('Compute <span class="mono">RREF([A | 0])</span>.',
+      {A:rrefHTML(homogeneousAug(good), {augCol:good[0].length}), B:rrefHTML(homogeneousAug(bad), {augCol:bad[0].length})}, 'decisive'),
+    question('Compute <span class="mono">A<sup>T</sup>A</span>.',
+      {A:matrixHTML(matMul(transpose(good), good), {compact:true}), B:matrixHTML(matMul(transpose(bad), bad), {compact:true})}, 'misleading'),
+    question('Compute <span class="mono">RREF(A<sup>T</sup>)</span>.',
+      {A:rrefHTML(transpose(good)), B:rrefHTML(transpose(bad))}, 'misleading')
   ];
   return finalizeCase({
     title:'The repeated lead',
-    crime:'Having a redundant column.',
+    crime:'Having linearly dependent columns.',
     math:'A matrix is guilty if one column does not add a new independent direction.',
     evidence:[],
     suspects:{A:{html:matrixHTML(good)}, B:{html:matrixHTML(bad)}},
     questions:bank,
     guilty:'A',
     explanation:'Suspect A is guilty because column 3 is already a combination of earlier columns.',
-    fastRoute:'Compute rank, pivot columns, or compare rank before and after deleting the suspect column.'
+    fastRoute:'Compute <span class="mono">RREF(A)</span>, pivot columns, or the homogeneous augmented system <span class="mono">[A|0]</span>.'
   });
 }
 function caseBasisRn() {
@@ -1937,16 +2290,18 @@ function caseTwoLinesPoint() {
   const bank = [
     question('Compute <span class="mono">REF([A | b])</span>.',
       {A:oneREFHTML(good,{augCol:2}), B:oneREFHTML(bad,{augCol:2})}, 'decisive'),
+    question('Compute <span class="mono">RREF([A | b])</span>.',
+      {A:rrefHTML(good,{augCol:2}), B:rrefHTML(bad,{augCol:2})}, 'decisive'),
     question('Compute <span class="mono">rank(A)</span>, <span class="mono">rank([A | b])</span>, and the number of variables.',
-      {A:rankCompareHTML(good), B:rankCompareHTML(bad)}, 'decisive'),
+      {A:rankCompareHTML(good), B:rankCompareHTML(bad)}, 'decisive', {live:false, auditTag:'review-leave-out'}),
     question('Solve the system by row reduction.',
       {A:'one ordered pair', B:classText(classifyAug(bad))}, 'decisive'),
     question('Compute <span class="mono">RREF(A)</span>.',
       {A:rrefHTML(coefficientMatrix(good)), B:rrefHTML(coefficientMatrix(bad))}, 'neutral'),
     question('Compute <span class="mono">A<sup>T</sup>b</span>.',
       {A:colVectorHTML(matVec(transpose(coefficientMatrix(good)), good.map(r=>r[2])), true), B:colVectorHTML(matVec(transpose(coefficientMatrix(bad)), bad.map(r=>r[2])), true)}, 'misleading'),
-    question('Compute the row sums of <span class="mono">[A | b]</span>.',
-      {A:'<span class="mono">' + good.map(r=>r.reduce((s,x)=>s+x,0)).join(', ') + '</span>', B:'<span class="mono">' + bad.map(r=>r.reduce((s,x)=>s+x,0)).join(', ') + '</span>'}, 'misleading')
+    question('Compare only the left sides of the equations.',
+      {A:rank(coefficientMatrix(good)) === 1 ? 'left sides are multiples' : 'left sides are not multiples', B:rank(coefficientMatrix(bad)) === 1 ? 'left sides are multiples' : 'left sides are not multiples'}, 'misleading', {live:false, auditTag:'review-leave-out'})
   ];
   return finalizeCase({
     title:'The crossing lines',
@@ -1966,16 +2321,18 @@ function caseParallelNoIntersection() {
   const bank = [
     question('Compute <span class="mono">REF([A | b])</span>.',
       {A:oneREFHTML(good,{augCol:2}), B:oneREFHTML(bad,{augCol:2})}, 'decisive'),
+    question('Compute <span class="mono">RREF([A | b])</span>.',
+      {A:rrefHTML(good,{augCol:2}), B:rrefHTML(bad,{augCol:2})}, 'decisive'),
     question('Compare <span class="mono">rank(A)</span> and <span class="mono">rank([A | b])</span>.',
-      {A:rankCompareHTML(good), B:rankCompareHTML(bad)}, 'decisive'),
+      {A:rankCompareHTML(good), B:rankCompareHTML(bad)}, 'decisive', {live:false, auditTag:'review-leave-out'}),
     question('Show the contradiction row, if any.',
       {A:firstContradictionText(good), B:firstContradictionText(bad)}, 'decisive'),
-    question('Compute <span class="mono">rank(A)</span> only.',
-      {A:'<span class="mono">' + rank(coefficientMatrix(good)) + '</span>', B:'<span class="mono">' + rank(coefficientMatrix(bad)) + '</span>'}, 'misleading'),
+    question('Compute <span class="mono">rank(A)</span>.',
+      {A:'<span class="mono">' + rank(coefficientMatrix(good)) + '</span>', B:'<span class="mono">' + rank(coefficientMatrix(bad)) + '</span>'}, 'neutral'),
     question('Compare only the left sides of the equations.',
-      {A:'left sides are multiples', B:rank(coefficientMatrix(bad)) === 1 ? 'left sides are multiples' : 'left sides are not multiples'}, 'misleading'),
-    question('Compute row sums of <span class="mono">A</span>.',
-      {A:'<span class="mono">' + coefficientMatrix(good).map(r=>r.reduce((s,x)=>s+x,0)).join(', ') + '</span>', B:'<span class="mono">' + coefficientMatrix(bad).map(r=>r.reduce((s,x)=>s+x,0)).join(', ') + '</span>'}, 'misleading')
+      {A:'left sides are multiples', B:rank(coefficientMatrix(bad)) === 1 ? 'left sides are multiples' : 'left sides are not multiples'}, 'misleading', {live:false, auditTag:'review-leave-out'}),
+    question('Compute <span class="mono">RREF(A)</span>.',
+      {A:rrefHTML(coefficientMatrix(good)), B:rrefHTML(coefficientMatrix(bad))}, 'misleading')
   ];
   return finalizeCase({
     title:'The parallel lines',
@@ -1993,32 +2350,34 @@ function caseMapForgetsHeight() {
   const good = [[1,0,0],[0,1,0]];
   const bad = [[1,0,1],[0,1,0]];
   const e3 = [0,0,1];
-  const x = [randInt(-2,3), randInt(-2,3), randInt(-2,3)];
-  const y = addVec(x, e3);
+  const u = [1,1,1];
+  const e1 = [1,0];
   const bank = [
-    question('Compute <span class="mono">A e₃</span>.',
+    question('Compute <span class="mono">B e₃</span>.',
       {A:colVectorHTML(matVec(good,e3), true), B:colVectorHTML(matVec(bad,e3), true)}, 'decisive'),
-    question('Compute <span class="mono">A<span class="vec">x</span></span> and <span class="mono">A(<span class="vec">x</span>+e₃)</span></span>.',
-      {A:`${colVectorHTML(matVec(good,x), true)} and ${colVectorHTML(matVec(good,y), true)}`, B:`${colVectorHTML(matVec(bad,x), true)} and ${colVectorHTML(matVec(bad,y), true)}`}, 'decisive'),
-    question('Find a basis for <span class="mono">null(A)</span>.',
-      {A:setOfColumnVectors(nullspaceBasis(good)), B:setOfColumnVectors(nullspaceBasis(bad))}, 'decisive'),
-    question('Compute <span class="mono">rank(A)</span>.',
-      {A:'<span class="mono">' + rank(good) + '</span>', B:'<span class="mono">' + rank(bad) + '</span>'}, 'misleading'),
-    question('Compute <span class="mono">A<sup>T</sup>e₃</span>.',
-      answerSame(shapeError('not defined: A<sup>T</sup> has 2 columns but e₃ has 3 entries')), 'misleading'),
-    question('Compute row sums.',
-      {A:'<span class="mono">' + good.map(r=>r.reduce((s,x)=>s+x,0)).join(', ') + '</span>', B:'<span class="mono">' + bad.map(r=>r.reduce((s,x)=>s+x,0)).join(', ') + '</span>'}, 'misleading')
+    question('Compare <span class="mono">B u</span> and <span class="mono">B(u+e₃)</span>, where <span class="mono">u=[1,1,1]<sup>T</sup></span>.',
+      {A:vectorPairAnswerHTML(matVec(good,u), matVec(good,addVec(u,e3))), B:vectorPairAnswerHTML(matVec(bad,u), matVec(bad,addVec(u,e3)))}, 'decisive'),
+    question('Compute the row dot products with <span class="mono">e₃</span>.',
+      {A:'<span class="mono">' + matVec(good,e3).map(fmtVal).join(', ') + '</span>', B:'<span class="mono">' + matVec(bad,e3).map(fmtVal).join(', ') + '</span>'}, 'decisive'),
+    question('Find a basis for <span class="mono">null(B)</span>.',
+      {A:setOfColumnVectors(nullspaceBasis(good)), B:setOfColumnVectors(nullspaceBasis(bad))}, 'decisive', {live:false, auditTag:'review-leave-out'}),
+    question('Compute <span class="mono">rank(B)</span>.',
+      {A:'<span class="mono">' + rank(good) + '</span>', B:'<span class="mono">' + rank(bad) + '</span>'}, 'neutral'),
+    question('Compute <span class="mono">B<sup>T</sup>e₁</span>.',
+      {A:colVectorHTML(matVec(transpose(good), e1), true), B:colVectorHTML(matVec(transpose(bad), e1), true)}, 'misleading'),
+    question('Compute <span class="mono">B<sup>T</sup>B</span>.',
+      {A:matrixHTML(matMul(transpose(good), good), {compact:true}), B:matrixHTML(matMul(transpose(bad), bad), {compact:true})}, 'misleading')
   ];
   return finalizeCase({
-    title:'The missing height',
-    crime:'Forgetting height.',
-    math:'A matrix is guilty if changing only the third coordinate does not change the output.',
+    title:'The null-height direction',
+    crime:'Having <span class="mono">e₃</span> in <span class="mono">null(B<sup>(i)</sup>)</span>.',
+    math:'A suspect matrix is guilty if <span class="mono">B<sup>(i)</sup>e₃=0</span>, equivalently if <span class="mono">e₃∈null(B<sup>(i)</sup>)</span>.',
     evidence:[],
     suspects:{A:{html:matrixHTML(good)}, B:{html:matrixHTML(bad)}},
     questions:bank,
     guilty:'A',
-    explanation:'Suspect A is guilty because <span class="mono">A e₃=0</span>, so the third-coordinate direction is forgotten.',
-    fastRoute:'Compute <span class="mono">A e₃</span> or compare outputs for inputs that differ only in height.'
+    explanation:'Suspect A is guilty because <span class="mono">B e₃=0</span>, so <span class="mono">e₃∈null(B)</span>. Equivalently, adding <span class="mono">e₃</span> to an input does not change the output.',
+    fastRoute:'Compute <span class="mono">B e₃</span>, or compare <span class="mono">B x</span> and <span class="mono">B(x+e₃)</span>.'
   });
 }
 function caseSameOutputDifference() {
@@ -2026,18 +2385,24 @@ function caseSameOutputDifference() {
   const z = [1,-1,1];
   let bad = randomVector(3, true);
   while (isZeroVec(matVec(A,bad))) bad = randomVector(3, true);
-  const x = randomVector(3, true);
+  const u = [1,0,1];
+  const refHom = oneREFHTML(homogeneousAug(A), {augCol:A[0].length});
+  const rrefHom = rrefHTML(homogeneousAug(A), {augCol:A[0].length});
   const bank = [
     question('Compute <span class="mono">A<span class="vec">d</span></span>.',
       {A:colVectorHTML(matVec(A,z), true), B:colVectorHTML(matVec(A,bad), true)}, 'decisive'),
-    question('Compare <span class="mono">A<span class="vec">x</span></span> with <span class="mono">A(<span class="vec">x</span>+<span class="vec">d</span>)</span></span>.',
-      {A:`${colVectorHTML(matVec(A,x), true)} and ${colVectorHTML(matVec(A,addVec(x,z)), true)}`, B:`${colVectorHTML(matVec(A,x), true)} and ${colVectorHTML(matVec(A,addVec(x,bad)), true)}`}, 'decisive'),
+    question('Compare <span class="mono">Au</span> with <span class="mono">A(u+<span class="vec">d</span>)</span>, where <span class="mono">u=[1,0,1]<sup>T</sup></span>.',
+      {A:vectorPairAnswerHTML(matVec(A,u), matVec(A,addVec(u,z))), B:vectorPairAnswerHTML(matVec(A,u), matVec(A,addVec(u,bad)))}, 'decisive'),
     question('Compute the row dot products with <span class="vec">d</span>.',
       {A:'<span class="mono">' + matVec(A,z).map(fmtVal).join(', ') + '</span>', B:'<span class="mono">' + matVec(A,bad).map(fmtVal).join(', ') + '</span>'}, 'decisive'),
+    question('Compute <span class="mono">REF([A | 0])</span> and compare <span class="vec">d</span> with the homogeneous solution directions.',
+      {A:refHom + '<div class="qSub">d is a homogeneous solution direction.</div>', B:refHom + '<div class="qSub">d is not a homogeneous solution direction.</div>'}, 'decisive'),
+    question('Compute <span class="mono">RREF([A | 0])</span> and compare <span class="vec">d</span> with the homogeneous solution directions.',
+      {A:rrefHom + '<div class="qSub">d is a homogeneous solution direction.</div>', B:rrefHom + '<div class="qSub">d is not a homogeneous solution direction.</div>'}, 'decisive'),
     question('Compute <span class="mono">A<sup>T</sup><span class="vec">d</span></span>.',
       answerSame(shapeError('not defined: A<sup>T</sup> has 2 columns but d has 3 entries')), 'misleading'),
     question('Compare <span class="vec">x</span> and <span class="vec">d</span> entry by entry.',
-      {A:'different entries', B:'different entries'}, 'misleading'),
+      {A:'different entries', B:'different entries'}, 'misleading', {live:false, auditTag:'review-leave-out'}),
     question('Compute <span class="mono"><span class="vec">d</span><sup>T</sup><span class="vec">d</span></span>.',
       {A:'<span class="mono">' + dot(z,z) + '</span>', B:'<span class="mono">' + dot(bad,bad) + '</span>'}, 'misleading')
   ];
@@ -2061,24 +2426,27 @@ function caseSamePredictions() {
   const badDiff = addVec(bad1, scaleVec(-1,bad2));
   const bank = [
     question('Compute the two prediction vectors.',
-      {A:`${colVectorHTML(matVec(X,c), true)} and ${colVectorHTML(matVec(X,cp), true)}`, B:`${colVectorHTML(matVec(X,bad1), true)} and ${colVectorHTML(matVec(X,bad2), true)}`}, 'decisive'),
+      {A:vectorPairAnswerHTML(matVec(X,c), matVec(X,cp)), B:vectorPairAnswerHTML(matVec(X,bad1), matVec(X,bad2))}, 'decisive'),
     question('Compute <span class="mono">X(c-c′)</span>.',
       {A:colVectorHTML(matVec(X,goodDiff), true), B:colVectorHTML(matVec(X,badDiff), true)}, 'decisive'),
-    question('Check whether <span class="mono">c-c′</span> is in <span class="mono">null(X)</span>.',
-      {A:'yes', B:'no'}, 'decisive'),
+    question('Compute <span class="mono">RREF(X)</span>.',
+      answerSame(rrefHTML(X)), 'neutral'),
+    question('Compute <span class="mono">X<sup>T</sup>c - X<sup>T</sup>c′</span>.',
+      answerSame(shapeError('not defined: X<sup>T</sup> has 4 columns but c and c′ each have 3 entries')), 'misleading'),
+    question('Compute <span class="mono">X<sup>T</sup>X</span>.',
+      answerSame(matrixHTML(matMul(transpose(X), X), {compact:true})), 'misleading'),
     question('Compute <span class="mono">c⋅c′</span>.',
-      {A:'<span class="mono">' + dot(c,cp) + '</span>', B:'<span class="mono">' + dot(bad1,bad2) + '</span>'}, 'misleading'),
-    question('Compare the entries of <span class="mono">c</span> and <span class="mono">c′</span>.',
-      {A:'different', B:'different'}, 'misleading'),
-    question('Compute <span class="mono">X<sup>T</sup>c</span>.',
-      answerSame(shapeError('not defined: X<sup>T</sup> has 4 columns but c has 3 entries')), 'misleading')
+      {A:'<span class="mono">' + dot(c,cp) + '</span>', B:'<span class="mono">' + dot(bad1,bad2) + '</span>'}, 'misleading')
   ];
   return finalizeCase({
     title:'The duplicate predictions',
     crime:'Giving the same predictions.',
     math:'A suspect pair is guilty if <span class="mono">Xc=Xc′</span>, equivalently if <span class="mono">X(c-c′)=0</span>.',
     evidence:[{label:'Evidence X', html:matrixHTML(X)}],
-    suspects:{A:{html:matrixPairHTML('c', c, 'c′', cp)}, B:{html:matrixPairHTML('c', bad1, 'c′', bad2)}},
+    suspects:{
+      A:{html:matrixPairHTML(indexedHTML('c', '1', true), c, indexedHTML('c′', '1', true), cp)},
+      B:{html:matrixPairHTML(indexedHTML('c', '2', true), bad1, indexedHTML('c′', '2', true), bad2)}
+    },
     questions:bank,
     guilty:'A',
     explanation:'Suspect A is guilty because the two different coefficient vectors give the same prediction vector.',
@@ -2087,76 +2455,88 @@ function caseSamePredictions() {
 }
 
 
-const CASE_GENERATORS = [
+
+const ACTIVE_CASE_GENERATORS = [
   caseNullMembership,
   caseOutsideNull,
   caseColumnMembership,
   caseOutsideCol,
-  caseDependentColumns,
-  caseRankExactly2,
   caseUniqueSolution,
   caseNoSolution,
-  caseConsistentSystem,
-  caseInconsistentSystem,
   caseInfiniteSolutions,
   caseOneFreeVariable,
+  caseColumnSpaceBasis,
+  caseNullspaceBasis,
+  caseRowspaceBasis,
+  caseRedundantColumn,
+  caseMapForgetsHeight,
+  caseSameOutputDifference,
+  caseSamePredictions,
+  caseTwoLinesPoint,
+  caseParallelNoIntersection
+];
+const CURATED_CASE_GENERATORS = ACTIVE_CASE_GENERATORS;
+
+const RETIRED_CASE_GENERATORS = [
+  caseDependentColumns,
+  caseRankExactly2,
+  caseConsistentSystem,
+  caseInconsistentSystem,
   caseIndependentColumns,
   caseFullColumnRank,
   caseFullRowRank,
   caseTrivialNullSpace,
   caseNontrivialNullSpace,
   caseNullityExactly1,
-  caseRedundantColumn,
   caseBasisRn,
   caseLinearlyIndependentSet,
-  caseLinearlyDependentSet,
-  caseTwoLinesPoint,
-  caseParallelNoIntersection,
-  caseMapForgetsHeight,
-  caseSameOutputDifference
+  caseLinearlyDependentSet
 ];
 
-const CHALLENGE_CASE_GENERATORS = [
-  caseColumnSpaceBasis,
-  caseNullspaceBasis,
-  caseRowspaceBasis,
-  caseSamePredictions,
-  caseUniqueSolution,
-  caseNoSolution,
-  caseOneFreeVariable,
-  caseFullColumnRank,
-  caseFullRowRank,
-  caseNullityExactly1,
-  caseRedundantColumn,
-  caseBasisRn,
-  caseLinearlyIndependentSet,
-  caseLinearlyDependentSet,
-  caseTwoLinesPoint,
-  caseMapForgetsHeight,
-  caseSameOutputDifference
+const RETIRED_CASE_NOTES = [
+  {name:'caseDependentColumns', reason:'Folded into the redundant-column progression to avoid oversampling the same rank/dependence idea.'},
+  {name:'caseRankExactly2', reason:'Retired because the clue bank tended to make rank itself the answer.'},
+  {name:'caseIndependentColumns', reason:'Folded into null-space and redundant-column cases.'},
+  {name:'caseFullColumnRank', reason:'Retired for now because it overlaps heavily with independent-column and null-space diagnostics.'},
+  {name:'caseFullRowRank', reason:'Covered more explicitly by the row-space basis case.'},
+  {name:'caseTrivialNullSpace', reason:'Covered by null membership, same-output difference, and null-space basis cases.'},
+  {name:'caseNontrivialNullSpace', reason:'Covered by null membership, redundant feature, and duplicate-prediction cases.'},
+  {name:'caseNullityExactly1', reason:'Retired because computing nullity was too close to the answer.'},
+  {name:'caseBasisRn', reason:'Retired because it was another full-rank set test and not as course-specific as row/col/null bases.'},
+  {name:'caseLinearlyIndependentSet', reason:'Retired to reduce dependence/full-rank repetition.'},
+  {name:'caseLinearlyDependentSet', reason:'Retired to reduce dependence/full-rank repetition.'}
 ];
+
+const CASE_GENERATORS = ACTIVE_CASE_GENERATORS;
+const CHALLENGE_CASE_GENERATORS = [];
 
 const state = {
   mode:'start',
-  level:'standard',
+  level:'single',
   timeLeft:ROUND_SECONDS,
   timerId:null,
   score:0,
   attempted:0,
   deck:[],
   current:null,
-  history:[]
+  history:[],
+  caseLog:[],
+  caseLogs:[],
+  restartConfirmOpen:false
 };
 
 function activeGenerators() {
-  return state.level === 'challenge' ? CHALLENGE_CASE_GENERATORS : CASE_GENERATORS;
+  return ACTIVE_CASE_GENERATORS;
 }
+
 function levelName() {
-  return state.level === 'challenge' ? 'Challenge' : 'Standard';
+  return 'Single mode';
 }
+
 function clueLimit() {
-  return state.level === 'challenge' ? 2 : 1;
+  return 1;
 }
+
 function refillDeck() {
   const gens = activeGenerators();
   state.deck = shuffle(Array.from({length:gens.length}, (_, i) => i));
@@ -2173,18 +2553,22 @@ function makePlayState(caseObj) {
     askedIndex:null,
     revealed:new Set(),
     usedWrong:new Set(),
+    clueLog:[],
+    prematureConvictions:[],
+    startedAt:new Date().toISOString(),
+    reported:false,
     usableClues:0,
     decisionReady:false,
     resolved:false,
     correct:false,
     explainOpen:false,
-    mathOpen:false,
     blockedUntil:0,
     blockToken:null,
     wrongClueMessage:'',
     status:''
   };
 }
+
 function formatTime(seconds) {
   const m = Math.floor(seconds / 60);
   const s = seconds % 60;
@@ -2202,13 +2586,16 @@ function renderEvidence(evidence) {
     </div>`).join('')}</div>`;
 }
 function suspectLabel(letter) {
-  return letter === 'A' ? '1' : '2';
+  if (letter === 'A') return '1';
+  if (letter === 'B') return '2';
+  return '';
 }
 function displayExplanation(text) {
   return text
     .replaceAll('Suspect A', 'Suspect 1')
     .replaceAll('Suspect B', 'Suspect 2');
 }
+
 function aliasForCase(caseObj) {
   const crime = stripTags(caseObj.crime || '').toLowerCase();
   const title = (caseObj.title || '').toLowerCase();
@@ -2261,6 +2648,7 @@ function aliasQuestionLabel(label, caseObj) {
     out = out
       .replaceAll('Compute the two prediction vectors.', `Compute <span class="mono">X</span>${S.c} and <span class="mono">X</span>${S.cp}.`)
       .replaceAll('<span class="mono">X(c-c′)</span>', `<span class="mono">X(</span>${S.c} − ${S.cp}<span class="mono">)</span>`)
+      .replaceAll('<span class="mono">X<sup>T</sup>c - X<sup>T</sup>c′</span>', `<span class="mono">X<sup>T</sup></span>${S.c} − <span class="mono">X<sup>T</sup></span>${S.cp}`)
       .replaceAll('<span class="mono">c-c′</span>', `${S.c} − ${S.cp}`)
       .replaceAll('<span class="mono">c⋅c′</span>', `${S.c} ⋅ ${S.cp}`)
       .replaceAll('<span class="mono">X<sup>T</sup>c</span>', `<span class="mono">X<sup>T</sup></span>${S.c}`)
@@ -2363,6 +2751,13 @@ function aliasQuestionLabel(label, caseObj) {
       .replaceAll('<span class="mono">A[1,1,−1]<sup>T</sup></span>', `${S.B}<span class="mono">[1,1,−1]<sup>T</sup></span>`)
       .replaceAll('<span class="mono">A<span class="vec">x</span> = 0</span>', `${S.B}<span class="vec">x</span> = 0`)
       .replaceAll('<span class="mono">A e₃</span>', `${S.B}<span class="mono">e₃</span>`)
+      .replaceAll('<span class="mono">B e₃</span>', `${S.B}<span class="mono">e₃</span>`)
+      .replaceAll('<span class="mono">B u</span>', `${S.B}<span class="mono">u</span>`)
+      .replaceAll('<span class="mono">B(u+e₃)</span>', `${S.B}<span class="mono">(u+e₃)</span>`)
+      .replaceAll('<span class="mono">B<sup>T</sup>e₁</span>', `${S.B}<sup>T</sup><span class="mono">e₁</span>`)
+      .replaceAll('<span class="mono">B<sup>T</sup>B</span>', `${S.B}<sup>T</sup>${S.B}`)
+      .replaceAll('<span class="mono">rank(B)</span>', `<span class="mono">rank</span>(${S.B})`)
+      .replaceAll('<span class="mono">null(B)</span>', `<span class="mono">null</span>(${S.B})`)
       .replaceAll('<span class="mono">A<span class="vec">x</span></span>', `${S.B}<span class="vec">x</span>`)
       .replaceAll('<span class="mono">A(<span class="vec">x</span>+e₃)</span></span>', `${S.B}<span class="mono">(</span><span class="vec">x</span><span class="mono">+e₃)</span>`)
       .replaceAll('<span class="mono">A<sup>T</sup>e₃</span>', `${S.B}<sup>T</sup><span class="mono">e₃</span>`)
@@ -2401,7 +2796,7 @@ function renderSuspectHead(letter, suspect, caseObj) {
 function renderQuestionRow(q, idx, playState) {
   const revealed = playState.revealed.has(idx);
   const wrongUsed = playState.usedWrong.has(idx);
-  const disabled = playState.resolved || isBlocked(playState) || !!playState.wrongClueMessage || playState.decisionReady || revealed || wrongUsed;
+  const disabled = playState.resolved || isBlocked(playState) || revealed || wrongUsed;
   const btnClass = revealed ? 'askBtn used' : (disabled ? 'askBtn locked' : 'askBtn');
   return `
     <tr>
@@ -2410,9 +2805,12 @@ function renderQuestionRow(q, idx, playState) {
           <span class="qLabel">${aliasQuestionLabel(q.label, playState.caseObj)}</span>
         </button>
       </td>
-      <td class="answerCell ${revealed ? '' : 'empty'}">${revealed ? q.answers.A : '—'}</td>
-      <td class="answerCell ${revealed ? '' : 'empty'}">${revealed ? q.answers.B : '—'}</td>
+      <td class="answerCell ${revealed ? '' : 'empty'}">${revealed ? formatAnswerHTML(q.answers.A) : '—'}</td>
+      <td class="answerCell ${revealed ? '' : 'empty'}">${revealed ? formatAnswerHTML(q.answers.B) : '—'}</td>
     </tr>`;
+}
+function formatAnswerHTML(html) {
+  return String(html).replace(/\bx(\d+)\b/g, 'x<sub>$1</sub>');
 }
 function renderProgressDots() {
   const dots = state.history.slice(-12).map(item => `<span class="dot ${item ? 'done' : 'fail'}"></span>`).join('');
@@ -2422,44 +2820,56 @@ function renderProgressDots() {
 function isBlocked(playState) {
   return playState.blockedUntil && Date.now() < playState.blockedUntil;
 }
+function hasDecisiveClue(playState) {
+  return !!playState && playState.clueLog.some(item => item.kind === 'decisive');
+}
 function blockSeconds(playState) {
   if (!isBlocked(playState)) return 0;
   return Math.max(1, Math.ceil((playState.blockedUntil - Date.now()) / 1000));
 }
-function renderPenaltyPanel(playState) {
-  if (!playState.wrongClueMessage || playState.resolved) return '';
-  const waiting = isBlocked(playState);
-  return `<section class="cluePenalty">
-    <strong>Wrong clue</strong>
-    <p>${playState.wrongClueMessage}${waiting ? ` <span class="count">${blockSeconds(playState)}</span>` : ''}</p>
-    ${waiting ? '' : '<button class="btn dismissBtn" id="dismissPenaltyBtn">Dismiss</button>'}
-  </section>`;
+function renderBoardNote(playState) {
+  if (playState.resolved) return 'Choose a clue. Additional clues become available after 5 seconds.';
+  if (isBlocked(playState)) return `<span class="boardNoteBubble">An additional clue can be accessed in ${blockSeconds(playState)} seconds.</span>`;
+  if (playState.status === 'An additional clue is available.') return `<span class="boardNoteBubble">${playState.status}</span>`;
+  if (playState.status) return playState.status;
+  return 'Choose a clue. Additional clues become available after 5 seconds.';
 }
+function renderJuryWarning(playState) {
+  if (!playState.wrongClueMessage) return '';
+  return `
+    <section class="cluePenalty" role="alertdialog" aria-live="assertive" aria-label="Jury warning">
+      <strong>Jury needs evidence</strong>
+      <p>${escapeHTML(playState.wrongClueMessage)}</p>
+      <div class="cluePenaltyActions">
+        <button class="btn dismissBtn" id="dismissPenaltyBtn">Dismiss</button>
+      </div>
+    </section>`;
+}
+
 function renderStart() {
   return `
     <header class="top">
       <img class="glassArt" alt="" src="${MAG}" />
       <h1 class="title">Null &amp; Order</h1>
-      <p class="subtitle">In Standard, one useful clue lets you decide. In Challenge, hard cases allow two useful clues. Wrong clues cost 5 seconds.</p>
     </header>
     <div class="startScreen">
       <section class="startCard">
         <div class="startHead"><h2>How to play</h2></div>
         <div class="startBody">
           <ul class="rulesList">
-            <li class="ruleItem">Each case has two suspects and a short list of possible clues.</li>
-            <li class="ruleItem">Reveal one clue at a time. Standard cases need one useful clue; Challenge cases allow two useful clues.</li>
-            <li class="ruleItem">Once you have a useful clue, click <strong>Suspect 1 is guilty</strong> or <strong>Suspect 2 is guilty</strong>.</li>
-            <li class="ruleItem">You have <strong>${Math.floor(ROUND_SECONDS/60)} minutes</strong>. Standard uses easy and intermediate cases; Challenge mixes harder cases with intermediate ones and allows two useful clues.</li>
+            <li class="ruleItem">Each case has two suspects and four possible clues.</li>
+            <li class="ruleItem">Use clues to investigate. Charge a suspect whenever you are ready. A decisive clue is needed to convince the jury.</li>
+            <li class="ruleItem">An additional clue can be accessed after <strong>5 seconds</strong>.</li>
+            <li class="ruleItem">You have <strong>${Math.floor(ROUND_SECONDS/60)} minutes</strong> to close as many cases as you can.</li>
           </ul>
           <div class="startBtns">
-            <button class="btn gold startBtn" id="startStandardBtn">Standard</button>
-            <button class="btn teal startBtn" id="startChallengeBtn">Challenge</button>
+            <button class="btn gold startBtn" id="startBtn">Start game</button>
           </div>
         </div>
       </section>
     </div>`;
 }
+
 function renderCase() {
   const p = state.current;
   const c = p.caseObj;
@@ -2467,12 +2877,12 @@ function renderCase() {
     <header class="top">
       <img class="glassArt" alt="" src="${MAG}" />
       <h1 class="title">Null &amp; Order</h1>
-      <p class="subtitle">${state.level === 'challenge' ? 'Challenge: you may use two useful clues. Wrong clues cost 5 seconds.' : 'Choose a useful clue, then decide who is guilty. Wrong clues cost 5 seconds.'}</p>
+      <p class="subtitle">Clues help you convict. Additional clues become available after a 5-second pause.</p>
       <div class="statsRow">
         <span class="pill gold">Time ${formatTime(state.timeLeft)}</span>
         <span class="pill teal">Score ${state.score}</span>
         <span class="pill rose">Cases ${state.attempted}</span>
-        <span class="pill">Level ${levelName()}</span>
+        <button class="pill restartPill" id="restartRoundBtn">Restart</button>
       </div>
     </header>
     <section class="caseBar">
@@ -2480,26 +2890,21 @@ function renderCase() {
         <h2>${c.title}</h2>
         <div class="caseLine"><strong>Crime:</strong> ${c.crime}</div>
         ${renderEvidence(c.evidence)}
-        <div class="caseTools">
-          <button class="inlineBtn" id="mathHintBtn">${p.mathOpen ? 'Hide hint' : 'Hint'}</button>
-        </div>
-        <div class="mathHintPanel ${p.mathOpen ? 'show' : ''}">${c.math}</div>
       </div>
     </section>
     <main class="main">
       <section class="board">
         <div class="boardHead">
           <div class="boardTitle">Clue table</div>
-          <div class="boardNote">${state.level === 'challenge' ? 'Two useful clues allowed; wrong clues cost 5 seconds.' : 'Wrong clues cost 5 seconds.'}</div>
+          <div class="boardNote">${renderBoardNote(p)}</div>
         </div>
-        ${renderPenaltyPanel(p)}
         <table class="clueTable">
           <thead>
             <tr>
               <th class="leftHead">
                 <div class="leftHeadInner">
                   <div class="leftHeadTitle">Questions</div>
-                  <div class="leftHeadSub">${state.level === 'challenge' ? 'Choose up to 2 clues.' : 'Choose 1 clue.'}</div>
+                  <div class="leftHeadSub">Choose a clue.</div>
                 </div>
               </th>
               <th class="suspectHead">${renderSuspectHead('A', c.suspects.A, c)}</th>
@@ -2513,15 +2918,34 @@ function renderCase() {
       </section>
       <div class="decisionRow">
         <div class="decisionSpacer" aria-hidden="true"></div>
-        <button class="btn teal decisionBtn" id="guiltyA" ${(p.resolved || !p.decisionReady || isBlocked(p)) ? 'disabled' : ''}>Suspect 1 is guilty</button>
-        <button class="btn rose decisionBtn" id="guiltyB" ${(p.resolved || !p.decisionReady || isBlocked(p)) ? 'disabled' : ''}>Suspect 2 is guilty</button>
+        <button class="btn teal decisionBtn" id="guiltyA" ${p.resolved ? 'disabled' : ''}>Suspect 1 is guilty</button>
+        <button class="btn rose decisionBtn" id="guiltyB" ${p.resolved ? 'disabled' : ''}>Suspect 2 is guilty</button>
       </div>
       <div class="resultWrap">${p.resolved ? renderResult() : ''}</div>
     </main>
     <footer class="footer">
       <div class="dots">${renderProgressDots()}</div>
       <div class="subtitle" style="margin:0;color:#4d5667">Correct cases solved so far: ${state.score}</div>
-    </footer>`;
+    </footer>
+    ${renderJuryWarning(p)}
+    ${renderRestartConfirm()}`;
+}
+
+function renderRestartConfirm() {
+  if (!state.restartConfirmOpen) return '';
+  return `
+    <div class="restartOverlay" id="restartOverlay" role="presentation">
+      <section class="restartDialog" role="dialog" aria-modal="true" aria-labelledby="restartTitle">
+        <div class="restartDialogHead"><h2 id="restartTitle">Restart round?</h2></div>
+        <div class="restartDialogBody">
+          <p>Your current case progress will be cleared.</p>
+          <div class="restartActions">
+            <button class="btn" id="cancelRestartBtn">Cancel</button>
+            <button class="btn gold" id="confirmRestartBtn">Restart</button>
+          </div>
+        </div>
+      </section>
+    </div>`;
 }
 function renderResult() {
   const p = state.current;
@@ -2531,15 +2955,218 @@ function renderResult() {
       <div class="resultTop ${good ? 'good' : 'bad'}">
         <div class="resultTitle">${good ? 'Case closed!' : 'You convicted an innocent!'}</div>
         <div class="resultButtons">
-          <button class="btn" id="explainBtn">${p.explainOpen ? 'Hide explanation' : 'Explain'}</button>
-          <button class="btn gold" id="nextCaseBtn">${state.timeLeft > 0 ? 'Next case' : 'See score'}</button>
+          <button class="btn gold" id="nextCaseBtn">${state.timeLeft > 0 ? 'Next case' : 'See report'}</button>
         </div>
       </div>
-      <div class="explainPanel ${p.explainOpen ? 'show' : ''}">
-        <p><strong>Explanation.</strong> ${displayExplanation(p.caseObj.explanation)}</p>
-        <p><strong>Fast route.</strong> ${p.caseObj.fastRoute}</p>
-      </div>
     </section>`;
+}
+
+
+function escapeHTML(text) {
+  return String(text ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+}
+function htmlToReportText(html) {
+  if (!html) return '';
+  if (typeof document === 'undefined') {
+    return stripTags(html).replace(/\s+/g, ' ').replaceAll('−', '-').trim();
+  }
+  const div = document.createElement('div');
+  div.innerHTML = html;
+  div.querySelectorAll('.matrixFrame[data-plain]').forEach(frame => {
+    const pre = document.createElement('pre');
+    pre.textContent = frame.getAttribute('data-plain') || '';
+    frame.replaceWith(pre);
+  });
+  div.querySelectorAll('sup').forEach(sup => sup.replaceWith('^(' + sup.textContent + ')'));
+  div.querySelectorAll('sub').forEach(sub => sub.replaceWith('_(' + sub.textContent + ')'));
+  return (div.textContent || '')
+    .replaceAll('−', '-')
+    .replace(/\n{3,}/g, '\n\n')
+    .replace(/[ \t]+\n/g, '\n')
+    .replace(/[ \t]{2,}/g, ' ')
+    .trim();
+}
+function reportAccuracy() {
+  return state.attempted ? Math.round(100 * state.score / state.attempted) : 0;
+}
+function recordCaseOutcome(playState, decisionLetter) {
+  if (!playState || playState.reported) return;
+  const c = playState.caseObj;
+  const chosenDisplay = suspectLabel(decisionLetter);
+  const guiltyDisplay = suspectLabel(c.guilty);
+  const explanationHTML = displayExplanation(c.explanation || '');
+  playState.reported = true;
+  state.caseLog.push({
+    game:'Null & Order',
+    seed:SEED_STRING,
+    caseId:c.id || slugify(stripTags(c.title || 'case')),
+    titleHTML:c.title || '',
+    titleText:htmlToReportText(c.title || ''),
+    crimeHTML:c.crime || '',
+    crimeText:htmlToReportText(c.crime || ''),
+    evidenceHTML:(c.evidence || []).map(e => ({
+      label:e.label,
+      html:e.html,
+      text:htmlToReportText(e.html)
+    })),
+    suspectsHTML:{
+      A:c.suspects?.A?.html || '',
+      B:c.suspects?.B?.html || ''
+    },
+    suspectsText:{
+      A:htmlToReportText(c.suspects?.A?.html || ''),
+      B:htmlToReportText(c.suspects?.B?.html || '')
+    },
+    chosen:decisionLetter,
+    chosenDisplay,
+    guilty:c.guilty,
+    guiltyDisplay,
+    correct:decisionLetter === c.guilty,
+    explanationHTML,
+    explanationText:htmlToReportText(explanationHTML),
+    decisionRule:c.decisionRule || '',
+    fastRouteHTML:c.fastRoute || '',
+    fastRouteText:htmlToReportText(c.fastRoute || ''),
+    clueLog:playState.clueLog.slice(),
+    prematureConvictions:(playState.prematureConvictions || []).slice(),
+    startedAt:playState.startedAt,
+    decidedAt:new Date().toISOString()
+  });
+  state.caseLogs = state.caseLog;
+}
+function recordUnresolvedCurrentCase() {
+  const p = state.current;
+  if (p && !p.resolved && (p.clueLog.length || (p.prematureConvictions || []).length) && !p.reported) recordCaseOutcome(p, null);
+}
+function buildCaseReportHTML(entry, number) {
+  const evidence = entry.evidenceHTML.length ? `
+    <section class="reportSection">
+      <h4>Evidence</h4>
+      <div class="reportObjectList">
+        ${entry.evidenceHTML.map(e => `
+        <div class="reportObjectBlock">
+          <div class="reportObjectLabel">${escapeHTML(e.label)}</div>
+          <div class="reportObject">${e.html}</div>
+        </div>`).join('')}
+      </div>
+    </section>` : '';
+  return `
+    <article class="feedbackCase caseReport">
+      <h3>Case ${number}: ${entry.titleHTML}</h3>
+      <p class="feedbackMeta"><strong>Crime:</strong> ${entry.crimeHTML}</p>
+      ${evidence}
+      <section class="reportSection">
+        <h4>Suspects</h4>
+        <div class="reportSuspectList">
+          <div class="reportSuspectItem">
+            <div class="reportObjectLabel">Suspect 1</div>
+            <div class="reportObject">${entry.suspectsHTML.A}</div>
+          </div>
+          <div class="reportSuspectItem">
+            <div class="reportObjectLabel">Suspect 2</div>
+            <div class="reportObject">${entry.suspectsHTML.B}</div>
+          </div>
+        </div>
+      </section>
+      <p class="feedbackMeta"><strong>Your decision:</strong> ${entry.chosen ? `Suspect ${entry.chosenDisplay}` : 'No decision recorded'}. <strong>Correct suspect:</strong> Suspect ${entry.guiltyDisplay}. <strong>Result:</strong> ${entry.correct ? 'correct' : 'not correct'}.</p>
+      <section class="reportSection">
+        <h4>Chosen clue${entry.clueLog.length === 1 ? '' : 's'}</h4>
+        ${entry.clueLog.map((clue, j) => `
+          <div class="clueReport">
+            <p class="clueReportQuestion"><strong>${j + 1}. ${clue.labelHTML}</strong></p>
+            <div class="reportAnswer"><strong>Suspect 1:</strong><div class="reportObject">${clue.answersHTML.A}</div></div>
+            <div class="reportAnswer"><strong>Suspect 2:</strong><div class="reportObject">${clue.answersHTML.B}</div></div>
+            <p><em>${escapeHTML(clue.feedback)}</em></p>
+          </div>`).join('')}
+      </section>
+      ${(entry.prematureConvictions || []).length ? `<p class="feedbackMeta"><strong>Premature conviction attempts:</strong> ${entry.prematureConvictions.length}. A decisive clue was required to convince the jury.</p>` : ''}
+      <section class="reportSection">
+        <h4>How to decide</h4>
+        <p>${entry.explanationHTML}</p>
+        <p><strong>Fast route:</strong> ${entry.fastRouteHTML}</p>
+      </section>
+    </article>`;
+}
+function buildFinalReportHTML() {
+  if (!state.caseLog.length) return '';
+  return `<div class="feedbackReport finalReport" id="feedbackReport">
+    <h2>Null &amp; Order report</h2>
+    <p><strong>Game:</strong> Null &amp; Order</p>
+    <p><strong>Seed:</strong> <span class="mono">${escapeHTML(SEED_STRING)}</span></p>
+    <p><strong>Cases attempted:</strong> ${state.attempted}</p>
+    <p><strong>Score:</strong> ${state.score}</p>
+    <p><strong>Accuracy:</strong> ${reportAccuracy()}%</p>
+    ${state.caseLog.map((entry, idx) => buildCaseReportHTML(entry, idx + 1)).join('')}
+  </div>`;
+}
+function renderFeedbackReport() {
+  return buildFinalReportHTML();
+}
+function buildReportMarkdown() {
+  const lines = [];
+  lines.push('# Null & Order report');
+  lines.push('');
+  lines.push('Game: Null & Order');
+  lines.push(`Seed: ${SEED_STRING}`);
+  lines.push(`Cases attempted: ${state.attempted}`);
+  lines.push(`Score: ${state.score}`);
+  lines.push(`Accuracy: ${reportAccuracy()}%`);
+  lines.push('');
+  state.caseLog.forEach((entry, idx) => {
+    lines.push(`## Case ${idx + 1}: ${entry.titleText}`);
+    lines.push('');
+    lines.push(`Crime: ${entry.crimeText}`);
+    lines.push('');
+    if (entry.evidenceHTML.length) {
+      lines.push('### Evidence');
+      entry.evidenceHTML.forEach(e => {
+        lines.push(`${e.label}:`);
+        lines.push('```text');
+        lines.push(e.text);
+        lines.push('```');
+      });
+      lines.push('');
+    }
+    lines.push('### Suspects');
+    lines.push('Suspect 1:');
+    lines.push('```text');
+    lines.push(entry.suspectsText.A);
+    lines.push('```');
+    lines.push('Suspect 2:');
+    lines.push('```text');
+    lines.push(entry.suspectsText.B);
+    lines.push('```');
+    lines.push('');
+    lines.push(`Your decision: ${entry.chosen ? 'Suspect ' + entry.chosenDisplay : 'No decision recorded'}`);
+    lines.push(`Correct suspect: Suspect ${entry.guiltyDisplay}`);
+    lines.push(`Result: ${entry.correct ? 'correct' : 'not correct'}`);
+    lines.push('');
+    if ((entry.prematureConvictions || []).length) {
+      lines.push(`Premature conviction attempts before a decisive clue: ${entry.prematureConvictions.length}`);
+      lines.push('');
+    }
+    lines.push('### Chosen clues');
+    entry.clueLog.forEach((clue, j) => {
+      lines.push(`${j + 1}. ${clue.labelText}`);
+      lines.push('');
+      lines.push('Suspect 1:');
+      lines.push('```text');
+      lines.push(clue.answersText.A);
+      lines.push('```');
+      lines.push('Suspect 2:');
+      lines.push('```text');
+      lines.push(clue.answersText.B);
+      lines.push('```');
+      lines.push(`Feedback: ${clue.feedback}`);
+      lines.push('');
+    });
+    lines.push('### How to decide');
+    if (entry.decisionRule) lines.push(entry.decisionRule);
+    if (entry.explanationText) lines.push(entry.explanationText);
+    if (entry.fastRouteText) lines.push(`Fast route: ${entry.fastRouteText}`);
+    lines.push('');
+  });
+  return lines.join('\n');
 }
 function renderEnd() {
   const accuracy = state.attempted ? Math.round(100 * state.score / state.attempted) : 0;
@@ -2551,7 +3178,7 @@ function renderEnd() {
     <header class="top">
       <img class="glassArt" alt="" src="${MAG}" />
       <h1 class="title">Null &amp; Order</h1>
-      <p class="subtitle">Time is up. Here is your final score.</p>
+      <p class="subtitle">Time is up. Here is your final score and feedback report.</p>
     </header>
     <div class="endScreen">
       <section class="endCard">
@@ -2566,14 +3193,17 @@ function renderEnd() {
             <div class="summaryBox"><span>Accuracy</span><b>${accuracy}%</b></div>
           </div>
           <p>${praise}</p>
-          <p>You played <strong>${levelName()}</strong> mode and solved <strong>${state.score}</strong> case${state.score === 1 ? '' : 's'} before the timer ran out. That is your official score.</p>
+          <p>You solved <strong>${state.score}</strong> case${state.score === 1 ? '' : 's'} before the timer ran out.</p>
+          <div class="seedBox">Game: Null &amp; Order<br>Seed: ${escapeHTML(SEED_STRING)}</div>
           <div class="endBtns">
             <button class="btn gold startBtn" id="restartBtn">Play again</button>
           </div>
+          ${renderFeedbackReport()}
         </div>
       </section>
     </div>`;
 }
+
 function render() {
   const app = document.getElementById('game');
   if (state.mode === 'start') app.innerHTML = renderStart();
@@ -2582,31 +3212,27 @@ function render() {
   bindEvents();
 }
 function bindEvents() {
-  const startStandardBtn = document.getElementById('startStandardBtn');
-  if (startStandardBtn) startStandardBtn.addEventListener('click', () => startRound('standard'));
-  const startChallengeBtn = document.getElementById('startChallengeBtn');
-  if (startChallengeBtn) startChallengeBtn.addEventListener('click', () => startRound('challenge'));
   const startBtn = document.getElementById('startBtn');
-  if (startBtn) startBtn.addEventListener('click', () => startRound(state.level || 'standard'));
+  if (startBtn) startBtn.addEventListener('click', () => startRound());
   const restartBtn = document.getElementById('restartBtn');
-  if (restartBtn) restartBtn.addEventListener('click', () => startRound(state.level || 'standard'));
-  const mathHintBtn = document.getElementById('mathHintBtn');
-  if (mathHintBtn) mathHintBtn.addEventListener('click', () => {
-    state.current.mathOpen = !state.current.mathOpen;
-    render();
+  if (restartBtn) restartBtn.addEventListener('click', () => returnToIntro());
+  const restartRoundBtn = document.getElementById('restartRoundBtn');
+  if (restartRoundBtn) restartRoundBtn.addEventListener('click', openRestartConfirm);
+  const cancelRestartBtn = document.getElementById('cancelRestartBtn');
+  if (cancelRestartBtn) cancelRestartBtn.addEventListener('click', closeRestartConfirm);
+  const confirmRestartBtn = document.getElementById('confirmRestartBtn');
+  if (confirmRestartBtn) confirmRestartBtn.addEventListener('click', returnToIntro);
+  const restartOverlay = document.getElementById('restartOverlay');
+  if (restartOverlay) restartOverlay.addEventListener('click', (event) => {
+    if (event.target === restartOverlay) closeRestartConfirm();
   });
+  const dismissPenaltyBtn = document.getElementById('dismissPenaltyBtn');
+  if (dismissPenaltyBtn) dismissPenaltyBtn.addEventListener('click', dismissPenalty);
   document.querySelectorAll('[data-ask]').forEach(btn => btn.addEventListener('click', () => askQuestion(Number(btn.dataset.ask))));
   const guiltyA = document.getElementById('guiltyA');
   const guiltyB = document.getElementById('guiltyB');
   if (guiltyA) guiltyA.addEventListener('click', () => decide('A'));
   if (guiltyB) guiltyB.addEventListener('click', () => decide('B'));
-  const explainBtn = document.getElementById('explainBtn');
-  if (explainBtn) explainBtn.addEventListener('click', () => {
-    state.current.explainOpen = !state.current.explainOpen;
-    render();
-  });
-  const dismissPenaltyBtn = document.getElementById('dismissPenaltyBtn');
-  if (dismissPenaltyBtn) dismissPenaltyBtn.addEventListener('click', dismissPenalty);
   const nextCaseBtn = document.getElementById('nextCaseBtn');
   if (nextCaseBtn) nextCaseBtn.addEventListener('click', () => {
     if (state.timeLeft <= 0) endRound();
@@ -2616,14 +3242,18 @@ function bindEvents() {
     }
   });
 }
-function startRound(nextLevel='standard') {
+
+function startRound() {
   if (state.timerId) clearInterval(state.timerId);
   state.mode = 'play';
-  state.level = nextLevel;
+  state.level = 'single';
   state.timeLeft = ROUND_SECONDS;
   state.score = 0;
   state.attempted = 0;
   state.history = [];
+  state.caseLog = [];
+  state.caseLogs = state.caseLog;
+  state.restartConfirmOpen = false;
   state.deck = [];
   refillDeck();
   state.current = makePlayState(nextCaseObject());
@@ -2638,56 +3268,98 @@ function startRound(nextLevel='standard') {
   }, 1000);
   render();
 }
+
 function endRound() {
   if (state.timerId) {
     clearInterval(state.timerId);
     state.timerId = null;
   }
+  recordUnresolvedCurrentCase();
   state.mode = 'end';
+  state.restartConfirmOpen = false;
+  render();
+}
+function openRestartConfirm() {
+  state.restartConfirmOpen = true;
+  render();
+}
+function closeRestartConfirm() {
+  state.restartConfirmOpen = false;
+  render();
+}
+function returnToIntro() {
+  if (state.timerId) {
+    clearInterval(state.timerId);
+    state.timerId = null;
+  }
+  state.mode = 'start';
+  state.timeLeft = ROUND_SECONDS;
+  state.score = 0;
+  state.attempted = 0;
+  state.deck = [];
+  state.current = null;
+  state.history = [];
+  state.caseLog = [];
+  state.caseLogs = state.caseLog;
+  state.restartConfirmOpen = false;
   render();
 }
 function askQuestion(index) {
   const p = state.current;
-  if (p.resolved || p.decisionReady || isBlocked(p) || p.wrongClueMessage || p.usedWrong.has(index) || p.revealed.has(index)) return;
+  if (p.resolved || isBlocked(p) || p.usedWrong.has(index) || p.revealed.has(index)) return;
   const q = p.caseObj.questions[index];
+  const labelHTML = aliasQuestionLabel(q.label, p.caseObj);
+  const answerAHTML = formatAnswerHTML(q.answers.A);
+  const answerBHTML = formatAnswerHTML(q.answers.B);
+  const feedback = q.kind === 'decisive'
+    ? 'Useful clue. This clue was enough to decide the case.'
+    : (q.why || wrongClueReason(q.label, q.kind));
   p.askedIndex = index;
   p.revealed.add(index);
+  p.clueLog.push({
+    index,
+    label:q.label,
+    labelHTML,
+    labelText:htmlToReportText(labelHTML),
+    kind:q.kind,
+    answers:q.answers,
+    answersHTML:{A:answerAHTML, B:answerBHTML},
+    answersText:{A:htmlToReportText(answerAHTML), B:htmlToReportText(answerBHTML)},
+    feedback,
+    why:q.why || '',
+    selectedAt:new Date().toISOString()
+  });
 
   if (q.kind === 'decisive') {
     p.usableClues += 1;
-    p.decisionReady = true;
-  } else if (state.level === 'challenge' && q.kind === 'neutral') {
-    p.usableClues += 1;
-    if (p.usableClues >= clueLimit()) {
-      p.decisionReady = true;
-    }
+    p.status = 'Choose a suspect when ready.';
   } else {
+    p.usedWrong.add(index);
+    p.status = 'Choose a suspect when ready.';
+  }
+  if (p.revealed.size < p.caseObj.questions.length) {
     const token = Date.now() + ':' + Math.random();
     p.blockToken = token;
     p.blockedUntil = Date.now() + 5000;
-    p.wrongClueMessage = q.why || 'This clue is not enough to identify the guilty suspect.';
     setTimeout(() => {
       if (state.mode === 'play' && state.current === p && p.blockToken === token && !p.resolved) {
         p.blockedUntil = 0;
         p.blockToken = null;
+        p.status = 'An additional clue is available.';
         render();
       }
     }, 5050);
   }
   render();
 }
+
 function dismissPenalty() {
   const p = state.current;
-  if (!p || !p.wrongClueMessage || isBlocked(p)) return;
-  if (p.askedIndex !== null) {
-    p.usedWrong.add(p.askedIndex);
-  }
-  p.askedIndex = null;
-  p.blockedUntil = 0;
-  p.blockToken = null;
+  if (!p) return;
   p.wrongClueMessage = '';
   render();
 }
+
 function stripTags(html) {
   if (typeof document !== 'undefined') {
     const tmp = document.createElement('div');
@@ -2698,18 +3370,30 @@ function stripTags(html) {
 }
 function decide(letter) {
   const p = state.current;
-  if (p.resolved || !p.decisionReady || isBlocked(p) || p.wrongClueMessage) return;
+  if (!p || p.resolved) return;
+  if (!hasDecisiveClue(p)) {
+    p.prematureConvictions.push({
+      letter,
+      at:new Date().toISOString()
+    });
+    p.status = '';
+    p.wrongClueMessage = 'A decisive clue is needed to convince the jury. Choose a clue whose result is enough to decide the crime.';
+    render();
+    return;
+  }
   p.resolved = true;
   p.correct = letter === p.caseObj.guilty;
   state.attempted += 1;
   if (p.correct) state.score += 1;
   state.history.push(p.correct);
+  recordCaseOutcome(p, letter);
   p.status = p.correct ? 'Case closed.' : 'Case closed — the wrong suspect was chosen.';
   render();
 }
+
 function boot() {
   state.mode = 'start';
-  state.level = state.level || 'standard';
+  state.level = 'single';
   state.timeLeft = ROUND_SECONDS;
   state.timerId = null;
   state.score = 0;
@@ -2717,8 +3401,175 @@ function boot() {
   state.deck = [];
   state.current = null;
   state.history = [];
+  state.caseLog = [];
+  state.caseLogs = state.caseLog;
+  state.restartConfirmOpen = false;
   render();
 }
+
+function smokeTestCases(iterations=200) {
+  const banned = /trace|row sums|column sums|total sum|sum of entries|number of rows|number of columns|compare the entries/i;
+  for (let i = 0; i < iterations; i++) {
+    for (const gen of ACTIVE_CASE_GENERATORS) {
+      const c = gen();
+      if (!c.id) throw new Error(`${gen.name} missing id`);
+      if (!c.decisionRule) throw new Error(`${gen.name} missing decisionRule`);
+      if (!c.fastRoute) throw new Error(`${gen.name} missing fastRoute`);
+      if (!Array.isArray(c.questions) || c.questions.length !== 4) {
+        throw new Error(`${gen.name} must produce exactly 4 live clues`);
+      }
+      if (!c.questions.some(q => q.kind === 'decisive')) {
+        throw new Error(`${gen.name} has no decisive clue`);
+      }
+      for (const q of c.questions) {
+        const label = stripTags(q.label);
+        if (q.live === false) throw new Error(`${gen.name} selected live=false clue: ${label}`);
+        if (q.kind === 'decisive' && clueIsPedagogicallyWeak(q)) {
+          throw new Error(`${gen.name} selected weak decisive clue: ${label}`);
+        }
+        if (clueIsPedagogicallyWeak(q) && !q.allowWeak) {
+          throw new Error(`${gen.name} selected weak clue without allowWeak: ${label}`);
+        }
+        if (banned.test(label)) throw new Error(`${gen.name} has banned clue: ${label}`);
+      }
+    }
+  }
+  return true;
+}
+
+function smokeTestSpecificFixes() {
+  const ns = caseNullspaceBasis();
+  if (ns.questions.some(q => /free variables/i.test(stripTags(q.label)) && q.kind === 'decisive')) {
+    throw new Error('Free variables alone must not be decisive for null-space basis.');
+  }
+  if (!ns.questions.some(q => /AC|rank\(C\)|RREF\(C\)/i.test(stripTags(q.label)) && q.kind === 'decisive')) {
+    throw new Error('Null-space basis needs a decisive membership + independence clue.');
+  }
+  const inf = caseInfiniteSolutions();
+  if (inf.questions.some(q => /^List free variables/i.test(stripTags(q.label)))) {
+    throw new Error('Infinite-solutions case must not list free variables without consistency check.');
+  }
+  if (!/RREF\(\[A \| z\]\)/.test(caseNullMembership.toString())) {
+    throw new Error('Hidden direction missing the reviewed RREF([A | z]) role-error clue.');
+  }
+  if (!/RREF\(\[A \| z\]\)/.test(caseOutsideNull.toString())) {
+    throw new Error('Outside-null direction missing the reviewed RREF([A | z]) role-error clue.');
+  }
+  const redundant = caseRedundantColumn();
+  if (!/linearly dependent columns/i.test(stripTags(redundant.crime))) {
+    throw new Error('Redundant-column case was not renamed.');
+  }
+  const height = caseMapForgetsHeight();
+  if (/null\(A\)/.test(stripTags(height.crime)) && /B/.test(stripTags(height.suspects.A.html))) {
+    throw new Error('Null-height direction crime should not say null(A) when suspects are B matrices.');
+  }
+  if (/A e₃|null\(A\)|A<sup>T<\/sup>e₃/.test(caseMapForgetsHeight.toString())) {
+    throw new Error('Null-height direction still contains old A-based clue text.');
+  }
+  if (!/u=\[1,0,1\]/.test(caseSameOutputDifference.toString())) {
+    throw new Error('Same-output case must use the fixed u=[1,0,1]^T comparison.');
+  }
+  if (!/X<sup>T<\/sup>c - X<sup>T<\/sup>c′/.test(caseSamePredictions.toString())) {
+    throw new Error('Duplicate-predictions transpose-difference clue missing.');
+  }
+  const line = caseTwoLinesPoint();
+  if (line.questions.some(q => /number of variables|left sides/i.test(stripTags(q.label)))) {
+    throw new Error('Line case still exposes a removed rank-count or left-side-only clue.');
+  }
+  const sys = caseUniqueSolution();
+  if (sys.questions.some(q => /rank\(A\).*number of variables|rank\(\[A \| b\]\) only/i.test(stripTags(q.label)))) {
+    throw new Error('System case still exposes a removed rank-count/rank-only clue.');
+  }
+  const fakeReport = buildReportMarkdown();
+  if (/\b\d{5,}-\d+\b/.test(fakeReport)) {
+    console.warn('Possible collapsed matrix/vector formatting in Markdown report.');
+  }
+  return true;
+}
+
+function smokeTestDecisiveConvictionRule() {
+  const saved = {
+    mode:state.mode,
+    current:state.current,
+    score:state.score,
+    attempted:state.attempted,
+    history:state.history.slice(),
+    caseLog:state.caseLog.slice(),
+    caseLogs:state.caseLogs
+  };
+  const p = makePlayState(caseNullMembership());
+  state.mode = 'play';
+  state.current = p;
+  state.score = 0;
+  state.attempted = 0;
+  state.history = [];
+  state.caseLog = [];
+  state.caseLogs = state.caseLog;
+  decide('A');
+  if (p.resolved) throw new Error('Case resolved before a decisive clue was selected.');
+  if (state.attempted !== 0 || state.score !== 0 || state.history.length !== 0) {
+    throw new Error('Premature conviction changed score, attempts, or history.');
+  }
+  if (p.status) {
+    throw new Error('Premature conviction warning should not be placed in the clue-table header.');
+  }
+  if (!p.wrongClueMessage || !/convince the jury/i.test(p.wrongClueMessage)) {
+    throw new Error('Premature conviction warning did not appear.');
+  }
+  if (!p.prematureConvictions || p.prematureConvictions.length !== 1) {
+    throw new Error('Premature conviction attempt was not logged.');
+  }
+  state.mode = saved.mode;
+  state.current = saved.current;
+  state.score = saved.score;
+  state.attempted = saved.attempted;
+  state.history = saved.history;
+  state.caseLog = saved.caseLog;
+  state.caseLogs = saved.caseLogs;
+  render();
+  return true;
+}
+
+function smokeTestPlayAgainReturnsToIntro() {
+  const saved = {
+    mode:state.mode,
+    current:state.current,
+    score:state.score,
+    attempted:state.attempted,
+    deck:state.deck.slice(),
+    history:state.history.slice(),
+    caseLog:state.caseLog.slice(),
+    caseLogs:state.caseLogs,
+    timerId:state.timerId,
+    timeLeft:state.timeLeft
+  };
+  if (state.timerId) clearInterval(state.timerId);
+  state.timerId = null;
+  state.mode = 'end';
+  render();
+  const btn = document.getElementById('restartBtn');
+  if (!btn) throw new Error('Play again button missing on final page.');
+  btn.click();
+  if (state.mode !== 'start') throw new Error('Play again should return to the intro page.');
+  if (!document.getElementById('startBtn')) throw new Error('Intro Start game button missing after Play again.');
+  if (state.timerId) clearInterval(state.timerId);
+  state.mode = saved.mode;
+  state.current = saved.current;
+  state.score = saved.score;
+  state.attempted = saved.attempted;
+  state.deck = saved.deck;
+  state.history = saved.history;
+  state.caseLog = saved.caseLog;
+  state.caseLogs = saved.caseLogs;
+  state.timerId = saved.timerId;
+  state.timeLeft = saved.timeLeft;
+  render();
+  return true;
+}
+
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape' && state.restartConfirmOpen) closeRestartConfirm();
+});
 boot();
 </script>
 </body>

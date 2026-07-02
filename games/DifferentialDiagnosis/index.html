@@ -63,10 +63,10 @@ body {
 }
 .header {
   display:grid;
-  grid-template-columns:1fr auto;
-  gap:16px;
+  grid-template-columns:1fr;
+  gap:18px;
   align-items:start;
-  padding:22px 24px 18px;
+  padding:22px 24px 24px;
   background:linear-gradient(135deg, var(--blue), #fff 62%);
   border-bottom:2px solid var(--line);
 }
@@ -107,10 +107,25 @@ h1 {
   font-weight:760;
 }
 .hud {
+  display:grid;
+  grid-template-columns:minmax(0, 1fr) auto;
+  gap:8px 14px;
+  align-items:center;
+  width:100%;
+}
+.hudStats,
+.hudActions {
   display:flex;
   gap:8px;
+  align-items:center;
+}
+.hudStats {
+  min-width:0;
   flex-wrap:wrap;
+}
+.hudActions {
   justify-content:flex-end;
+  flex-wrap:nowrap;
 }
 .pill {
   min-width:86px;
@@ -124,28 +139,52 @@ h1 {
 }
 .pill span { display:block; font-size:10px; letter-spacing:.11em; text-transform:uppercase; color:var(--muted); }
 .pill b { display:block; margin-top:2px; font-size:20px; line-height:1; font-variant-numeric:tabular-nums; }
-.main { padding:20px 24px 24px; }
-.roundbar {
-  display:flex;
-  gap:12px;
-  align-items:center;
-  justify-content:space-between;
-  margin-bottom:16px;
+.hudRoundBtn {
+  min-width:86px;
+  padding:9px 11px;
+  border-radius:999px;
+  background:var(--red-soft);
+  box-shadow:3px 3px 0 var(--line);
+  text-align:center;
 }
-.progressWrap {
-  flex:1;
-  height:18px;
-  border:2px solid var(--line);
+.hudRoundBtn span {
+  display:block;
+  font-size:10px;
+  letter-spacing:.11em;
+  text-transform:uppercase;
+  color:var(--muted);
+  line-height:1;
+}
+.hudRoundBtn b {
+  display:block;
+  margin-top:2px;
+  font-size:20px;
+  line-height:1;
+}
+.hintGateBtn {
+  min-width:86px;
+  padding:9px 11px;
   border-radius:999px;
   background:#fff;
-  overflow:hidden;
+  box-shadow:3px 3px 0 var(--line);
+  text-align:center;
 }
-.progress {
-  width:0%;
-  height:100%;
-  background:linear-gradient(90deg, var(--blue-3), var(--red));
-  transition:width .22s ease;
+.hintGateBtn.active { background:var(--blue-2); }
+.hintGateBtn span {
+  display:block;
+  font-size:10px;
+  letter-spacing:.11em;
+  text-transform:uppercase;
+  color:var(--muted);
+  line-height:1;
 }
+.hintGateBtn b {
+  display:block;
+  margin-top:2px;
+  font-size:20px;
+  line-height:1;
+}
+.main { padding:20px 24px 24px; }
 button {
   font:inherit;
   color:var(--ink);
@@ -222,6 +261,29 @@ button:disabled { cursor:not-allowed; opacity:.65; transform:none; }
   border-radius:18px;
   background:#fbfdff;
   overflow-x:auto;
+  overflow-y:hidden;
+  text-align:center;
+}
+.mathDisplay.chartLines {
+  display:grid;
+  gap:8px;
+  padding:18px 20px;
+  text-align:left;
+  font-size:clamp(16px, 2.8vw, 20px);
+}
+.chartLine {
+  display:block;
+  max-width:100%;
+  line-height:1.35;
+}
+.mathDisplay mjx-container[jax="SVG"] {
+  max-width:100%;
+  overflow-x:auto;
+  overflow-y:hidden;
+  padding-bottom:2px;
+}
+.mathDisplay mjx-container[jax="SVG"][display="true"] {
+  display:inline-block;
 }
 pre {
   margin:12px 0 0;
@@ -231,34 +293,89 @@ pre {
   background:#07090d;
   color:#f6fbff;
   font:850 14px/1.45 ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
-  overflow:auto;
+  max-width:100%;
+  overflow-x:hidden;
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
+  word-break:normal;
 }
-.hintBox { margin:0 18px 18px; }
-.hintToggle {
-  width:100%;
+pre code {
+  white-space:inherit;
+  overflow-wrap:inherit;
+}
+.patientContextNote {
+  margin:0 0 12px;
   padding:12px 14px;
-  background:linear-gradient(135deg, var(--blue), #fff);
-  color:var(--ink);
-  box-shadow:3px 3px 0 var(--line);
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-}
-.hintToggle:hover { background:var(--blue-2); }
-.hintToggle span { color:var(--ink); }
-.hintPanel {
-  display:none;
-  margin-top:10px;
-  padding:14px 15px;
   border:2px solid var(--line);
   border-radius:18px;
   background:var(--blue);
-  font-size:14px;
+  color:#172132;
+  font-size:15px;
   line-height:1.35;
-  font-weight:760;
+  font-weight:780;
 }
-.hintPanel.open { display:block; }
+.goalNote {
+  color:#20242d;
+  font-size:16px;
+  line-height:1.38;
+  font-weight:760;
+  font-style:italic;
+}
+.chartMeta {
+  margin:0 0 12px;
+  display:flex;
+  align-items:baseline;
+  gap:10px;
+  flex-wrap:wrap;
+  color:#20242d;
+  font-size:16px;
+  line-height:1.38;
+}
+.chartMeta b {
+  font-weight:1000;
+}
+.patientContextNote b,
+.goalNote b {
+  font-weight:1000;
+}
+.hintToggle {
+  width:calc(100% - 36px);
+  min-height:52px;
+  margin:0 18px 18px;
+  padding:12px 18px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  border-radius:18px;
+  background:var(--blue);
+  box-shadow:4px 4px 0 var(--line);
+  text-align:left;
+}
+.hintToggle span:first-child {
+  font-size:16px;
+  line-height:1;
+}
+.hintToggle span:last-child {
+  font-size:22px;
+  line-height:1;
+}
+.hintPanel {
+  display:none;
+  margin:0 18px 18px;
+  padding:13px 15px;
+  border:2px solid var(--line);
+  border-radius:18px;
+  background:#fbfdff;
+}
+.hintPanel.show { display:block; }
+.hintPanel p {
+  margin:0;
+  font-size:15px;
+  line-height:1.35;
+  font-weight:780;
+  color:#222;
+}
 .side { display:grid; gap:14px; }
 .section { padding:14px; }
 .sectionTitle {
@@ -266,13 +383,14 @@ pre {
   align-items:center;
   justify-content:space-between;
   gap:10px;
-  margin-bottom:10px;
+  margin-bottom:14px;
 }
 .sectionTitle h2 {
   margin:0;
   font-size:16px;
   line-height:1;
   letter-spacing:-.02em;
+  font-weight:1000;
 }
 .statusDot {
   width:15px;
@@ -283,20 +401,55 @@ pre {
 }
 .statusDot.good { background:var(--blue-3); }
 .statusDot.bad { background:var(--red); }
-.choices { display:grid; gap:9px; }
+.choices { display:grid; gap:9px; min-width:0; }
 .choice {
   width:100%;
+  min-width:0;
+  max-width:100%;
   min-height:48px;
   padding:11px 12px;
   text-align:left;
   background:#fff;
   line-height:1.25;
+  font-weight:600;
+  overflow:hidden;
+  overflow-wrap:anywhere;
 }
 .choice:hover { background:#f5fcff; }
 .choice.correct { background:var(--blue); box-shadow:4px 4px 0 var(--blue-3); }
 .choice.wrong { background:var(--red-soft); color:#111; box-shadow:4px 4px 0 var(--red); }
-.choice .mathDisplay { margin:0; padding:8px; border-width:0; background:transparent; border-radius:0; }
-.choice pre { margin:0; font-size:13px; }
+.choice .mathDisplay {
+  width:100%;
+  max-width:100%;
+  margin:0;
+  padding:8px;
+  border-width:0;
+  background:transparent;
+  border-radius:0;
+  overflow-x:auto;
+  overflow-y:hidden;
+  text-align:center;
+  font-size:clamp(13px, 3.65vw, 16px);
+}
+.choice .mathDisplay mjx-container {
+  max-width:100%;
+}
+.choiceFormula {
+  width:100%;
+  max-width:100%;
+  overflow-x:auto;
+  overflow-y:hidden;
+  text-align:center;
+  font-size:clamp(13px, 3.65vw, 16px);
+}
+.choiceProse {
+  margin-top:6px;
+  text-align:center;
+  font-size:clamp(13px, 3.65vw, 16px);
+  overflow-wrap:anywhere;
+  word-break:normal;
+}
+.choice pre { margin:0; font-size:13px; font-weight:650; }
 .feedback {
   min-height:24px;
   margin-top:10px;
@@ -354,17 +507,106 @@ pre {
 }
 .endStat span { display:block; font-size:11px; letter-spacing:.13em; text-transform:uppercase; color:var(--muted); font-weight:1000; }
 .endStat b { display:block; margin-top:5px; font-size:28px; line-height:1; }
-.endCard p { margin:0 auto 18px; max-width:480px; color:#222; font-weight:760; line-height:1.35; }
+.confirmOverlay {
+  position:fixed;
+  inset:0;
+  z-index:20;
+  display:grid;
+  place-items:center;
+  padding:20px;
+  background:rgba(5, 5, 5, .34);
+}
+.confirmBox {
+  width:min(420px, 100%);
+  border:2px solid var(--line);
+  border-radius:24px;
+  background:linear-gradient(135deg, var(--red-soft), #fff 70%);
+  box-shadow:8px 8px 0 var(--line);
+  padding:20px;
+}
+.confirmBox h2 {
+  margin:0;
+  font-size:28px;
+  line-height:1;
+  letter-spacing:-.045em;
+}
+.confirmBox p {
+  margin:10px 0 18px;
+  font-size:15px;
+  line-height:1.35;
+  font-weight:760;
+  color:#222;
+}
+.confirmActions {
+  display:flex;
+  justify-content:flex-end;
+  gap:10px;
+  flex-wrap:wrap;
+}
+.confirmActions .smallBtn {
+  min-width:116px;
+}
+.confirmActions .danger {
+  background:var(--red-soft);
+}
+.introOverlay {
+  position:fixed;
+  inset:0;
+  z-index:30;
+  display:grid;
+  place-items:center;
+  padding:20px;
+  background:rgba(5, 5, 5, .28);
+}
+.introBox {
+  width:min(520px, 100%);
+  border:2px solid var(--line);
+  border-radius:28px;
+  background:linear-gradient(135deg, var(--blue), #fff 68%);
+  box-shadow:8px 8px 0 var(--line);
+  padding:24px;
+  text-align:center;
+}
+.introBox h2 {
+  margin:0 0 14px;
+  font-size:clamp(32px, 5vw, 48px);
+  line-height:.9;
+  letter-spacing:-.055em;
+}
+.introCopy {
+  display:grid;
+  gap:10px;
+  margin:0 0 22px;
+}
+.introCopy p {
+  margin:0;
+  font-size:17px;
+  line-height:1.35;
+  font-weight:820;
+  color:#20242d;
+}
+.introStartBtn {
+  min-width:180px;
+  padding:13px 20px;
+  color:#fff;
+  background:var(--ink);
+  border-radius:999px;
+  box-shadow:4px 4px 0 var(--line);
+}
 .hidden { display:none !important; }
 @media (max-width:760px) {
   body { padding:10px; align-items:start; }
   .app { border-radius:24px; }
   .header { grid-template-columns:1fr; padding:18px; }
-  .hud { justify-content:flex-start; }
   .main { padding:16px; }
-  .roundbar { align-items:stretch; flex-direction:column; }
   .smallBtn { width:100%; }
+  .hudRoundBtn { width:auto; }
+  .hintGateBtn { width:auto; }
   .pill { min-width:78px; }
+}
+@media (max-width:520px) {
+  .hud { grid-template-columns:1fr; }
+  .hudActions { width:100%; }
 }
 </style>
 </head>
@@ -375,38 +617,36 @@ pre {
       <div class="cross" aria-hidden="true"></div>
       <div>
         <h1>Differential diagnosis</h1>
-        <p class="subtitle">Diagnose the conceptual problem, then choose the treatment.</p>
+        <p class="subtitle">Diagnose the issue, then choose the treatment.</p>
       </div>
     </div>
     <div class="hud" aria-label="Round status">
-      <div class="pill"><span>patient</span><b id="patientCount">1/8</b></div>
-      <div class="pill"><span>treated</span><b id="treatedCount">0</b></div>
-      <div class="pill"><span>misses</span><b id="missCount">0</b></div>
+      <div class="hudStats">
+        <div class="pill"><span>patient</span><b id="patientCount">1/10</b></div>
+        <div class="pill"><span>treated</span><b id="treatedCount">0</b></div>
+        <div class="pill"><span>misses</span><b id="missCount">0</b></div>
+      </div>
+      <div class="hudActions">
+        <button class="hintGateBtn" id="allowHintsBtn" type="button"><span>allow</span><b>hints</b></button>
+        <button class="hudRoundBtn" id="newRoundBtn" type="button"><span>new</span><b>round</b></button>
+      </div>
     </div>
   </header>
 
-  <section class="main" id="gameScreen">
-    <div class="roundbar">
-      <div class="progressWrap" aria-label="Round progress"><div class="progress" id="progress"></div></div>
-      <button class="smallBtn" id="newRoundBtn" type="button">New round</button>
-    </div>
-
+  <section class="main hidden" id="gameScreen">
     <div class="grid">
       <article class="card patientCard">
         <div class="cardHead patientHead"><b id="patientTitle">Patient 1</b></div>
         <div class="patientBody" id="patientBody"></div>
-
-        <div class="hintBox">
-          <button class="hintToggle" id="hintToggle" type="button" aria-expanded="false"><span>Hint chart</span><span id="hintChevron">+</span></button>
-          <div class="hintPanel" id="hintPanel"></div>
-        </div>
+        <button class="hintToggle hidden" id="hintToggle" type="button" aria-expanded="false" aria-controls="hintPanel"><span>Hint chart</span><span id="hintIcon">+</span></button>
+        <div class="hintPanel" id="hintPanel"><p id="hintText"></p></div>
       </article>
 
       <article class="card">
         <div class="section">
           <div class="sectionTitle"><h2>Diagnosis</h2><span class="statusDot" id="diagnosisDot"></span></div>
           <div class="choices" id="diagnosisChoices"></div>
-          <div class="feedback" id="diagnosisFeedback">Choose the wrong idea.</div>
+          <div class="feedback" id="diagnosisFeedback">Choose a diagnosis</div>
         </div>
       </article>
 
@@ -427,14 +667,34 @@ pre {
     <div class="endCard">
       <h2>Round complete.</h2>
       <div class="endStats">
-        <div class="endStat"><span>treated</span><b id="endTreated">8</b></div>
+        <div class="endStat"><span>treated</span><b id="endTreated">10</b></div>
         <div class="endStat"><span>misses</span><b id="endMisses">0</b></div>
         <div class="endStat"><span>accuracy</span><b id="endAccuracy">100%</b></div>
       </div>
-      <p>Best review move: pick one missed patient and name the failed test: anchor, displacement, frozen Jacobian, shape, outer-at-inner, first-order only, or code timing.</p>
       <button class="smallBtn primary" id="againBtn" type="button">Start another round</button>
     </div>
   </section>
+
+  <div class="introOverlay" id="introOverlay" role="dialog" aria-modal="true" aria-label="Differential diagnosis instructions">
+    <div class="introBox">
+      <div class="introCopy">
+        <p>A round consists of 10 patients.</p>
+        <p>For each patient, identify the issue in the statement. Then choose the treatment that fixes it.</p>
+      </div>
+      <button class="introStartBtn" id="introStartBtn" type="button">Start</button>
+    </div>
+  </div>
+
+  <div class="confirmOverlay hidden" id="newRoundConfirm" role="dialog" aria-modal="true" aria-labelledby="newRoundConfirmTitle">
+    <div class="confirmBox">
+      <h2 id="newRoundConfirmTitle">Start a new round?</h2>
+      <p>This will reset the current patients, treated count, and misses.</p>
+      <div class="confirmActions">
+        <button class="smallBtn" id="cancelNewRoundBtn" type="button">Cancel</button>
+        <button class="smallBtn danger" id="confirmNewRoundBtn" type="button">New round</button>
+      </div>
+    </div>
+  </div>
 </main>
 
 <script>
@@ -501,7 +761,7 @@ const CASES = [
         "correct": false
       }
     ],
-    "discharge": "Two input variables give domain dimension 2. Three output components give codomain dimension 3."
+    "discharge": "Two input variables mean the domain is \\(\\mathbb{R}^2\\). Three output components mean the outputs live in \\(\\mathbb{R}^3\\)."
   },
   {
     "id": "U3-DD-R002",
@@ -555,7 +815,7 @@ const CASES = [
     "hint": "A square root allows zero inside.",
     "diagnoses": [
       {
-        "html": "The inequality is too strict; boundary points with radicand zero are allowed.",
+        "html": "The inequality is too strict. The square root may be \\(0\\), so equality is allowed.",
         "correct": true
       },
       {
@@ -814,7 +1074,7 @@ const CASES = [
   {
     "id": "U3-DD-R009",
     "patient": {
-      "html": "<div class='mathDisplay'>\\[B_r(\\mathbf{a})=\\{\\mathbf{x}:\\|\\mathbf{x}\\|<r\\}.\\]</div>"
+      "html": "<div class='mathDisplay'>\\[B_r(\\mathbf{a})=\\{\\mathbf{x}:\\|\\mathbf{x}\\|\\lt r\\}.\\]</div>"
     },
     "hint": "A ball centered at \\(\\mathbf{a}\\) measures distance from \\(\\mathbf{a}\\).",
     "diagnoses": [
@@ -837,11 +1097,11 @@ const CASES = [
     ],
     "treatments": [
       {
-        "html": "<div class='mathDisplay'>\\[B_r(\\mathbf{a})=\\{\\mathbf{x}:\\|\\mathbf{x}-\\mathbf{a}\\|<r\\}.\\]</div>",
+        "html": "<div class='mathDisplay'>\\[B_r(\\mathbf{a})=\\{\\mathbf{x}:\\|\\mathbf{x}-\\mathbf{a}\\|\\lt r\\}.\\]</div>",
         "correct": true
       },
       {
-        "html": "<div class='mathDisplay'>\\[B_r(\\mathbf{a})=\\{\\mathbf{x}:\\|\\mathbf{x}\\|<r\\}.\\]</div>",
+        "html": "<div class='mathDisplay'>\\[B_r(\\mathbf{a})=\\{\\mathbf{x}:\\|\\mathbf{x}\\|\\lt r\\}.\\]</div>",
         "correct": false
       },
       {
@@ -849,7 +1109,7 @@ const CASES = [
         "correct": false
       },
       {
-        "html": "<div class='mathDisplay'>\\[B_r(\\mathbf{a})=\\{\\mathbf{x}:\\|\\mathbf{x}+\\mathbf{a}\\|<r\\}.\\]</div>",
+        "html": "<div class='mathDisplay'>\\[B_r(\\mathbf{a})=\\{\\mathbf{x}:\\|\\mathbf{x}+\\mathbf{a}\\|\\lt r\\}.\\]</div>",
         "correct": false
       }
     ],
@@ -1210,7 +1470,7 @@ const CASES = [
   {
     "id": "U3-DD-R018",
     "patient": {
-      "html": "<div class='mathDisplay'>\\[\\lim_{\\mathbf{x}\\to\\mathbf{a}}F(\\mathbf{x})=\\mathbf{L}\\quad\\text{means}\\quad \\|\\mathbf{x}-\\mathbf{a}\\|<r\\text{ and }F(\\mathbf{a})=\\mathbf{L}.\\]</div>"
+      "html": "<div class='mathDisplay'>\\[\\lim_{\\mathbf{x}\\to\\mathbf{a}}F(\\mathbf{x})=\\mathbf{L}\\quad\\text{means}\\quad \\|\\mathbf{x}-\\mathbf{a}\\|\\lt r\\text{ and }F(\\mathbf{a})=\\mathbf{L}.\\]</div>"
     },
     "hint": "A limit uses nearby points; the center value is not part of the limiting test.",
     "diagnoses": [
@@ -1233,7 +1493,7 @@ const CASES = [
     ],
     "treatments": [
       {
-        "html": "<div class='mathDisplay'>\\[\\lim_{\\mathbf{x}\\to\\mathbf{a}}F(\\mathbf{x})=\\mathbf{L}\\text{ concerns nearby inputs with }0<\\|\\mathbf{x}-\\mathbf{a}\\|<r.\\]</div>",
+        "html": "<div class='mathDisplay'>\\[\\lim_{\\mathbf{x}\\to\\mathbf{a}}F(\\mathbf{x})=\\mathbf{L}\\text{ concerns nearby inputs with }0\\lt\\|\\mathbf{x}-\\mathbf{a}\\|\\lt r.\\]</div>",
         "correct": true
       },
       {
@@ -1241,7 +1501,7 @@ const CASES = [
         "correct": false
       },
       {
-        "html": "<div class='mathDisplay'>\\[\\lim_{\\mathbf{x}\\to\\mathbf{a}}F(\\mathbf{x})=\\mathbf{L}\\text{ only tests }\\|\\mathbf{x}\\|<r.\\]</div>",
+        "html": "<div class='mathDisplay'>\\[\\lim_{\\mathbf{x}\\to\\mathbf{a}}F(\\mathbf{x})=\\mathbf{L}\\text{ only tests }\\|\\mathbf{x}\\|\\lt r.\\]</div>",
         "correct": false
       },
       {
@@ -1382,50 +1642,6 @@ const CASES = [
       }
     ],
     "discharge": "Vector-valued one-parameter maps are differentiated component by component."
-  },
-  {
-    "id": "U3-DD-R022",
-    "patient": {
-      "html": "<div class='mathDisplay'>\\[\\mathbf{r}(t)=\\begin{bmatrix}t\\\\t^2\\\\1\\end{bmatrix},\\quad t_0=2,\\qquad \\boldsymbol{\\ell}(s)=\\mathbf{r}(s)+s\\mathbf{r}'(s).\\]</div>"
-    },
-    "hint": "At a specified time, freeze the base point and velocity.",
-    "diagnoses": [
-      {
-        "html": "The tangent line uses the moving path instead of the base point and base velocity.",
-        "correct": true
-      },
-      {
-        "html": "The tangent direction is reversed but otherwise correct.",
-        "correct": false
-      },
-      {
-        "html": "The base point is correct but the velocity is missing.",
-        "correct": false
-      },
-      {
-        "html": "The tangent line should use the Hessian of the path.",
-        "correct": false
-      }
-    ],
-    "treatments": [
-      {
-        "html": "<div class='mathDisplay'>\\[\\boldsymbol{\\ell}(s)=\\mathbf{r}(2)+s\\mathbf{r}'(2)=\\begin{bmatrix}2\\\\4\\\\1\\end{bmatrix}+s\\begin{bmatrix}1\\\\4\\\\0\\end{bmatrix}.\\]</div>",
-        "correct": true
-      },
-      {
-        "html": "<div class='mathDisplay'>\\[\\boldsymbol{\\ell}(s)=\\mathbf{r}(s)+s\\mathbf{r}'(s).\\]</div>",
-        "correct": false
-      },
-      {
-        "html": "<div class='mathDisplay'>\\[\\boldsymbol{\\ell}(s)=\\mathbf{r}'(2)+s\\mathbf{r}(2).\\]</div>",
-        "correct": false
-      },
-      {
-        "html": "<div class='mathDisplay'>\\[\\boldsymbol{\\ell}(s)=s\\mathbf{r}'(2).\\]</div>",
-        "correct": false
-      }
-    ],
-    "discharge": "A tangent line at one time uses fixed data from that time."
   },
   {
     "id": "U3-DD-R023",
@@ -1606,7 +1822,7 @@ const CASES = [
   {
     "id": "U3-DD-R027",
     "patient": {
-      "html": "<div class='mathDisplay'>\\[\\mathbf{r}(t)=\\begin{bmatrix}t^2\\\\2t\\end{bmatrix},\\qquad \\text{speed at }t=1=2+2=4.\\]</div>"
+      "html": "<div class='mathDisplay'>\\[\\mathbf{r}(t)=\\begin{bmatrix}t^2\\\\2t\\end{bmatrix},\\qquad \\text{speed at }t=1\\text{ is }2+2=4.\\]</div>"
     },
     "hint": "Speed is the norm of the velocity, not the sum of its entries.",
     "diagnoses": [
@@ -1633,7 +1849,7 @@ const CASES = [
         "correct": true
       },
       {
-        "html": "<div class='mathDisplay'>\\[\\text{speed at }t=1=2+2=4.\\]</div>",
+        "html": "<div class='mathDisplay'>\\[\\text{speed at }t=1\\text{ is }2+2=4.\\]</div>",
         "correct": false
       },
       {
@@ -1909,7 +2125,7 @@ const CASES = [
         "correct": false
       }
     ],
-    "discharge": "The gradient collects first partials. The Hessian collects second partials in a square matrix."
+    "discharge": "The gradient collects first partial derivatives. The Hessian collects second partial derivatives in a square matrix."
   },
   {
     "id": "U3-DD-R034",
@@ -1919,7 +2135,7 @@ const CASES = [
     "hint": "Compute the second partials entry by entry.",
     "diagnoses": [
       {
-        "html": "The Hessian of \\(xy\\) has been confused with the identity matrix.",
+        "html": "The Hessian of \\(xy\\) is incorrect.",
         "correct": true
       },
       {
@@ -2750,7 +2966,8 @@ const CASES = [
   {
     "id": "U3-DD-R053",
     "patient": {
-      "html": "<pre><code># Intended task: compute the full Jacobian of F with respect to x and y.\nx, y = sp.symbols(\"x y\")\nF = sp.Matrix([x*y, sp.sin(x + y)])\nJ = sp.diff(F, x)</code></pre>"
+      "html": "<pre><code>x, y = sp.symbols(\"x y\")\nF = sp.Matrix([x*y, sp.sin(x + y)])\nJ = sp.diff(F, x)</code></pre>",
+      "goal": "Compute the full Jacobian of \\(F\\) with respect to \\(x\\) and \\(y\\)."
     },
     "hint": "A full Jacobian needs derivatives with respect to all input variables.",
     "diagnoses": [
@@ -2794,7 +3011,8 @@ const CASES = [
   {
     "id": "U3-DD-R054",
     "patient": {
-      "html": "<pre><code># Intended task: compute the Jacobian of F at the base point (1, 0).\nx, y = sp.symbols(\"x y\")\nF = sp.Matrix([x**2*y, sp.sin(x + y)])\nF0 = F.subs({x: 1, y: 0})\nJ0 = F0.jacobian([x, y])</code></pre>"
+      "html": "<pre><code>x, y = sp.symbols(\"x y\")\nF = sp.Matrix([x**2*y, sp.sin(x + y)])\nF0 = F.subs({x: 1, y: 0})\nJ0 = F0.jacobian([x, y])</code></pre>",
+      "goal": "Compute the Jacobian of \\(F\\) at the base point \\((1,0)\\)."
     },
     "hint": "Differentiate first, then substitute the base point.",
     "diagnoses": [
@@ -2838,7 +3056,8 @@ const CASES = [
   {
     "id": "U3-DD-R055",
     "patient": {
-      "html": "<pre><code># Intended task: compute the Jacobian with columns ordered by x, then y.\nJ = F.jacobian([y, x])\n# first column is the x-partial column</code></pre>"
+      "html": "<pre><code>J = F.jacobian([y, x])</code></pre>",
+      "goal": "Compute the Jacobian with columns ordered by \\(x\\), then \\(y\\)."
     },
     "hint": "SymPy columns follow the variable list order.",
     "diagnoses": [
@@ -2861,7 +3080,7 @@ const CASES = [
     ],
     "treatments": [
       {
-        "html": "<pre><code>J = F.jacobian([x, y])\n# first column is the x-partial column</code></pre>",
+        "html": "<pre><code>J = F.jacobian([x, y])</code></pre>",
         "correct": true
       },
       {
@@ -2882,7 +3101,8 @@ const CASES = [
   {
     "id": "U3-DD-R056",
     "patient": {
-      "html": "<pre><code># Intended task: build a symbolic vector-valued function and compute its Jacobian.\nx, y = sp.symbols(\"x y\")\nF = sp.Matrix([np.sin(x + y), x*y])\nJ = F.jacobian([x, y])</code></pre>"
+      "html": "<pre><code>x, y = sp.symbols(\"x y\")\nF = sp.Matrix([np.sin(x + y), x*y])\nJ = F.jacobian([x, y])</code></pre>",
+      "goal": "Build a symbolic vector-valued function and compute its Jacobian."
     },
     "hint": "Symbolic expressions should use SymPy functions.",
     "diagnoses": [
@@ -2926,7 +3146,8 @@ const CASES = [
   {
     "id": "U3-DD-R057",
     "patient": {
-      "html": "<pre><code># Intended task: compute the Jacobian of a two-component column vector.\nx, y = sp.symbols(\"x y\")\nF = sp.Matrix([[x*y, sp.sin(x + y)]])\nJ = F.jacobian([x, y])</code></pre>"
+      "html": "<pre><code>x, y = sp.symbols(\"x y\")\nF = sp.Matrix([[x*y, sp.sin(x + y)]])\nJ = F.jacobian([x, y])</code></pre>",
+      "goal": "Compute the Jacobian of a two-component column vector."
     },
     "hint": "Use a column vector when the output is a two-component vector in this convention.",
     "diagnoses": [
@@ -3058,7 +3279,7 @@ const CASES = [
   {
     "id": "U3-DD-R060",
     "patient": {
-      "html": "<div class='mathDisplay'>\\[L(\\mathbf{x})=J_F(\\mathbf{a})(\\mathbf{x}-\\mathbf{a}).\\]</div>"
+      "html": "<div class='mathDisplay'>\\[\\text{A local linearization of }F\\text{ at }\\mathbf{a}\\text{ is claimed to be }L(\\mathbf{x})=J_F(\\mathbf{a})(\\mathbf{x}-\\mathbf{a}).\\]</div>"
     },
     "hint": "Run the anchor test: plug in \\(\\mathbf{x}=\\mathbf{a}\\).",
     "diagnoses": [
@@ -3190,7 +3411,7 @@ const CASES = [
   {
     "id": "U3-DD-R063",
     "patient": {
-      "html": "<div class='mathDisplay'>\\[z=f_x(a,b)(x-a)+f_y(a,b)(y-b).\\]</div>"
+      "html": "<div class='mathDisplay chartLines'><div class='chartLine'>For the graph \\(z=f(x,y),\\)</div><div class='chartLine'>the tangent plane at \\((a,b)\\) is claimed to be</div><div class='chartLine'>\\(z=f_x(a,b)(x-a)+f_y(a,b)(y-b).\\)</div></div>"
     },
     "hint": "A tangent plane must pass through \\((a,b,f(a,b))\\).",
     "diagnoses": [
@@ -3389,11 +3610,11 @@ const CASES = [
     ],
     "treatments": [
       {
-        "html": "<div class='mathDisplay'>\\[J_F(\\mathbf{a})\\mathbf{h}=\\mathbf{0}\\text{ means the local model predicts no first-order change in direction }\\mathbf{h}.\\]</div>",
+        "html": "<div class='choiceFormula'>\\(J_F(\\mathbf{a})\\mathbf{h}=\\mathbf{0}\\)</div><div class='choiceProse'>means the local model predicts no first-order change in direction \\(\\mathbf{h}\\).</div>",
         "correct": true
       },
       {
-        "html": "<div class='mathDisplay'>\\[J_F(\\mathbf{a})\\mathbf{h}=\\mathbf{0}\\Rightarrow F(\\mathbf{a}+\\mathbf{h})=F(\\mathbf{a})\\text{ exactly.}\\]</div>",
+        "html": "<div class='choiceFormula'>\\(J_F(\\mathbf{a})\\mathbf{h}=\\mathbf{0}\\Rightarrow F(\\mathbf{a}+\\mathbf{h})=F(\\mathbf{a})\\)</div><div class='choiceProse'>exactly.</div>",
         "correct": false
       },
       {
@@ -3410,7 +3631,8 @@ const CASES = [
   {
     "id": "U3-DD-R068",
     "patient": {
-      "html": "<pre><code># Intended task: use the local linearization at a to predict F(x0).\nh = a - x0\npred = F0 + J0 @ h</code></pre>"
+      "html": "<pre><code>h = a - x0\npred = F0 + J0 @ h</code></pre>",
+      "goal": "Use the local linearization at \\(\\mathbf{a}\\) to predict \\(F(\\mathbf{x}_0)\\)."
     },
     "hint": "If \\(\\mathbf{x}_0=\\mathbf{a}+\\mathbf{h}\\), then \\(\\mathbf{h}=\\mathbf{x}_0-\\mathbf{a}\\).",
     "diagnoses": [
@@ -3423,11 +3645,11 @@ const CASES = [
         "correct": false
       },
       {
-        "html": "The base output is missing from the prediction.",
+        "html": "The base output \\(F_0\\) is missing from the prediction.",
         "correct": false
       },
       {
-        "html": "The Jacobian should be recomputed at `x0`.",
+        "html": "The Jacobian should be recomputed at \\(x_0\\).",
         "correct": false
       }
     ],
@@ -3454,7 +3676,8 @@ const CASES = [
   {
     "id": "U3-DD-R069",
     "patient": {
-      "html": "<pre><code># Intended task: use the local linearization at a to predict F(x0).\nh = x0 - a\npred = F0 + J0 @ a</code></pre>"
+      "html": "<pre><code>h = x0 - a\npred = F0 + J0 @ a</code></pre>",
+      "goal": "Use the local linearization at \\(\\mathbf{a}\\) to predict \\(F(\\mathbf{x}_0)\\)."
     },
     "hint": "The Jacobian should multiply the displacement.",
     "diagnoses": [
@@ -3467,7 +3690,7 @@ const CASES = [
         "correct": false
       },
       {
-        "html": "The base output is missing.",
+        "html": "The base output \\(F_0\\) is missing.",
         "correct": false
       },
       {
@@ -3498,7 +3721,7 @@ const CASES = [
   {
     "id": "U3-DD-R070",
     "patient": {
-      "html": "<div class='mathDisplay'>\\[F(\\mathbf{a}+\\mathbf{h})=F(\\mathbf{a})+J_F(\\mathbf{a})\\mathbf{h}.\\]</div>"
+      "html": "<div class='mathDisplay'>\\[\\text{Near }\\mathbf{a},\\text{ it is claimed that }F(\\mathbf{a}+\\mathbf{h})=F(\\mathbf{a})+J_F(\\mathbf{a})\\mathbf{h}\\text{ exactly for every differentiable }F.\\]</div>"
     },
     "hint": "Differentiability allows a higher-order error term.",
     "diagnoses": [
@@ -3540,53 +3763,9 @@ const CASES = [
     "discharge": "The Jacobian gives the first-order part. A differentiable nonlinear function still has higher-order error."
   },
   {
-    "id": "U3-DD-R071",
-    "patient": {
-      "html": "<div class='mathDisplay'>\\[f_x(0,0)\\text{ and }f_y(0,0)\\text{ exist}\\quad\\Longrightarrow\\quad f\\text{ is differentiable at }(0,0).\\]</div>"
-    },
-    "hint": "Partial derivatives at a point are not enough by themselves.",
-    "diagnoses": [
-      {
-        "html": "Existence of partial derivatives at one point is being treated as sufficient for differentiability.",
-        "correct": true
-      },
-      {
-        "html": "Continuity of the function is being mistaken for differentiability.",
-        "correct": false
-      },
-      {
-        "html": "The gradient is written as a row instead of a column.",
-        "correct": false
-      },
-      {
-        "html": "The tangent plane is missing its height.",
-        "correct": false
-      }
-    ],
-    "treatments": [
-      {
-        "html": "<div class='mathDisplay'>\\[\\text{Continuous first partial derivatives near }(0,0)\\text{ are a useful sufficient condition; pointwise existence alone is not enough.}\\]</div>",
-        "correct": true
-      },
-      {
-        "html": "<div class='mathDisplay'>\\[f_x(0,0),f_y(0,0)\\text{ exist}\\Rightarrow f\\text{ is differentiable at }(0,0).\\]</div>",
-        "correct": false
-      },
-      {
-        "html": "<div class='mathDisplay'>\\[f\\text{ is differentiable only if }H_f(0,0)\\text{ is invertible.}\\]</div>",
-        "correct": false
-      },
-      {
-        "html": "<div class='mathDisplay'>\\[f\\text{ is differentiable only if }\\nabla f(0,0)=\\mathbf{0}.\\]</div>",
-        "correct": false
-      }
-    ],
-    "discharge": "Differentiability means there is a good linear approximation, not merely coordinate-direction rates."
-  },
-  {
     "id": "U3-DD-R072",
     "patient": {
-      "html": "<div class='mathDisplay'>\\[F:\\mathbb{R}^2\\to\\mathbb{R}^3,\\qquad L(\\mathbf{x})\\in\\mathbb{R}^2\\text{ because the input has two coordinates}.\\]</div>"
+      "html": "<div class='mathDisplay'>\\[\\text{A local linearization }L\\text{ of }F:\\mathbb{R}^2\\to\\mathbb{R}^3\\text{ is claimed to satisfy }L(\\mathbf{x})\\in\\mathbb{R}^2\\text{ because the input has two coordinates}.\\]</div>"
     },
     "hint": "The local model approximates the function's output.",
     "diagnoses": [
@@ -3630,7 +3809,7 @@ const CASES = [
   {
     "id": "U3-DD-R073",
     "patient": {
-      "html": "<div class='mathDisplay'>\\[z=f(a,b)+f_x(x,y)(x-a)+f_y(x,y)(y-b).\\]</div>"
+      "html": "<div class='mathDisplay chartLines'><div class='chartLine'>For the graph \\(z=f(x,y),\\)</div><div class='chartLine'>the tangent plane at \\((a,b)\\) is claimed to be</div><div class='chartLine'>\\(z=f(a,b)+f_x(x,y)(x-a)+f_y(x,y)(y-b).\\)</div></div>"
     },
     "hint": "A tangent plane has fixed slopes from the base point.",
     "diagnoses": [
@@ -3762,12 +3941,13 @@ const CASES = [
   {
     "id": "U3-DD-R076",
     "patient": {
-      "html": "<pre><code># Intended task: use the local linearization at a to predict F(x0).\nh = x0 - a\npred = J0 @ h</code></pre>"
+      "html": "<pre><code>h = x0 - a\npred = J0 @ h</code></pre>",
+      "goal": "Use the local linearization at \\(\\mathbf{a}\\) to predict \\(F(\\mathbf{x}_0)\\)."
     },
     "hint": "The Jacobian term predicts the change, not the full output.",
     "diagnoses": [
       {
-        "html": "The base output `F0` is missing from the prediction.",
+        "html": "The base output \\(F_0\\) is missing from the prediction.",
         "correct": true
       },
       {
@@ -3779,7 +3959,7 @@ const CASES = [
         "correct": false
       },
       {
-        "html": "The Jacobian should be recalculated at `x0`.",
+        "html": "The Jacobian should be recalculated at \\(x_0\\).",
         "correct": false
       }
     ],
@@ -4244,50 +4424,6 @@ const CASES = [
     "discharge": "The small input change goes through the local map for \\(G\\), then the local map for \\(F\\)."
   },
   {
-    "id": "U3-DD-R087",
-    "patient": {
-      "html": "<div class='mathDisplay'>\\[J_F(\\mathbf{a})J_G(\\mathbf{a})\\text{ has a compatible shape, so it is the correct chain-rule product}.\\]</div>"
-    },
-    "hint": "A chain-rule product needs compatible shapes and correct evaluation points.",
-    "diagnoses": [
-      {
-        "html": "A shape check is being mistaken for a full chain-rule check.",
-        "correct": true
-      },
-      {
-        "html": "The chain rule never uses evaluation points.",
-        "correct": false
-      },
-      {
-        "html": "The product should always be reversed whenever the dimensions work.",
-        "correct": false
-      },
-      {
-        "html": "The derivative should be a sum instead of a product.",
-        "correct": false
-      }
-    ],
-    "treatments": [
-      {
-        "html": "<div class='mathDisplay'>\\[\\text{Check shape and point: }J_{F\\circ G}(\\mathbf{a})=J_F(G(\\mathbf{a}))J_G(\\mathbf{a}).\\]</div>",
-        "correct": true
-      },
-      {
-        "html": "<div class='mathDisplay'>\\[\\text{If the dimensions multiply, the formula is automatically correct.}\\]</div>",
-        "correct": false
-      },
-      {
-        "html": "<div class='mathDisplay'>\\[\\text{Only the evaluation point matters; shape does not.}\\]</div>",
-        "correct": false
-      },
-      {
-        "html": "<div class='mathDisplay'>\\[J_{F\\circ G}(\\mathbf{a})=J_F(\\mathbf{a})+J_G(\\mathbf{a}).\\]</div>",
-        "correct": false
-      }
-    ],
-    "discharge": "A formula can have compatible matrix sizes but still evaluate a derivative at the wrong point."
-  },
-  {
     "id": "U3-DD-R088",
     "patient": {
       "html": "<div class='mathDisplay'>\\[J_{F\\circ G}(\\mathbf{a})=J_F(G(\\mathbf{a}))J_G(G(\\mathbf{a})).\\]</div>"
@@ -4378,7 +4514,7 @@ const CASES = [
   {
     "id": "U3-DD-R090",
     "patient": {
-      "html": "<div class='mathDisplay'>\\[H(\\mathbf{x})=F(\\mathbf{x})\\cdot F(\\mathbf{x}),\\qquad \\nabla H(\\mathbf{x})=J_F(\\mathbf{x})F(\\mathbf{x}).\\]</div>"
+      "html": "<div class='mathDisplay'>\\[G(\\mathbf{x})=F(\\mathbf{x})\\cdot F(\\mathbf{x}),\\qquad \\nabla G(\\mathbf{x})=J_F(\\mathbf{x})F(\\mathbf{x}).\\]</div>"
     },
     "hint": "Use shapes: \\(J_F\\) maps input changes to output changes.",
     "diagnoses": [
@@ -4395,25 +4531,25 @@ const CASES = [
         "correct": false
       },
       {
-        "html": "The formula should be a Hessian because the output is scalar.",
+        "html": "The formula should be a Hessian because \\(G\\) is scalar-valued.",
         "correct": false
       }
     ],
     "treatments": [
       {
-        "html": "<div class='mathDisplay'>\\[\\nabla H(\\mathbf{x})=2J_F(\\mathbf{x})^T F(\\mathbf{x}).\\]</div>",
+        "html": "<div class='mathDisplay'>\\[\\nabla G(\\mathbf{x})=2J_F(\\mathbf{x})^T F(\\mathbf{x}).\\]</div>",
         "correct": true
       },
       {
-        "html": "<div class='mathDisplay'>\\[\\nabla H(\\mathbf{x})=J_F(\\mathbf{x})F(\\mathbf{x}).\\]</div>",
+        "html": "<div class='mathDisplay'>\\[\\nabla G(\\mathbf{x})=J_F(\\mathbf{x})F(\\mathbf{x}).\\]</div>",
         "correct": false
       },
       {
-        "html": "<div class='mathDisplay'>\\[\\nabla H(\\mathbf{x})=2J_F(\\mathbf{x})F(\\mathbf{x}).\\]</div>",
+        "html": "<div class='mathDisplay'>\\[\\nabla G(\\mathbf{x})=2J_F(\\mathbf{x})F(\\mathbf{x}).\\]</div>",
         "correct": false
       },
       {
-        "html": "<div class='mathDisplay'>\\[\\nabla H(\\mathbf{x})=F(\\mathbf{x})^TF(\\mathbf{x}).\\]</div>",
+        "html": "<div class='mathDisplay'>\\[\\nabla G(\\mathbf{x})=F(\\mathbf{x})^TF(\\mathbf{x}).\\]</div>",
         "correct": false
       }
     ],
@@ -4774,7 +4910,8 @@ const CASES = [
   {
     "id": "U3-DD-R099",
     "patient": {
-      "html": "<pre><code># Intended task: compare the true change with the first-order predicted change.\nactual_change = F(a + h) - F(a)\npredicted_change = F(a) + J0 @ h</code></pre>"
+      "html": "<pre><code>actual_change = F(a + h) - F(a)\npredicted_change = F(a) + J0 @ h</code></pre>",
+      "goal": "Compare the true change with the first-order predicted change."
     },
     "hint": "An actual change should be compared with a predicted change.",
     "diagnoses": [
@@ -4814,53 +4951,9 @@ const CASES = [
       }
     ],
     "discharge": "Compare output to output, or change to change. Do not mix the two."
-  },
-  {
-    "id": "U3-DD-R100",
-    "patient": {
-      "html": "<pre><code># Intended task: define the local linearization of F at a.\ndef L(x):\n    return F(x) + J0 @ (x - a)</code></pre>"
-    },
-    "hint": "The local model should not call the original nonlinear function at the moving input.",
-    "diagnoses": [
-      {
-        "html": "The base output should be fixed at `F0`, not recomputed as `F(x)`.",
-        "correct": true
-      },
-      {
-        "html": "The Jacobian should be recomputed at `x`.",
-        "correct": false
-      },
-      {
-        "html": "The displacement should be `a - x`.",
-        "correct": false
-      },
-      {
-        "html": "The base output should be removed entirely.",
-        "correct": false
-      }
-    ],
-    "treatments": [
-      {
-        "html": "<pre><code>def L(x):\n    return F0 + J0 @ (x - a)</code></pre>",
-        "correct": true
-      },
-      {
-        "html": "<pre><code>def L(x):\n    return F(x) + J0 @ (x - a)</code></pre>",
-        "correct": false
-      },
-      {
-        "html": "<pre><code>def L(x):\n    return F0 + J0 @ x</code></pre>",
-        "correct": false
-      },
-      {
-        "html": "<pre><code>def L(x):\n    return J0 @ (x - a)</code></pre>",
-        "correct": false
-      }
-    ],
-    "discharge": "A local linearization freezes both the base output and the Jacobian at the base point."
   }
 ];
-const ROUND_LENGTH = Math.min(8, CASES.length);
+const ROUND_LENGTH = Math.min(10, CASES.length);
 
 
 function rint(min, max) { return min + Math.floor(rng() * (max - min + 1)); }
@@ -4875,19 +4968,30 @@ function term(n, body, first=false) {
 }
 function col(entries) { return String.raw`\begin{bmatrix}${entries.map(x => String(x).replace('-', '−')).join(String.raw`\\`)}\end{bmatrix}`; }
 function mat(rows) { return String.raw`\begin{bmatrix}${rows.map(row => row.map(x => String(x).replace('-', '−')).join(' & ')).join(String.raw`\\`)}\end{bmatrix}`; }
+function pyVec(values) { return `[${values.join(', ')}]`; }
+function pyMat(rows) { return `[${rows.map(row => `[${row.join(', ')}]`).join(', ')}]`; }
 function math(html) { return `<div class='mathDisplay'>\\[${html}\\]</div>`; }
 function codeBlock(code) { return `<pre><code>${code.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;')}</code></pre>`; }
+function codePatient(code, goal) { return { html: codeBlock(code), goal }; }
 function cchoice(html, correct=false) {
   if (html && typeof html === 'object') return { ...html, correct };
   return { html, correct };
 }
 function makeCase(id, patientHtml, hint, diagnoses, treatments, discharge) {
-  return { id: `U3-DD-G${String(id).padStart(3,'0')}`, patient: { html: patientHtml }, hint, diagnoses, treatments, discharge };
+  const patient = patientHtml && typeof patientHtml === 'object' ? patientHtml : { html: patientHtml };
+  return { id: `U3-DD-G${String(id).padStart(3,'0')}`, patient, hint, diagnoses, treatments, discharge };
 }
 function generateRandomCases() {
   const out = [];
   let gid = 1;
-  const push = fn => out.push(fn(gid++));
+  const push = fn => {
+    const id = gid++;
+    const c = fn(id);
+    const generatorKey = fn.name || `generator-${id}`;
+    c.generatedKey = generatorKey;
+    c.roundKey = `generated:${generatorKey}`;
+    out.push(c);
+  };
   const nums = [-4,-3,-2,2,3,4];
   const small = [-3,-2,-1,1,2,3];
 
@@ -5086,9 +5190,11 @@ function generateRandomCases() {
   }
 
   function wrongDisplacement(id) {
+    const Fv = col([rint(-4,4), rint(-4,4)]);
+    const A = mat([[rint(-3,3), rint(-3,3)], [rint(-3,3), rint(-3,3)]]);
     const av = col([rint(-3,3), rint(-3,3)]);
     return makeCase(id,
-      math(String.raw`\mathbf{a}=${av},\qquad L(\mathbf{x})=F(\mathbf{a})+J_F(\mathbf{a})\mathbf{x}.`),
+      math(String.raw`F(\mathbf{a})=${Fv},\quad J_F(\mathbf{a})=${A},\quad \mathbf{a}=${av},\qquad L(\mathbf{x})=F(\mathbf{a})+J_F(\mathbf{a})\mathbf{x}.`),
       String.raw`At \(\mathbf{x}=\mathbf{a}\), the displacement should be zero.`,
       [
         cchoice(String.raw`The linear part is applied to \(\mathbf{x}\) instead of \(\mathbf{x}-\mathbf{a}\).`, true),
@@ -5106,8 +5212,11 @@ function generateRandomCases() {
   }
 
   function notFrozen(id) {
+    const Fv = col([rint(-4,4), rint(-4,4)]);
+    const A = mat([[rint(-3,3), rint(-3,3)], [rint(-3,3), rint(-3,3)]]);
+    const av = col([rint(-3,3), rint(-3,3)]);
     return makeCase(id,
-      math(String.raw`L(\mathbf{x})=F(\mathbf{a})+J_F(\mathbf{x})(\mathbf{x}-\mathbf{a}).`),
+      math(String.raw`F(\mathbf{a})=${Fv},\quad J_F(\mathbf{a})=${A},\quad \mathbf{a}=${av},\qquad L(\mathbf{x})=F(\mathbf{a})+J_F(\mathbf{x})(\mathbf{x}-\mathbf{a}).`),
       'A local linear model should have one fixed matrix.',
       [
         cchoice(String.raw`The Jacobian is not frozen at the base point.`, true),
@@ -5144,25 +5253,6 @@ function generateRandomCases() {
         cchoice(math(String.raw`z=f_x(x,y)(x-a)+f_y(x,y)(y-b).`))
       ],
       'The slopes give the tilt; the height anchors the plane.');
-  }
-
-  function localExact(id) {
-    return makeCase(id,
-      math(String.raw`F(\mathbf{a}+\mathbf{h})=F(\mathbf{a})+J_F(\mathbf{a})\mathbf{h}.`),
-      'For a nonlinear differentiable map, the first-order formula has an error term.',
-      [
-        cchoice(String.raw`A first-order approximation has been written as an exact equality.`, true),
-        cchoice(String.raw`The base output is missing.`),
-        cchoice(String.raw`The displacement should be \(\mathbf{a}+\mathbf{h}\).`),
-        cchoice(String.raw`The Jacobian should be evaluated at \(F(\mathbf{a})\).`)
-      ],
-      [
-        cchoice(math(String.raw`F(\mathbf{a}+\mathbf{h})=F(\mathbf{a})+J_F(\mathbf{a})\mathbf{h}+\text{error},\qquad \frac{\|\text{error}\|}{\|\mathbf{h}\|}\to0.`), true),
-        cchoice(math(String.raw`F(\mathbf{a}+\mathbf{h})=F(\mathbf{a})+J_F(\mathbf{a})\mathbf{h}.`)),
-        cchoice(math(String.raw`F(\mathbf{a}+\mathbf{h})=J_F(\mathbf{a})\mathbf{h}.`)),
-        cchoice(math(String.raw`F(\mathbf{a}+\mathbf{h})=F(\mathbf{h})+J_F(\mathbf{h})\mathbf{a}.`))
-      ],
-      'Differentiability says the linear part is the first-order behavior, not the whole nonlinear function.');
   }
 
   function chainOrder(id) {
@@ -5206,8 +5296,11 @@ function generateRandomCases() {
   }
 
   function pathRule(id) {
+    const a = pickR([2,3,-2,-3]);
+    const b = pickR([1,2,-1]);
+    const c = pickR([2,3,4]);
     return makeCase(id,
-      math(String.raw`\frac{d}{dt}F(\mathbf{r}(t))=J_F(t)\mathbf{r}'(t).`),
+      math(String.raw`\mathbf{r}(t)=\begin{bmatrix}${a}t${b<0?' - '+Math.abs(b):' + '+b}\\${c}t^2\end{bmatrix},\qquad \frac{d}{dt}F(\mathbf{r}(t))=J_F(t)\mathbf{r}'(t).`),
       String.raw`The Jacobian is evaluated at a point in the input space of \(F\).`,
       [
         cchoice(String.raw`The Jacobian is evaluated at the parameter \(t\) instead of at the point \(\mathbf{r}(t)\).`, true),
@@ -5225,8 +5318,11 @@ function generateRandomCases() {
   }
 
   function scalarPathMissingVelocity(id) {
+    const a = pickR([2,3,4]);
+    const b = pickR([1,2,-1,-2]);
+    const c = pickR([2,3,-2]);
     return makeCase(id,
-      math(String.raw`\frac{d}{dt}f(\mathbf{r}(t))=f_x(\mathbf{r}(t))+f_y(\mathbf{r}(t)).`),
+      math(String.raw`\mathbf{r}(t)=\begin{bmatrix}${a}t^2\\${c}t${b<0?' - '+Math.abs(b):' + '+b}\end{bmatrix},\qquad \frac{d}{dt}f(\mathbf{r}(t))=f_x(\mathbf{r}(t))+f_y(\mathbf{r}(t)).`),
       'The rate along a path also depends on how the path moves.',
       [
         cchoice(String.raw`The path velocity \(\mathbf{r}'(t)\) is missing from the chain rule.`, true),
@@ -5264,10 +5360,12 @@ function generateRandomCases() {
   }
 
   function sympyDiff(id) {
-    const expr = pickR(['x*y', 'x**2 + y', 'sp.sin(x + y)']);
-    const code = `# Intended task: compute the full Jacobian of F with respect to x and y.\nx, y = sp.symbols("x y")\nF = sp.Matrix([${expr}, x - y])\nJ = sp.diff(F, x)`;
+    const a = pickR([2,3,4,-2]);
+    const b = pickR([1,2,3,-1]);
+    const expr = pickR([`${a}*x*y`, `${a}*x**2 + ${b}*y`, `sp.sin(${a}*x + ${b}*y)`]);
+    const code = `x, y = sp.symbols("x y")\nF = sp.Matrix([${expr}, x - y])\nJ = sp.diff(F, x)`;
     return makeCase(id,
-      codeBlock(code),
+      codePatient(code, String.raw`Compute the full Jacobian of \(F\) with respect to \(x\) and \(y\).`),
       'A full Jacobian needs one column for each input variable.',
       [
         cchoice(String.raw`The code differentiates only with respect to \(x\), so it does not compute the full Jacobian.`, true),
@@ -5285,29 +5383,37 @@ function generateRandomCases() {
   }
 
   function sympySubFirst(id) {
-    const code = `# Intended task: compute the Jacobian of F at the base point (1, 0).\nx, y = sp.symbols("x y")\nF = sp.Matrix([x**2*y, sp.sin(x + y)])\nF0 = F.subs({x: 1, y: 0})\nJ0 = F0.jacobian([x, y])`;
+    const px = rint(-2,2);
+    const py = rint(-2,2);
+    const a = pickR([2,3,4,-2]);
+    const b = pickR([1,2,3,-1]);
+    const expr = pickR([`${a}*x**2*y`, `${a}*x*y + ${b}*y**2`, `sp.sin(${a}*x + ${b}*y)`]);
+    const code = `x, y = sp.symbols("x y")\nF = sp.Matrix([${expr}, x - y])\nF0 = F.subs({x: ${px}, y: ${py}})\nJ0 = F0.jacobian([x, y])`;
     return makeCase(id,
-      codeBlock(code),
+      codePatient(code, String.raw`Compute the Jacobian of \(F\) at the base point \((` + `${px},${py}` + String.raw`)\).`),
       'Differentiate symbolically first, then evaluate at the base point.',
       [
         cchoice(String.raw`The code substitutes first, so it differentiates a constant vector.`, true),
         cchoice(String.raw`The variables in the Jacobian call are in the wrong order.`),
         cchoice(String.raw`The code computes a row Jacobian instead of a column Jacobian.`),
-        cchoice(String.raw`The point \((1,0)\) is outside the domain.`)
+        cchoice(String.raw`The point \((` + `${px},${py}` + String.raw`)\) is outside the domain.`)
       ],
       [
-        cchoice({html:'', code:'J = F.jacobian([x, y])\nJ0 = J.subs({x: 1, y: 0})'}, true),
-        cchoice({html:'', code:'J0 = F.subs({x: 1, y: 0}).jacobian([x, y])'}),
-        cchoice({html:'', code:'J0 = F.jacobian([1, 0])'}),
-        cchoice({html:'', code:'J0 = F.jacobian([y, x]).subs({x: 1, y: 0})'})
+        cchoice({html:'', code:`J = F.jacobian([x, y])\nJ0 = J.subs({x: ${px}, y: ${py}})`}, true),
+        cchoice({html:'', code:`J0 = F.subs({x: ${px}, y: ${py}}).jacobian([x, y])`}),
+        cchoice({html:'', code:`J0 = F.jacobian([${px}, ${py}])`}),
+        cchoice({html:'', code:`J0 = F.jacobian([y, x]).subs({x: ${px}, y: ${py}})`})
       ],
       'Substitution before differentiation removes the variables and destroys derivative information.');
   }
 
   function sympyOrder(id) {
-    const code = `# Intended task: compute the Jacobian with columns ordered by x, then y.\nJ = F.jacobian([y, x])\n# first column is the x-partial column`;
+    const a = pickR([2,3,4,-2]);
+    const b = pickR([1,2,3,-1]);
+    const expr = pickR([`${a}*x*y`, `${a}*x**2 + ${b}*y`, `sp.sin(${a}*x + ${b}*y)`]);
+    const code = `x, y = sp.symbols("x y")\nF = sp.Matrix([${expr}, x - y])\nJ = F.jacobian([y, x])`;
     return makeCase(id,
-      codeBlock(code),
+      codePatient(code, String.raw`Compute the Jacobian with columns ordered by \(x\), then \(y\).`),
       'SymPy columns follow the variable list order.',
       [
         cchoice(String.raw`The variable order reverses the Jacobian columns.`, true),
@@ -5325,14 +5431,19 @@ function generateRandomCases() {
   }
 
   function codeWrongHSign(id) {
-    const code = `# Intended task: use the local linearization at a to predict F(x0).\nh = a - x0\npred = F0 + J0 @ h`;
+    const a = [rint(-3,3), rint(-3,3)];
+    const h = [pickR([-2,-1,1,2]), pickR([-2,-1,1,2])];
+    const x0 = [a[0] + h[0], a[1] + h[1]];
+    const F0 = [rint(-4,4), rint(-4,4)];
+    const J0 = [[rint(-3,3), rint(-3,3)], [rint(-3,3), rint(-3,3)]];
+    const code = `a = np.array(${pyVec(a)})\nx0 = np.array(${pyVec(x0)})\nF0 = np.array(${pyVec(F0)})\nJ0 = np.array(${pyMat(J0)})\nh = a - x0\npred = F0 + J0 @ h`;
     return makeCase(id,
-      codeBlock(code),
+      codePatient(code, String.raw`Use the local linearization at \(\mathbf{a}\) to predict \(F(\mathbf{x}_0)\).`),
       String.raw`If \(\mathbf{x}_0=\mathbf{a}+\mathbf{h}\), then \(\mathbf{h}=\mathbf{x}_0-\mathbf{a}\).`,
       [
         cchoice(String.raw`The displacement has the wrong sign.`, true),
         cchoice(String.raw`The Jacobian should multiply the base point instead.`),
-        cchoice(String.raw`The base output \(F0\) should be removed.`),
+        cchoice(String.raw`The base output \(F_0\) should be removed.`),
         cchoice(String.raw`The code should substitute before differentiating.`)
       ],
       [
@@ -5345,15 +5456,20 @@ function generateRandomCases() {
   }
 
   function codeUsesA(id) {
-    const code = `# Intended task: use the local linearization at a to predict F(x0).\nh = x0 - a\npred = F0 + J0 @ a`;
+    const a = [rint(-3,3), rint(-3,3)];
+    const h = [pickR([-2,-1,1,2]), pickR([-2,-1,1,2])];
+    const x0 = [a[0] + h[0], a[1] + h[1]];
+    const F0 = [rint(-4,4), rint(-4,4)];
+    const J0 = [[rint(-3,3), rint(-3,3)], [rint(-3,3), rint(-3,3)]];
+    const code = `a = np.array(${pyVec(a)})\nx0 = np.array(${pyVec(x0)})\nF0 = np.array(${pyVec(F0)})\nJ0 = np.array(${pyMat(J0)})\nh = x0 - a\npred = F0 + J0 @ a`;
     return makeCase(id,
-      codeBlock(code),
+      codePatient(code, String.raw`Use the local linearization at \(\mathbf{a}\) to predict \(F(\mathbf{x}_0)\).`),
       'The Jacobian should multiply the displacement.',
       [
         cchoice(String.raw`The code computes \(h\) but then multiplies by \(a\) instead of \(h\).`, true),
         cchoice(String.raw`The displacement has the wrong sign.`),
-        cchoice(String.raw`The base output \(F0\) is missing.`),
-        cchoice(String.raw`The Jacobian should be recomputed at \(x0\).`)
+        cchoice(String.raw`The base output \(F_0\) is missing.`),
+        cchoice(String.raw`The Jacobian should be recomputed at \(x_0\).`)
       ],
       [
         cchoice({html:'', code:'h = x0 - a\npred = F0 + J0 @ h'}, true),
@@ -5364,44 +5480,24 @@ function generateRandomCases() {
       String.raw`The first-order change is \(J_F(\mathbf{a})(\mathbf{x}_0-\mathbf{a})\).`);
   }
 
-  function codeUsesFx(id) {
-    const code = `# Intended task: define the local linearization of F at a.\ndef L(x):\n    return F(x) + J0 @ (x - a)`;
-    return makeCase(id,
-      codeBlock(code),
-      'The anchor value should be fixed at the base point.',
-      [
-        cchoice(String.raw`The model uses the true function value \(F(x)\) instead of the fixed base value \(F(a)\).`, true),
-        cchoice(String.raw`The displacement should be \(x\), not \(x-a\).`),
-        cchoice(String.raw`The Jacobian should be evaluated at \(x\) inside the function.`),
-        cchoice(String.raw`The local model is missing a transpose.`)
-      ],
-      [
-        cchoice({html:'', code:'def L(x):\n    return F(a) + J0 @ (x - a)'}, true),
-        cchoice({html:'', code:'def L(x):\n    return F(x) + J0 @ (x - a)'}),
-        cchoice({html:'', code:'def L(x):\n    return F(a) + J0 @ x'}),
-        cchoice({html:'', code:'def L(x):\n    return J0 @ (x - a)'})
-      ],
-      'The local linearization is an affine function fixed by data at the base point.');
-  }
-
-  const generators = [partialX, partialY, gradientRow, gradientMissingFactor, hessianAsGradient, hessianCross, jacobianShape, jacobianRows, missingAnchor, wrongDisplacement, notFrozen, tangentPlane, localExact, chainOrder, chainPoint, pathRule, scalarPathMissingVelocity, activationDiagonal, sympyDiff, sympySubFirst, sympyOrder, codeWrongHSign, codeUsesA, codeUsesFx];
+  const generators = [partialX, partialY, gradientRow, gradientMissingFactor, hessianAsGradient, hessianCross, jacobianShape, jacobianRows, missingAnchor, wrongDisplacement, notFrozen, tangentPlane, chainOrder, chainPoint, pathRule, scalarPathMissingVelocity, activationDiagonal, sympyDiff, sympySubFirst, sympyOrder, codeWrongHSign, codeUsesA];
   for (let k = 0; k < 3; k++) generators.forEach(push);
   return out;
 }
 function buildCasePool() {
   return CASES.concat(generateRandomCases());
 }
-let state = { queue: [], index: 0, treated: 0, misses: 0, diagnosisDone: false, treatmentDone: false, diagnosisChoices: [], treatmentChoices: [] };
+let state = { queue: [], index: 0, treated: 0, misses: 0, diagnosisDone: false, treatmentDone: false, diagnosisChoices: [], treatmentChoices: [], hintsAllowed: false };
 
 const patientCount = document.getElementById('patientCount');
 const treatedCount = document.getElementById('treatedCount');
 const missCount = document.getElementById('missCount');
-const progress = document.getElementById('progress');
 const patientTitle = document.getElementById('patientTitle');
 const patientBody = document.getElementById('patientBody');
 const hintToggle = document.getElementById('hintToggle');
 const hintPanel = document.getElementById('hintPanel');
-const hintChevron = document.getElementById('hintChevron');
+const hintText = document.getElementById('hintText');
+const hintIcon = document.getElementById('hintIcon');
 const diagnosisChoicesEl = document.getElementById('diagnosisChoices');
 const treatmentChoicesEl = document.getElementById('treatmentChoices');
 const diagnosisFeedback = document.getElementById('diagnosisFeedback');
@@ -5415,7 +5511,13 @@ const nextRow = document.getElementById('nextRow');
 const nextBtn = document.getElementById('nextBtn');
 const gameScreen = document.getElementById('gameScreen');
 const endPanel = document.getElementById('endPanel');
+const introOverlay = document.getElementById('introOverlay');
+const introStartBtn = document.getElementById('introStartBtn');
+const allowHintsBtn = document.getElementById('allowHintsBtn');
 const newRoundBtn = document.getElementById('newRoundBtn');
+const newRoundConfirm = document.getElementById('newRoundConfirm');
+const cancelNewRoundBtn = document.getElementById('cancelNewRoundBtn');
+const confirmNewRoundBtn = document.getElementById('confirmNewRoundBtn');
 const againBtn = document.getElementById('againBtn');
 
 function shuffle(arr) {
@@ -5427,6 +5529,84 @@ function shuffle(arr) {
   return a;
 }
 
+function caseFamily(c) {
+  const html = String(c && c.patient ? c.patient.html || '' : '');
+  const lower = html.toLowerCase();
+  if (/<pre\s*><code>/i.test(html)) {
+    if (lower.includes('jacobian') || lower.includes('sp.diff') || lower.includes('sp.matrix') || lower.includes('sp.symbols')) {
+      return 'code-sympy-jacobian';
+    }
+    if (lower.includes('f0') || lower.includes('j0') || lower.includes('x0') || lower.includes('def l(')) {
+      return 'code-local-linearization';
+    }
+    return 'code';
+  }
+  if (html.includes(String.raw`F(\mathbf{a}+\mathbf{h})`) || html.includes(String.raw`F(\mathbf{x})\approx`) || html.includes('L(')) {
+    return 'local-linearization';
+  }
+  if (html.includes(String.raw`F\circ G`) || html.includes(String.raw`G\circ F`) || html.includes(String.raw`H\circ F\circ G`) || html.includes('F(G(')) {
+    return 'chain-rule';
+  }
+  if (html.includes(String.raw`\frac{d}{dt}`) || html.includes(String.raw`\mathbf{r}`) || html.includes('r(t)')) {
+    return 'path-rate';
+  }
+  if (html.includes(String.raw`H_f`)) return 'hessian';
+  if (html.includes(String.raw`\nabla`) || html.includes('gradient')) return 'gradient';
+  if (html.includes(String.raw`J_F`) || html.includes(String.raw`J_f`) || html.includes('Jacobian')) return 'jacobian';
+  if (html.includes('f_x') || html.includes('f_y') || html.includes(String.raw`\partial f`)) return 'partial-derivative';
+  if (html.includes(String.raw`\operatorname{dom}`)) return 'domain';
+  if (html.includes(String.raw`\lim`) || lower.includes('continuous') || lower.includes('continuity')) return 'limit-continuity';
+  return 'general';
+}
+
+function normalizeCaseText(s) {
+  return String(s || '').replace(/\s+/g, ' ').trim();
+}
+
+function caseSignature(c) {
+  const patientHtml = c && c.patient ? c.patient.html || '' : '';
+  const correctDiagnosis = (c && c.diagnoses ? c.diagnoses : []).find(choice => choice.correct);
+  return [
+    caseFamily(c),
+    normalizeCaseText(stripCodeComments(patientHtml)),
+    normalizeCaseText(correctDiagnosis ? correctDiagnosis.html : '')
+  ].join('::');
+}
+
+function caseRoundKey(c) {
+  if (c && c.roundKey) return c.roundKey;
+  return caseSignature(c);
+}
+
+function uniqueCasePool(pool) {
+  const seen = new Set();
+  return pool.filter(c => {
+    const signature = caseSignature(c);
+    if (seen.has(signature)) return false;
+    seen.add(signature);
+    return true;
+  });
+}
+
+function buildRoundQueue(pool) {
+  const candidates = shuffle(uniqueCasePool(pool));
+  const queue = [];
+  const usedSignatures = new Set();
+  const usedRoundKeys = new Set();
+  const available = c => !usedSignatures.has(caseSignature(c)) && !usedRoundKeys.has(caseRoundKey(c));
+  while (queue.length < ROUND_LENGTH && candidates.length) {
+    const previousFamily = queue.length ? caseFamily(queue[queue.length - 1]) : '';
+    let nextIndex = candidates.findIndex(c => available(c) && caseFamily(c) !== previousFamily);
+    if (nextIndex < 0) nextIndex = candidates.findIndex(available);
+    if (nextIndex < 0) break;
+    const next = candidates.splice(nextIndex, 1)[0];
+    queue.push(next);
+    usedSignatures.add(caseSignature(next));
+    usedRoundKeys.add(caseRoundKey(next));
+  }
+  return queue;
+}
+
 function escapeHtml(str) {
   return String(str)
     .replaceAll('&', '&amp;')
@@ -5436,90 +5616,89 @@ function escapeHtml(str) {
     .replaceAll("'", '&#039;');
 }
 
-function renderBlock(item) {
+function protectMathHtml(html) {
+  const normalizeMathAliases = (s) => String(s)
+    .replace(/\bF0\b/g, 'F_0')
+    .replace(/\bJ0\b/g, 'J_0')
+    .replace(/\bx0\b/g, 'x_0');
+  const escapeComparators = (s) => String(s)
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;');
+  const prepareMathBody = (s) => escapeComparators(normalizeMathAliases(s));
+  return String(html || '')
+    .replace(/\\\[([\s\S]*?)\\\]/g, (_, body) => `\\[${prepareMathBody(body)}\\]`)
+    .replace(/\\\(([\s\S]*?)\\\)/g, (_, body) => `\\(${prepareMathBody(body)}\\)`);
+}
+
+function formatSubscriptText(s) {
+  return String(s)
+    .replaceAll('F(x0)', String.raw`\(F(x_0)\)`)
+    .replaceAll('`F0`', String.raw`\(F_0\)`)
+    .replaceAll('`J0`', String.raw`\(J_0\)`)
+    .replaceAll('`x0`', String.raw`\(x_0\)`);
+}
+
+function chartMetaHtml(goal = '') {
+  const intent = goal ? `<span class="goalNote">Intended task: ${formatSubscriptText(goal)}</span>` : '';
+  return protectMathHtml(`<div class="chartMeta"><b>Chart</b>${intent}</div>`);
+}
+
+function stripCodeComments(html) {
+  return String(html || '').replace(/(<pre\s*><code>)([\s\S]*?)(<\/code><\/pre>)/gi, (full, open, code, close) => {
+    const lines = code.split('\n').filter(line => !/^\s*#/.test(line));
+    return `${open}${lines.join('\n').trimStart()}${close}`;
+  });
+}
+
+function renderBlock(item, options = {}) {
   let html = item.html || '';
   if (item.type === 'code' || item.code) {
     html += `<pre><code>${escapeHtml(item.code || '')}</code></pre>`;
   }
-  return html;
+  if (options.stripCodeComments) {
+    html = stripCodeComments(html);
+  }
+  return protectMathHtml(html);
+}
+
+function renderPatientBlock(c) {
+  const html = renderBlock(c.patient);
+  const goal = c && c.patient ? c.patient.goal || '' : '';
+  const isCode = /<pre\s*><code>/i.test(html) || (c && c.patient && c.patient.code);
+  return chartMetaHtml(isCode ? goal : '') + (isCode ? stripCodeComments(html) : html);
+}
+
+let typesetScheduled = false;
+let typesetRunning = false;
+let typesetAgain = false;
+
+function runTypesetCycle() {
+  typesetScheduled = false;
+  typesetRunning = true;
+  const app = document.getElementById('app');
+  if (window.MathJax && MathJax.typesetClear) {
+    MathJax.typesetClear([app]);
+  }
+  MathJax.typesetPromise([app]).catch(() => {}).finally(() => {
+    typesetRunning = false;
+    if (typesetAgain) {
+      typesetAgain = false;
+      typeset();
+    }
+  });
 }
 
 function typeset() {
   if (window.MathJax && MathJax.typesetPromise) {
-    MathJax.typesetPromise([document.getElementById('app')]).catch(() => {});
+    if (typesetRunning || typesetScheduled) {
+      typesetAgain = true;
+      return;
+    }
+    typesetScheduled = true;
+    requestAnimationFrame(runTypesetCycle);
   }
 }
 
-
-function patientContextNote(c) {
-  const block = c && c.patient ? c.patient : {};
-  const html = String(block.html || '');
-  if (!html || /<pre\s*><code>/i.test(html) || block.code) return '';
-  if (!html.includes('mathDisplay')) return '';
-
-  function note(s) {
-    return `<div class="patientContextNote"><b>Chart note.</b> ${s}</div>`;
-  }
-
-  // Tangent-plane patients are the ones where z is the height of the tangent plane,
-  // not just any displayed variable named z.
-  if ((html.includes('z=') || html.includes('z =')) &&
-      (html.includes('f_x') || html.includes('f_y') || html.includes('f(a,b)'))) {
-    return note(String.raw`Intended task: write a tangent-plane equation. Here \(z\) is the output height \(L(x,y)\) of the plane approximating the graph \(z=f(x,y)\).`);
-  }
-  if (html.includes(String.raw`\text{Level curve}`) || html.includes(String.raw`\text{level curve}`) || html.includes(String.raw`\text{level set}`)) {
-    return note(String.raw`Intended task: distinguish a level curve or level set from the graph of a function.`);
-  }
-  if (html.includes('L(') || html.includes(String.raw`F(\mathbf{a}+\mathbf{h})`) || html.includes(String.raw`F(\mathbf{x})\approx`) || html.includes(String.raw`F(\mathbf{a})+J_F`)) {
-    return note(String.raw`Intended task: build or check a local linearization near the base point. The local model should be an affine approximation, not the original function.`);
-  }
-  if (html.includes(String.raw`J_{F\circ G}`) || html.includes(String.raw`F\circ G`) || html.includes(String.raw`G\circ F`) || html.includes(String.raw`H\circ F\circ G`) || html.includes(String.raw`F(G(`)) {
-    return note(String.raw`Intended task: apply the Jacobian chain rule for a composed map.`);
-  }
-  if (html.includes(String.raw`\frac{d}{dt}`)) {
-    return note(String.raw`Intended task: differentiate a function along a one-parameter path.`);
-  }
-  if (html.includes(String.raw`\mathbf{r}`) || html.includes(String.raw`r(t)`) || html.includes(String.raw`\text{speed}`)) {
-    return note(String.raw`Intended task: work with a one-parameter vector-valued map. For speed, use the length of the velocity vector.`);
-  }
-  if (html.includes(String.raw`\sigma`) || html.includes(String.raw`W\mathbf{x}+\mathbf{b}`) || html.includes(String.raw`W\mathbf{x}`) || html.includes(String.raw`W\in\mathbb`)) {
-    return note(String.raw`Intended task: compute or classify the derivative of a small nonlinear layer.`);
-  }
-  if (html.includes(String.raw`J_F`) || html.includes(String.raw`J_f`) || html.includes(String.raw`J_G`) || html.includes(String.raw`J_T`) || html.includes(String.raw`\left[\frac{\partial F_i}`)) {
-    return note(String.raw`Intended task: compute or check a Jacobian matrix. Rows correspond to output components; columns correspond to input variables.`);
-  }
-  if (html.includes(String.raw`H_f`)) {
-    return note(String.raw`Intended task: compute or check the Hessian matrix of second partial derivatives.`);
-  }
-  if (html.includes(String.raw`\nabla`)) {
-    return note(String.raw`Intended task: compute or check a gradient vector for a scalar-valued function.`);
-  }
-  if (html.includes('f_x') || html.includes('f_y') || html.includes(String.raw`\partial f`)) {
-    return note(String.raw`Intended task: compute the indicated partial derivative while holding the other variables fixed.`);
-  }
-  if (html.includes(String.raw`\lim`) || html.includes('continuous') || html.includes('continuity')) {
-    return note(String.raw`Intended task: check a multivariable limit or continuity claim.`);
-  }
-  if (html.includes(String.raw`\operatorname{dom}`)) {
-    return note(String.raw`Intended task: state the domain of the displayed function.`);
-  }
-  if (html.includes(String.raw`\operatorname{graph}`)) {
-    return note(String.raw`Intended task: describe the graph of the displayed function, including both input coordinates and output coordinates.`);
-  }
-  if (html.includes(String.raw`\partial D`)) {
-    return note(String.raw`Intended task: describe the boundary of the displayed region.`);
-  }
-  if (html.includes(String.raw`B_r`)) {
-    return note(String.raw`Intended task: write the ball centered at the stated base point.`);
-  }
-  if (html.includes(String.raw`F_1`) || html.includes(String.raw`F_2`)) {
-    return note(String.raw`Intended task: identify the component functions of a vector-valued map.`);
-  }
-  if (html.includes(String.raw`F:\mathbb`) || html.includes(String.raw`F(x,y)=\begin{bmatrix}`)) {
-    return note(String.raw`Intended task: identify the function type from its inputs and outputs.`);
-  }
-  return note(String.raw`Intended task: diagnose the displayed Unit 3 computation or statement.`);
-}
 
 function currentCase() { return state.queue[state.index]; }
 
@@ -5527,18 +5706,63 @@ function updateHud() {
   patientCount.textContent = `${Math.min(state.index + 1, ROUND_LENGTH)}/${ROUND_LENGTH}`;
   treatedCount.textContent = String(state.treated);
   missCount.textContent = String(state.misses);
-  progress.style.width = `${(state.treated / ROUND_LENGTH) * 100}%`;
+}
+
+function setHintGateLabel() {
+  if (!allowHintsBtn) return;
+  const top = allowHintsBtn.querySelector('span');
+  const main = allowHintsBtn.querySelector('b');
+  if (top) top.textContent = state.hintsAllowed ? 'hints' : 'allow';
+  if (main) main.textContent = state.hintsAllowed ? 'on' : 'hints';
+}
+
+function updateHintGate() {
+  if (!allowHintsBtn || !hintToggle || !hintPanel) return;
+  allowHintsBtn.classList.toggle('active', state.hintsAllowed);
+  setHintGateLabel();
+  hintToggle.classList.toggle('hidden', !state.hintsAllowed);
+  if (!state.hintsAllowed) {
+    hintPanel.classList.remove('show');
+    hintToggle.setAttribute('aria-expanded', 'false');
+    if (hintIcon) hintIcon.textContent = '+';
+  }
 }
 
 function startRound() {
+  closeNewRoundConfirm();
+  if (introOverlay) introOverlay.classList.add('hidden');
   const pool = buildCasePool();
-  state.queue = shuffle(pool).slice(0, ROUND_LENGTH);
+  state.queue = buildRoundQueue(pool);
   state.index = 0;
   state.treated = 0;
   state.misses = 0;
   gameScreen.classList.remove('hidden');
   endPanel.classList.remove('show');
   renderCase();
+}
+
+function resetRoundState() {
+  state.queue = [];
+  state.index = 0;
+  state.treated = 0;
+  state.misses = 0;
+  state.diagnosisDone = false;
+  state.treatmentDone = false;
+  state.diagnosisChoices = [];
+  state.treatmentChoices = [];
+  updateHud();
+}
+
+function returnToIntro() {
+  closeNewRoundConfirm();
+  resetRoundState();
+  gameScreen.classList.add('hidden');
+  endPanel.classList.remove('show');
+  if (introOverlay) {
+    introOverlay.classList.remove('hidden');
+    introStartBtn.focus();
+  }
+  updateHintGate();
 }
 
 function renderCase() {
@@ -5549,15 +5773,16 @@ function renderCase() {
   state.treatmentChoices = shuffle(c.treatments);
 
   patientTitle.textContent = `Patient ${state.index + 1}`;
-  patientBody.innerHTML = patientContextNote(c) + renderBlock(c.patient);
-  hintPanel.innerHTML = c.hint;
-  hintPanel.classList.remove('open');
+  patientBody.innerHTML = renderPatientBlock(c);
+  hintText.innerHTML = protectMathHtml(c.hint || '');
+  hintPanel.classList.remove('show');
   hintToggle.setAttribute('aria-expanded', 'false');
-  hintChevron.textContent = '+';
+  hintIcon.textContent = '+';
+  updateHintGate();
 
   diagnosisChoicesEl.innerHTML = '';
   treatmentChoicesEl.innerHTML = '';
-  diagnosisFeedback.textContent = 'Choose the wrong idea.';
+  diagnosisFeedback.textContent = 'Choose a diagnosis';
   diagnosisFeedback.className = 'feedback';
   treatmentFeedback.textContent = 'Diagnosis required first.';
   treatmentFeedback.className = 'feedback';
@@ -5572,12 +5797,26 @@ function renderCase() {
     const btn = document.createElement('button');
     btn.className = 'choice';
     btn.type = 'button';
-    btn.innerHTML = choice.html;
+    btn.innerHTML = protectMathHtml(choice.html);
     btn.addEventListener('click', () => chooseDiagnosis(i, btn));
     diagnosisChoicesEl.appendChild(btn);
   });
 
   updateHud();
+  typeset();
+}
+
+function toggleHint() {
+  if (!state.hintsAllowed) return;
+  const isOpen = hintPanel.classList.toggle('show');
+  hintToggle.setAttribute('aria-expanded', String(isOpen));
+  hintIcon.textContent = isOpen ? '-' : '+';
+  typeset();
+}
+
+function toggleHintGate() {
+  state.hintsAllowed = !state.hintsAllowed;
+  updateHintGate();
   typeset();
 }
 
@@ -5613,7 +5852,7 @@ function renderTreatments() {
     const btn = document.createElement('button');
     btn.className = 'choice';
     btn.type = 'button';
-    btn.innerHTML = renderBlock(choice);
+    btn.innerHTML = renderBlock(choice, { stripCodeComments: true });
     btn.addEventListener('click', () => chooseTreatment(i, btn));
     treatmentChoicesEl.appendChild(btn);
   });
@@ -5631,7 +5870,7 @@ function chooseTreatment(i, btn) {
     treatmentFeedback.textContent = 'Treatment accepted.';
     treatmentFeedback.className = 'feedback good';
     [...treatmentChoicesEl.querySelectorAll('button')].forEach(b => b.disabled = true);
-    dischargeText.innerHTML = currentCase().discharge;
+    dischargeText.innerHTML = protectMathHtml(currentCase().discharge);
     discharge.classList.add('show');
     nextBtn.textContent = state.index + 1 >= ROUND_LENGTH ? 'Finish round' : 'Next patient';
     nextRow.classList.add('show');
@@ -5665,21 +5904,42 @@ function finishRound() {
   const attempts = state.treated + state.misses;
   const accuracy = attempts ? Math.round(100 * state.treated / attempts) : 100;
   document.getElementById('endAccuracy').textContent = `${accuracy}%`;
-  progress.style.width = '100%';
 }
 
-hintToggle.addEventListener('click', () => {
-  const open = !hintPanel.classList.contains('open');
-  hintPanel.classList.toggle('open', open);
-  hintToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
-  hintChevron.textContent = open ? '−' : '+';
-  typeset();
-});
-nextBtn.addEventListener('click', nextPatient);
-newRoundBtn.addEventListener('click', startRound);
-againBtn.addEventListener('click', startRound);
+function openNewRoundConfirm() {
+  newRoundConfirm.classList.remove('hidden');
+  confirmNewRoundBtn.focus();
+}
 
-startRound();
+function closeNewRoundConfirm() {
+  newRoundConfirm.classList.add('hidden');
+}
+
+function startIntroRound() {
+  startRound();
+}
+
+nextBtn.addEventListener('click', nextPatient);
+hintToggle.addEventListener('click', toggleHint);
+allowHintsBtn.addEventListener('click', toggleHintGate);
+newRoundBtn.addEventListener('click', openNewRoundConfirm);
+cancelNewRoundBtn.addEventListener('click', closeNewRoundConfirm);
+confirmNewRoundBtn.addEventListener('click', returnToIntro);
+introStartBtn.addEventListener('click', startIntroRound);
+newRoundConfirm.addEventListener('click', (event) => {
+  if (event.target === newRoundConfirm) closeNewRoundConfirm();
+});
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape' && !newRoundConfirm.classList.contains('hidden')) {
+    closeNewRoundConfirm();
+    newRoundBtn.focus();
+  }
+});
+againBtn.addEventListener('click', returnToIntro);
+
+updateHud();
+updateHintGate();
+introStartBtn.focus();
 </script>
 </body>
 </html>
