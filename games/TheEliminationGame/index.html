@@ -1,0 +1,1198 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-060RZGCFFW"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-060RZGCFFW');
+</script>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>The Elimination Game</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop stop-color='%235b65f2'/%3E%3Cstop offset='1' stop-color='%2314b8a6'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M8 12 h16 v13 h16 v13 h16 v14' fill='none' stroke='url(%23g)' stroke-width='9' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+<style>
+
+:root{color-scheme:light;--bg:#f7f8fc;--card:#fff;--card-2:#f9fbff;--ink:#172033;--muted:#647086;--line:#dce2ee;--accent:#5b65f2;--accent-b:#14b8a6;--accent-grad:linear-gradient(135deg,#5b65f2,#14b8a6);--pink:#ffeaf3;--pink-line:#f5b8ce;--pink-ink:#a33362;--ok:#18794e;--ok-2:#e9f8ef;--bad:#b42318;--bad-2:#fff0ee;--warn:#925d00;--warn-2:#fff6df;--zero:#eef2f7;--shadow:0 22px 60px rgba(22,34,51,.12);--coefw:62px;--constw:70px;--rowh:48px}*{box-sizing:border-box}html,body{min-height:100%}body{margin:0;min-height:100vh;padding:18px;display:grid;place-items:center;color:var(--ink);background:radial-gradient(circle at 50% 0%,rgba(91,101,242,.11),transparent 34rem),linear-gradient(rgba(24,32,51,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(24,32,51,.035) 1px,transparent 1px),var(--bg);background-size:auto,24px 24px,24px 24px,auto;font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}button{font:inherit}.hidden{display:none!important}[hidden]{display:none!important}.game{width:min(100%,720px);background:var(--card);border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow);overflow:hidden;position:relative}.top{padding:16px 18px 14px;border-bottom:1px solid var(--line);background:linear-gradient(180deg,rgba(255,255,255,.96),rgba(249,251,255,.94))}.titleRow{display:flex;align-items:center;justify-content:space-between;gap:12px}h1{display:flex;align-items:center;gap:10px;margin:0;font-size:clamp(24px,4.2vw,32px);line-height:1;font-weight:800;letter-spacing:-.04em}.logoGlyph{width:44px;height:44px;display:inline-grid;place-items:center;flex:0 0 auto}.logoGlyph svg{width:44px;height:44px;display:block}.logoGlyph path{fill:none;stroke:url(#logoGrad);stroke-width:9;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:140;stroke-dashoffset:140;animation:drawStair .6s ease .15s forwards}@keyframes drawStair{to{stroke-dashoffset:0}}.statBar{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.stat{display:inline-flex;align-items:center;min-height:28px;padding:5px 10px;border-radius:999px;background:var(--card-2);border:1px solid var(--line);color:var(--muted);font-size:12px;font-weight:750;font-variant-numeric:tabular-nums}.btn{appearance:none;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--ink);min-height:38px;padding:8px 13px;font-weight:750;cursor:pointer;transition:transform .12s ease,box-shadow .12s ease,background .12s ease,border-color .12s ease}.btn:hover{transform:translateY(-1px);box-shadow:0 8px 16px rgba(22,34,51,.08)}.btn:active{transform:translateY(0);box-shadow:none}.btn.primary{border:0;background:var(--accent-grad);color:#fff;box-shadow:0 8px 18px rgba(91,101,242,.24)}.btn.pinkTop{background:var(--pink);border-color:var(--pink-line);color:var(--pink-ink);box-shadow:none;min-height:34px;padding:7px 12px;font-size:13px}.btn.pinkTop:hover{background:#ffe1ee;box-shadow:0 7px 16px rgba(163,51,98,.12)}.modeBar{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:3px;margin-top:12px;border:1px solid var(--line);border-radius:999px;padding:3px;background:var(--card-2);isolation:isolate;--mode-index:1;--mode-count:3}.modeBar::before{content:"";position:absolute;z-index:0;top:3px;bottom:3px;left:calc(3px + (100% - 6px)/var(--mode-count)*var(--mode-index));width:calc((100% - 6px)/var(--mode-count));border-radius:999px;background:var(--accent-grad);box-shadow:0 8px 18px rgba(91,101,242,.20);transition:left .18s ease}.modeBtn{position:relative;z-index:1;appearance:none;border:0;background:transparent;border-radius:999px;min-height:32px;padding:6px 10px;color:var(--muted);font-size:12.5px;font-weight:800;cursor:pointer}.modeBtn.active{color:#fff}.modeBtn:focus-visible,.btn:focus-visible,.choice:focus-visible{outline:3px solid rgba(91,101,242,.35);outline-offset:2px}.progressPanel{padding:9px 14px;border-bottom:1px solid var(--line);background:var(--card)}.tracker{--progress:0%;position:relative;display:flex;gap:6px;align-items:center;overflow-x:auto;padding:3px 0 5px}.tracker::before{content:"";position:absolute;left:0;right:0;top:50%;height:2px;background:var(--line);transform:translateY(-50%)}.tracker::after{content:"";position:absolute;left:0;top:50%;height:2px;width:var(--progress);background:var(--accent-grad);transform:translateY(-50%);transition:width .25s ease}.trackStep{position:relative;z-index:1;display:inline-flex;align-items:center;gap:5px;min-height:30px;padding:5px 9px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--muted);font-size:12px;font-weight:800;white-space:nowrap}.trackStep .num{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;border-radius:999px;background:var(--card-2);font-size:10px;color:var(--muted)}.trackStep.now{border-color:#bec6ff;color:var(--accent);background:#f3f5ff}.trackStep.now .num{background:var(--accent);color:#fff}.trackStep.done{border-color:#bde7ce;color:var(--ok);background:var(--ok-2)}.trackStep.done .num{background:var(--ok);color:#fff}.trackStep.dim{opacity:.55}.play{padding:12px 14px 14px}.taskPanel{padding:11px 13px;border:1px solid var(--line);border-radius:18px;background:var(--card-2)}.taskLabel{font-size:12px;font-weight:850;color:var(--accent);text-transform:uppercase;letter-spacing:.065em;margin-bottom:4px}.promptText{margin:0;font-size:clamp(18px,3.8vw,24px);line-height:1.15;letter-spacing:-.025em}.matrixCard{margin-top:10px;border:1px solid var(--line);border-radius:20px;background:var(--card);padding:10px}.matrixStage{display:grid;grid-template-columns:32px minmax(0,1fr);gap:8px;align-items:center;justify-content:center;padding:4px 2px}.rowLabels{display:grid;grid-template-rows:repeat(3,var(--rowh));gap:4px;align-items:center}.rowLabel{font:800 14px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;text-align:right;color:var(--muted)}.matrixWrap{display:flex;justify-content:center;align-items:center;min-width:0;overflow-x:auto;padding:6px 0}.matrixShell{position:relative;display:inline-block;padding:0 11px;--coefw:62px;--constw:70px;--rowh:48px}.matrixShell::before,.matrixShell::after{content:"";position:absolute;top:-5px;bottom:-5px;width:10px;border-top:2px solid var(--ink);border-bottom:2px solid var(--ink);pointer-events:none}.matrixShell::before{left:0;border-left:2px solid var(--ink);border-radius:10px 0 0 10px}.matrixShell::after{right:0;border-right:2px solid var(--ink);border-radius:0 10px 10px 0}.augLine{position:absolute;top:-5px;bottom:-5px;left:0;width:2px;background:var(--ink);border-radius:999px;z-index:4;pointer-events:none}.stairSvg{position:absolute;top:0;left:11px;z-index:3;pointer-events:none;overflow:visible}.stairSvg path{fill:none;stroke:url(#stairGradient);stroke-width:5;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 7px rgba(20,184,166,.22));stroke-dasharray:1000;stroke-dashoffset:1000;animation:drawStair .42s ease forwards}.stairSvg polygon{fill:rgba(91,101,242,.055)}table.matrix{border-collapse:separate;border-spacing:0 4px;table-layout:fixed;width:auto;font:800 18px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;position:relative;z-index:2}table.matrix col.coef{width:var(--coefw)}table.matrix col.constantCol{width:var(--constw)}.matrix td{width:var(--coefw);min-width:var(--coefw);height:var(--rowh);padding:0 6px;text-align:center;border-radius:12px;position:relative;transition:background .16s ease,box-shadow .16s ease,color .16s ease;white-space:nowrap}.matrix td.constant{width:var(--constw);min-width:var(--constw);padding-left:16px}.matrix td.activeCol{background:rgba(91,101,242,.055)}.matrix td.focus{background:#fff5cf;box-shadow:inset 0 0 0 2px #f0c861}.matrix td.pivotDone{background:var(--ok-2);box-shadow:inset 0 0 0 1px #c7ebd4;color:var(--ok)}.matrix td.zeroZone{background:var(--zero);color:#8c98aa}.matrix td.violation{background:var(--bad-2);box-shadow:inset 0 0 0 2px #f2b5af;color:var(--bad)}.matrix tr.flash td{animation:flash .46s ease}@keyframes flash{0%{transform:scale(1)}38%{transform:scale(1.045);background:#e5fbff}100%{transform:scale(1)}}.matrix tr.swapFromDown{animation:swapDown .25s ease}.matrix tr.swapFromUp{animation:swapUp .25s ease}@keyframes swapDown{from{transform:translateY(calc(-1*var(--swapdist)))}to{transform:translateY(0)}}@keyframes swapUp{from{transform:translateY(var(--swapdist))}to{transform:translateY(0)}}.calcBubble{position:absolute;z-index:10;left:50%;bottom:-13px;transform:translateX(-50%);max-width:112px;padding:2px 5px;border-radius:999px;background:#172033;color:white;font:700 9.5px/1.2 ui-sans-serif,system-ui;box-shadow:0 4px 10px rgba(0,0,0,.16);white-space:nowrap;pointer-events:none}.equationsPanel{margin-top:8px;border-radius:16px;border:1px solid var(--line);background:var(--card-2);padding:9px 11px}.equationsSummary{font-size:12px;font-weight:850;color:var(--muted);text-transform:none;letter-spacing:0;margin-bottom:4px}.equations{font:750 13px/1.55 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:var(--ink)}.eqLine{white-space:pre-wrap}.checkList{display:grid;gap:4px;color:var(--muted)}.choiceArea{margin-top:10px}.choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.choices.fullWidth{grid-template-columns:minmax(0,1fr)}.choices.refNext{justify-items:center}.choices.refNext .choice{width:min(100%,280px)}.choice{appearance:none;border:1.5px solid var(--line);border-radius:17px;background:var(--card);min-height:58px;padding:10px 12px;text-align:left;color:var(--ink);cursor:pointer;display:grid;grid-template-columns:26px 1fr;gap:8px;align-items:center;font-size:15px;font-weight:760;line-height:1.25;transition:transform .1s ease,box-shadow .1s ease,border-color .12s ease,background .12s ease}.choice:hover{transform:translateY(-1px);box-shadow:0 10px 20px rgba(22,34,51,.08);border-color:#c5cce0}.choice:active{transform:translateY(0);box-shadow:none}.choiceKey{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:999px;background:var(--card-2);border:1px solid var(--line);color:var(--muted);font-size:12px;font-weight:850}.choiceText{min-width:0;white-space:pre-line}.choice mjx-container,.choice .mjx-chtml{font-size:1.06em}.choice.correct{border-color:#a8dfbf;background:var(--ok-2);color:var(--ok)}.choice.wrong{border-color:#f2b5af;background:var(--bad-2);color:var(--bad);animation:shake .28s ease}@keyframes shake{25%{transform:translateX(-5px)}50%{transform:translateX(5px)}75%{transform:translateX(-3px)}}.refChoices .choice{font-size:18px;min-height:64px;justify-content:center;text-align:center;grid-template-columns:1fr}.refStart{display:grid;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px;text-align:center}.refStart p{margin:0;color:var(--muted);font-weight:650;line-height:1.35}.refStartActions{display:grid;grid-template-columns:1fr;gap:8px;justify-items:center}.refStartActions .btn{min-width:180px}.feedback{margin-top:10px;border:0;border-radius:999px;background:transparent;padding:4px 0;min-height:28px;color:var(--muted)}.feedback.hiddenFeedback{display:none}.feedbackMain{display:grid;grid-template-columns:24px 1fr;gap:8px;align-items:center}.feedbackMain p{margin:0;font-size:13px;font-weight:700;line-height:1.25}.feedbackIcon{width:22px;height:22px;border-radius:999px;display:grid;place-items:center;background:var(--card-2);color:var(--accent);font-weight:850;font-size:12px}.feedback.good{color:var(--ok)}.feedback.bad{color:var(--bad)}.preview{display:none!important}.endPanel{display:none;position:absolute;inset:0;z-index:30;background:rgba(247,248,252,.88);backdrop-filter:blur(9px);place-items:center;padding:18px}.endPanel.show{display:grid}.endCard{width:min(100%,500px);background:var(--card);border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow);padding:22px;text-align:center}.endCard h2{margin:0 0 4px;font-size:clamp(26px,5vw,34px);letter-spacing:-.04em}.endStair{width:170px;height:80px;margin:2px auto 4px;display:block}.endStair path{fill:none;stroke:url(#endGrad);stroke-width:7;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:400;stroke-dashoffset:400;animation:drawStair .55s ease forwards}.endStars{font-size:28px;color:var(--warn);letter-spacing:.04em}.starIcon{display:inline-block}.starIcon.empty{opacity:.35;filter:grayscale(1)}.summaryGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-top:12px}.summaryBox{background:var(--card-2);border:1px solid var(--line);border-radius:16px;padding:10px}.summaryBox span{display:block;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.08em;font-weight:800}.summaryBox b{font-size:22px;font-variant-numeric:tabular-nums}.endNote{color:var(--muted);font-weight:650;line-height:1.38}.endBtns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:12px}@media(max-width:560px){body{padding:8px;place-items:start center}.game{border-radius:18px}.top{padding:14px}.logoGlyph,.logoGlyph svg{width:36px;height:36px}h1{font-size:24px}.titleRow{align-items:start}.btn.pinkTop{font-size:12px;padding:7px 10px;white-space:nowrap}.statBar{gap:6px}.stat{font-size:11.5px}.modeBar::before{display:none}.modeBtn.active{background:var(--accent-grad);color:#fff}.progressPanel{padding:8px 10px}.play{padding:10px}.taskPanel{padding:10px 11px}.matrixCard{padding:9px 8px}.matrixStage{grid-template-columns:28px minmax(0,1fr);gap:5px}.matrixShell{--coefw:52px!important;--constw:60px!important}.matrix td{font-size:16px;padding:0 4px}.rowLabel{font-size:13px}.choices{grid-template-columns:1fr}.summaryGrid{grid-template-columns:repeat(2,1fr)}.calcBubble{font-size:8px;max-width:68px}.eqLine{font-size:12px}}@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.logoGlyph path,.stairSvg path{stroke-dashoffset:0!important}}@media(prefers-color-scheme:dark){:root{color-scheme:dark;--bg:#0f1420;--card:#151b2a;--card-2:#101827;--ink:#edf3ff;--muted:#a6b1c5;--line:#2b3548;--accent:#8b8dff;--accent-b:#2dd4bf;--accent-grad:linear-gradient(135deg,#8b8dff,#2dd4bf);--pink:#321a29;--pink-line:#714059;--pink-ink:#ffd2e5;--ok:#7bd99f;--ok-2:#10281d;--bad:#ff8d82;--bad-2:#311715;--warn:#ffd36a;--warn-2:#2a2111;--zero:#1e2634;--shadow:0 18px 48px rgba(0,0,0,.35)}.btn.primary{color:#07101d}.btn.pinkTop:hover{background:#3e2032}.calcBubble{background:#edf3ff;color:#101827}.matrix td.focus{background:#463817}.choiceKey{background:#111a2b}}
+
+
+/* latest requested UI cleanup */
+.tracker{flex-wrap:wrap;overflow-x:visible}
+.choiceText{white-space:pre-line}
+.choiceText[data-tex]{white-space:normal;font-size:18px}
+.choiceText mjx-container,.choice .MathJax,.choice .mjx-chtml{font-size:1.06em!important;margin:0!important}
+.feedback{height:64px;min-height:64px;overflow:auto;display:grid;align-items:center}
+.feedback.hiddenFeedback{display:grid;visibility:hidden;pointer-events:none}
+.feedback.bad .feedbackIcon{background:var(--bad-2);color:var(--bad)}
+#warmupQuizView:not([hidden]) .warmupFeedback{height:64px;overflow:auto}
+#warmupQuizView:not([hidden]) .warmupFeedback[hidden]{display:grid!important;visibility:hidden}
+#warmupQuizView:not([hidden]) .warmupNextRow[hidden]{display:flex!important;visibility:hidden}
+#warmupQuizView:not([hidden]) .warmupSwipeHint[hidden]{display:block!important;visibility:hidden}
+.calcBubble{display:none!important}
+.equationsSummary{text-transform:none!important;letter-spacing:0!important;color:var(--ink);font-size:13px}
+.equationsSummary[hidden],.equationsPanel[hidden]{display:none!important}
+
+
+/* landing page and view routing */
+body.introActive{place-items:start center}
+.titleHome{all:unset;display:flex;align-items:center;gap:10px;min-width:0;border-radius:13px;cursor:pointer}
+.titleHome span:last-child{min-width:0}
+.titleHome:focus-visible{outline:3px solid rgba(91,101,242,.35);outline-offset:3px}
+#introView{position:relative;padding:16px 18px 72px;display:grid;gap:12px}
+.introCard{border:1px solid var(--line);border-radius:20px;background:var(--card-2);padding:15px 16px}
+.introEyebrow{display:block;margin-bottom:4px;color:var(--accent);font-size:11px;font-weight:850;letter-spacing:.075em;text-transform:uppercase}
+.introCard h2,.introModes h2{margin:0;font-size:clamp(20px,3.8vw,25px);line-height:1.1;letter-spacing:-.03em}
+.introLead{margin:6px 0 0;color:var(--muted);font-size:13.5px;font-weight:650;line-height:1.4}
+.outcomeList{list-style:none;margin:12px 0 0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 14px}
+.outcomeList li{display:grid;grid-template-columns:22px minmax(0,1fr);gap:7px;align-items:start;color:var(--ink);font-size:13px;font-weight:690;line-height:1.34}
+.outcomeList li::before{content:"✓";display:grid;place-items:center;width:20px;height:20px;border-radius:999px;background:var(--ok-2);color:var(--ok);font-size:12px;font-weight:900}
+.cheatGrid{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:start;margin-top:12px}
+.refConditions{list-style:none;counter-reset:ref-rule;margin:0;padding:0;display:grid;gap:8px}
+.refConditions li{counter-increment:ref-rule;display:grid;grid-template-columns:23px minmax(0,1fr);gap:8px;align-items:start;color:var(--muted);font-size:13px;font-weight:680;line-height:1.34}
+.refConditions li::before{content:counter(ref-rule);display:grid;place-items:center;width:21px;height:21px;border-radius:999px;background:var(--card);border:1px solid var(--line);color:var(--accent);font-size:11px;font-weight:850}
+.cheatActions{display:flex;align-items:center;justify-content:center;gap:9px;flex-wrap:wrap;margin-top:10px}
+.warmupBtn{border-color:#bec6ff;color:var(--accent);background:var(--card)}
+.warmupBtn:hover{border-color:var(--accent);background:var(--card-2)}
+.buttonNote{color:var(--muted);font-size:12px;font-weight:700}
+.introMatrixFigure{margin:0;display:grid;justify-items:center;gap:7px;min-width:0;transform:translateY(-6px)}
+.introMatrixScroller{max-width:100%;overflow-x:auto;padding:0 2px 2px}
+.introMatrixStage{grid-template-columns:26px auto;gap:5px;width:max-content;padding:0 1px 4px}
+.introShell{--coefw:48px!important;--constw:55px!important;--rowh:39px!important}
+.introShell table.matrix{width:199px;font-size:15px}
+.introShell .matrix td{font-size:15px;padding:0 4px}
+.introShell .augLine{left:154px}
+.introStairSvg{width:199px;height:131px}
+.introStairSvg path{stroke:url(#introStairGrad)}
+.introModes{display:grid;gap:4px;margin-top:6px}
+.introModesHead{padding:2px 3px}
+#introView>.introModesHead{margin-top:6px;margin-bottom:-7px}
+.introSectionToggle{all:unset;display:inline-flex;align-items:center;gap:8px;border-radius:7px;color:inherit;font:inherit;letter-spacing:inherit;text-transform:inherit;cursor:pointer}
+.introSectionToggle:focus-visible{outline:3px solid rgba(91,101,242,.3);outline-offset:3px}
+.introSectionChevron{width:13px;height:13px;flex:0 0 auto;transition:transform .18s ease}
+.introSectionChevron path{fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.introSectionToggle[aria-expanded="true"] .introSectionChevron{transform:rotate(180deg)}
+.introCard.introDisclosure{padding:0;overflow:hidden}
+.introDisclosureHeader{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;min-height:58px;padding:12px 16px}
+.introDisclosureHeader .modeChooserTitle{min-width:0}
+.introDisclosureHeader .cheatActions{margin:0 0 0 auto;justify-content:flex-end;flex-wrap:nowrap}
+.introDisclosureHeader .warmupBtn{min-height:34px;padding:6px 12px}
+.introDisclosureHeader .buttonNote{width:auto;text-align:left}
+.introDisclosureContent{padding:0 16px 15px}
+.introDisclosureContent .cheatGrid{margin-top:0}
+.cheatReminder{list-style:none;margin:12px 0 0;padding:10px 12px;display:grid;gap:5px;border:1px solid var(--line);border-radius:14px;background:var(--card);color:var(--muted);font-size:12.5px;font-weight:670;line-height:1.35}
+.cheatReminder strong{color:var(--ink)}
+.modeCards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.modeCard{position:relative;min-width:0;border:1px solid var(--line);border-radius:20px;background:var(--card);padding:14px;display:grid;grid-template-rows:auto 1fr;gap:7px;cursor:pointer;transition:transform .15s ease,border-color .15s ease,box-shadow .15s ease}
+.modeCard[data-mode="guided"]{background:linear-gradient(rgba(91,101,242,.075),rgba(91,101,242,.035)),var(--card);border-color:rgba(91,101,242,.36)}
+.modeCard[data-mode="exam"]{background:linear-gradient(rgba(20,184,166,.075),rgba(20,184,166,.035)),var(--card);border-color:rgba(20,184,166,.36)}
+.modeCard.recommended{border-color:#bec6ff;box-shadow:inset 0 0 0 1px rgba(91,101,242,.08)}
+.modeCard::after{content:"→";position:absolute;right:14px;bottom:12px;color:var(--accent);font-size:20px;font-weight:900;line-height:1;opacity:0;transform:translateX(-5px);transition:opacity .15s ease,transform .15s ease}
+.modeCard:hover,.modeCard:focus-visible{transform:translateY(-3px);border-color:var(--accent);box-shadow:0 10px 24px rgba(91,101,242,.15),inset 0 0 0 1px rgba(91,101,242,.08)}
+.modeCard[data-mode="exam"]:hover,.modeCard[data-mode="exam"]:focus-visible{border-color:var(--accent-b);box-shadow:0 10px 24px rgba(20,184,166,.15),inset 0 0 0 1px rgba(20,184,166,.08)}
+.modeCard:hover::after,.modeCard:focus-visible::after{opacity:1;transform:translateX(0)}
+.modeCard:focus-visible{outline:3px solid rgba(91,101,242,.28);outline-offset:3px}
+.modeCard h3{margin:0;font-size:17px;line-height:1.15;letter-spacing:-.02em}
+.modeCard p{margin:0;color:var(--muted);font-size:13px;font-weight:650;line-height:1.4}
+.modeBest{position:absolute;right:14px;top:15px;color:var(--muted);font-size:11px;font-weight:850;font-variant-numeric:tabular-nums;letter-spacing:.02em}
+.aboutBtn{appearance:none;position:absolute;right:18px;bottom:16px;width:42px;height:42px;border:1px solid #bec6ff;border-radius:50%;display:grid;place-items:center;background:var(--card);color:var(--accent);font-size:22px;line-height:1;font-weight:900;cursor:pointer;box-shadow:0 3px 10px rgba(91,101,242,.12);transition:transform .12s ease,border-color .12s ease,box-shadow .12s ease}
+.aboutBtn:hover{transform:translateY(-1px);border-color:var(--accent);box-shadow:0 5px 14px rgba(91,101,242,.16)}
+.aboutBtn:focus-visible{outline:3px solid rgba(91,101,242,.3);outline-offset:3px}
+.introFootnote{margin:1px 0 0;color:var(--muted);font-size:12px;font-weight:650;line-height:1.35;text-align:center}
+.introFootnote a{color:var(--accent);font-weight:800;text-underline-offset:2px}
+@media(max-width:560px){#introView{padding:10px 10px 14px}.introCard{padding:13px 12px}.introCard.introDisclosure{padding:0}.introDisclosureHeader{padding:12px}.introDisclosureContent{padding:0 12px 12px}.introDisclosureHeader .cheatActions{width:100%;justify-content:flex-end}.outcomeList{grid-template-columns:1fr}.cheatGrid{grid-template-columns:1fr;gap:12px}.cheatActions{justify-content:center}.modeCards{grid-template-columns:1fr}.introModesHead{text-align:center}.introMatrixFigure{width:100%}.titleHome{gap:8px}}
+@media(max-width:350px){#introView{padding-inline:7px}.introCard{padding-inline:9px}.introMatrixScroller{margin-inline:-4px}.buttonNote{width:100%;text-align:center}}
+@media(prefers-color-scheme:dark){.top{background:linear-gradient(180deg,rgba(21,27,42,.98),rgba(16,24,39,.96))}}
+
+
+/* compact header/menu revision and modal warm-up */
+.outcomesOnly .outcomeList{margin-top:0}
+.modeChooserTitle{margin:0;color:var(--accent);font-size:12px!important;font-weight:850;letter-spacing:.075em!important;text-transform:uppercase}
+.topMenuBtn{white-space:nowrap}
+.warmupPanel,.confirmPanel{position:fixed;inset:0;z-index:60;display:grid;place-items:center;padding:12px;overflow:auto;background:rgba(247,248,252,.74);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.confirmPanel{z-index:70}
+.warmupPanel[hidden],.confirmPanel[hidden]{display:none!important}
+.warmupCard{width:min(100%,620px);max-height:calc(100dvh - 24px);overflow:auto;border:1px solid var(--line);border-radius:24px;background:var(--card);box-shadow:var(--shadow);padding:18px}
+.warmupHeader{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:12px}
+.warmupHeader h2{margin:0;font-size:clamp(23px,4.7vw,30px);line-height:1.08;letter-spacing:-.04em}
+.iconBtn{appearance:none;display:grid;place-items:center;flex:0 0 auto;width:38px;height:38px;border:1px solid var(--line);border-radius:999px;background:var(--card-2);color:var(--muted);font-size:25px;line-height:1;cursor:pointer}
+.iconBtn:hover{color:var(--ink);border-color:#c5cce0}
+.iconBtn:focus-visible,.warmupAnswer:focus-visible{outline:3px solid rgba(91,101,242,.35);outline-offset:2px}
+.warmupMeta{display:flex;justify-content:space-between;gap:10px;color:var(--muted);font-size:12px;font-weight:800;font-variant-numeric:tabular-nums}
+.warmupProgress{height:7px;margin-top:7px;border-radius:999px;background:var(--zero);overflow:hidden}
+.warmupProgress span{display:block;width:10%;height:100%;border-radius:inherit;background:var(--accent-grad);transition:width .2s ease}
+.warmupSwipeArea{touch-action:pan-y;will-change:transform,opacity;transition:transform .16s ease,opacity .16s ease}
+.warmupSwipeArea.swipeAdvance{transform:translateX(-80px);opacity:0}
+.warmupPrompt{margin:14px 0 0;text-align:center;font-size:clamp(18px,4vw,23px);line-height:1.18;letter-spacing:-.025em}
+.warmupMatrixCard{margin-top:10px}
+.warmupMatrixStage{padding-block:2px}
+.warmupAnswers{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}
+.warmupAnswer{grid-template-columns:28px minmax(0,1fr) auto;justify-content:stretch;text-align:left;font-size:17px;min-height:62px}
+.warmupAnswer:disabled{cursor:default;opacity:1;transform:none;box-shadow:none}
+.warmupAnswerMark{display:grid;place-items:center;width:26px;height:26px;border-radius:999px;background:var(--card-2);border:1px solid var(--line);font-size:13px;font-weight:900}
+.warmupAnswer.correct .warmupAnswerMark{background:var(--ok);border-color:var(--ok);color:#fff}
+.warmupAnswer.wrong .warmupAnswerMark{background:var(--bad);border-color:var(--bad);color:#fff}
+.warmupThumb{font-size:19px;line-height:1}
+.warmupFeedback{display:grid;grid-template-columns:28px minmax(0,1fr);gap:9px;align-items:start;margin-top:11px;padding:10px 12px;border:1px solid var(--line);border-radius:15px;background:var(--card-2)}
+.warmupFeedback[hidden]{display:none!important}
+.warmupFeedback.good{border-color:#bde7ce;background:var(--ok-2);color:var(--ok)}
+.warmupFeedback.bad{border-color:#f2b5af;background:var(--bad-2);color:var(--bad)}
+.warmupFeedbackIcon{display:grid;place-items:center;width:24px;height:24px;border-radius:999px;background:var(--accent);color:#fff;font-size:12px;font-weight:900}
+.warmupFeedback.good .warmupFeedbackIcon{background:var(--ok);color:#fff}
+.warmupFeedback.bad .warmupFeedbackIcon{background:var(--bad);color:#fff}
+.warmupFeedback p{margin:1px 0 0;font-size:13px;font-weight:720;line-height:1.4}
+.warmupNextRow{display:flex;justify-content:center;margin-top:12px}
+.warmupNextRow[hidden]{display:none!important}
+.warmupNextRow .btn{min-width:170px}
+.warmupSwipeHint{margin:7px 0 0;text-align:center;color:var(--muted);font-size:11.5px;font-weight:700}
+.warmupSwipeHint[hidden]{display:none!important}
+.warmupResult{text-align:center;padding:10px 4px 4px}
+.warmupResult[hidden]{display:none!important}
+.warmupResultEmoji{font-size:42px}
+.warmupResult h3{margin:3px 0 2px;font-size:clamp(25px,5vw,34px);letter-spacing:-.04em}
+.warmupResult p{margin:6px 0;color:var(--muted);font-weight:750}
+.warmupBest{font-size:13px}
+.warmupResultActions{display:flex;justify-content:center;gap:9px;flex-wrap:wrap;margin-top:15px}
+.confirmCard{width:min(100%,430px);border:1px solid var(--line);border-radius:22px;background:var(--card);box-shadow:var(--shadow);padding:21px;text-align:center}
+.confirmCard h2{margin:0;font-size:clamp(23px,4.5vw,29px);letter-spacing:-.035em}
+.confirmCard p{margin:8px 0 0;color:var(--muted);font-size:14px;font-weight:650;line-height:1.45}
+.confirmActions{display:flex;justify-content:center;gap:9px;flex-wrap:wrap;margin-top:17px}
+.aboutCard{width:min(100%,560px);text-align:left}
+.aboutCard h2{margin-bottom:14px}
+.aboutList{display:grid;gap:11px}
+.aboutList p{margin:0;overflow-wrap:anywhere}
+.aboutList strong{color:var(--ink)}
+.aboutList a{color:var(--accent);font-weight:800;text-decoration-thickness:1.5px;text-underline-offset:2px}
+.aboutList a:hover{text-decoration-thickness:2px}
+.aboutCard .confirmActions{justify-content:flex-end}
+.endCard .summaryGrid{grid-template-columns:1fr;width:min(100%,280px);margin-inline:auto}
+body.modalOpen{overflow:hidden}
+@media(max-width:560px){.top .titleRow{align-items:center}.top h1{font-size:21px;white-space:nowrap}.top .logoGlyph,.top .logoGlyph svg{width:32px;height:32px}.topMenuBtn{min-height:32px;padding:6px 10px}.warmupPanel,.confirmPanel{padding:7px}.warmupCard{max-height:calc(100dvh - 14px);border-radius:19px;padding:13px 11px}.warmupHeader{margin-bottom:10px}.warmupAnswers{gap:8px}.warmupAnswer{min-height:58px;padding:9px 10px;font-size:15px}.warmupFeedback{padding:9px 10px}#warmupQuizView:not([hidden]) .warmupFeedback{height:84px}.confirmCard{padding:18px 15px}.outcomesOnly{padding-top:11px;padding-bottom:11px}.aboutBtn{right:12px;bottom:12px}}
+@media(max-width:350px){.top h1{font-size:19px}.top .logoGlyph,.top .logoGlyph svg{width:29px;height:29px}.topMenuBtn{padding-inline:8px}.warmupAnswers{grid-template-columns:1fr}.warmupAnswer{min-height:52px}}
+@media(prefers-color-scheme:dark){.warmupPanel,.confirmPanel{background:rgba(15,20,32,.74)}}
+
+</style>
+
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['\\(','\\)']], processEscapes: true },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] },
+  startup: {
+    typeset: false,
+    ready: () => {
+      MathJax.startup.defaultReady();
+      MathJax.startup.promise.then(() => window.dispatchEvent(new Event('mathjax-ready')));
+    }
+  }
+};
+</script>
+<script defer id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+<main class="game" id="game">
+  <header class="top">
+    <div class="titleRow">
+      <h1><span class="logoGlyph" aria-hidden="true"><svg viewBox="0 0 64 64"><defs><linearGradient id="logoGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#5b65f2"/><stop offset="100%" stop-color="#14b8a6"/></linearGradient></defs><path d="M8 12 h16 v13 h16 v13 h16 v14"/></svg></span><span>The Elimination Game</span></h1>
+      <button class="btn pinkTop topMenuBtn" id="topMenuBtn" type="button" hidden>Menu</button>
+    </div>
+    <div class="statBar" id="statBar" aria-label="Game stats" hidden>
+      <span class="stat" id="parStat">step 1</span>
+      <span class="stat" id="streakStat">misses 0</span>
+    </div>
+  </header>
+
+  <section id="introView" aria-label="Game menu">
+    <section class="introCard introDisclosure outcomesOnly" id="learningGoalsPanel" aria-labelledby="learningGoalsTitle">
+      <div class="introDisclosureHeader">
+        <h2 class="modeChooserTitle" id="learningGoalsTitle"><button class="introSectionToggle" type="button" aria-expanded="false" aria-controls="learningGoalsContent"><span>Learning goals</span><svg class="introSectionChevron" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4 6 8 10 4"/></svg></button></h2>
+      </div>
+      <div class="introDisclosureContent" id="learningGoalsContent" hidden>
+        <ul class="outcomeList">
+          <li>Decide whether a matrix is in row echelon form.</li>
+          <li>Choose the next row operation: pivot, scale, or clear.</li>
+          <li>Reduce an augmented matrix to REF with elementary row operations.</li>
+          <li>Identify basic and free variables from the pivot columns.</li>
+          <li>Determine whether a system has no solutions, exactly one, or infinitely many.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="introCard introDisclosure" id="cheatSheetPanel" aria-labelledby="cheatTitle">
+      <div class="introDisclosureHeader">
+        <h2 class="modeChooserTitle" id="cheatTitle"><button class="introSectionToggle" type="button" aria-expanded="false" aria-controls="cheatSheetContent"><span>Row echelon form cheatsheet</span><svg class="introSectionChevron" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4 6 8 10 4"/></svg></button></h2>
+        <div class="cheatActions">
+          <button class="btn warmupBtn" id="introWarmupBtn" type="button">Popup Quiz</button>
+          <span class="buttonNote" id="introWarmupBest">best -/10</span>
+        </div>
+      </div>
+      <div class="introDisclosureContent" id="cheatSheetContent" hidden>
+        <div class="cheatGrid">
+        <div>
+          <ol class="refConditions">
+            <li>Zero rows are at the bottom.</li>
+            <li>Each nonzero row starts with a leading 1.</li>
+            <li>Leading 1s move strictly right as you go down.</li>
+            <li>Entries below each leading 1 are zero.</li>
+          </ol>
+        </div>
+
+        <figure class="introMatrixFigure">
+          <div class="introMatrixScroller">
+            <div class="matrixStage introMatrixStage">
+              <div class="rowLabels" aria-hidden="true"><div class="rowLabel">R₁</div><div class="rowLabel">R₂</div><div class="rowLabel">R₃</div></div>
+              <div class="matrixWrap">
+                <div class="matrixShell introShell">
+                  <div class="augLine" aria-hidden="true"></div>
+                  <svg class="stairSvg introStairSvg" viewBox="0 0 216 142" aria-hidden="true">
+                    <defs><linearGradient id="introStairGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#5b65f2"/><stop offset="100%" stop-color="#14b8a6"/></linearGradient></defs>
+                    <polygon points="0 142 0 -2 3 -2 3 44 55 44 55 90 107 90 107 136 156 136 156 142"></polygon>
+                    <path d="M 3 -2 L 3 44 L 55 44 L 55 90 L 107 90 L 107 136 L 156 136"></path>
+                  </svg>
+                  <table class="matrix" aria-label="Example augmented matrix in row echelon form">
+                    <colgroup><col class="coef"><col class="coef"><col class="coef"><col class="constantCol"></colgroup>
+                    <tbody>
+                      <tr><td class="pivotDone">1</td><td>2</td><td>−1</td><td class="constant">4</td></tr>
+                      <tr><td class="zeroZone">0</td><td class="pivotDone">1</td><td>3</td><td class="constant">−2</td></tr>
+                      <tr><td class="zeroZone">0</td><td class="zeroZone">0</td><td class="pivotDone">1</td><td class="constant">5</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </figure>
+        </div>
+        <ul class="cheatReminder" aria-label="Variable and solution reminders">
+          <li><strong>Variables:</strong> pivot columns are basic; the rest are free.</li>
+          <li><strong>Solutions:</strong> a contradiction means none; otherwise no free variables means unique, and any free variable means infinitely many.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="introModes" aria-labelledby="modeTitle">
+      <div class="introModesHead">
+        <h2 class="modeChooserTitle" id="modeTitle">Choose a mode</h2>
+      </div>
+      <div class="modeCards">
+        <article class="modeCard recommended" id="introStudyCard" role="button" tabindex="0" data-mode="guided" aria-label="Start Study Mode">
+          <span class="modeBest" id="studyBestStars">best: -</span>
+          <h3>Study Mode</h3>
+          <p>Step-by-step Gaussian elimination with highlighted cells, guided prompts, and feedback on every move.</p>
+        </article>
+        <article class="modeCard" id="introExamCard" role="button" tabindex="0" data-mode="exam" aria-label="Start Exam Mode">
+          <span class="modeBest" id="examBestStars">best: -</span>
+          <h3>Exam Mode</h3>
+          <p>The same puzzles with the training wheels off: choose each operation with minimal feedback, like the real thing.</p>
+        </article>
+      </div>
+    </section>
+    <button class="aboutBtn" id="aboutBtn" type="button" aria-label="About The Elimination Game" aria-haspopup="dialog">?</button>
+  </section>
+
+
+  <div class="warmupPanel" id="warmupPanel" role="dialog" aria-modal="true" aria-labelledby="warmupTitle" hidden>
+    <div class="warmupCard">
+      <div class="warmupHeader">
+        <div>
+          <span class="introEyebrow">10 quick questions</span>
+          <h2 id="warmupTitle">Warm-up: is it REF?</h2>
+        </div>
+        <button class="iconBtn" id="warmupCloseBtn" type="button" aria-label="Close warm-up">×</button>
+      </div>
+
+      <div id="warmupQuizView">
+        <div class="warmupMeta" aria-live="polite">
+          <span id="warmupQuestionLabel">Question 1 of 10</span>
+          <span id="warmupScoreLabel">Score 0/10</span>
+        </div>
+        <div class="warmupProgress" aria-hidden="true"><span id="warmupProgressBar"></span></div>
+
+        <div class="warmupSwipeArea" id="warmupSwipeArea">
+          <h3 class="warmupPrompt">Is this matrix in row echelon form?</h3>
+          <section class="matrixCard warmupMatrixCard" aria-label="Warm-up augmented matrix">
+            <div class="matrixStage warmupMatrixStage">
+              <div class="rowLabels" aria-hidden="true"><div class="rowLabel">R₁</div><div class="rowLabel">R₂</div><div class="rowLabel">R₃</div></div>
+              <div class="matrixWrap">
+                <div class="matrixShell" id="warmupMatrixShell">
+                  <div class="augLine" id="warmupAugLine" aria-hidden="true"></div>
+                  <svg class="stairSvg" id="warmupStairSvg" aria-hidden="true"></svg>
+                  <table class="matrix" id="warmupMatrix"></table>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <div class="warmupAnswers" id="warmupAnswers" aria-label="Warm-up answer choices">
+            <button class="choice warmupAnswer" id="warmupYesBtn" type="button" data-warmup-answer="yes">
+              <span class="warmupAnswerMark" aria-hidden="true">✓</span><span>REF</span><span class="warmupThumb" aria-hidden="true" hidden>👍</span>
+            </button>
+            <button class="choice warmupAnswer" id="warmupNoBtn" type="button" data-warmup-answer="no">
+              <span class="warmupAnswerMark" aria-hidden="true">✕</span><span>Not REF</span><span class="warmupThumb" aria-hidden="true" hidden>👍</span>
+            </button>
+          </div>
+
+          <div class="warmupFeedback" id="warmupFeedback" aria-live="polite" hidden>
+            <span class="warmupFeedbackIcon" id="warmupFeedbackIcon" aria-hidden="true">✓</span>
+            <p id="warmupFeedbackText"></p>
+          </div>
+
+          <div class="warmupNextRow" id="warmupNextRow" hidden>
+            <button class="btn primary" id="warmupNextBtn" type="button">Next Matrix</button>
+          </div>
+          <p class="warmupSwipeHint" id="warmupSwipeHint" hidden>Swipe left or tap Next Matrix.</p>
+        </div>
+      </div>
+
+      <div class="warmupResult" id="warmupResultView" hidden>
+        <div class="warmupResultEmoji" aria-hidden="true">👍</div>
+        <h3 id="warmupResultTitle" tabindex="-1">Warm-up complete</h3>
+        <div class="endStars" id="warmupResultStars">★★★</div>
+        <p id="warmupResultScore">Score: 0/10</p>
+        <p class="warmupBest" id="warmupResultBest">Best: 0/10</p>
+        <div class="warmupResultActions">
+          <button class="btn" id="warmupResultCloseBtn" type="button">Close</button>
+          <button class="btn primary" id="warmupAgainBtn" type="button">Try again</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="playWrap" hidden>
+    <section class="progressPanel" aria-label="Progress">
+      <div class="tracker" id="tracker"></div>
+    </section>
+
+    <div class="play">
+      <section class="taskPanel" id="taskPanel" aria-labelledby="promptText" tabindex="-1">
+        <div class="taskLabel" id="taskLabel">Start</div>
+        <h2 class="promptText" id="promptText">Pick the next valid row operation.</h2>
+      </section>
+
+      <section class="matrixCard" aria-label="Current augmented matrix">
+        <div class="matrixStage" id="matrixStage">
+          <div class="rowLabels"><div class="rowLabel">R₁</div><div class="rowLabel">R₂</div><div class="rowLabel">R₃</div></div>
+          <div class="matrixWrap">
+            <div class="matrixShell" id="matrixShell">
+              <div class="augLine" id="augLine" aria-hidden="true"></div>
+              <svg class="stairSvg" id="stairSvg" aria-hidden="true"></svg>
+              <table class="matrix" id="matrix"></table>
+            </div>
+          </div>
+        </div>
+        <div class="equationsPanel" id="equationsDetails" aria-live="polite">
+          <div class="equationsSummary" id="equationsSummary" hidden></div>
+          <div class="equations" id="equations"></div>
+        </div>
+      </section>
+
+      <section class="choiceArea" aria-label="Answer choices">
+        <div class="choices" id="choices"></div>
+        <div class="feedback hiddenFeedback" id="feedback" aria-live="polite">
+          <div class="feedbackMain"><span class="feedbackIcon" id="feedbackIcon" aria-hidden="true">•</span><p id="feedbackText"></p></div>
+          <div class="preview hidden" id="preview"></div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div class="endPanel" id="endPanel" role="dialog" aria-modal="true" aria-labelledby="endTitle">
+    <div class="endCard">
+      <h2 id="endTitle">Elimination complete</h2>
+      <svg class="endStair" id="endStairSvg" viewBox="0 0 180 90" aria-hidden="true"></svg>
+      <div class="endStars" id="endStars">★★★</div>
+      <div class="summaryGrid">
+        <div class="summaryBox"><span>Misses</span><b id="endMistakes">0</b></div>
+      </div>
+      <p class="endNote" id="endNote">You reached row echelon form and classified the solution set.</p>
+      <div class="endBtns">
+        <button class="btn" id="menuBtn" type="button">Menu</button>
+        <button class="btn primary" id="againBtn" type="button">New puzzle</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="confirmPanel" id="menuConfirmPanel" role="dialog" aria-modal="true" aria-labelledby="menuConfirmTitle" hidden>
+    <div class="confirmCard">
+      <h2 id="menuConfirmTitle">Return to the menu?</h2>
+      <p id="menuConfirmText">Your current puzzle will be paused so you can resume it later.</p>
+      <div class="confirmActions">
+        <button class="btn" id="stayBtn" type="button">Keep playing</button>
+        <button class="btn primary" id="confirmMenuBtn" type="button">Return to menu</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="confirmPanel" id="aboutPanel" role="dialog" aria-modal="true" aria-labelledby="aboutTitle" hidden>
+    <div class="confirmCard aboutCard">
+      <h2 id="aboutTitle">About The Elimination Game</h2>
+      <div class="aboutList">
+        <p><strong>Version:</strong> The Elimination Game [v0.2(beta)]</p>
+        <p><strong>Copyright:</strong> © 2026 <a href="https://people.math.wisc.edu/~roch/" target="_blank" rel="noopener noreferrer">Sébastien Roch</a></p>
+        <p><strong>License:</strong> <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener noreferrer">Creative Commons Attribution-NonCommercial 4.0 International License</a></p>
+        <p><strong>Textbook:</strong> <a href="https://math345-textbook.github.io/" target="_blank" rel="noopener noreferrer">math345-textbook.github.io</a></p>
+        <p><strong>Privacy:</strong> Your best scores are saved in this browser on this device. They are not uploaded anywhere. If you use a private window, clear site data, switch browsers, or block site storage, your best scores may reset.</p>
+        <p><strong>Acknowledgments:</strong> Thanks to Betsy Stovall for helpful feedback.</p>
+      </div>
+      <div class="confirmActions">
+        <button class="btn primary" id="aboutCloseBtn" type="button">Close</button>
+      </div>
+    </div>
+  </div>
+</main>
+<script>
+
+class Frac{
+  constructor(n,d=1){
+    if(d===0) throw new Error('zero denominator');
+    if(d<0){n=-n;d=-d;}
+    const g=Frac.gcd(Math.abs(n),Math.abs(d));
+    this.n=n/g; this.d=d/g;
+  }
+  static gcd(a,b){while(b){const t=a%b;a=b;b=t;}return a||1;}
+  static of(x){return x instanceof Frac?x:new Frac(x,1)}
+  add(o){o=Frac.of(o);return new Frac(this.n*o.d+o.n*this.d,this.d*o.d)}
+  sub(o){o=Frac.of(o);return new Frac(this.n*o.d-o.n*this.d,this.d*o.d)}
+  mul(o){o=Frac.of(o);return new Frac(this.n*o.n,this.d*o.d)}
+  neg(){return new Frac(-this.n,this.d)}
+  inv(){if(this.n===0) throw new Error('zero reciprocal'); return new Frac(this.d,this.n)}
+  abs(){return new Frac(Math.abs(this.n),this.d)}
+  eq(o){o=Frac.of(o);return this.n===o.n&&this.d===o.d}
+  zero(){return this.n===0}
+  one(){return this.n===this.d}
+  value(){return this.n/this.d}
+  text(){if(this.d===1)return String(this.n).replace('-', '−'); return (this.n<0?'−':'')+Math.abs(this.n)+'/'+this.d}
+  ascii(){return this.d===1?String(this.n):`${this.n}/${this.d}`}
+}
+const F=(n,d=1)=>new Frac(n,d);
+const ROWS=3;
+const allVars=['x','y','z','w'];
+const ord=['first','second','third','fourth'];
+const smallCoef=[-2,-1,0,1,2];
+const smallConst=[-5,-4,-3,-2,-1,0,1,2,3,4,5];
+let nVars=3, activeVars=['x','y','z'];
+let startM=null, M=null, puzzleMeta=null, puzzleNo=0;
+let puzzleSeed=0, rngState=1, seedCounter=0, fixedSeedActive=false;
+let pivotRow=0, pivotCol=0, pivotChosen=false, variableDoorDone=false;
+let mistakes=0, moveCount=0, parMoves=0, streak=0, solved=false;
+let flashing=[], swapAnim={}, swapAnimDist={}, calcAnims={}, currentFeedback={type:'', text:'', preview:''};
+let mode='guided', view='intro';
+let violationCells=[], examStepMiss={sig:'',count:0};
+let savedGames={guided:null,exam:null};
+let refRound={index:0,total:10,score:0,current:null,answered:false,selected:null,finished:false,started:false,best:0,feedbackType:'',feedbackText:'',violationCells:[]};
+let warmupSwipe={active:false,pointerId:null,startX:0,startY:0,dx:0,dy:0,advancing:false};
+let lastModalFocus=null;
+
+const clone=A=>A.map(r=>r.map(x=>F(x.n,x.d)));
+function rng(){rngState=(rngState+0x6D2B79F5)>>>0;let t=rngState;t=Math.imul(t^(t>>>15),t|1);t^=t+Math.imul(t^(t>>>7),t|61);return ((t^(t>>>14))>>>0)/4294967296;}
+function seedRng(seed){puzzleSeed=(Number(seed)>>>0)||0xA5A5A5A5; rngState=puzzleSeed;}
+function reseedFromClock(){seedCounter=(seedCounter+1)>>>0; seedRng((Date.now() ^ Math.imul(seedCounter,0x9E3779B9))>>>0);}
+function pick(a){return a[Math.floor(rng()*a.length)]}
+function choiceWeighted(pairs){const sum=pairs.reduce((s,p)=>s+p[1],0);let r=rng()*sum;for(const [v,w] of pairs){if((r-=w)<=0)return v;}return pairs[pairs.length-1][0];}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(rng()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function fracSig(x){return x.d===1?String(x.n):`${x.n}/${x.d}`}
+function puzzleSignature(A,spec){return `${spec.family}|${spec.outcome}|${spec.nVars}|${spec.pivotCols.join(',')}|`+A.map(row=>row.map(fracSig).join(',')).join(';')}
+function recentPuzzleSignatures(){try{return JSON.parse(sessionStorage.getItem('echelonStaircaseRecent')||'[]')}catch(e){return []}}
+function seenRecently(sig){return recentPuzzleSignatures().includes(sig)}
+function rememberPuzzle(sig){try{const arr=[sig,...recentPuzzleSignatures().filter(s=>s!==sig)].slice(0,16);sessionStorage.setItem('echelonStaircaseRecent',JSON.stringify(arr));}catch(e){}}
+function rawAdd(A,target,source,c){A[target]=A[target].map((x,j)=>x.add(A[source][j].mul(c)))}
+function rawSwap(A,a,b){[A[a],A[b]]=[A[b],A[a]]}
+function rawScale(A,row,c){A[row]=A[row].map(x=>x.mul(c))}
+function randomAfterPivot(row,pivot,n){for(let j=pivot+1;j<n;j++) row[j]=F(pick(smallCoef)); row[n]=F(pick(smallConst));}
+function makeREF(spec){
+  const n=spec.nVars, last=n;
+  const A=Array.from({length:ROWS},()=>Array.from({length:n+1},()=>F(0)));
+  for(let r=0;r<spec.pivotCols.length;r++){const p=spec.pivotCols[r];A[r][p]=F(1);randomAfterPivot(A[r],p,n);}
+  if(spec.outcome==='none'){A[spec.pivotCols.length][last]=F(pick([-3,-2,-1,1,2,3]));}
+  return A;
+}
+function makeSpec(){
+  const family=choiceWeighted([['three',48],['four',24],['skipped',28]]);
+  if(family==='three'){
+    const outcome=choiceWeighted([['one',44],['inf',38],['none',18]]);
+    if(outcome==='one') return {family,outcome,nVars:3,pivotCols:[0,1,2]};
+    if(outcome==='inf') return {family,outcome,nVars:3,pivotCols:pick([[0,1],[0,2]])};
+    return {family,outcome,nVars:3,pivotCols:pick([[0,1],[0,2]])};
+  }
+  if(family==='four'){
+    const outcome=choiceWeighted([['inf',78],['none',22]]);
+    if(outcome==='inf') return {family,outcome,nVars:4,pivotCols:choiceWeighted([[[0,1,2],42],[[0,1,3],18],[[0,2,3],16],[[0,1],16],[[1,2],8]])};
+    return {family,outcome,nVars:4,pivotCols:pick([[0,1],[0,2],[1,2]])};
+  }
+  const n=pick([3,4]);
+  const outcome=choiceWeighted([['inf',74],['none',26]]);
+  if(n===3) return {family,outcome,nVars:3,pivotCols:pick([[0,2],[1,2]])};
+  return {family,outcome,nVars:4,pivotCols:outcome==='inf'?pick([[0,2],[0,3],[1,3],[0,2,3],[1,2,3]]):pick([[0,2],[1,2],[0,3]])};
+}
+function scaleRowsNonunit(A){for(let r=0;r<ROWS;r++) rawScale(A,r,F(pick([-4,-3,-2,2,3,4])));}
+function scrambleTopNonzeroFromREF(R,spec){
+  const A=clone(R);
+  if(spec.pivotCols.includes(0)){
+    rawAdd(A,2,1,F(pick([-2,-1,1,2])));
+    rawAdd(A,1,0,F(pick([-2,-1,1,2])));
+    rawAdd(A,2,0,F(pick([-1,1])));
+    if(rng()<0.75) rawSwap(A,...pick([[0,1],[0,2],[1,2]]));
+  }else{
+    rawAdd(A,2,1,F(pick([-2,-1,1,2])));
+    if(rng()<0.6) rawSwap(A,...pick([[0,1],[0,2],[1,2]]));
+  }
+  scaleRowsNonunit(A);return A;
+}
+function scrambleTopZeroFromREF(R,spec){
+  const A=clone(R); if(!spec.pivotCols.includes(0)) return scrambleTopNonzeroFromREF(R,spec);
+  let zeroCandidate=1; if(spec.outcome!=='none' && rng()<0.5) zeroCandidate=2; if(spec.outcome==='none') zeroCandidate=1;
+  const other=zeroCandidate===1?2:1;
+  rawAdd(A,other,0,F(pick([-2,-1,1,2])));
+  rawAdd(A,other,zeroCandidate,F(pick([-1,1])));
+  rawSwap(A,0,zeroCandidate);
+  rawAdd(A,1,0,F(pick([-1,0,1])));
+  rawAdd(A,2,0,F(pick([-1,0,1])));
+  scaleRowsNonunit(A);return A;
+}
+function contradictionRowAnyInMatrix(B){const last=B[0].length-1;for(let r=0;r<ROWS;r++){const coeffZero=B[r].slice(0,last).every(x=>x.zero());if(coeffZero&&!B[r][last].zero()) return r;}return -1;}
+function contradictionRowAnyIn(B=M){return contradictionRowAnyInMatrix(B)}
+function firstColumnLooksNatural(A,spec,wantZeroTop=false){const vals=A.map(row=>row[0]).filter(x=>!x.zero()).map(x=>Math.abs(x.value()));if(vals.length===0)return !spec.pivotCols.includes(0);if(!vals.every(v=>v!==1))return false;if(wantZeroTop)return A[0][0].zero()&&A.slice(1).some(row=>!row[0].zero());return true;}
+function matrixEntriesReasonable(A){for(const row of A)for(const x of row)if(Math.abs(x.n)>72||x.d>8)return false;return true;}
+function pathLooksReasonable(A,spec){
+  function reasonableMatrix(B){for(const row of B)for(const x of row)if(Math.abs(x.n)>96||x.d>8)return false;return true;}
+  function rec(B,pr,pc,depth){
+    if(depth>24)return true;if(!reasonableMatrix(B))return false;if(contradictionRowAnyInMatrix(B)>=0)return true;
+    while(true){
+      if(pr>=ROWS||pc>=spec.nVars)return true;
+      const cands=[];for(let r=pr;r<ROWS;r++)if(!B[r][pc].zero())cands.push(r);
+      if(cands.length===0){pc++;continue;}
+      const branches=B[pr][pc].zero()?cands:[pr];
+      for(const k of branches){
+        const C=clone(B);let d=depth;
+        if(k!==pr){rawSwap(C,pr,k);d++;}
+        if(!C[pr][pc].one()){rawScale(C,pr,C[pr][pc].inv());d++;}
+        const targets=[];for(let r=pr+1;r<ROWS;r++)if(!C[r][pc].zero())targets.push(r);
+        for(const t of targets){rawAdd(C,t,pr,C[t][pc].neg());d++;if(!reasonableMatrix(C))return false;if(contradictionRowAnyInMatrix(C)>=0)return true;}
+        if(!rec(C,pr+1,pc+1,d))return false;
+      }
+      return true;
+    }
+  }
+  return rec(clone(A),0,0,0);
+}
+function complexityOK(A,spec,wantZeroTop=false){return matrixEntriesReasonable(A)&&firstColumnLooksNatural(A,spec,wantZeroTop)&&pathLooksReasonable(A,spec);}
+function generatePuzzle(){
+  for(let attempt=0;attempt<320;attempt++){
+    const spec=makeSpec();const wantZeroTop=spec.pivotCols.includes(0)&&rng()<0.42;const R=makeREF(spec);const A=wantZeroTop?scrambleTopZeroFromREF(R,spec):scrambleTopNonzeroFromREF(R,spec);
+    if(complexityOK(A,spec,wantZeroTop)){const sig=puzzleSignature(A,spec);if(!fixedSeedActive&&seenRecently(sig)&&attempt<300)continue;puzzleMeta=spec;nVars=spec.nVars;activeVars=allVars.slice(0,nVars);puzzleNo++;if(!fixedSeedActive)rememberPuzzle(sig);return A;}
+  }
+  puzzleMeta={family:'three',outcome:'one',nVars:3,pivotCols:[0,1,2]};nVars=3;activeVars=allVars.slice(0,nVars);puzzleNo++;
+  const fallback=[[F(0),F(1),F(-1),F(4)],[F(2),F(0),F(6),F(4)],[F(3),F(2),F(2),F(-1)]];if(!fixedSeedActive)rememberPuzzle(puzzleSignature(fallback,puzzleMeta));return fallback;
+}
+function sub(n){return String(n).replace(/[123456789]/g,m=>({'1':'₁','2':'₂','3':'₃','4':'₄','5':'₅','6':'₆','7':'₇','8':'₈','9':'₉'}[m]))}
+function rname(i){return 'R'+sub(i+1)}
+function wrapCoeff(c){const t=c.text();return c.n<0||c.d!==1?`(${t})`:t}
+function rowTex(i){return `R_${i+1}`}
+function fracTex(c){c=F(c.n,c.d);if(c.d===1)return String(c.n);return `${c.n<0?'-':''}\\tfrac{${Math.abs(c.n)}}{${c.d}}`;}
+function opScale(row,c){return {t:'scale',row,c,txt:`${rname(row)} → ${wrapCoeff(c)}${rname(row)}`,tex:`${rowTex(row)} \\to ${fracTex(c)}${rowTex(row)}`}}
+function opSwap(a,b){return {t:'swap',a,b,txt:`${rname(a)} ↔ ${rname(b)}`,tex:`${rowTex(a)} \\leftrightarrow ${rowTex(b)}`}}
+function opKeep(row){return {t:'keep',row,txt:`${rname(row)} stays`,tex:`${rowTex(row)} \\text{ stays}`}}
+function opAdd(target,source,c){
+  const sign=c.n<0?' − ':' + ';const mag=c.abs();const coeff=mag.one()?'':wrapCoeff(mag);
+  const texSign=c.n<0?' - ':' + ';const texCoeff=mag.one()?'':fracTex(mag);
+  return {t:'add',target,source,c,txt:`${rname(target)} → ${rname(target)}${sign}${coeff}${rname(source)}`,tex:`${rowTex(target)} \\to ${rowTex(target)}${texSign}${texCoeff}${rowTex(source)}`}
+}
+function sameOp(a,b){if(!a||!b||a.t!==b.t)return false;if(a.t==='keep')return a.row===b.row;if(a.t==='swap')return (a.a===b.a&&a.b===b.b)||(a.a===b.b&&a.b===b.a);if(a.t==='scale')return a.row===b.row&&a.c.eq(b.c);if(a.t==='add')return a.target===b.target&&a.source===b.source&&a.c.eq(b.c);return false;}
+function addUnique(arr,item){if(!arr.some(x=>(x.op&&item.op&&sameOp(x.op,item.op))||x.txt===item.txt))arr.push(item);}
+function nonzeroRowsFrom(row,col){const a=[];for(let r=row;r<ROWS;r++)if(!M[r][col].zero())a.push(r);return a;}
+function belowNonzero(row,col){const a=[];for(let r=row+1;r<ROWS;r++)if(!M[r][col].zero())a.push(r);return a;}
+function pivotColOfRow(row){for(let j=0;j<nVars;j++)if(!row[j].zero())return j;return -1;}
+function computeTask(){
+  const visibleContradiction=contradictionRowAnyIn(M); if(visibleContradiction>=0)return {kind:'solution',reason:'contradiction',row:visibleContradiction};
+  while(true){
+    if(pivotRow>=ROWS||pivotCol>=nVars){if(!variableDoorDone)return {kind:'variables'};return {kind:'solution'};}
+    const candidates=nonzeroRowsFrom(pivotRow,pivotCol);
+    if(candidates.length===0){pivotCol++;pivotChosen=false;continue;}
+    if(!pivotChosen && M[pivotRow][pivotCol].zero()) return {kind:'pivot',col:pivotCol,row:pivotRow,candidates};
+    pivotChosen=true;
+    if(!M[pivotRow][pivotCol].one()) return {kind:'scale',col:pivotCol,row:pivotRow,pivot:M[pivotRow][pivotCol]};
+    const targets=belowNonzero(pivotRow,pivotCol);
+    if(targets.length) return {kind:'clear',col:pivotCol,row:pivotRow,targets};
+    pivotRow++;pivotCol++;pivotChosen=false;
+  }
+}
+function applyToMatrix(B,op){if(op.t==='keep')return;if(op.t==='swap')rawSwap(B,op.a,op.b);else if(op.t==='scale')rawScale(B,op.row,op.c);else if(op.t==='add')rawAdd(B,op.target,op.source,op.c);}
+function apply(op){
+  calcAnims={}; flashing=[]; swapAnim={}; swapAnimDist={};
+  if(op.t==='keep') return;
+  if(op.t==='swap'){rawSwap(M,op.a,op.b);flashing=[op.a,op.b];const dist=Math.abs(op.b-op.a)*48;swapAnim[op.a]=op.b>op.a?'swapFromDown':'swapFromUp';swapAnim[op.b]=op.a>op.b?'swapFromDown':'swapFromUp';swapAnimDist[op.a]=dist;swapAnimDist[op.b]=dist;return;}
+  if(op.t==='scale'){
+    M[op.row]=M[op.row].map(x=>x.mul(op.c));flashing=[op.row];
+    return;
+  }
+  if(op.t==='add'){
+    M[op.target]=M[op.target].map((x,j)=>x.add(M[op.source][j].mul(op.c)));flashing=[op.target];
+  }
+}
+function starText(n=starRating()){return '★★★'.slice(0,n)+'☆☆☆'.slice(0,3-n)}
+function starHTML(n=starRating()){let out='';for(let i=1;i<=3;i++)out+=`<span class="starIcon ${i<=n?'filled':'empty'}">★</span>`;return out;}
+function refSolutionCount(){let pivots=0,bad=false;for(const row of M){const allCoeff=row.slice(0,nVars).every(x=>x.zero());if(allCoeff&&!row[nVars].zero())bad=true;if(!allCoeff)pivots++;}if(bad)return 'none';return pivots===nVars?'one':'inf';}
+function basicFree(){const basicIdx=[];for(const row of M){const p=pivotColOfRow(row);if(p>=0&&!basicIdx.includes(p))basicIdx.push(p);}const freeIdx=[];for(let j=0;j<nVars;j++)if(!basicIdx.includes(j))freeIdx.push(j);return {basicIdx,freeIdx,basic:basicIdx.map(j=>activeVars[j]),free:freeIdx.map(j=>activeVars[j])};}
+function fmtVarList(arr){return arr.length?arr.join(', '):'none'}
+function varChoiceText(basicIdx,freeIdx){return `basic: ${fmtVarList(basicIdx.map(j=>activeVars[j]))}\nfree: ${fmtVarList(freeIdx.map(j=>activeVars[j]))}`}
+function texVarList(idxs){return idxs.length?idxs.map(j=>activeVars[j]).join(', '):'\\text{none}'}
+function varChoiceTex(basicIdx,freeIdx){return `\\begin{array}{l}\\text{basic: }${texVarList(basicIdx)}\\\\ \\text{free: }${texVarList(freeIdx)}\\end{array}`}
+function sameIdxSet(a,b){return a.length===b.length&&a.every(x=>b.includes(x))}
+function normalizeIdx(a){return [...new Set(a)].filter(j=>j>=0&&j<nVars).sort((x,y)=>x-y)}
+function variableChoices(){
+  const bf=basicFree();const opts=[{txt:varChoiceText(bf.basicIdx,bf.freeIdx),tex:varChoiceTex(bf.basicIdx,bf.freeIdx),basicIdx:bf.basicIdx,freeIdx:bf.freeIdx,correct:true}];
+  function add(basic,why){basic=normalizeIdx(basic);const free=[];for(let j=0;j<nVars;j++)if(!basic.includes(j))free.push(j);if(sameIdxSet(basic,bf.basicIdx))return;const txt=varChoiceText(basic,free);if(!opts.some(o=>o.txt===txt))opts.push({txt,tex:varChoiceTex(basic,free),basicIdx:basic,freeIdx:free,reason:why||'Basic variables correspond to pivot columns; columns without pivots are free.'});}
+  add([...Array(nVars).keys()],'That treats every variable column as a pivot column. A missing pivot column means a free variable.');
+  add([...Array(bf.basicIdx.length).keys()],'This assumes pivots are the first columns. Look for the actual leading 1s.');
+  if(bf.basicIdx.length&&bf.freeIdx.length){const b=bf.basicIdx.slice();b.pop();b.push(bf.freeIdx[0]);add(b,'This swaps a pivot column with a free column. Leading 1s mark the basic variables.');}
+  if(nVars===4)add([0,1,2],'Check the w-column too; a pivot may appear there, or an earlier column may be free.');
+  add([],'At least one leading 1 is visible, so not every variable is free.');
+  const distractors=shuffle(opts.slice(1)).slice(0,3);
+  return shuffle([opts[0],...distractors]);
+}
+function solutionChoices(){return shuffle([{txt:'No solutions',answer:'none',reason:'No solutions only when a row has the form [0 0 … 0 | nonzero].'},{txt:'Exactly one',answer:'one',reason:'A unique solution requires consistency and a pivot in every variable column.'},{txt:'Infinitely many',answer:'inf',reason:'Infinitely many solutions require consistency and at least one free variable.'}]);}
+function choiceSet(task){
+  if(task.kind==='solution')return solutionChoices();
+  if(task.kind==='variables')return variableChoices();
+  const good=[], wrong=[];const r=task.row,c=task.col;
+  function addWrong(item,priority=99){item.priority=priority;addUnique(wrong,item);}
+  if(task.kind==='pivot'){
+    task.candidates.forEach(k=>good.push({txt:opSwap(r,k).txt,tex:opSwap(r,k).tex,op:opSwap(r,k),correct:true}));
+    addWrong({txt:opKeep(r).txt,tex:opKeep(r).tex,op:opKeep(r),reason:`${rname(r)} has 0 in the ${activeVars[c]}-column, so it cannot supply the next pivot.`},1);
+    for(let a=0;a<ROWS;a++)for(let b=a+1;b<ROWS;b++)if(!good.some(g=>sameOp(g.op,opSwap(a,b))))addWrong({txt:opSwap(a,b).txt,tex:opSwap(a,b).tex,op:opSwap(a,b),reason:`The next pivot must be moved into ${rname(r)}, and the chosen row needs a nonzero ${activeVars[c]}-entry.`},2);
+    addWrong({txt:opScale(r,F(2)).txt,tex:opScale(r,F(2)).tex,op:opScale(r,F(2)),reason:'Scaling does not help while the pivot position is still 0. First move a nonzero entry into place.'},3);
+    addWrong({txt:opAdd(r,(r+1)%ROWS,F(1)).txt,tex:opAdd(r,(r+1)%ROWS,F(1)).tex,op:opAdd(r,(r+1)%ROWS,F(1)),reason:'The Gaussian algorithm first moves a row with a nonzero entry into the pivot position.'},3);
+  }
+  if(task.kind==='scale'){
+    const corr=opScale(r,task.pivot.inv());good.push({txt:corr.txt,tex:corr.tex,op:corr,correct:true});
+    const byPivot=opScale(r,task.pivot);addWrong({txt:byPivot.txt,tex:byPivot.tex,op:byPivot,reason:`Multiplying by ${task.pivot.text()} makes the pivot ${task.pivot.mul(task.pivot).text()}, not 1. Use the reciprocal ${task.pivot.inv().text()}.`},1);
+    const wrongSign=opScale(r,task.pivot.inv().neg());addWrong({txt:wrongSign.txt,tex:wrongSign.tex,op:wrongSign,reason:`The sign is wrong: the pivot would become −1. Use ${task.pivot.inv().text()} to make it 1.`},2);
+    const zeroScale=opScale(r,F(0));addWrong({txt:zeroScale.txt,tex:zeroScale.tex,op:zeroScale,reason:'Scaling by 0 is not an elementary row operation; the scalar must be nonzero.'},4);
+    const other=opScale(Math.min(r+1,ROWS-1),task.pivot.inv());addWrong({txt:other.txt,tex:other.tex,op:other,reason:`Scale the pivot row ${rname(r)}, not another row.`},3);
+    if(r>0){const above=opScale(r-1,task.pivot.inv());addWrong({txt:above.txt,tex:above.tex,op:above,reason:`Scale the pivot row ${rname(r)}, not a row above it.`},3);}
+    if(c>=1){const rref=opAdd(0,r,M[0][c].neg());addWrong({txt:rref.txt,tex:rref.tex,op:rref,reason:'Clearing above a pivot is valid for RREF later, but this step is building REF. Scale the pivot first.'},5);}
+  }
+  if(task.kind==='clear'){
+    task.targets.forEach(t=>{const op=opAdd(t,r,M[t][c].neg());good.push({txt:op.txt,tex:op.tex,op,correct:true});});
+    task.targets.forEach(t=>{
+      const wrongSign=opAdd(t,r,M[t][c]);addWrong({txt:wrongSign.txt,tex:wrongSign.tex,op:wrongSign,reason:`Wrong sign: the ${activeVars[c]}-entry in ${rname(t)} is ${M[t][c].text()}, so add ${M[t][c].neg().text()} times ${rname(r)} to make it 0.`},1);
+      const swapped=opAdd(r,t,M[t][c].neg());addWrong({txt:swapped.txt,tex:swapped.tex,op:swapped,reason:`The target should be the row below the pivot (${rname(t)}). Keep the pivot row ${rname(r)} unchanged.`},2);
+      const minusOne=opAdd(t,r,F(-1));addWrong({txt:minusOne.txt,tex:minusOne.tex,op:minusOne,reason:`Use the multiplier that cancels the entry: ${M[t][c].neg().text()}, not always −1.`},3);
+    });
+    if(r>0){const above=opAdd(r-1,r,M[r-1][c].neg());addWrong({txt:above.txt,tex:above.tex,op:above,reason:'That would clear above the pivot. It is valid for RREF later, but this step only clears below for REF.'},4);}
+    const sw=opSwap(r,Math.min(r+1,ROWS-1));addWrong({txt:sw.txt,tex:sw.tex,op:sw,reason:'Swapping now would move the leading 1 out of place. Use row replacement to clear entries below.'},5);
+  }
+  const filteredWrong=wrong.filter(w=>!good.some(g=>sameOp(g.op,w.op)||g.txt===w.txt)).sort((a,b)=>(a.priority??99)-(b.priority??99));
+  const chosenWrong=filteredWrong.slice(0,Math.max(0,4-good.length));
+  return shuffle([...good,...chosenWrong]).slice(0,4);
+}
+function correctOpsForTask(task){
+  if(task.kind==='pivot')return task.candidates.map(k=>opSwap(task.row,k));
+  if(task.kind==='scale')return [opScale(task.row,task.pivot.inv())];
+  if(task.kind==='clear')return task.targets.map(t=>opAdd(t,task.row,M[t][task.col].neg()));
+  return [];
+}
+function taskSig(task){return [task.kind,task.row,task.col,task.pivot?task.pivot.ascii():'',task.targets?task.targets.join('-'):'',task.candidates?task.candidates.join('-'):''].join('|');}
+function termCoeff(c){const a=c.abs();return a.one()?'':a.text()}
+function eqTerm(c,v,first){if(c.zero())return '';const neg=c.n<0, body=termCoeff(c)+v;if(first)return neg?'−'+body:body;return neg?' − '+body:' + '+body;}
+function rowEquation(row){let left='';for(let j=0;j<nVars;j++){const t=eqTerm(row[j],activeVars[j],left==='');if(t)left+=t;}if(left==='')left='0';return `${left} = ${row[nVars].text()}`;}
+function escapeHtml(s){return String(s).replace(/[&<>"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));}
+function renderChoiceMath(root=document.getElementById('choices')){
+  const spans=[...root.querySelectorAll('.choiceText[data-tex]')];
+  if(!spans.length)return;
+  if(!(window.MathJax&&window.MathJax.typesetPromise))return;
+  spans.forEach(span=>{span.textContent=`\\(${span.dataset.tex}\\)`;});
+  try{if(window.MathJax.typesetClear)window.MathJax.typesetClear(spans);}catch(e){}
+  window.MathJax.typesetPromise(spans).catch(()=>{
+    spans.forEach(span=>{span.textContent=span.dataset.fallback||span.textContent;});
+  });
+}
+function promptFor(task){
+  if(task.kind==='solution'){
+    if(refSolutionCount()==='none')return {label:'Solution count',text:'How many solutions does the system have?'};
+    return {label:'Solution count',text:'How many solutions does the system have?'};
+  }
+  if(task.kind==='variables')return {label:'Classify variables',text:'Which variables are basic and which are free?'};
+  const v=activeVars[task.col];
+  if(task.kind==='pivot')return {label:`${v}-column · pivot`,text:`Pick a pivot row for the ${v}-column.`};
+  if(task.kind==='scale')return {label:`${v}-column · scale`,text:`Make the pivot in ${rname(task.row)} equal to 1.`};
+  if(task.kind==='clear')return {label:`${v}-column · clear below`,text:`Use the leading 1 to clear below it.`};
+}
+function completedPivotData(){const piv=[];for(let i=0;i<ROWS;i++){const p=pivotColOfRow(M[i]);if(p>=0&&M[i][p].one())piv.push({row:i,col:p});}return piv;}
+function isZeroZone(i,j){if(j>=nVars)return false;const piv=completedPivotData().filter(p=>p.col<nVars).sort((a,b)=>a.row-b.row||a.col-b.col);let last=-1;for(const p of piv){if(p.col<=last)continue;last=p.col;if(i>p.row&&j<=p.col)return true;}return false;}
+function renderMatrix(task){
+  const tbl=document.getElementById('matrix');tbl.innerHTML='';
+  const coefW=nVars===4?52:62, constW=nVars===4?62:70, rowH=48;
+  const shell=document.getElementById('matrixShell');shell.style.setProperty('--coefw',coefW+'px');shell.style.setProperty('--constw',constW+'px');shell.style.setProperty('--rowh',rowH+'px');
+  document.getElementById('augLine').style.left=(11+coefW*nVars)+'px';
+  tbl.style.width=(coefW*nVars+constW)+'px';
+  const cg=document.createElement('colgroup');for(let j=0;j<nVars+1;j++){const col=document.createElement('col');col.className=j===nVars?'constantCol':'coef';cg.appendChild(col);}tbl.appendChild(cg);
+  M.forEach((row,i)=>{const tr=document.createElement('tr');const rowClasses=[];if(flashing.includes(i))rowClasses.push('flash');if(swapAnim[i])rowClasses.push(swapAnim[i]);tr.className=rowClasses.join(' ');tr.style.setProperty('--swapdist',(swapAnimDist[i]||rowH)+'px');row.forEach((x,j)=>{const td=document.createElement('td');td.className=cellClass(i,j,task);if(j===nVars)td.classList.add('constant');td.textContent=x.text();tr.appendChild(td);});tbl.appendChild(tr);});
+  renderStairSvg(coefW,constW,rowH,task);
+}
+function staircasePivotsForTask(task){
+  let piv=completedPivotData().filter(p=>p.col<nVars);
+  if(mode==='guided' && task && typeof task.col==='number')piv=piv.filter(p=>p.row<task.row || (p.row===task.row && p.col<=task.col));
+  piv.sort((a,b)=>a.row-b.row||a.col-b.col);
+  const clean=[];let lastCol=-1;
+  for(const p of piv){if(p.col>lastCol){clean.push(p);lastCol=p.col;}}
+  return clean;
+}
+function renderStairSvg(coefW,constW,rowH,task){
+  const svg=document.getElementById('stairSvg');
+  const tbl=document.getElementById('matrix');
+  const first=tbl?.rows?.[0]?.cells?.[0];
+  const tableW=(tbl&&tbl.offsetWidth)||coefW*nVars+constW;
+  const tableH=(tbl&&tbl.offsetHeight)||rowH*ROWS;
+  svg.setAttribute('width',tableW);svg.setAttribute('height',tableH);svg.setAttribute('viewBox',`0 0 ${tableW} ${tableH}`);
+  svg.innerHTML='<defs><linearGradient id="stairGradient" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#5b65f2"/><stop offset="100%" stop-color="#14b8a6"/></linearGradient></defs>';
+  let guide=staircasePivotsForTask(task);
+  if(mode==='guided' && task && task.kind!=='variables'&&task.kind!=='solution'&&task.row<ROWS&&task.col<nVars&&!guide.some(p=>p.row===task.row&&p.col===task.col))guide=[...guide,{row:task.row,col:task.col,current:true}];
+  guide=guide.sort((a,b)=>a.row-b.row||a.col-b.col);
+  if(!guide.length)return;
+  const hasLayout=!!(first&&first.offsetWidth);
+  const cell=(r,c)=>tbl?.rows?.[r]?.cells?.[c];
+  const left=c=>{const td=cell(0,Math.min(c,nVars));return hasLayout&&td?td.offsetLeft+3:c*coefW+3;};
+  const bottom=r=>{const td=cell(r,0);return hasLayout&&td?td.offsetTop+td.offsetHeight-2:(r+1)*rowH-2;};
+  const topY=hasLayout?Math.max(-4,(cell(0,0)?.offsetTop||0)-6):-4;
+  const augCell=cell(0,nVars);
+  const augX=hasLayout&&augCell?augCell.offsetLeft:nVars*coefW;
+  let d=`M ${left(guide[0].col)} ${topY} `;
+  for(let i=0;i<guide.length;i++){
+    const p=guide[i];const nextX=i<guide.length-1?left(guide[i+1].col):augX;
+    d+=`L ${left(p.col)} ${bottom(p.row)} L ${nextX} ${bottom(p.row)} `;
+  }
+  const pts=[`0 ${tableH}`,`0 ${topY}`,`${left(guide[0].col)} ${topY}`];
+  for(let i=0;i<guide.length;i++){
+    const p=guide[i];const nextX=i<guide.length-1?left(guide[i+1].col):augX;
+    pts.push(`${left(p.col)} ${bottom(p.row)}`,`${nextX} ${bottom(p.row)}`);
+  }
+  pts.push(`${augX} ${tableH}`);
+  const poly=document.createElementNS('http://www.w3.org/2000/svg','polygon');poly.setAttribute('points',pts.join(' '));poly.setAttribute('opacity',guide.some(p=>p.current)?'.38':'.7');svg.appendChild(poly);
+  const path=document.createElementNS('http://www.w3.org/2000/svg','path');path.setAttribute('d',d);path.setAttribute('opacity',guide.some(p=>p.current)?'.52':'.95');svg.appendChild(path);
+}
+function renderFeedback(){const box=document.getElementById('feedback');const type=currentFeedback.type||'';const text=currentFeedback.text||'';const hide=(mode==='exam')||(!type&&!text);box.className='feedback '+type+(hide?' hiddenFeedback':'');const icon=document.getElementById('feedbackIcon');if(icon)icon.textContent=type==='good'?'✓':(type==='bad'?'✕':'•');document.getElementById('feedbackText').textContent=text;const preview=document.getElementById('preview');preview.classList.add('hidden');preview.innerHTML='';}
+function setFeedback(type,text,preview=''){currentFeedback={type,text,preview:''};renderFeedback();}
+function clearFeedback(){setFeedback('','');}
+function clearCalcSoon(){if(Object.keys(calcAnims).length){setTimeout(()=>{calcAnims={};flashing=[];swapAnim={};swapAnimDist={};renderAll();},1080);}else if(flashing.length||Object.keys(swapAnim).length){setTimeout(()=>{flashing=[];swapAnim={};swapAnimDist={};renderAll();},560);}}
+function badText(ch,task){if(ch&&ch.reason)return ch.reason;if(task.kind==='pivot')return 'Move a row with a nonzero entry into the pivot position.';if(task.kind==='scale')return 'The pivot must become exactly 1; use the reciprocal of the current pivot.';if(task.kind==='clear')return 'Use the leading 1 to make a highlighted entry below it equal to 0.';return 'Try a different operation.';}
+function computePar(A,n){
+  const B=clone(A);let pr=0,pc=0,count=0;
+  while(true){if(contradictionRowAnyInMatrix(B)>=0)return count;if(pr>=ROWS||pc>=n)return count;const cands=[];for(let r=pr;r<ROWS;r++)if(!B[r][pc].zero())cands.push(r);if(!cands.length){pc++;continue;}if(B[pr][pc].zero()){rawSwap(B,pr,cands[0]);count++;}
+    if(!B[pr][pc].one()){rawScale(B,pr,B[pr][pc].inv());count++;}
+    for(let t=pr+1;t<ROWS;t++){if(!B[t][pc].zero()){rawAdd(B,t,pr,B[t][pc].neg());count++;if(contradictionRowAnyInMatrix(B)>=0)return count;}}
+    pr++;pc++;
+  }
+}
+function safeGetLocal(key,defaultValue='0'){try{const v=localStorage.getItem(key);return v===null?defaultValue:v;}catch(e){return defaultValue;}}
+function safeSetLocal(key,value){try{localStorage.setItem(key,value);}catch(e){}}
+const modeBestStarKeys={guided:'eliminationStudyBestStars',exam:'eliminationExamBestStars'};
+function readModeBestStars(nextMode){const raw=safeGetLocal(modeBestStarKeys[nextMode],'');const value=Number(raw);return raw!==''&&Number.isInteger(value)&&value>=1&&value<=3?value:null;}
+function updateIntroModeBestStars(){
+  const study=readModeBestStars('guided'),exam=readModeBestStars('exam');
+  document.getElementById('studyBestStars').textContent=`best: ${study===null?'-':study+'★'}`;
+  document.getElementById('examBestStars').textContent=`best: ${exam===null?'-':exam+'★'}`;
+}
+function recordModeBestStars(nextMode,stars){const previous=readModeBestStars(nextMode)||0;if(stars>previous)safeSetLocal(modeBestStarKeys[nextMode],String(stars));updateIntroModeBestStars();}
+function updateIntroWarmupBest(){
+  const raw=safeGetLocal('eliminationPrelimBest','');
+  const best=raw===''?null:Number(raw);
+  document.getElementById('introWarmupBest').textContent=`best ${Number.isFinite(best)?best:'-'}/10`;
+}
+function modeTask(){return computeTask();}
+function updateModeButtons(){}
+function stopRefTimer(){}
+function cloneMeta(x){return x?JSON.parse(JSON.stringify(x)):null;}
+function captureGameState(){
+  if(!M||!startM||!['guided','exam'].includes(mode))return null;
+  return {mode,nVars,activeVars:[...activeVars],startM:clone(startM),M:clone(M),puzzleMeta:cloneMeta(puzzleMeta),puzzleSeed,pivotRow,pivotCol,pivotChosen,variableDoorDone,mistakes,moveCount,parMoves,streak,solved,currentFeedback:{...currentFeedback},violationCells:violationCells.map(c=>[...c]),examStepMiss:{...examStepMiss}};
+}
+function restoreGameState(state){
+  if(!state)return false;
+  mode=state.mode;nVars=state.nVars;activeVars=[...state.activeVars];startM=clone(state.startM);M=clone(state.M);puzzleMeta=cloneMeta(state.puzzleMeta);puzzleSeed=state.puzzleSeed;
+  pivotRow=state.pivotRow;pivotCol=state.pivotCol;pivotChosen=state.pivotChosen;variableDoorDone=state.variableDoorDone;mistakes=state.mistakes;moveCount=state.moveCount;parMoves=state.parMoves;streak=state.streak;solved=state.solved;
+  currentFeedback={...state.currentFeedback};violationCells=state.violationCells.map(c=>[...c]);examStepMiss={...state.examStepMiss};flashing=[];swapAnim={};swapAnimDist={};calcAnims={};
+  renderAll();return true;
+}
+function updateIntroModeButtons(){
+  const study=document.getElementById('introStudyCard'), exam=document.getElementById('introExamCard');
+  if(study)study.setAttribute('aria-label',savedGames.guided&&!savedGames.guided.solved?'Resume Study Mode':'Start Study Mode');
+  if(exam)exam.setAttribute('aria-label',savedGames.exam&&!savedGames.exam.solved?'Resume Exam Mode':'Start Exam Mode');
+}
+function setPlayChrome(show){
+  document.getElementById('introView').hidden=show;
+  document.getElementById('playWrap').hidden=!show;
+  document.getElementById('statBar').hidden=!show;
+  document.getElementById('topMenuBtn').hidden=!show;
+  document.body.classList.toggle('introActive',!show);
+  updateIntroModeButtons();
+}
+function setBaseContentInert(on){
+  for(const el of [document.querySelector('.top'),document.getElementById('introView'),document.getElementById('playWrap')])if(el)el.inert=on;
+}
+function anyModalOpen(){return !document.getElementById('warmupPanel').hidden||!document.getElementById('menuConfirmPanel').hidden||!document.getElementById('aboutPanel').hidden||document.getElementById('endPanel').classList.contains('show');}
+function syncModalState(){document.body.classList.toggle('modalOpen',anyModalOpen());setBaseContentInert(anyModalOpen());}
+function showIntro({focus=false}={}){
+  view='intro';setPlayChrome(false);document.getElementById('endPanel').classList.remove('show');syncModalState();
+  if(focus)requestAnimationFrame(()=>document.getElementById('introStudyCard')?.focus());
+}
+function enterMode(next,{useUrlSeed=false,focus=true,forceNew=false}={}){
+  if(!['guided','exam'].includes(next))return;
+  view='play';mode=next;setPlayChrome(true);document.getElementById('endPanel').classList.remove('show');
+  const saved=!useUrlSeed&&!forceNew?savedGames[next]:null;
+  if(saved){savedGames[next]=null;restoreGameState(saved);}else reset(useUrlSeed);
+  if(focus)requestAnimationFrame(()=>document.getElementById('taskPanel')?.focus());
+}
+function saveCurrentGame(){
+  if(view==='play'&&M&&!solved&&['guided','exam'].includes(mode))savedGames[mode]=captureGameState();
+  else if(['guided','exam'].includes(mode))savedGames[mode]=null;
+  updateIntroModeButtons();
+}
+function openMenuConfirm(){
+  if(view!=='play')return;
+  lastModalFocus=document.activeElement;
+  const label=mode==='exam'?'Exam':'Study';
+  document.getElementById('menuConfirmText').textContent=`Your current ${label} puzzle will be paused. You can resume it from the menu.`;
+  document.getElementById('menuConfirmPanel').hidden=false;syncModalState();requestAnimationFrame(()=>document.getElementById('stayBtn')?.focus());
+}
+function closeMenuConfirm({restoreFocus=true}={}){
+  document.getElementById('menuConfirmPanel').hidden=true;syncModalState();
+  if(restoreFocus)requestAnimationFrame(()=>lastModalFocus?.focus?.());
+}
+function confirmReturnToMenu(){saveCurrentGame();closeMenuConfirm({restoreFocus:false});showIntro({focus:true});}
+function openAbout(){lastModalFocus=document.activeElement;document.getElementById('aboutPanel').hidden=false;syncModalState();requestAnimationFrame(()=>document.getElementById('aboutCloseBtn')?.focus());}
+function closeAbout({restoreFocus=true}={}){document.getElementById('aboutPanel').hidden=true;syncModalState();if(restoreFocus)requestAnimationFrame(()=>lastModalFocus?.focus?.());}
+function leadingIndex(row,cols){for(let j=0;j<cols;j++)if(!row[j].zero())return j;return -1;}
+function isREFDetailed(B,n){
+  const cols=n+1;let lastLead=-1,zeroSeen=false;
+  for(let i=0;i<B.length;i++){
+    const lead=leadingIndex(B[i],cols);
+    if(lead<0){zeroSeen=true;continue;}
+    if(zeroSeen)return {ok:false,reason:'A nonzero row appears below a zero row. In REF, zero rows must be at the bottom.',cells:B[i].map((_,j)=>[i,j])};
+    if(lead<=lastLead)return {ok:false,reason:'Leading 1s must move strictly to the right as you go down the rows.',cells:[[i,lead]]};
+    if(!B[i][lead].one())return {ok:false,reason:`The first nonzero entry in ${rname(i)} is ${B[i][lead].text()}, but REF here requires a leading 1.`,cells:[[i,lead]]};
+    for(let r=i+1;r<B.length;r++)if(!B[r][lead].zero())return {ok:false,reason:`The entry below the leading 1 in column ${lead+1} must be 0.`,cells:[[i,lead],[r,lead]]};
+    lastLead=lead;
+  }
+  return {ok:true,reason:'This matrix is in row echelon form.',cells:[]};
+}
+function normalizeREFRows(B){for(let i=0;i<B.length;i++){const lead=leadingIndex(B[i],B[i].length);if(lead>=0&&!B[i][lead].one())rawScale(B,i,B[i][lead].inv());}return B;}
+function makeRefCheckMatrix(){
+  const spec=makeSpec();const R=normalizeREFRows(makeREF(spec));const n=spec.nVars;let A=clone(R);const wantOk=rng()<0.48;
+  if(wantOk)return {matrix:A,n,ok:true,reason:'All zero rows are at the bottom, leading entries are 1, and leading 1s move down and right.',cells:[]};
+  const nonzeroRows=A.map((row,i)=>({i,lead:leadingIndex(row,n+1)})).filter(x=>x.lead>=0);
+  const variants=['lead','below','order','zeroMiddle','sameLead','leftStep'];let kind=pick(variants);
+  if(kind==='lead'&&nonzeroRows.length){const r=nonzeroRows[0].i;rawScale(A,r,F(2));}
+  else if(kind==='below'&&nonzeroRows.length){const p=nonzeroRows[0];const r=Math.min(ROWS-1,p.i+1);A[r][p.lead]=F(pick([-3,-2,-1,1,2,3]));}
+  else if(kind==='sameLead'&&nonzeroRows.length>=1){const p=nonzeroRows[0];const r=Math.min(ROWS-1,p.i+1);A[r]=Array.from({length:n+1},()=>F(0));A[r][p.lead]=F(1);A[r][n]=F(pick([-2,-1,1,2]));}
+  else if(kind==='leftStep'&&nonzeroRows.length>=2){const lower=nonzeroRows[1].i;const newLead=Math.max(0,nonzeroRows[0].lead-1);A[lower]=Array.from({length:n+1},()=>F(0));A[lower][newLead]=F(1);A[lower][n]=F(pick([-3,-1,1,3]));}
+  else if(kind==='zeroMiddle'&&nonzeroRows.length>=2){const saved=A[nonzeroRows[1].i].map(x=>F(x.n,x.d));A[1]=Array.from({length:n+1},()=>F(0));A[2]=saved;}
+  else if(nonzeroRows.length>=2){rawSwap(A,nonzeroRows[0].i,nonzeroRows[nonzeroRows.length-1].i);}
+  else{A[0]=Array.from({length:n+1},()=>F(0));A[1][0]=F(1);}
+  const detail=isREFDetailed(A,n);return {matrix:A,n,ok:false,reason:detail.reason,cells:detail.cells};
+}
+function startRefRound(){
+  reseedFromClock();
+  refRound={index:0,total:10,score:0,current:null,answered:false,selected:null,finished:false,started:true,best:Number(safeGetLocal('eliminationPrelimBest','0')||0),feedbackType:'',feedbackText:'',violationCells:[]};
+  nextRefQuestion(true);
+}
+function beginRefRound(){startRefRound();}
+function nextRefQuestion(initial=false){
+  if(!initial)refRound.index++;
+  if(refRound.index>=refRound.total){finishRefRound();return;}
+  refRound.current=makeRefCheckMatrix();refRound.answered=false;refRound.selected=null;refRound.feedbackType='';refRound.feedbackText='';refRound.violationCells=[];warmupSwipe.advancing=false;
+  renderWarmup();
+  requestAnimationFrame(()=>document.getElementById('warmupYesBtn')?.focus());
+}
+function answerRefCheck(ans){
+  if(refRound.answered||refRound.finished||!refRound.started||!refRound.current)return;
+  const ok=ans===refRound.current.ok;refRound.answered=true;refRound.selected=ans;if(ok)refRound.score++;
+  if(!refRound.current.ok)refRound.violationCells=refRound.current.cells||[];
+  if(refRound.current.ok){
+    refRound.feedbackText=ok?'Correct — this matrix is in REF. All four REF conditions hold.':'Not quite. This matrix is in REF: leading 1s move down and right, entries below them are zero, and any zero rows are at the bottom.';
+  }else{
+    refRound.feedbackText=(ok?'Correct — this matrix is not in REF. ':'Not quite. ')+refRound.current.reason;
+  }
+  refRound.feedbackType=ok?'good':'bad';renderWarmup();
+}
+function finishRefRound(){
+  if(refRound.finished)return;refRound.finished=true;const best=Math.max(refRound.best,refRound.score);refRound.best=best;safeSetLocal('eliminationPrelimBest',String(best));updateIntroWarmupBest();renderWarmup();requestAnimationFrame(()=>document.getElementById('warmupResultTitle')?.focus());
+}
+function openWarmup(){
+  lastModalFocus=document.activeElement;
+  if(!refRound.started||refRound.finished)startRefRound();else renderWarmup();
+  document.getElementById('warmupPanel').hidden=false;syncModalState();requestAnimationFrame(()=>document.getElementById('warmupYesBtn')?.focus());
+}
+function closeWarmup(){document.getElementById('warmupPanel').hidden=true;syncModalState();requestAnimationFrame(()=>document.getElementById('introWarmupBtn')?.focus());}
+function restartWarmup(){startRefRound();requestAnimationFrame(()=>document.getElementById('warmupYesBtn')?.focus());}
+function warmupCellClass(B,n,i,j){
+  const cls=[];
+  if(!refRound.answered)return '';
+  if(!refRound.current.ok&&refRound.violationCells.some(([r,c])=>r===i&&c===j))cls.push('violation');
+  if(refRound.current.ok){const lead=leadingIndex(B[i],n+1);if(lead===j&&B[i][j].one())cls.push('pivotDone');if(j<n&&warmupZeroZone(B,n,i,j))cls.push('zeroZone');}
+  return cls.join(' ');
+}
+function warmupZeroZone(B,n,i,j){
+  const piv=[];for(let r=0;r<B.length;r++){const p=leadingIndex(B[r],n+1);if(p>=0&&p<n)piv.push({row:r,col:p});}
+  let last=-1;for(const p of piv){if(p.col<=last)continue;last=p.col;if(i>p.row&&j<=p.col)return true;}return false;
+}
+function renderWarmupMatrix(){
+  if(!refRound.current)return;
+  const B=refRound.current.matrix,n=refRound.current.n,tbl=document.getElementById('warmupMatrix'),shell=document.getElementById('warmupMatrixShell');
+  const coefW=n===4?52:62,constW=n===4?62:70,rowH=48;shell.style.setProperty('--coefw',coefW+'px');shell.style.setProperty('--constw',constW+'px');shell.style.setProperty('--rowh',rowH+'px');tbl.innerHTML='';
+  const cg=document.createElement('colgroup');for(let j=0;j<n+1;j++){const col=document.createElement('col');col.className=j===n?'constantCol':'coef';cg.appendChild(col);}tbl.appendChild(cg);
+  B.forEach((row,i)=>{const tr=document.createElement('tr');row.forEach((x,j)=>{const td=document.createElement('td');td.className=warmupCellClass(B,n,i,j);if(j===n)td.classList.add('constant');td.textContent=x.text();tr.appendChild(td);});tbl.appendChild(tr);});
+  requestAnimationFrame(()=>renderWarmupStairSvg(B,n));
+}
+function renderWarmupStairSvg(B,n){
+  const tbl=document.getElementById('warmupMatrix'),svg=document.getElementById('warmupStairSvg'),line=document.getElementById('warmupAugLine');if(!tbl?.rows?.length)return;
+  const augCell=tbl.rows[0].cells[n],tableW=tbl.offsetWidth,tableH=tbl.offsetHeight;line.style.left=(11+augCell.offsetLeft)+'px';svg.setAttribute('width',tableW);svg.setAttribute('height',tableH);svg.setAttribute('viewBox',`0 0 ${tableW} ${tableH}`);
+  svg.innerHTML='<defs><linearGradient id="warmupStairGradient" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#5b65f2"/><stop offset="100%" stop-color="#14b8a6"/></linearGradient></defs>';
+  if(!refRound.answered||!refRound.current.ok)return;
+  const guide=[];for(let r=0;r<B.length;r++){const c=leadingIndex(B[r],n+1);if(c>=0)guide.push({row:r,col:c});}if(!guide.length)return;
+  const cell=(r,c)=>tbl.rows[r]?.cells[c],left=c=>cell(0,Math.min(c,n))?.offsetLeft+3,bottom=r=>cell(r,0)?.offsetTop+cell(r,0)?.offsetHeight-2,topY=Math.max(-4,(cell(0,0)?.offsetTop||0)-6),augX=augCell.offsetLeft;
+  let d=`M ${left(guide[0].col)} ${topY} `;const pts=[`0 ${tableH}`,`0 ${topY}`,`${left(guide[0].col)} ${topY}`];
+  for(let i=0;i<guide.length;i++){const p=guide[i],nextX=i<guide.length-1?left(guide[i+1].col):augX;d+=`L ${left(p.col)} ${bottom(p.row)} L ${nextX} ${bottom(p.row)} `;pts.push(`${left(p.col)} ${bottom(p.row)}`,`${nextX} ${bottom(p.row)}`);}
+  pts.push(`${augX} ${tableH}`);const poly=document.createElementNS('http://www.w3.org/2000/svg','polygon');poly.setAttribute('points',pts.join(' '));svg.appendChild(poly);const path=document.createElementNS('http://www.w3.org/2000/svg','path');path.setAttribute('d',d);path.style.stroke='url(#warmupStairGradient)';svg.appendChild(path);
+}
+function renderWarmupAnswers(){
+  const yes=document.getElementById('warmupYesBtn'),no=document.getElementById('warmupNoBtn');
+  for(const btn of [yes,no]){btn.disabled=refRound.answered;btn.classList.remove('correct','wrong');btn.querySelector('.warmupThumb').hidden=true;}
+  if(!refRound.answered)return;
+  const correctBtn=refRound.current.ok?yes:no,selectedBtn=refRound.selected?yes:no;correctBtn.classList.add('correct');correctBtn.querySelector('.warmupThumb').hidden=false;if(refRound.selected!==refRound.current.ok)selectedBtn.classList.add('wrong');
+}
+function renderWarmup(){
+  const quiz=document.getElementById('warmupQuizView'),result=document.getElementById('warmupResultView');
+  if(refRound.finished){quiz.hidden=true;result.hidden=false;const stars=refRound.score>=9?3:(refRound.score>=7?2:1);document.getElementById('warmupResultStars').innerHTML=starHTML(stars);document.getElementById('warmupResultScore').textContent=`Score: ${refRound.score}/${refRound.total}`;document.getElementById('warmupResultBest').textContent=`Best: ${refRound.best}/${refRound.total}`;return;}
+  quiz.hidden=false;result.hidden=true;if(!refRound.current)return;
+  document.getElementById('warmupQuestionLabel').textContent=`Question ${refRound.index+1} of ${refRound.total}`;document.getElementById('warmupScoreLabel').textContent=`Score ${refRound.score}/${refRound.total}`;document.getElementById('warmupProgressBar').style.width=`${((refRound.index+1)/refRound.total)*100}%`;
+  renderWarmupMatrix();renderWarmupAnswers();
+  const fb=document.getElementById('warmupFeedback');fb.hidden=!refRound.answered;fb.className='warmupFeedback '+(refRound.feedbackType||'');document.getElementById('warmupFeedbackIcon').textContent=refRound.feedbackType==='good'?'✓':'✕';document.getElementById('warmupFeedbackText').textContent=refRound.feedbackText||'';
+  const nextRow=document.getElementById('warmupNextRow'),hint=document.getElementById('warmupSwipeHint'),nextBtn=document.getElementById('warmupNextBtn');nextRow.hidden=!refRound.answered;hint.hidden=!refRound.answered;nextBtn.textContent=refRound.index===refRound.total-1?'See results':'Next Matrix';
+  const area=document.getElementById('warmupSwipeArea');area.classList.remove('swipeAdvance');area.style.transform='';area.style.opacity='';
+}
+function advanceWarmup(){
+  if(!refRound.answered||warmupSwipe.advancing)return;warmupSwipe.advancing=true;const area=document.getElementById('warmupSwipeArea');area.classList.add('swipeAdvance');setTimeout(()=>nextRefQuestion(false),150);
+}
+function solutionCountFromMatrix(){return refSolutionCount();}
+function starRating(){return mistakes===0?3:(mistakes<=2?2:1)}
+function renderPrompt(task){
+  const panel=document.getElementById('taskPanel');panel.classList.remove('compact');
+  if(mode==='exam' && task.kind!=='variables' && task.kind!=='solution'){
+    document.getElementById('taskLabel').textContent='Exam';
+    document.getElementById('promptText').textContent='Your move.';
+    return;
+  }
+  const p=promptFor(task);document.getElementById('taskLabel').textContent=(mode==='exam'?'Exam · ':'')+p.label;document.getElementById('promptText').textContent=p.text;
+}
+function setTrackerProgress(done,total){const el=document.getElementById('tracker');const pct=total?Math.max(0,Math.min(100,Math.round(done/total*100))):0;el.style.setProperty('--progress',pct+'%');}
+function stageWord(task){return task.kind==='pivot'?'pivot':(task.kind==='scale'?'scale':(task.kind==='clear'?'clear':''));}
+function renderTracker(task){
+  const el=document.getElementById('tracker');
+  const labels=[...activeVars,'variables','solutions'];
+  let currentIdx=0;if(task.kind==='variables')currentIdx=nVars;else if(task.kind==='solution')currentIdx=nVars+1;else currentIdx=task.col;if(solved)currentIdx=labels.length;
+  setTrackerProgress(currentIdx,labels.length);
+  const bf=(task.kind==='variables'||task.kind==='solution'||solved)?basicFree():null;
+  let html='';
+  for(let j=0;j<nVars;j++){
+    const hasPivot=completedPivotData().some(p=>p.col===j);
+    let cls='', num='', label=activeVars[j];
+    if(j<currentIdx){cls=hasPivot?'done':'dim';num=hasPivot?'✓':'';}
+    else if(j===currentIdx && task.kind!=='variables' && task.kind!=='solution'){
+      cls='now';num=j+1;label=mode==='guided'?`${label} · ${stageWord(task)}`:label;
+    }else{num=j+1;}
+    if((task.kind==='variables'||task.kind==='solution'||solved) && bf && j<currentIdx){cls=bf.basicIdx.includes(j)?'done':'dim';num=bf.basicIdx.includes(j)?'✓':'';}
+    html+=`<span class="trackStep ${cls}"><span class="num">${num}</span>${label}</span>`;
+  }
+  const varsCls=solved||task.kind==='solution'?'done':(task.kind==='variables'?'now':'');
+  const solCls=solved?'done':(task.kind==='solution'?'now':'');
+  html+=`<span class="trackStep ${varsCls}"><span class="num">${solved||task.kind==='solution'?'✓':nVars+1}</span>variables</span>`;
+  html+=`<span class="trackStep ${solCls}"><span class="num">${solved?'✓':nVars+2}</span>solutions</span>`;
+  el.innerHTML=html;
+  el.scrollLeft=0;
+}
+function cellClass(i,j,task){
+  const cls=[];const cr=contradictionRowAnyIn(M);const p=pivotColOfRow(M[i]);
+  if(p>=0&&j===p&&M[i][j].one())cls.push('pivotDone');
+  if(isZeroZone(i,j))cls.push('zeroZone');
+  if(violationCells.some(([r,c])=>r===i&&c===j))cls.push('violation');
+  if(mode==='guided'&&task.kind!=='solution'&&task.kind!=='variables'){
+    if(j===task.col&&j<nVars)cls.push('activeCol');
+    if(j===task.col&&(i===task.row||(task.kind==='clear'&&task.targets.includes(i))))cls.push('focus');
+  }
+  return cls.join(' ');
+}
+function renderEquations(){
+  const details=document.getElementById('equationsDetails');const summary=document.getElementById('equationsSummary');const el=document.getElementById('equations');
+  if(!details||!summary||!el)return;
+  details.hidden=false;
+  details.classList.toggle('alwaysOpen',mode==='guided');
+  if(mode==='guided'){
+    details.open=true;
+    summary.hidden=false;
+    summary.textContent='System as equations';
+  }else{
+    summary.hidden=true;
+    summary.textContent='';
+  }
+  el.innerHTML=M.map((row,i)=>`<div class="eqLine">${rname(i)}  ${escapeHtml(rowEquation(row))}</div>`).join('');
+}
+function renderChoiceButtons(choices){
+  const el=document.getElementById('choices');el.className='choices';el.innerHTML='';
+  const keys='ABCD';
+  choices.forEach((ch,i)=>{
+    const btn=document.createElement('button');
+    btn.type='button';
+    btn.className='choice';
+    btn.dataset.i=i;
+    const plain=String(ch.txt||'');
+    btn.setAttribute('aria-label',`${keys[i]}. ${plain.split('\n').join(' ')}`);
+    const mathAttrs=ch.tex?` data-tex="${escapeHtml(ch.tex)}" data-fallback="${escapeHtml(plain)}"`:'';
+    btn.innerHTML=`<span class="choiceKey" aria-hidden="true">${keys[i]}</span><span class="choiceText"${mathAttrs}>${escapeHtml(plain)}</span>`;
+    btn.addEventListener('click',()=>choose(ch,btn));
+    el.appendChild(btn);
+  });
+  renderChoiceMath(el);
+}
+function renderChoices(task){renderChoiceButtons(choiceSet(task));}
+function guidedStepText(){
+  const total=Math.max(1,parMoves+2);let current=moveCount+1;const t=computeTask();if(t.kind==='variables')current=parMoves+1;else if(t.kind==='solution')current=parMoves+2;if(solved)current=total;return `step ${Math.min(current,total)} of ${total}`;
+}
+function renderStats(){
+  const par=document.getElementById('parStat'), third=document.getElementById('streakStat');
+  par.hidden=mode==='exam';
+  if(!par.hidden)par.textContent=guidedStepText();
+  third.textContent=`misses ${mistakes}`;third.className='stat';
+}
+function renderAll(){
+  if(view!=='play'||!M)return;
+  const task=modeTask();renderTracker(task);renderPrompt(task);renderMatrix(task);renderEquations();renderChoices(task);renderFeedback();renderStats();
+}
+function recordMistake(){mistakes++;streak=0;renderStats();}
+function applyCorrectGuidedOp(op,task){
+  if(task.kind==='pivot')pivotChosen=true;
+  apply(op);moveCount++;streak++;clearFeedback();renderAll();clearCalcSoon();
+}
+function choose(ch,btn){
+  const task=computeTask();
+  if(task.kind==='solution'){
+    if(ch.answer===refSolutionCount()){btn.classList.add('correct');streak++;clearFeedback();finish();}
+    else{recordMistake();btn.classList.add('wrong');setFeedback('bad',mode==='exam'?'Not correct. Recheck the final matrix and pivot columns.':badText(ch,task));setTimeout(()=>btn.classList.remove('wrong'),320);}return;
+  }
+  if(task.kind==='variables'){
+    const bf=basicFree();
+    if(ch.correct||(sameIdxSet(ch.basicIdx,bf.basicIdx)&&sameIdxSet(ch.freeIdx,bf.freeIdx))){btn.classList.add('correct');variableDoorDone=true;streak++;clearFeedback();setTimeout(renderAll,180);}
+    else{recordMistake();btn.classList.add('wrong');setFeedback('bad',mode==='exam'?'Not correct. Recheck the pivot columns.':badText(ch,task));setTimeout(()=>btn.classList.remove('wrong'),320);}return;
+  }
+  if(ch.correct){
+    btn.classList.add('correct');examStepMiss={sig:'',count:0};
+    applyCorrectGuidedOp(ch.op,task);return;
+  }
+  recordMistake();btn.classList.add('wrong');
+  if(mode==='exam'){
+    const sig=taskSig(task);if(examStepMiss.sig!==sig)examStepMiss={sig,count:0};examStepMiss.count++;
+    let msg='Not a correct next step.';
+    if(examStepMiss.count>=3){const good=correctOpsForTask(task)[0];if(good)msg+=` Try ${good.txt}.`;}
+    setFeedback('bad',msg);
+  }else{
+    setFeedback('bad',badText(ch,task));
+  }
+  setTimeout(()=>btn.classList.remove('wrong'),320);
+}
+function renderEndStair(){
+  const svg=document.getElementById('endStairSvg');if(!svg)return;
+  svg.innerHTML='<defs><linearGradient id="endGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#5b65f2"/><stop offset="100%" stop-color="#14b8a6"/></linearGradient></defs><path d="M18 18 H62 V40 H104 V62 H150 V78"/>';
+}
+function showEndPanel(){const panel=document.getElementById('endPanel');panel.classList.add('show');renderEndStair();syncModalState();setTimeout(()=>document.getElementById('againBtn')?.focus(),20);}
+function finish(){
+  solved=true;savedGames[mode]=null;renderStats();renderTracker({kind:'solution'});
+  document.getElementById('endTitle').textContent=mode==='exam'?'Exam complete':'Elimination complete';
+  const stars=starRating();recordModeBestStars(mode,stars);document.getElementById('endStars').innerHTML=starHTML(stars);document.getElementById('endMistakes').textContent=mistakes;
+  const retrySentence=readModeBestStars(mode)===3?'':' Try again to earn more stars with fewer misses.';
+  document.getElementById('endNote').textContent=`${stars}★ earned.${retrySentence}`;
+  setTimeout(showEndPanel,420);
+}
+function reset(useUrlSeed=false){
+  savedGames[mode]=null;
+  const params=new URLSearchParams(location.search);const urlSeed=params.get('seed');fixedSeedActive=!!(useUrlSeed&&urlSeed);if(fixedSeedActive)seedRng(urlSeed);else reseedFromClock();
+  startM=generatePuzzle();fixedSeedActive=false;M=clone(startM);pivotRow=0;pivotCol=0;pivotChosen=false;variableDoorDone=false;mistakes=0;moveCount=0;streak=0;solved=false;flashing=[];swapAnim={};swapAnimDist={};calcAnims={};violationCells=[];examStepMiss={sig:'',count:0};parMoves=computePar(startM,nVars);currentFeedback={type:'',text:'',preview:''};document.getElementById('endPanel').classList.remove('show');syncModalState();renderAll();
+}
+
+// unused: re-add a button wired to copyPuzzleLink to expose this.
+function currentPuzzleURL(){const u=new URL(location.href);u.searchParams.set('seed',String(puzzleSeed));if(mode==='exam')u.searchParams.set('mode','exam');else u.searchParams.delete('mode');return u.toString();}
+async function copyPuzzleLink(){
+  const link=currentPuzzleURL();
+  try{await navigator.clipboard.writeText(link);setFeedback('good','Link copied for this puzzle.');}
+  catch(e){setFeedback('bad',link);}
+}
+function hideEndPanel(){document.getElementById('endPanel').classList.remove('show');syncModalState();document.getElementById('topMenuBtn')?.focus();}
+document.querySelectorAll('.introSectionToggle').forEach(toggle=>{
+  const panel=document.getElementById(toggle.getAttribute('aria-controls'));if(!panel)return;
+  toggle.addEventListener('click',()=>{const open=toggle.getAttribute('aria-expanded')!=='true';toggle.setAttribute('aria-expanded',open?'true':'false');panel.hidden=!open;});
+});
+document.getElementById('introWarmupBtn').addEventListener('click',openWarmup);
+document.getElementById('aboutBtn').addEventListener('click',openAbout);
+document.getElementById('aboutCloseBtn').addEventListener('click',()=>closeAbout());
+document.getElementById('aboutPanel').addEventListener('click',e=>{if(e.target===e.currentTarget)closeAbout();});
+document.querySelectorAll('.modeCard[data-mode]').forEach(card=>{
+  const launch=()=>enterMode(card.dataset.mode);
+  card.addEventListener('click',launch);
+  card.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();launch();}});
+});
+document.getElementById('topMenuBtn').addEventListener('click',openMenuConfirm);
+document.getElementById('stayBtn').addEventListener('click',()=>closeMenuConfirm());
+document.getElementById('confirmMenuBtn').addEventListener('click',confirmReturnToMenu);
+document.getElementById('warmupCloseBtn').addEventListener('click',closeWarmup);
+document.getElementById('warmupResultCloseBtn').addEventListener('click',closeWarmup);
+document.getElementById('warmupAgainBtn').addEventListener('click',restartWarmup);
+document.getElementById('warmupNextBtn').addEventListener('click',advanceWarmup);
+document.querySelectorAll('[data-warmup-answer]').forEach(btn=>btn.addEventListener('click',()=>answerRefCheck(btn.dataset.warmupAnswer==='yes')));
+document.getElementById('againBtn').addEventListener('click',()=>reset(false));
+document.getElementById('menuBtn').addEventListener('click',()=>{document.getElementById('endPanel').classList.remove('show');showIntro({focus:true});});
+const copyBtn=document.getElementById('copyLinkBtn');if(copyBtn)copyBtn.addEventListener('click',copyPuzzleLink);
+
+const warmupSwipeArea=document.getElementById('warmupSwipeArea');
+warmupSwipeArea.addEventListener('pointerdown',e=>{if((e.pointerType==='mouse'&&e.button!==0)||e.target.closest('button'))return;warmupSwipe={...warmupSwipe,active:true,pointerId:e.pointerId,startX:e.clientX,startY:e.clientY,dx:0,dy:0};warmupSwipeArea.setPointerCapture?.(e.pointerId);});
+warmupSwipeArea.addEventListener('pointermove',e=>{if(!warmupSwipe.active||warmupSwipe.pointerId!==e.pointerId)return;warmupSwipe.dx=e.clientX-warmupSwipe.startX;warmupSwipe.dy=e.clientY-warmupSwipe.startY;if(refRound.answered&&warmupSwipe.dx<0&&Math.abs(warmupSwipe.dx)>Math.abs(warmupSwipe.dy))warmupSwipeArea.style.transform=`translateX(${Math.max(-55,warmupSwipe.dx*.35)}px)`;});
+function endWarmupSwipe(e){
+  if(!warmupSwipe.active||warmupSwipe.pointerId!==e.pointerId)return;const horizontal=Math.abs(warmupSwipe.dx)>Math.abs(warmupSwipe.dy)*1.2;const shouldAdvance=horizontal&&warmupSwipe.dx<-58;warmupSwipe.active=false;warmupSwipeArea.style.transform='';if(shouldAdvance){if(refRound.answered)advanceWarmup();else{const hint=document.getElementById('warmupSwipeHint');hint.hidden=false;hint.textContent='Choose REF or Not REF before swiping to the next matrix.';setTimeout(()=>{if(!refRound.answered){hint.hidden=true;hint.textContent='Swipe left or tap Next Matrix.';}},1600);}}}
+warmupSwipeArea.addEventListener('pointerup',endWarmupSwipe);warmupSwipeArea.addEventListener('pointercancel',endWarmupSwipe);
+
+function activeDialog(){
+  const about=document.getElementById('aboutPanel'),confirm=document.getElementById('menuConfirmPanel'),warmup=document.getElementById('warmupPanel'),end=document.getElementById('endPanel');
+  if(!about.hidden)return about;if(!confirm.hidden)return confirm;if(!warmup.hidden)return warmup;if(end.classList.contains('show'))return end;return null;
+}
+function trapDialogKeys(e){
+  const panel=activeDialog();if(!panel)return;
+  if(e.key==='Escape'){e.preventDefault();if(panel.id==='aboutPanel')closeAbout();else if(panel.id==='menuConfirmPanel')closeMenuConfirm();else if(panel.id==='warmupPanel')closeWarmup();else hideEndPanel();return;}
+  if(panel.id==='warmupPanel'&&!refRound.finished&&!refRound.answered){const key=e.key.toLowerCase();if(key==='1'||key==='a'){e.preventDefault();answerRefCheck(true);return;}if(key==='2'||key==='b'){e.preventDefault();answerRefCheck(false);return;}}
+  if(e.key!=='Tab')return;const focusables=[...panel.querySelectorAll('button,[href],[tabindex]:not([tabindex="-1"])')].filter(el=>!el.disabled&&!el.hidden&&el.offsetParent!==null);if(!focusables.length)return;const first=focusables[0],last=focusables[focusables.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}
+}
+document.addEventListener('keydown',trapDialogKeys);
+
+const helpBtn=document.getElementById('helpBtn');
+const helpPopover=document.getElementById('helpPopover');
+if(helpBtn&&helpPopover){
+  helpBtn.addEventListener('click',()=>{const open=helpPopover.hidden;helpPopover.hidden=!open;helpBtn.setAttribute('aria-expanded',open?'true':'false');});
+  document.addEventListener('click',e=>{if(!helpPopover.hidden&&!helpPopover.contains(e.target)&&e.target!==helpBtn){helpPopover.hidden=true;helpBtn.setAttribute('aria-expanded','false');}});
+}
+const eqDetails=document.getElementById('equationsDetails');
+if(eqDetails){eqDetails.open=safeGetLocal('eliminationEquationsOpen','0')==='1';eqDetails.addEventListener('toggle',()=>{if(mode==='guided'&&!eqDetails.open){eqDetails.open=true;return;}safeSetLocal('eliminationEquationsOpen',eqDetails.open?'1':'0');});}
+document.addEventListener('keydown',e=>{
+  if(view!=='play'||activeDialog())return;
+  if(e.target&&['INPUT','TEXTAREA','SELECT','BUTTON'].includes(e.target.tagName))return;
+  const key=e.key.toLowerCase();const map={'1':0,'2':1,'3':2,'4':3,'a':0,'b':1,'c':2,'d':3};
+  if(Object.prototype.hasOwnProperty.call(map,key)){const btn=[...document.querySelectorAll('#choices .choice')].filter(b=>b.offsetParent!==null)[map[key]];if(btn){e.preventDefault();btn.click();}}
+});
+window.addEventListener('mathjax-ready',()=>{try{renderAll();}catch(e){}});
+
+const bootParams=new URLSearchParams(location.search);
+if(bootParams.get('seed'))enterMode(bootParams.get('mode')==='exam'?'exam':'guided',{useUrlSeed:true,focus:false});
+else showIntro();
+updateIntroModeButtons();
+updateIntroWarmupBest();
+updateIntroModeBestStars();
+
+</script>
+</body>
+</html>

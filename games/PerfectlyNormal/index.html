@@ -1,0 +1,3583 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-060RZGCFFW"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-060RZGCFFW');
+</script>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Perfectly Normal</title>
+<script>
+window.MathJax = {
+  loader: {load: ['[tex]/html']},
+  tex: {
+    inlineMath: [['\\(', '\\)']],
+    displayMath: [['\\[', '\\]']],
+    packages: {'[+]': ['html']},
+    processEscapes: true
+  },
+  svg: {fontCache: 'local'},
+  options: {skipHtmlTags: ['script','noscript','style','textarea','pre','code']},
+  startup: {
+    ready() {
+      MathJax.startup.defaultReady();
+      MathJax.startup.promise.then(() => {
+        window.dispatchEvent(new CustomEvent('perfectly-normal-math-ready'));
+      });
+    }
+  }
+};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<style>
+:root{
+  --paper:#F0EEE6;
+  --paper-panel:#FCFBF7;
+  --plot-paper:#FFFFFF;
+  --ink:#1F2A44;
+  --muted:rgba(31,42,68,.68);
+  --soft:rgba(31,42,68,.08);
+  --faint:rgba(31,42,68,.14);
+  --line:rgba(31,42,68,.30);
+  --line-strong:rgba(31,42,68,.42);
+  --a:#2B55C8;
+  --v:#7B3FBF;
+  --proj:#C7521F;
+  --q:#1D8A50;
+  --star:#D9930D;
+  --bad:#C0392B;
+  --good-bg:rgba(29,138,80,.11);
+  --warn-bg:rgba(217,147,13,.13);
+  --bad-bg:rgba(192,57,43,.10);
+  --serif:Georgia, "Times New Roman", Times, serif;
+  --sans:ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --mono:ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{min-height:100%;}
+body{
+  margin:0;
+  padding:18px;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--sans);
+}
+.app{
+  width:min(1240px,100%);
+  margin:0 auto 40px;
+  display:grid;
+  grid-template-columns:minmax(0,1.2fr) minmax(330px,.8fr);
+  gap:14px;
+  align-items:start;
+}
+.header,.progressShell,.card,.endCard{
+  background:var(--paper-panel);
+  border:1px solid var(--line);
+  border-radius:10px;
+  box-shadow:0 1px 2px rgba(31,42,68,.10);
+}
+.header,.progressShell{grid-column:1/-1;}
+.header{padding:15px 16px 14px;}
+.titleRow{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;}
+h1{margin:0;font-family:var(--serif);font-size:clamp(32px,4.6vw,54px);line-height:1;letter-spacing:-.025em;font-weight:500;}
+.brand{display:flex;align-items:center;gap:12px;}
+.brandKicker{font:500 13.5px/1.25 var(--sans);letter-spacing:.005em;color:var(--muted);margin-top:5px;}
+.logoMark{width:40px;height:40px;flex:0 0 auto;}
+.logoMark path{fill:none;stroke:var(--a);stroke-width:3.1;stroke-linecap:round;stroke-linejoin:round;}
+.logoMark .logoV{stroke:var(--v);}
+.logoMark .logoQ{stroke:var(--q);}
+.logoMark .logoRight{stroke:var(--proj);stroke-width:2.15;}
+.subtitle{margin:8px 0 0;max-width:850px;color:var(--muted);font-size:14px;line-height:1.38;}
+.headerTools{display:grid;gap:8px;justify-items:end;min-width:min(470px,100%);}
+.stats{display:flex;flex-wrap:wrap;gap:7px;justify-content:flex-end;align-items:center;min-width:0;}
+.scoreline{font:650 12.5px/1.2 var(--sans);letter-spacing:.01em;color:var(--ink);}
+.scoreline .pill{border:0;background:transparent;border-radius:0;padding:0;font:inherit;color:inherit;}
+.scoreline .dot{color:var(--muted);}
+#bestPill{color:var(--star);letter-spacing:.025em;}
+.starIcon{display:inline-block;}
+.starIcon.empty{color:rgba(31,42,68,.25);}
+.buttonRow{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end;}
+.miniBtn{
+  border:1px solid var(--line-strong);
+  background:var(--paper-panel);
+  color:var(--ink);
+  border-radius:6px;
+  padding:7px 10px;
+  font:650 12.5px/1 var(--sans);
+  white-space:nowrap;
+  cursor:pointer;
+  transition:.12s ease background,.12s ease color,.12s ease border-color,.12s ease transform;
+}
+.miniBtn:hover{background:rgba(31,42,68,.06);border-color:var(--ink);}
+.miniBtn:active{transform:translateY(1px);}
+.miniBtn.primary,.miniBtn.modeActive{background:var(--ink);color:#fff;border-color:var(--ink);}
+.miniBtn.primary:hover,.miniBtn.modeActive:hover{background:#111827;color:#fff;}
+.miniBtn:disabled{opacity:.45;cursor:not-allowed;}
+body.examMode .subtitle,
+body.examMode .phaseHint,
+body.examMode .taskSub,
+body.examMode .hintBox,
+body.examMode .matrixIntro,
+body.examMode .figureCaption,
+body.examMode .plotHelp,
+body.examMode .checkBlock{display:none!important;}
+body.examMode .feedback{min-height:42px;}
+.progressShell{padding:12px 14px;}
+.phaseTop{display:flex;justify-content:space-between;gap:14px;align-items:flex-end;margin-bottom:10px;}
+.phaseTitle{display:none!important;}
+.phaseHint{font:500 12.5px/1.25 var(--sans);color:var(--muted);text-align:right;}
+.phaseBar{display:grid;grid-template-columns:3fr 5fr 6fr 1fr;gap:13px;align-items:start;}
+.progressGroup{display:grid;gap:6px;min-width:0;}
+.progressSquares{display:grid;grid-template-columns:repeat(var(--count),12px);gap:5px;align-items:center;justify-content:start;}
+.progressSquare{width:12px;height:12px;border:1px solid var(--line);border-radius:2px;background:transparent;position:relative;}
+.progressSquare.current{border-color:var(--ink);box-shadow:0 0 0 1px var(--ink);background:#fff;}
+.progressSquare.clean{background:var(--q);border-color:var(--q);}
+.progressSquare.hint{background:var(--star);border-color:var(--star);}
+.progressSquare.revealed{background:var(--bad);border-color:var(--bad);}
+.progressSquare.done{background:var(--q);border-color:var(--q);}
+.progressLabel{font:650 10px/1 var(--sans);color:rgba(31,42,68,.60);letter-spacing:.02em;}
+.figureStage{grid-column:1;grid-row:3;position:relative;min-width:0;}
+.figureControls{position:absolute;top:8px;right:10px;z-index:2;display:flex;gap:7px;align-items:center;background:rgba(255,255,255,.90);border:1px solid rgba(31,42,68,.18);border-radius:8px;padding:4px 6px;}
+.plotBtn{appearance:none;border:0;background:transparent;border-radius:0;padding:3px 2px;font:650 11.5px/1.15 var(--sans);color:var(--ink);cursor:pointer;text-decoration-thickness:1px;text-underline-offset:3px;}
+.plotBtn + .plotBtn::before{content:"·";color:var(--muted);margin-right:7px;}
+.plotBtn:hover{text-decoration:underline;}
+.plotBtn.modeActive{font-weight:800;text-decoration:underline;}
+.plotBtn:disabled{opacity:.36;cursor:not-allowed;text-decoration:none;}
+#plotWrap{
+  position:relative;
+  min-height:390px;
+  height:48vh;
+  max-height:560px;
+  background-color:var(--plot-paper);
+  background-image:
+    repeating-linear-gradient(0deg, rgba(43,85,200,.06) 0 1px, transparent 1px 22px),
+    repeating-linear-gradient(90deg, rgba(43,85,200,.06) 0 1px, transparent 1px 22px);
+  border:1px solid rgba(31,42,68,.36);
+  border-radius:10px;
+  box-shadow:0 1px 2px rgba(31,42,68,.10);
+  touch-action:none;
+  user-select:none;
+  overflow:hidden;
+  cursor:grab;
+}
+#plotWrap:active{cursor:grabbing;}
+#plotWrap.panMode{cursor:all-scroll;}
+#scene{display:block;width:100%;height:100%;border-radius:9px;}
+.plotHelp{position:absolute;right:12px;bottom:10px;color:rgba(31,42,68,.62);background:rgba(255,255,255,.88);border:1px solid rgba(31,42,68,.16);border-radius:6px;padding:5px 8px;font:650 11.5px/1 var(--sans);pointer-events:none;}
+.figureCaption,.tableCaption{margin:0;color:var(--ink);font-family:var(--serif);font-style:italic;font-size:16px;line-height:1.32;display:flex;gap:8px;align-items:flex-start;}
+.figureCaption{padding:8px 4px 0;}
+.cornerTick{position:relative;width:13px;height:13px;flex:0 0 13px;margin-top:2px;}
+.cornerTick::before{content:"";position:absolute;left:1px;top:1px;width:8px;height:8px;border-left:2px solid var(--proj);border-top:2px solid var(--proj);}
+.workbench{display:contents;}
+.card{overflow:hidden;}
+.choiceCard{grid-column:2;grid-row:3;display:flex;flex-direction:column;min-height:100%;padding:16px;}
+.taskTitle{font-family:var(--serif);font-size:22px;line-height:1.15;font-weight:600;letter-spacing:-.01em;margin:0;}
+.taskSub{margin:8px 0 0;color:var(--muted);font-size:13.5px;line-height:1.35;min-height:35px;}
+.choices{display:grid;grid-template-columns:1fr;gap:9px;margin-top:16px;}
+.choice{
+  width:100%;appearance:none;border:1px solid var(--line-strong);background:var(--paper-panel);color:var(--ink);
+  position:relative;border-radius:8px;padding:11px 12px;height:88px;min-height:88px;overflow:auto;text-align:left;cursor:pointer;
+  font:500 17px/1.25 var(--serif);display:grid;grid-template-columns:26px 1fr;gap:10px;align-items:center;
+  box-shadow:none;transition:.12s ease background,.12s ease border-color,.12s ease color;
+}
+.choiceMark{width:22px;height:22px;border:1px solid var(--line-strong);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font:700 12px/1 var(--sans);color:var(--ink);background:#fff;}
+.choiceFormula{min-width:0;}
+.choice:hover{background:#fff;border-color:var(--ink);}
+.choice:hover .choiceMark{background:var(--ink);color:#fff;border-color:var(--ink);}
+.choice:disabled{cursor:default;opacity:.92;}
+.choice.correct{background:var(--good-bg);border-color:rgba(29,138,80,.62);color:#155c37;}
+.choice.correct .choiceMark{background:var(--q);border-color:var(--q);color:#fff;font-size:0;}
+.choice.correct .choiceMark::before{content:"✓";font-size:13px;}
+.choice.wrong{background:var(--bad-bg);border-color:rgba(192,57,43,.62);color:#7f241c;animation:shake .25s ease;}
+.choice.wrong .choiceMark{background:var(--bad);border-color:var(--bad);color:#fff;font-size:0;}
+.choice.wrong .choiceMark::before{content:"✕";font-size:13px;}
+.choice.wrong .choiceFormula{text-decoration:line-through;text-decoration-color:var(--bad);text-decoration-thickness:2px;}
+.choice.revealed{outline:2px solid rgba(29,138,80,.22);outline-offset:2px;}
+@keyframes shake{25%{transform:translateX(-4px)}50%{transform:translateX(4px)}75%{transform:translateX(-2px)}}
+.feedback{height:48px;min-height:48px;overflow-y:auto;margin:12px 0 0;padding:2px 0 2px 12px;border-radius:0;background:transparent;color:var(--ink);font-family:var(--serif);font-style:italic;font-size:15.5px;line-height:1.35;font-weight:400;border:0;border-left:2px solid var(--line-strong);}
+.feedback.good{color:#155c37;border-left-color:var(--q);}
+.feedback.bad{color:var(--bad);border-left-color:var(--bad);}
+.feedback.warn{color:#735110;border-left-color:var(--star);}
+.hintBox{display:none!important;}
+.hintActions{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+.hintFormula{display:none;border:1px solid var(--line);background:#fff;border-radius:8px;padding:11px 12px;font:500 16px/1.35 var(--serif);color:var(--ink);}
+.hintFormula.show{display:block;}
+.matrixPanel{grid-column:1/-1;grid-row:4;padding:14px;}
+.tableCaption{margin-bottom:12px;}
+.matrixIntro{margin:0 0 12px;color:var(--muted);font-size:12.5px;line-height:1.34;}
+.matrixEquation{display:flex;align-items:center;gap:12px;overflow-x:auto;padding:6px 2px 12px;}
+.matrixTerm{display:grid;gap:5px;justify-items:center;flex:0 0 auto;}
+.matrixLabel{font:600 16px/1 var(--serif);font-style:normal;color:var(--ink);}
+.matrixLabel.a{color:var(--a);}.matrixLabel.q{color:var(--q);}.matrixLabel.r{color:var(--proj);}
+.equals,.times{font:500 24px/1 var(--serif);color:var(--ink);padding-top:19px;}
+.bracketed{position:relative;display:inline-block;padding:5px 12px;min-height:34px;}
+.bracketed::before,.bracketed::after{content:"";position:absolute;top:0;bottom:0;width:8px;border-color:var(--ink);border-style:solid;}
+.bracketed::before{left:0;border-width:1.5px 0 1.5px 1.5px;}
+.bracketed::after{right:0;border-width:1.5px 1.5px 1.5px 0;}
+.checkEquation{border-top:1px solid var(--line);padding-top:10px;margin-top:4px;display:flex;align-items:center;gap:12px;overflow-x:auto;}
+.checkEquation[hidden]{display:none!important;}
+table.matrix{border-collapse:collapse;font:650 13px/1.25 var(--mono);}
+table.matrix td{padding:5px 7px;text-align:right;min-width:36px;border:0;}
+.blank{color:rgba(31,42,68,.26);}.zeroCell{color:rgba(31,42,68,.48);}.focusCell{background:rgba(217,147,13,.16);color:#7c4a00;animation:cellFlash .55s ease;}.doneCell{background:rgba(29,138,80,.10);color:#155c37;}
+@keyframes cellFlash{0%{background:rgba(217,147,13,.35)}100%{background:rgba(217,147,13,.16)}}
+.endPanel{display:none;position:fixed;inset:0;z-index:20;align-items:center;justify-content:center;padding:20px;background:rgba(31,42,68,.35);backdrop-filter:blur(4px);}
+.endPanel.show{display:flex;}
+.endCard{width:min(540px,100%);padding:22px;text-align:center;background:var(--paper-panel);}
+#miniScene{width:132px;height:104px;margin:0 auto 8px;display:block;}
+.endCard h2{font-family:var(--serif);font-size:34px;font-weight:500;margin:0 0 8px;letter-spacing:-.02em;}
+.endSummary{color:var(--muted);font-size:14px;line-height:1.4;margin:0 auto 14px;max-width:390px;}
+.starBig{font-size:28px;letter-spacing:.08em;color:var(--star);margin:8px 0 10px;}
+.endScoreGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;max-width:390px;margin:0 auto 12px;}
+.endScoreBox{border:1px solid var(--line);background:#fff;padding:9px 12px;}
+.endScoreBox span{display:block;color:var(--muted);font:700 10px/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;}
+.endScoreBox b{display:block;margin-top:5px;font:650 21px/1 var(--sans);font-variant-numeric:tabular-nums;}
+.shareGrid{display:grid;gap:8px;justify-content:center;margin:12px auto;padding:10px;border-radius:8px;background:#fff;border:1px solid var(--line);max-width:390px;}
+.shareRow{display:flex;align-items:center;justify-content:center;gap:7px;}
+.shareRowLabel{width:22px;text-align:right;font:650 10px/1 var(--sans);color:rgba(31,42,68,.60);}
+.shareSquares{display:grid;grid-template-columns:repeat(var(--count),12px);gap:5px;}
+.shareSquare{width:12px;height:12px;border:1px solid var(--line);border-radius:2px;background:transparent;}
+.shareSquare.clean{background:var(--q);border-color:var(--q);}.shareSquare.hint{background:var(--star);border-color:var(--star);}.shareSquare.revealed{background:var(--bad);border-color:var(--bad);}.shareSquare.upcoming{background:transparent;}
+.endActions{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin-top:14px;}
+.sessionStrip{display:flex;gap:5px;flex-wrap:wrap;margin-top:2px;justify-content:flex-end;}
+.sessionResult{border:1px solid var(--line);background:transparent;border-radius:4px;padding:4px 6px;font:700 11px/1 var(--sans);color:var(--muted);}
+.sessionResult.stars3{background:rgba(29,138,80,.12);color:#155c37;border-color:rgba(29,138,80,.45);}
+.sessionResult.stars2{background:rgba(217,147,13,.14);color:#735110;border-color:rgba(217,147,13,.45);}
+.sessionResult.stars1,.sessionResult.stars0{background:rgba(31,42,68,.06);color:var(--muted);}
+.starReveal{animation:starReveal .46s cubic-bezier(.2,.85,.35,1.25) both;transform-origin:center;}
+@keyframes starReveal{0%{opacity:0;transform:scale(.62)}70%{opacity:1;transform:scale(1.08)}100%{opacity:1;transform:scale(1)}}
+.math{font-family:var(--serif);}.math i{font-style:italic;}.math sub{font-size:.7em;vertical-align:-.28em;}.math sup{font-size:.7em;vertical-align:.45em;}.angle{font-family:var(--serif);}
+.tok-a{color:var(--a);font-weight:700}.tok-v{color:var(--v);font-weight:700}.tok-r{color:var(--proj);font-weight:700}.tok-q{color:var(--q);font-weight:700}
+@media(max-width:980px){
+  body{padding:10px;}
+  .app{grid-template-columns:1fr;}
+  .titleRow{display:block;}
+  .headerTools{justify-items:start;margin-top:13px;}
+  .stats,.buttonRow,.sessionStrip{justify-content:flex-start;}
+  .figureStage,.choiceCard,.matrixPanel{grid-column:1;grid-row:auto;}
+  #plotWrap{height:44vh;min-height:340px;max-height:520px;}
+  .matrixEquation,.checkEquation{padding-bottom:14px;}
+}
+@media(max-width:640px){
+  body{padding:8px;}
+  .header,.progressShell,.card,#plotWrap{border-radius:10px;}
+  .header{padding:13px;}
+  .subtitle{font-size:13px;}
+  .phaseTop{display:block;}
+  .phaseHint{text-align:left;margin-top:5px;}
+  .phaseBar{grid-template-columns:1fr 1fr;row-gap:10px;}
+  #plotWrap{height:40vh;min-height:300px;}
+  .figureControls{top:7px;right:7px;max-width:calc(100% - 14px);flex-wrap:wrap;justify-content:flex-end;}
+  .choiceCard,.matrixPanel{padding:13px;}
+  .taskTitle{font-size:20px;}
+  .choice{font-size:16px;min-height:54px;grid-template-columns:25px 1fr;}
+  .matrixEquation{display:grid;grid-template-columns:auto 1fr;align-items:center;justify-items:start;}
+  .matrixTerm{justify-items:start;}
+  .equals,.times{padding-top:0;}
+}
+@media(max-width:420px){
+  h1{font-size:34px;}
+}
+
+/* right-angle visual language and touch affordances */
+.header,.progressShell,.card,.endCard,.miniBtn,.figureControls,#plotWrap,#scene,.plotHelp,.choice,.choiceMark,.hintFormula,.shareGrid,.shareSquare,.progressSquare,.sessionResult,.vectorChip{border-radius:0!important;}
+.logoMark .logoRight{stroke:var(--star);}
+.cornerTick::before{border-left-color:var(--star);border-top-color:var(--star);}
+#plotWrap::before{content:"";position:absolute;left:10px;top:10px;width:12px;height:12px;border-left:2px solid var(--star);border-top:2px solid var(--star);z-index:2;pointer-events:none;}
+.progressSquare{transition:transform .2s ease, background-color .14s ease, border-color .14s ease;transform:rotate(0deg);}
+.progressSquare.current{transform:rotate(45deg);}
+.progressSquare.current::after{content:"";position:absolute;left:2px;top:2px;width:5px;height:5px;border-left:2px solid var(--star);border-top:2px solid var(--star);transform:rotate(-45deg);transform-origin:center;}
+.progressSquare.clean,.progressSquare.hint,.progressSquare.revealed{transform:rotate(0deg);}
+.choiceMark{transition:transform .14s ease, background-color .12s ease, border-color .12s ease, color .12s ease;}
+.choice.correct .choiceMark{background:#fff;border-color:var(--star);color:var(--star);font-size:0;transform:rotate(0deg);}
+.choice.correct .choiceMark::before{content:"∟";font-size:18px;line-height:1;font-weight:800;}
+.choice.wrong .choiceMark{transform:rotate(-12deg);}
+.choice.wrong .choiceMark::before{content:"✕";font-size:13px;}
+.vectorChip{position:absolute;z-index:4;max-width:min(260px,calc(100% - 22px));background:#fff;border:1px solid rgba(31,42,68,.42);box-shadow:0 1px 2px rgba(31,42,68,.10);padding:8px 9px;color:var(--ink);font:600 12px/1.35 var(--sans);pointer-events:none;}
+.vectorChip .chipName{font-family:var(--serif);font-size:14px;font-style:italic;margin-right:4px;}
+.vectorChip .chipNumbers{font-family:var(--mono);font-weight:650;}
+.orientationTriad text{font-family:ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;font-weight:750;font-size:10px;paint-order:stroke;stroke:#fff;stroke-width:3px;stroke-linejoin:round;}
+body.examMode .vectorChip{display:none!important;}
+
+
+.subtitle{display:none!important;}
+/* Workstream 3: compact desktop layout; renderer and game logic unchanged */
+:root{--stageH:clamp(400px,calc(100dvh - 316px),580px);}
+@media(min-width:981px){
+  body{padding:18px;overflow-x:hidden;}
+  .app{
+    width:min(1240px,100%);
+    margin:0 auto;
+    grid-template-columns:minmax(0,1.25fr) minmax(340px,.75fr);
+    grid-template-rows:auto auto var(--stageH) auto;
+    gap:12px;
+    align-items:stretch;
+  }
+  .header{grid-column:1/-1;grid-row:1;padding:8px 14px;min-height:56px;display:flex;align-items:center;}
+  .titleRow{width:100%;align-items:center;gap:14px;}
+  .titleRow>div:first-child{min-width:0;}
+  .brand{gap:8px;min-width:0;}
+  .brand>div{display:flex;align-items:baseline;gap:10px;min-width:0;}
+  .logoMark{width:26px;height:26px;}
+  .logoMark path{stroke-width:2.7;}
+  .logoMark .logoRight{stroke-width:2;}
+  h1{font-size:22px;line-height:1;letter-spacing:-.015em;white-space:nowrap;}
+  .brandKicker{margin:0;font-size:12px;line-height:1;color:var(--muted);white-space:nowrap;}
+  .subtitle{display:none!important;}
+  .headerTools{display:flex;align-items:center;justify-content:flex-end;gap:10px;justify-items:unset;min-width:0;}
+  .stats{gap:6px;flex-wrap:nowrap;white-space:nowrap;}
+  .scoreline{font-size:12.2px;}
+  .buttonRow{gap:6px;flex-wrap:nowrap;}
+  .miniBtn{padding:6px 8px;font-size:12px;}
+  .sessionStrip{margin-top:0;flex-wrap:nowrap;max-width:150px;overflow:hidden;justify-content:flex-end;}
+  .sessionResult{padding:3px 5px;font-size:10px;}
+
+  .progressShell{grid-column:1/-1;grid-row:2;padding:7px 12px;min-height:36px;display:flex;align-items:center;}
+  .progressCompact{display:grid;grid-template-columns:minmax(0,1fr) max-content;gap:12px;align-items:center;width:100%;}
+  .phaseTop{display:contents;}
+  .phaseTitle{font-size:13px;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .phaseHint{display:none!important;}
+  .phaseBar{display:flex;align-items:center;gap:14px;min-width:0;}
+  .progressGroup{display:block;min-width:0;}
+  .progressSquares{gap:5px;}
+  .progressLabel{display:none;}
+  .progressStep{font:650 12.2px/1 var(--sans);color:var(--muted);white-space:nowrap;text-align:right;}
+
+  .figureStage{grid-column:1;grid-row:3;height:var(--stageH);min-height:0;align-self:stretch;}
+  #plotWrap{height:100%;min-height:0;max-height:none;}
+  #scene{height:100%;}
+  .choiceCard{grid-column:2;grid-row:3;height:var(--stageH);min-height:0;align-self:stretch;padding:14px;display:flex;flex-direction:column;}
+  .taskTitle{font-size:20px;line-height:1.12;min-height:44px;display:flex;align-items:flex-start;}
+  .taskSub{margin-top:6px;min-height:30px;font-size:13px;line-height:1.3;}
+  .choices{gap:7px;margin-top:10px;min-height:0;overflow:auto;scrollbar-width:thin;padding-right:1px;}
+  .choice{height:64px;min-height:64px;padding:8px 10px;font-size:16px;line-height:1.2;grid-template-columns:24px 1fr;gap:9px;}
+  .choiceMark{width:22px;height:22px;}
+  .feedback{height:44px;min-height:44px;margin-top:10px;font-size:15.5px;line-height:1.3;}
+  .hintBox{margin-top:auto;padding-top:8px;gap:8px;}
+  .hintActions{gap:6px;}
+  .hintFormula{padding:8px 10px;font-size:15px;line-height:1.25;}
+
+  .matrixPanel{grid-column:1/-1;grid-row:4;padding:8px 10px;align-self:start;}
+  .tableCaption{display:inline-flex;margin:0 10px 5px 0;font-size:13px;line-height:1.18;vertical-align:baseline;}
+  .tableCaption .cornerTick{width:11px;height:11px;flex-basis:11px;margin-top:1px;}
+  .tableCaption .cornerTick::before{width:7px;height:7px;border-width:1.5px 0 0 1.5px;}
+  .matrixIntro{display:inline;margin:0;color:var(--muted);font-size:12px;line-height:1.2;}
+  .matrixEquation{padding:2px 0 5px;gap:10px;}
+  .matrixTerm{gap:3px;}
+  .matrixLabel{font-size:13px;}
+  .equals,.times{font-size:20px;padding-top:14px;}
+  .bracketed{padding:3px 10px;min-height:28px;}
+  table.matrix{font-size:12.5px;line-height:1.15;}
+  table.matrix td{padding:3px 6px;min-width:31px;}
+  .checkEquation{padding-top:6px;margin-top:2px;gap:10px;}
+}
+@media(min-width:981px) and (max-width:1100px){.brandKicker{display:none;}}
+.figureCaption{
+  position:absolute;left:90px;bottom:10px;z-index:3;max-width:min(500px,calc(100% - 410px));
+  padding:5px 8px;background:rgba(255,255,255,.90);border:1px solid rgba(31,42,68,.16);
+  font-size:13.5px;line-height:1.2;pointer-events:none;margin:0;
+}
+.figureCaption .cornerTick{width:12px;height:12px;flex-basis:12px;margin-top:1px;}
+.plotHelp{transition:opacity .45s ease;}
+.plotHelp.plotHelpFaded{opacity:0;}
+#plotBackdrop{position:fixed;inset:0;z-index:30;background:rgba(31,42,68,.35);backdrop-filter:blur(4px);opacity:0;transition:opacity .15s ease;}
+#plotBackdrop[hidden]{display:none!important;}
+#plotBackdrop.show{opacity:1;}
+.figureStage.expanded{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:min(94vw,1240px);height:min(88dvh,860px);z-index:31;margin:0;}
+.figureStage.expanded #plotWrap{height:100%;min-height:0;max-height:none;}
+.figureStage.expanded .figureControls{z-index:4;}
+@media(max-width:980px){
+  .figureStage.expanded{left:0;top:0;right:0;bottom:0;transform:none;width:auto;height:auto;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);}
+  .figureStage.expanded #plotWrap{height:100%;min-height:0;max-height:none;}
+}
+@media(prefers-reduced-motion:reduce){#plotBackdrop{transition:none;}}
+@media(max-width:980px){
+  .app{margin:0 auto 32px;}
+  .progressCompact{display:block;}
+  .progressStep{display:none;}
+  .figureCaption{left:12px;max-width:calc(100% - 20px);bottom:42px;font-size:12.5px;}
+  #plotWrap{height:44dvh;min-height:340px;max-height:520px;}
+}
+@media(max-width:640px){#plotWrap{height:40dvh;min-height:300px;}.figureCaption{bottom:42px;}}
+
+
+@media(max-width:980px){
+  body{padding:8px;}
+  .header{padding:9px 10px;}
+  .titleRow{display:flex;flex-direction:column;align-items:flex-start;gap:8px;}
+  .brand{gap:8px;}
+  .brand>div{min-width:0;}
+  .logoMark{width:30px;height:30px;}
+  h1{font-size:30px;line-height:1;}
+  .brandKicker{font-size:12px;margin-top:2px;}
+  .headerTools{display:grid;gap:8px;justify-items:start;margin-top:0;min-width:0;}
+  .stats,.buttonRow,.sessionStrip{justify-content:flex-start;}
+  .stats{gap:5px;font-size:11.5px;line-height:1.2;}
+  .buttonRow{gap:6px;}
+  .miniBtn{padding:6px 8px;font-size:12px;}
+  .sessionStrip{display:none;}
+  .progressShell{padding:7px 10px;}
+  .progressCompact{display:grid;grid-template-columns:1fr;gap:6px;width:100%;}
+  .phaseTitle{font-size:12.5px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .phaseBar{display:flex;gap:10px;align-items:center;}
+  .progressSquares{grid-template-columns:repeat(var(--count),11px);gap:4px;}
+  .progressSquare{width:11px;height:11px;}
+  #plotWrap{height:38dvh;min-height:250px;max-height:420px;}
+  .choiceCard{padding:13px;}
+  .choice{min-height:50px;}
+}
+@media(max-width:640px){
+  h1{font-size:28px;}
+  .headerTools{gap:7px;}
+  #plotWrap{height:37dvh;min-height:245px;}
+  .figureCaption{left:12px;bottom:40px;font-size:12px;max-width:calc(100% - 18px);}
+}
+
+
+@media(min-width:981px){
+  .matrixPanel.showChecks{display:grid;grid-template-columns:minmax(0,1fr) minmax(340px,.72fr);column-gap:12px;align-items:start;}
+  .matrixPanel.showChecks .matrixEquation{grid-column:1;grid-row:1;padding-bottom:0;}
+  .matrixPanel.showChecks .checkEquation{grid-column:2;grid-row:1;border-top:0;border-left:1px solid var(--line);padding:0 0 0 10px;margin:0;display:flex;align-items:flex-start;gap:10px;overflow-x:auto;}
+  .matrixPanel.showChecks .checkEquation[hidden]{display:none!important;}
+  .matrixPanel.showChecks .checkEquation .matrixTerm{gap:3px;}
+  .matrixPanel.showChecks .checkEquation .matrixLabel{font-size:12px;}
+  .matrixPanel.showChecks .checkEquation .bracketed{padding:2px 8px;}
+  .matrixPanel.showChecks .checkEquation table.matrix{font-size:11.5px;line-height:1.12;}
+  .matrixPanel.showChecks .checkEquation table.matrix td{padding:2px 4px;min-width:24px;}
+}
+
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* T1-T6 menu, mode, cheatsheet, and quiz pass */
+[hidden]{display:none!important;}
+body.menuOpen{padding:0;}
+.introScreen{
+  min-height:100dvh;
+  padding:clamp(14px,2.4vw,28px);
+  background:var(--paper);
+  color:var(--ink);
+}
+.introShell{width:min(1120px,100%);margin:0 auto;display:grid;gap:14px;}
+.introBrandRow{display:flex;align-items:center;gap:12px;padding:12px 0 4px;}
+.introBrandRow .logoMark{width:34px;height:34px;}
+.introBrandRow h1{font-family:var(--serif);font-weight:500;font-size:clamp(34px,5vw,56px);letter-spacing:-.025em;margin:0;line-height:.95;}
+.introTagline{font:500 14px/1.25 var(--sans);color:var(--muted);margin-top:6px;}
+.resumeBar{border:1px solid var(--line-strong);background:#fff;padding:9px 12px;display:flex;align-items:center;justify-content:space-between;gap:10px;font:650 13px/1.2 var(--sans);box-shadow:0 1px 2px rgba(31,42,68,.08);}
+.modeCards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;}
+.modeCard{background:var(--paper-panel);border:1px solid var(--line);box-shadow:0 1px 2px rgba(31,42,68,.10);padding:16px;display:grid;gap:10px;position:relative;min-height:146px;}
+.modeCard h2{font-family:var(--serif);font-weight:600;font-size:25px;line-height:1.05;margin:0;}
+.modeCard p{margin:0;color:var(--muted);font:500 14px/1.35 var(--sans);}
+.modeCard .modeTag{position:absolute;top:10px;right:10px;border:1px solid rgba(31,42,68,.28);padding:3px 6px;font:700 10.5px/1 var(--sans);color:var(--muted);background:#fff;display:block;}
+.modeCard .miniBtn{justify-self:start;margin-top:auto;}
+.introLower{display:grid;grid-template-columns:minmax(0,1.18fr) minmax(320px,.82fr);gap:12px;align-items:start;}
+.cheatsheetCard,.quizCard{background:var(--paper-panel);border:1px solid var(--line);box-shadow:0 1px 2px rgba(31,42,68,.10);padding:14px;}
+.cheatsheetCard summary{cursor:pointer;font-family:var(--serif);font-weight:600;font-size:22px;list-style:none;display:flex;align-items:center;gap:8px;}
+.cheatsheetCard summary::-webkit-details-marker{display:none;}
+.cheatsheetCard summary::before{content:"";width:11px;height:11px;border-left:2px solid var(--star);border-top:2px solid var(--star);display:inline-block;}
+.cheatsheetBody{display:grid;grid-template-columns:minmax(0,1fr) 170px;gap:14px;align-items:center;margin-top:12px;}
+.cheatsheetTable{width:100%;border-collapse:collapse;font:500 14px/1.28 var(--sans);}
+.cheatsheetTable th{font-family:var(--serif);font-weight:650;text-align:left;white-space:nowrap;width:160px;color:var(--ink);vertical-align:top;padding:7px 9px 7px 0;border-top:1px solid rgba(31,42,68,.14);}
+.cheatsheetTable td{padding:7px 0;border-top:1px solid rgba(31,42,68,.14);color:var(--ink);}
+.cheatsheetTable .math{font-family:var(--serif);font-size:15px;}
+.cheatsheetTable tr.flash{animation:cheatFlash 1.15s ease;}
+@keyframes cheatFlash{0%{background:rgba(217,147,13,.24)}100%{background:transparent}}
+.projectionSketch{width:100%;height:auto;display:block;background:#fff;border:1px solid rgba(31,42,68,.24);}
+.quizCard{display:grid;gap:12px;}
+.quizTop{display:flex;justify-content:space-between;align-items:start;gap:10px;}
+.quizTop h2{font-family:var(--serif);font-size:24px;line-height:1.05;margin:0;font-weight:600;}
+.quizTop p{margin:5px 0 0;color:var(--muted);font:500 13.5px/1.35 var(--sans);}
+.quizBest{font:700 11px/1 var(--sans);white-space:nowrap;color:var(--muted);border:1px solid rgba(31,42,68,.25);background:#fff;padding:5px 7px;}
+.quizPlay{display:grid;gap:10px;}
+.quizMeta{display:flex;justify-content:space-between;gap:10px;color:var(--muted);font:700 12px/1 var(--sans);}
+.quizStack{position:relative;height:176px;touch-action:pan-y;}
+.quizGhost,.quizStatement{position:absolute;inset:0;border:1px solid var(--line-strong);background:#fff;box-shadow:0 1px 2px rgba(31,42,68,.10);}
+.quizGhost.one{transform:translate(7px,7px);opacity:.52;}
+.quizGhost.two{transform:translate(14px,14px);opacity:.25;}
+.quizStatement{display:flex;align-items:center;justify-content:center;text-align:center;padding:20px;font-family:var(--serif);font-size:22px;line-height:1.2;font-weight:500;cursor:grab;user-select:none;transition:transform .16s ease,border-color .12s ease,background .12s ease;}
+.quizStatement:active{cursor:grabbing;}
+.quizStatement.correctFlash{border-color:rgba(29,138,80,.65);background:rgba(29,138,80,.08);}
+.quizStatement.wrongStay{border-color:rgba(192,57,43,.70);background:rgba(192,57,43,.08);transform:rotate(-12deg);}
+.quizFeedback{min-height:42px;border-left:2px solid var(--line-strong);padding:2px 0 2px 10px;font:italic 15px/1.32 var(--serif);color:var(--ink);}
+.quizFeedback.good{border-left-color:var(--q);color:#155c37;}
+.quizFeedback.bad{border-left-color:var(--bad);color:var(--bad);}
+.quizActions{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;}
+.quizActions .miniBtn{min-width:82px;}
+.quizEnd{display:grid;gap:10px;border:1px solid rgba(31,42,68,.22);background:#fff;padding:12px;}
+.quizEndScore{font-family:var(--serif);font-size:24px;font-weight:600;line-height:1.1;}
+.quizEndActions{display:flex;gap:8px;flex-wrap:wrap;}
+.modeSegment{display:inline-flex;border:1px solid var(--line-strong);background:var(--paper-panel);}
+.modeSeg{appearance:none;border:0;background:transparent;color:var(--ink);padding:6px 9px;font:700 12px/1 var(--sans);cursor:pointer;}
+.modeSeg + .modeSeg{border-left:1px solid var(--line-strong);}
+.modeSeg.active{background:var(--ink);color:#fff;}
+#logoHome{cursor:pointer;}
+.confirmPanel{display:none;position:fixed;inset:0;z-index:40;align-items:center;justify-content:center;padding:20px;background:rgba(31,42,68,.35);backdrop-filter:blur(4px);}
+.confirmPanel.show{display:flex;}
+.confirmCard{width:min(430px,100%);background:var(--paper-panel);border:1px solid var(--line);box-shadow:0 1px 2px rgba(31,42,68,.10);padding:18px;}
+.confirmCard h2{font-family:var(--serif);font-size:28px;line-height:1.1;font-weight:600;margin:0 0 8px;}
+.confirmCard p{margin:0;color:var(--muted);font:500 14px/1.35 var(--sans);}
+.confirmActions{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap;margin-top:16px;}
+.aboutCard{width:min(560px,100%);position:relative;border-color:var(--line-strong);box-shadow:0 10px 30px rgba(31,42,68,.18);}
+.aboutCard::before{content:"";position:absolute;left:17px;top:18px;width:10px;height:10px;border-left:2px solid var(--star);border-top:2px solid var(--star);}
+.aboutCard h2{margin:0 0 14px;padding-left:20px;}
+.aboutList{display:grid;gap:0;padding:3px 13px;background:#fff;border:1px solid rgba(31,42,68,.22);}
+.aboutList p{padding:9px 0;overflow-wrap:anywhere;}
+.aboutList p + p{border-top:1px solid var(--faint);}
+.aboutList strong{color:var(--ink);font:800 10.5px/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;}
+.aboutList a{color:var(--a);text-decoration-thickness:1.5px;text-underline-offset:2px;}
+.aboutList a:hover{text-decoration-thickness:2px;}
+@media(max-height:700px){.cheatsheetCard:not([open]){padding-bottom:12px;}}
+@media(max-width:880px){.introLower,.modeCards{grid-template-columns:1fr;}.cheatsheetBody{grid-template-columns:1fr;}.projectionSketch{max-width:210px;}.introScreen{padding:10px;}.modeCard{min-height:0;}.quizStack{height:162px;}.quizStatement{font-size:20px;}}
+@media(prefers-reduced-motion:reduce){.quizStatement{transition:none!important}.cheatsheetTable tr.flash{animation:none!important}}
+
+
+
+/* Intro revision: outcomes -> cheatsheet + embedded warm-up -> mode choices */
+.introShell{width:min(1040px,100%);gap:12px;}
+.outcomesCard,.cheatsheetCard{
+  background:var(--paper-panel);
+  border:1px solid var(--line);
+  box-shadow:0 1px 2px rgba(31,42,68,.10);
+  padding:14px;
+}
+.outcomesHeader,.cheatsheetHeader{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;}
+.outcomesHeader h2,.cheatsheetHeader h2{font-family:var(--serif);font-size:23px;line-height:1.05;font-weight:600;margin:0;}
+.outcomesHeader p,.cheatsheetHeader p{margin:3px 0 0;color:var(--muted);font:500 13px/1.35 var(--sans);}
+.outcomesGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:11px;}
+.outcomeItem{border-top:2px solid var(--faint);padding:8px 8px 2px;font:600 13.25px/1.35 var(--sans);}
+.outcomeItem::before{content:"∟";color:var(--star);font-weight:850;margin-right:7px;}
+.cheatsheetLead{margin:10px 0 8px;padding:8px 10px;background:#fff;border:1px solid rgba(31,42,68,.18);font:600 13.5px/1.3 var(--sans);}
+.algorithmList{display:grid;border-top:1px solid rgba(31,42,68,.18);}
+.algorithmStep{
+  display:grid;
+  grid-template-columns:32px minmax(125px,.36fr) minmax(0,1fr);
+  gap:10px;
+  align-items:start;
+  padding:9px 4px;
+  border-bottom:1px solid rgba(31,42,68,.14);
+}
+.algorithmStep.flash{animation:cheatFlash 1.15s ease;}
+.stepNumber{width:25px;height:25px;display:flex;align-items:center;justify-content:center;border:1px solid var(--line-strong);background:#fff;font:800 11px/1 var(--sans);}
+.stepName{font:750 13px/1.25 var(--sans);padding-top:4px;}
+.stepBody{font:500 13.6px/1.38 var(--sans);min-width:0;}
+.stepBody .microGloss{display:block;color:var(--muted);font-size:12.5px;margin-top:3px;}
+.qrSummary{display:grid;grid-template-columns:32px minmax(125px,.36fr) minmax(0,1fr);gap:10px;align-items:start;padding:10px 4px 2px;}
+.qrSummary .stepNumber{border-color:var(--star);color:#735110;}
+.qrFacts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 14px;font:600 13.5px/1.35 var(--sans);}
+.qrFact{min-width:0;}
+.cheatsheetCard>.quizCard{margin-top:12px;background:#fff;border:1px solid var(--line-strong);box-shadow:none;padding:12px;}
+.quizDivider{border:0;border-top:1px solid rgba(31,42,68,.18);margin:12px 0 0;}
+.quizTop h3{font-family:var(--serif);font-size:22px;line-height:1.05;margin:0;font-weight:600;}
+.quizEndHint{margin:0;color:var(--muted);font:600 12.5px/1.35 var(--sans);}
+.modeCards{order:4;}
+.modeCard{
+  appearance:none;
+  width:100%;
+  text-align:left;
+  color:var(--ink);
+  cursor:pointer;
+  font:inherit;
+  min-height:122px;
+  padding:15px;
+  align-content:start;
+  transition:.12s ease background,.12s ease border-color,.12s ease transform;
+}
+.modeCard:hover{background:#fff;border-color:var(--ink);}
+.modeCard:focus-visible{outline:3px solid rgba(43,85,200,.24);outline-offset:2px;border-color:var(--a);}
+.modeCard:active{transform:translateY(1px);}
+.modeTitle{display:block;font-family:var(--serif);font-weight:600;font-size:25px;line-height:1.05;padding-right:70px;}
+.modeDescription{display:block;margin-top:8px;color:var(--muted);font:500 14px/1.35 var(--sans);}
+.modeCue{display:block;margin-top:auto;padding-top:10px;font:800 11.5px/1 var(--sans);letter-spacing:.015em;color:var(--ink);}
+.cheatsheetBody,.projectionSketch,.introLower{display:none!important;}
+
+/* MathJax is the mathematical typesetter for interface copy, choices, checks, and matrices. */
+mjx-container{line-height:1!important;}
+.math mjx-container{margin:0 .035em!important;}
+.choice mjx-container,.quizStatement mjx-container{font-size:1.03em!important;}
+.cheatsheetCard mjx-container,.outcomesCard mjx-container{font-size:1em!important;}
+.matrixLabel mjx-container{margin:0!important;}
+.bracketed{padding:2px 3px;}
+.bracketed::before,.bracketed::after{display:none!important;}
+.tok-a{color:var(--a)!important;}
+.tok-v{color:var(--v)!important;}
+.tok-r{color:var(--proj)!important;}
+.tok-q{color:var(--q)!important;}
+.blank{color:rgba(31,42,68,.26)!important;}
+.zeroCell{color:rgba(31,42,68,.48)!important;}
+.focusCell{color:#7c4a00!important;filter:drop-shadow(0 0 2px rgba(217,147,13,.42));}
+.doneCell{color:#155c37!important;}
+.vectorChip mjx-container{margin:0!important;}
+.progressLabel mjx-container{margin:0!important;font-size:10px!important;}
+
+@media(max-width:760px){
+  .outcomesGrid{grid-template-columns:1fr;gap:4px;}
+  .outcomeItem{padding-top:6px;}
+  .algorithmStep,.qrSummary{grid-template-columns:29px minmax(0,1fr);gap:8px;}
+  .stepName{grid-column:2;}
+  .stepBody,.qrFacts{grid-column:2;}
+  .qrFacts{grid-template-columns:1fr;gap:5px;}
+  .outcomesHeader,.cheatsheetHeader{display:block;}
+  .outcomesHeader p,.cheatsheetHeader p{margin-top:5px;}
+  .quizStack{height:150px;}
+}
+@media(max-width:420px){
+  .outcomesCard,.cheatsheetCard{padding:11px;}
+  .algorithmStep{padding:8px 1px;}
+  .stepBody{font-size:13.2px;}
+  .modeCard{min-height:112px;padding:13px;}
+}
+
+/* MathJax matrix/SVG finishing pass. */
+.matrixEquation{display:flex!important;align-items:center;gap:10px;overflow-x:auto;}
+.matrixEquation .equals,.matrixEquation .times{padding-top:18px;flex:0 0 auto;}
+.matrixEquation .times:empty{width:0;margin-left:-5px;}
+.bracketed mjx-container{margin:0!important;}
+.mathSvgLabel{overflow:visible;pointer-events:none;}
+@media(max-width:640px){
+  .matrixEquation{display:flex!important;flex-wrap:wrap;align-items:center;justify-items:unset;}
+  .matrixEquation .equals,.matrixEquation .times{padding-top:0;}
+  .matrixTerm{justify-items:center;}
+}
+
+
+
+/* Compact menu, telegraphic cheatsheet, modal quiz, and simplified game header. */
+body.quizOpen{overflow:hidden;}
+.introScreen{padding:10px 18px 14px;}
+.introShell{width:min(1080px,100%);gap:8px;}
+.introBrandRow{gap:14px;padding:0;min-height:68px;align-items:center;}
+.introBrandRow .logoMark{width:68px;height:68px;}
+.introBrandRow .logoMark path{stroke-width:3.35;}
+.introBrandRow .logoMark .logoRight{stroke-width:2.25;}
+.introBrandRow h1{font-size:clamp(38px,4.5vw,52px);line-height:.92;}
+.introTagline,.brandKicker{display:none!important;}
+.outcomesCard,.cheatsheetCard{padding:9px 11px;}
+.sectionLabel{
+  margin:0;
+  font:800 11px/1 var(--sans);
+  letter-spacing:.14em;
+  color:var(--muted);
+}
+.introDisclosure{min-width:0;}
+.introDisclosure summary{
+  display:flex!important;
+  align-items:center;
+  gap:8px;
+  width:max-content;
+  max-width:100%;
+  cursor:pointer;
+  list-style:none;
+}
+.introDisclosure summary::-webkit-details-marker{display:none;}
+.introDisclosure summary::before{
+  content:"";
+  width:7px;
+  height:7px;
+  flex:0 0 auto;
+  border:0;
+  border-right:2px solid var(--star);
+  border-bottom:2px solid var(--star);
+  transform:rotate(-45deg);
+  transition:transform .14s ease;
+}
+.introDisclosure[open] summary::before{transform:rotate(45deg) translate(-1px,-1px);}
+.introDisclosure summary:focus-visible{outline:3px solid rgba(43,85,200,.24);outline-offset:3px;}
+.outcomesGrid{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-top:6px;}
+.outcomeItem{border:0;border-left:2px solid var(--faint);padding:2px 7px;font:650 12.2px/1.24 var(--sans);}
+.outcomeItem::before{font-size:11px;margin-right:6px;}
+.cheatsheetLead{margin:6px 0 3px;padding:5px 7px;font:650 12.35px/1.22 var(--sans);}
+.algorithmList{margin-top:0;}
+.algorithmStep,.qrSummary{
+  grid-template-columns:25px 78px minmax(0,1fr);
+  gap:7px;
+  padding:5px 2px;
+  align-items:center;
+}
+.stepNumber{width:22px;height:22px;font-size:10px;}
+.stepName{padding-top:0;font:780 12px/1.16 var(--sans);}
+.stepBody{font:520 12.65px/1.25 var(--sans);}
+.stepBody .microGloss{display:none!important;}
+.qrSummary{padding-bottom:5px;}
+.qrFacts{display:block;font:600 12.65px/1.25 var(--sans);}
+.quizLaunchBtn{
+  appearance:none;
+  width:auto;
+  min-width:148px;
+  min-height:28px;
+  margin:0;
+  border:1px solid var(--ink);
+  background:var(--ink);
+  color:#fff;
+  padding:5px 8px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  cursor:pointer;
+  font:800 11.5px/1 var(--sans);
+  letter-spacing:.08em;
+  transition:.12s ease background,.12s ease transform;
+}
+.quizLaunchBtn:hover{background:#111827;}
+.quizLaunchBtn:active{transform:translateY(1px);}
+.quizLaunchBtn:focus-visible{outline:3px solid rgba(43,85,200,.25);outline-offset:2px;}
+.quizLaunchBest{font-size:10.5px;letter-spacing:.04em;opacity:.82;white-space:nowrap;}
+.cheatsheetCard{position:relative;min-height:46px;}
+.cheatsheetCard>.introDisclosure>summary{min-height:27px;padding-right:170px;}
+.cheatsheetCard>.quizLaunchBtn{position:absolute;top:8px;right:11px;}
+.modeCards{gap:8px;}
+.modeCard{min-height:88px;padding:10px 12px;gap:4px;}
+.modeTitle{font-size:22px;line-height:1.02;padding-right:70px;}
+.modeDescription{margin-top:4px;font-size:12.5px;line-height:1.24;}
+.modeTag{top:7px!important;right:7px!important;}
+.modeCue{display:none!important;}
+.resumeBar{padding:6px 9px;font-size:12.2px;}
+
+.quizPanel{
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:45;
+  align-items:center;
+  justify-content:center;
+  padding:16px;
+  background:rgba(31,42,68,.34);
+  -webkit-backdrop-filter:blur(7px);
+  backdrop-filter:blur(7px);
+}
+.quizPanel.show{display:flex;}
+.quizModalCard{
+  width:min(620px,100%);
+  max-height:calc(100dvh - 32px);
+  overflow:auto;
+  background:var(--paper-panel);
+  border:1px solid var(--line);
+  box-shadow:0 10px 30px rgba(31,42,68,.20);
+  padding:14px;
+}
+.quizModalHeader{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px;}
+.quizModalHeader h2{margin:0;font-family:var(--serif);font-size:26px;line-height:1;font-weight:600;}
+.quizCloseBtn{
+  appearance:none;
+  border:0;
+  background:transparent;
+  color:var(--muted);
+  padding:4px 0 4px 8px;
+  cursor:pointer;
+  font:800 11px/1 var(--sans);
+  text-transform:uppercase;
+  letter-spacing:.06em;
+}
+.quizCloseBtn:hover{color:var(--ink);text-decoration:underline;text-underline-offset:3px;}
+.quizModalCard .quizPlay{gap:9px;}
+.quizModalCard .quizStack{height:190px;}
+.quizModalCard .quizStatement{font-size:21px;padding:18px;}
+.quizModalCard .quizFeedback{min-height:44px;}
+.quizModalCard .quizEnd{padding:16px;}
+.quizModalCard .quizEndActions{justify-content:center;}
+
+.taskTitle{display:block!important;}
+.quizStatementText{display:block;width:100%;}
+.header .titleRow{align-items:center;}
+.header .brand{min-width:0;gap:9px;}
+.header .brand .logoMark{width:36px;height:36px;}
+.header .brand .logoMark path{stroke-width:3.15;}
+.header .brand .logoRight{stroke-width:2.15;}
+.header .brand h1{font-size:25px;line-height:1;white-space:nowrap;}
+.header .headerTools{display:flex;align-items:center;justify-content:flex-end;gap:10px;min-width:0;margin:0;}
+.header .miniBtn{padding:7px 11px;}
+
+@media(min-width:981px){
+  :root{--stageH:clamp(390px,calc(100dvh - 286px),590px);}
+  body:not(.menuOpen){padding:10px 14px;}
+  .app{gap:8px;grid-template-rows:auto auto var(--stageH) auto;}
+  .header{padding:5px 10px;min-height:46px;}
+  .progressShell{padding:6px 10px;min-height:34px;}
+  .matrixPanel{padding:7px 9px;}
+}
+@media(max-width:980px){
+  body:not(.menuOpen){padding:7px;}
+  .app{gap:8px;}
+  .header{padding:6px 8px;}
+  .header .titleRow{display:flex;flex-direction:row;align-items:center;justify-content:space-between;gap:10px;}
+  .header .brand .logoMark{width:35px;height:35px;}
+  .header .brand h1{font-size:27px;}
+  .header .headerTools{display:flex;align-items:center;justify-content:flex-end;gap:8px;}
+}
+@media(max-width:760px){
+  .introScreen{padding:8px 9px 12px;}
+  .introBrandRow{min-height:58px;gap:10px;}
+  .introBrandRow .logoMark{width:58px;height:58px;}
+  .introBrandRow h1{font-size:37px;}
+  .outcomesGrid{grid-template-columns:1fr;gap:3px;}
+  .outcomeItem{padding:3px 7px;}
+  .algorithmStep,.qrSummary{grid-template-columns:23px minmax(0,1fr);gap:3px 7px;align-items:start;}
+  .stepName{grid-column:2;grid-row:1;}
+  .stepBody{grid-column:2;grid-row:2;font-size:12.35px;}
+  .modeCards{grid-template-columns:1fr;}
+  .modeCard{min-height:76px;}
+  .quizModalCard{padding:12px;}
+  .quizModalCard .quizStack{height:175px;}
+  .quizModalCard .quizStatement{font-size:19px;padding:15px;}
+}
+@media(max-width:520px){
+  .header .titleRow{flex-wrap:wrap;}
+  .header .headerTools{width:100%;justify-content:space-between;}
+}
+@media(max-width:420px){
+  .introBrandRow h1{font-size:33px;}
+  .cheatsheetCard{padding-top:42px;}
+  .cheatsheetCard>.introDisclosure>summary{padding-right:0;}
+  .cheatsheetCard>.quizLaunchBtn{top:7px;right:11px;min-width:136px;}
+  .algorithmStep,.qrSummary{grid-template-columns:22px minmax(0,1fr);gap:3px 6px;}
+  .stepName{grid-column:2;grid-row:1;font-size:11.5px;}
+  .stepBody{grid-column:2;grid-row:2;font-size:12px;}
+  .header .brand .logoMark{width:32px;height:32px;}
+  .header .brand h1{font-size:23px;}
+  .quizPanel{padding:8px;}
+  .quizModalCard{max-height:calc(100dvh - 16px);}
+}
+
+.aboutBtn{
+  appearance:none;
+  position:relative;
+  flex:0 0 38px;
+  width:38px;
+  height:38px;
+  margin-left:auto;
+  border:1px solid var(--line-strong);
+  border-radius:0;
+  display:grid;
+  place-items:center;
+  background:var(--paper-panel);
+  color:var(--ink);
+  font:600 24px/1 var(--serif);
+  cursor:pointer;
+  box-shadow:0 1px 2px rgba(31,42,68,.10);
+  transition:background .12s ease,border-color .12s ease,transform .12s ease;
+}
+.aboutBtn::before{content:"";position:absolute;left:5px;top:5px;width:7px;height:7px;border-left:2px solid var(--star);border-top:2px solid var(--star);}
+.aboutBtn:hover{background:rgba(31,42,68,.06);border-color:var(--ink);}
+.aboutBtn:active{transform:translateY(1px);}
+.aboutBtn:focus-visible{outline:3px solid rgba(43,85,200,.24);outline-offset:3px;}
+@media(max-width:520px){
+  .aboutBtn{flex-basis:34px;width:34px;height:34px;font-size:22px;}
+}
+
+</style>
+</head>
+<body>
+
+<section id="introScreen" class="introScreen" hidden>
+  <div class="introShell">
+    <div class="introBrandRow">
+      <svg class="logoMark" viewBox="0 0 36 36" aria-hidden="true"><path d="M6 27 L25 27"/><path class="logoV" d="M6 27 L20 12"/><path class="logoQ" d="M6 27 L6 8"/><path class="logoRight" d="M6 22 L11 22 L11 27"/></svg>
+      <h1>Perfectly Normal</h1>
+      <button class="aboutBtn" id="aboutBtn" type="button" aria-label="About Perfectly Normal" aria-haspopup="dialog">?</button>
+    </div>
+
+    <div class="resumeBar" id="resumeBar" hidden>
+      <span id="resumeText">resume current puzzle</span>
+      <button class="miniBtn primary" id="resumeBtn">resume</button>
+    </div>
+
+    <section class="outcomesCard">
+      <details class="introDisclosure">
+        <summary><h2 class="sectionLabel">LEARNING GOALS</h2></summary>
+        <div class="outcomesGrid">
+          <div class="outcomeItem">Choose the next Gram–Schmidt move.</div>
+          <div class="outcomeItem">Distinguish projection from perpendicular residual.</div>
+          <div class="outcomeItem">Read and check \(A = QR\), \(Q^{T}Q = I\), and upper-triangular \(R\).</div>
+        </div>
+      </details>
+    </section>
+
+    <section class="cheatsheetCard" id="cheatsheetCard">
+      <details class="introDisclosure">
+        <summary><h2 class="sectionLabel">GRAM-SCHMIDT CHEATSHEET</h2></summary>
+        <p class="cheatsheetLead">\(A = [\,\mathbf a_1\;\cdots\;\mathbf a_n\,]\), independent columns; for \(j = 1,\ldots,n\):</p>
+
+        <div class="algorithmList" aria-label="Gram-Schmidt algorithm">
+        <div class="algorithmStep" id="cs-start">
+          <span class="stepNumber">1</span>
+          <span class="stepName">Start</span>
+          <span class="stepBody">\(\mathbf v_j \leftarrow \mathbf a_j\).</span>
+        </div>
+        <div class="algorithmStep" id="cs-project">
+          <span class="stepNumber">2</span>
+          <span class="stepName">Project</span>
+          <span class="stepBody">For \(i &lt; j\): \(r_{ij} = \langle \mathbf q_i,\,\mathbf a_j \rangle\); \(\mathbf p_j = \operatorname{proj}_{U_{j-1}}(\mathbf a_j) = \sum_{i&lt;j} r_{ij}\,\mathbf q_i\), with \(U_{j-1} = \operatorname{span}\{\mathbf q_1,\ldots,\mathbf q_{j-1}\}\).</span>
+        </div>
+        <div class="algorithmStep" id="cs-residual">
+          <span class="stepNumber">3</span>
+          <span class="stepName">Residual</span>
+          <span class="stepBody">\(\mathbf v_j \leftarrow \mathbf a_j - \mathbf p_j;\qquad \mathbf v_j \perp U_{j-1}\).</span>
+        </div>
+        <div class="algorithmStep" id="cs-normalize">
+          <span class="stepNumber">4</span>
+          <span class="stepName">Normalize</span>
+          <span class="stepBody">\(r_{jj} = \lVert \mathbf v_j \rVert &gt; 0;\qquad \mathbf q_j = \mathbf v_j/r_{jj}\).</span>
+        </div>
+        </div>
+
+        <div class="qrSummary" id="cs-qr">
+          <span class="stepNumber">QR</span>
+          <span class="stepName">Collect</span>
+          <span class="stepBody">\(Q = [\,\mathbf q_1\;\cdots\;\mathbf q_n\,]\), \(R = (r_{ij})\) upper triangular; \(Q^{T}Q = I\), \(A = QR\).</span>
+        </div>
+      </details>
+
+      <button class="quizLaunchBtn" id="quizStartBtn" type="button">
+        <span>Popup Quiz</span>
+        <span class="quizLaunchBest" id="quizBestBadge">BEST —</span>
+      </button>
+    </section>
+
+    <div class="modeCards" aria-label="choose a mode">
+      <button class="modeCard" id="studyModeCard" type="button">
+        <span class="modeTag" id="studyBestStars">best: -</span>
+        <span class="modeTitle">Study Mode</span>
+        <span class="modeDescription">Feedback after incorrect moves and the \(A = QR\) ledger visible.</span>
+      </button>
+      <button class="modeCard" id="examModeCard" type="button">
+        <span class="modeTag" id="examBestStars">best: -</span>
+        <span class="modeTitle">Exam Mode</span>
+        <span class="modeDescription">No hints or explanations until the end. Test the sequence from memory.</span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<main class="app" id="app" hidden>
+  <section class="header">
+    <div class="titleRow">
+      <div class="brand">
+        <svg class="logoMark" viewBox="0 0 36 36" aria-hidden="true"><path d="M6 27 L25 27"/><path class="logoV" d="M6 27 L20 12"/><path class="logoQ" d="M6 27 L6 8"/><path class="logoRight" d="M6 22 L11 22 L11 27"/></svg>
+        <h1>Perfectly Normal</h1>
+      </div>
+      <div class="headerTools">
+        <div class="stats" id="gameStats" aria-label="current score" aria-live="polite">
+          <div class="scoreline"><span class="pill" id="missesPill">misses 0</span><span class="dot" aria-hidden="true"> · </span><span class="pill" id="bestPill" aria-label="No best score yet">best —</span></div>
+        </div>
+        <button class="miniBtn" id="menuBtn" type="button">menu</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="progressShell" aria-label="progress">
+    <div class="progressCompact">
+      <div class="phaseTitle" id="phaseTitle">Column 1 · start the residual</div>
+      <div class="phaseBar" id="phaseBar"></div>
+      <div class="progressStep" id="progressStep">step 1/15</div>
+      <div class="phaseHint" id="phaseHint" hidden>Set the current residual before recording its length.</div>
+    </div>
+  </section>
+
+  <section class="figureStage" aria-label="geometry figure">
+    <div class="figureControls" aria-label="camera controls">
+      <button class="plotBtn modeActive" id="rotateModeBtn" aria-pressed="true">rotate</button>
+      <button class="plotBtn" id="panModeBtn" aria-pressed="false">pan</button>
+      <button class="plotBtn" id="autoCamBtn" aria-pressed="true">auto view on</button>
+      <button class="plotBtn" data-camera="best">best view</button>
+      <button class="plotBtn" data-camera="overview">overview</button>
+      <button class="plotBtn" data-camera="trueAngle">true angle</button>
+      <button class="plotBtn" id="expandBtn" aria-pressed="false">expand</button>
+    </div>
+    <div id="plotWrap">
+      <svg id="scene" role="img" aria-label="interactive 3D Gram-Schmidt visualization"></svg>
+      <div class="plotHelp" id="plotHelp">drag to rotate · scroll to zoom</div>
+      <div class="vectorChip" id="vectorChip" hidden></div>
+    </div>
+  </section>
+
+  <section class="workbench">
+    <section class="card choiceCard">
+      <h2 class="taskTitle" id="taskTitle">Column 1: initialize the residual.</h2>
+      <p class="taskSub" id="taskSub">There are no earlier directions yet.</p>
+      <div class="choices" id="choices"></div>
+      <div class="feedback" id="feedback" aria-live="polite"></div>
+      <div class="hintBox">
+        <div class="hintActions">
+          <button class="miniBtn" id="hintBtn">hint</button>
+          <button class="miniBtn" id="formulaBtn">formula</button>
+          <button class="miniBtn" id="resetViewBtn">best view</button>
+        </div>
+        <div class="hintFormula" id="hintFormula"></div>
+      </div>
+    </section>
+
+    <section class="card matrixPanel">
+      <div class="matrixEquation" id="matrixEquation" aria-label="A equals Q times R">
+        <div class="matrixTerm"><span class="matrixLabel a">\(A\)</span><span class="bracketed" id="Ablock"></span></div>
+        <div class="equals">\(=\)</div>
+        <div class="matrixTerm"><span class="matrixLabel q">\(Q\)</span><span class="bracketed" id="Qblock"></span></div>
+        <div class="times" aria-hidden="true"></div>
+        <div class="matrixTerm"><span class="matrixLabel r">\(R\)</span><span class="bracketed" id="Rblock"></span></div>
+      </div>
+      <div class="checkEquation checkBlock" id="checkEquation" aria-label="final checks" hidden>
+        <div class="matrixTerm"><span class="matrixLabel">\(Q^{T}Q = I\)</span><span class="bracketed" id="QtQblock"></span></div>
+        <div class="matrixTerm"><span class="matrixLabel">\(QR = A\)</span><span class="bracketed" id="QRblock"></span></div>
+      </div>
+    </section>
+  </section>
+</main>
+
+<div id="plotBackdrop" hidden></div>
+
+
+<div class="quizPanel" id="quizPanel" aria-hidden="true">
+  <div class="quizModalCard" role="dialog" aria-modal="true" aria-labelledby="quizModalTitle" tabindex="-1">
+    <div class="quizModalHeader">
+      <h2 id="quizModalTitle">Popup Quiz</h2>
+      <button class="quizCloseBtn" id="quizCloseBtn" type="button" aria-label="Close Popup Quiz">close</button>
+    </div>
+    <div class="quizPlay" id="quizPlay" hidden>
+      <div class="quizMeta"><span id="quizProgress">1/10</span><span id="quizTag">projection</span></div>
+      <div class="quizStack" id="quizStack">
+        <div class="quizGhost two" aria-hidden="true"></div>
+        <div class="quizGhost one" aria-hidden="true"></div>
+        <article class="quizStatement" id="quizStatement" tabindex="0" aria-live="polite"></article>
+      </div>
+      <div class="quizFeedback" id="quizFeedback" aria-live="polite"></div>
+      <div class="quizActions">
+        <button class="miniBtn" id="quizFalseBtn" type="button">false</button>
+        <button class="miniBtn primary" id="quizTrueBtn" type="button">true</button>
+        <button class="miniBtn primary" id="quizContinueBtn" type="button" hidden>next</button>
+      </div>
+    </div>
+    <div class="quizEnd" id="quizEnd" hidden>
+      <div class="quizEndScore" id="quizEndScore">score 0/10</div>
+      <div class="quizEndActions">
+        <button class="miniBtn" id="quizAgainBtn" type="button">try again</button>
+        <button class="miniBtn primary" id="quizDoneBtn" type="button">done</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="endPanel" id="endPanel" role="dialog" aria-modal="true" aria-labelledby="endTitle">
+  <div class="endCard" tabindex="-1">
+    <svg id="miniScene" viewBox="0 0 132 104" aria-hidden="true"></svg>
+    <h2 id="endTitle">Factorization complete</h2>
+    <p class="endSummary" id="endSummary">The columns of \(Q\) are orthonormal and \(QR = A\).</p>
+    <div class="starBig" id="endStars" aria-label="3 of 3 stars">★★★</div>
+    <div class="endScoreGrid">
+      <div class="endScoreBox"><span>Misses</span><b id="endMisses">0</b></div>
+      <div class="endScoreBox"><span>Best</span><b id="endBest">—</b></div>
+    </div>
+    <div class="shareGrid" id="shareGrid"></div>
+    <div class="endActions">
+      <button class="miniBtn primary" id="shareBtn">copy result</button>
+      <button class="miniBtn" id="againBtn">next puzzle</button>
+      <button class="miniBtn" id="closeEndBtn">review</button>
+    </div>
+  </div>
+</div>
+
+<div class="confirmPanel" id="confirmPanel" aria-hidden="true">
+  <div class="confirmCard" role="dialog" aria-modal="true" aria-labelledby="confirmTitle" tabindex="-1">
+    <h2 id="confirmTitle">Restart this puzzle?</h2>
+    <p id="confirmBody">Choose what to do next.</p>
+    <div class="confirmActions" id="confirmActions"></div>
+  </div>
+</div>
+
+<div class="confirmPanel" id="aboutPanel" aria-hidden="true">
+  <div class="confirmCard aboutCard" role="dialog" aria-modal="true" aria-labelledby="aboutTitle" tabindex="-1">
+    <h2 id="aboutTitle">About Perfectly Normal</h2>
+    <div class="aboutList">
+      <p><strong>Version:</strong> Perfectly Normal [v0.2(beta)]</p>
+      <p><strong>Copyright:</strong> © 2026 <a href="https://people.math.wisc.edu/~roch/" target="_blank" rel="noopener noreferrer">Sébastien Roch</a></p>
+      <p><strong>License:</strong> <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener noreferrer">Creative Commons Attribution-NonCommercial 4.0 International License</a></p>
+      <p><strong>Textbook:</strong> <a href="https://math345-textbook.github.io/" target="_blank" rel="noopener noreferrer">math345-textbook.github.io</a></p>
+      <p><strong>Privacy:</strong> Your best scores are saved in this browser on this device. They are not uploaded anywhere. If you use a private window, clear site data, switch browsers, or block site storage, your best scores may reset.</p>
+      <p><strong>Acknowledgments:</strong> Thanks to Betsy Stovall for helpful feedback.</p>
+    </div>
+    <div class="confirmActions">
+      <button class="miniBtn primary" id="aboutCloseBtn" type="button">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(() => {
+'use strict';
+
+const puzzles = [
+  {name:'balanced columns', cols:[[1,1,0],[1,0,1],[0,1,1]]},
+  {name:'tilted span', cols:[[2,1,0],[1,2,1],[1,0,2]]},
+  {name:'projection-heavy', cols:[[1,2,1],[2,1,1],[1,1,2]]},
+  {name:'mixed signs', cols:[[1,-1,1],[2,1,0],[0,1,2]]},
+  {name:'stair-step residuals', cols:[[2,0,1],[1,1,1],[0,2,2]]},
+  {name:'negative coefficients', cols:[[1,1,1],[-1,2,0],[2,-1,2]]},
+  {name:'triangular start', cols:[[2,0,0],[1,2,0],[1,1,2]]},
+  {name:'nested plane', cols:[[1,1,0],[2,1,1],[3,1,3]]},
+  {name:'sparse rotation', cols:[[0,2,1],[1,0,2],[2,1,0]]},
+  {name:'skewed plane', cols:[[2,-1,0],[1,1,2],[0,2,1]]}
+];
+
+
+const CHEATSHEET_LABELS = {
+  'cs-start':'start',
+  'cs-project':'projection',
+  'cs-residual':'residual',
+  'cs-normalize':'normalize',
+  'cs-qr':'QR'
+};
+const QUIZ_BANK = [
+  {statement:'For column \\(j\\), Gram–Schmidt starts with \\(\\mathbf v_j\\leftarrow\\mathbf a_j\\).', answer:true, why:'The residual is initialized at the current original column before any old-span part is removed.', tag:'cs-start'},
+  {statement:'When \\(j=1\\), the old span is \\(U_0=\\{\\mathbf 0\\}\\), so the first projection is zero.', answer:true, why:'There are no earlier \\(\\mathbf q_i\\) directions in the first column.', tag:'cs-start'},
+  {statement:'Finished directions are used in column order: only \\(\\mathbf q_1,\\ldots,\\mathbf q_{j-1}\\) can affect column \\(j\\).', answer:true, why:'Gram–Schmidt reaches backward to directions already constructed, never forward to \\(\\mathbf q_j\\).', tag:'cs-start'},
+  {statement:'For \\(i < j\\), the coefficient is \\(r_{ij}=\\langle\\mathbf q_i,\\mathbf a_j\\rangle\\).', answer:true, why:'Because \\(\\mathbf q_i\\) is a unit vector, this inner product is the signed amount of \\(\\mathbf a_j\\) in that direction.', tag:'cs-project'},
+  {statement:'The vector \\(r_{ij}\\mathbf q_i\\) is the \\(\\mathbf q_i\\)-component of \\(\\mathbf a_j\\).', answer:true, why:'The scalar coefficient \\(r_{ij}\\) scales the unit direction \\(\\mathbf q_i\\).', tag:'cs-project'},
+  {statement:'\\(\\operatorname{proj}_{U_{j-1}}(\\mathbf a_j)=\\sum_{i < j}r_{ij}\\mathbf q_i\\).', answer:true, why:'The projection onto the old span is the sum of all earlier orthonormal-direction components.', tag:'cs-project'},
+  {statement:'If \\(\\mathbf a_j\\perp U_{j-1}\\), then its old-span projection is \\(\\mathbf 0\\).', answer:true, why:'Every earlier projection coefficient is then zero.', tag:'cs-project'},
+  {statement:'The residual is \\(\\mathbf v_j=\\mathbf a_j-\\operatorname{proj}_{U_{j-1}}(\\mathbf a_j)\\).', answer:true, why:'Residual means the part left after the old-span projection is removed.', tag:'cs-residual'},
+  {statement:'After projection removal, \\(\\mathbf v_j\\perp U_{j-1}\\).', answer:true, why:'That perpendicularity is the defining geometric payoff of orthogonal projection.', tag:'cs-residual'},
+  {statement:'If \\(\\mathbf v_j=\\mathbf 0\\), then \\(\\mathbf a_j\\) already lies in the span of the earlier columns.', answer:true, why:'Nothing remains outside the old span, so the columns are dependent.', tag:'cs-residual'},
+  {statement:'The diagonal entry is \\(r_{jj}=\\lVert\\mathbf v_j\\rVert\\).', answer:true, why:'The diagonal stores the residual length before normalization.', tag:'cs-normalize'},
+  {statement:'\\(\\mathbf q_j=\\mathbf v_j/r_{jj}\\) has the same direction as \\(\\mathbf v_j\\) and norm \\(1\\).', answer:true, why:'Dividing by the positive residual length rescales without turning the vector.', tag:'cs-normalize'},
+  {statement:'Independent columns guarantee \\(r_{jj} > 0\\) at every step.', answer:true, why:'Independence prevents a zero residual, so its norm is positive.', tag:'cs-normalize'},
+  {statement:'The columns of \\(Q = [\\mathbf q_1\\;\\cdots\\;\\mathbf q_n]\\) are orthonormal, so \\(Q^{T}Q = I\\).', answer:true, why:'The entries of \\(Q^{T}Q\\) are all pairwise inner products of the \\(\\mathbf q_i\\).', tag:'cs-qr'},
+  {statement:'The matrix \\(R=(r_{ij})\\) is upper triangular, with zeros below the diagonal.', answer:true, why:'Column \\(j\\) uses only rows \\(i\\le j\\).', tag:'cs-qr'},
+  {statement:'The column identity \\(\\mathbf a_j=\\sum_{i\\le j}r_{ij}\\mathbf q_i\\) is exactly the column-by-column meaning of \\(A = QR\\).', answer:true, why:'Column \\(j\\) of \\(QR\\) uses column \\(j\\) of \\(R\\) as coefficients for the columns of \\(Q\\).', tag:'cs-qr'},
+
+  {statement:'For \\(j>1\\), normalize \\(\\mathbf a_j\\) before subtracting its old-span projection.', answer:false, why:'Projection removal comes first; normalize the residual afterward.', tag:'cs-start'},
+  {statement:'Column \\(j\\) may use \\(\\mathbf q_j\\) while computing its own projection coefficients.', answer:false, why:'\\(\\mathbf q_j\\) does not exist until the residual has been normalized.', tag:'cs-start'},
+  {statement:'After finishing \\(\\mathbf q_2\\), Gram–Schmidt revisits \\(\\mathbf q_1\\) and changes it.', answer:false, why:'Earlier finished directions stay fixed; later columns are adjusted against them.', tag:'cs-start'},
+  {statement:'\\(r_{ij}=\\langle\\mathbf a_i,\\mathbf a_j\\rangle\\) is the Gram–Schmidt projection coefficient.', answer:false, why:'The coefficient uses the finished unit direction \\(\\mathbf q_i\\), not the original column \\(\\mathbf a_i\\).', tag:'cs-project'},
+  {statement:'The coefficient \\(r_{ij}\\) is a vector.', answer:false, why:'\\(r_{ij}\\) is a scalar; \\(r_{ij}\\mathbf q_i\\) is the vector component.', tag:'cs-project'},
+  {statement:'Subtracting the bare vector \\(\\mathbf q_i\\) always removes the \\(\\mathbf q_i\\)-component.', answer:false, why:'You must subtract the correctly scaled component \\(r_{ij}\\mathbf q_i\\).', tag:'cs-project'},
+  {statement:'For column \\(3\\), the old-plane projection is only \\(r_{13}\\mathbf q_1\\).', answer:false, why:'It includes both earlier directions: \\(r_{13}\\mathbf q_1+r_{23}\\mathbf q_2\\).', tag:'cs-project'},
+  {statement:'The residual \\(\\mathbf v_j\\) is the part of \\(\\mathbf a_j\\) that lies in the old span.', answer:false, why:'That part is the projection; the residual is what remains outside it.', tag:'cs-residual'},
+  {statement:'After the subtraction, \\(\\mathbf v_j\\) should be parallel to every earlier \\(\\mathbf q_i\\).', answer:false, why:'It should be orthogonal to every earlier direction.', tag:'cs-residual'},
+  {statement:'If \\(\\mathbf v_j=\\mathbf 0\\), divide by its norm anyway to create \\(\\mathbf q_j\\).', answer:false, why:'A zero residual cannot be normalized and signals dependent columns.', tag:'cs-residual'},
+  {statement:'The diagonal entry is \\(r_{jj}=\\langle\\mathbf v_j,\\mathbf v_j\\rangle\\).', answer:false, why:'That inner product is the squared norm; \\(r_{jj}=\\sqrt{\\langle\\mathbf v_j,\\mathbf v_j\\rangle}=\\lVert\\mathbf v_j\\rVert\\).', tag:'cs-normalize'},
+  {statement:'A positive residual may produce a negative diagonal entry \\(r_{jj}\\).', answer:false, why:'\\(r_{jj}\\) is a norm, so it is nonnegative—and positive for independent columns.', tag:'cs-normalize'},
+  {statement:'Normalizing a nonzero vector changes its direction.', answer:false, why:'Normalization changes length only.', tag:'cs-normalize'},
+  {statement:'In \\(A = QR\\), the columns of \\(Q\\) are the unchanged columns of \\(A\\).', answer:false, why:'The columns of \\(Q\\) are the new orthonormal directions produced from the columns of \\(A\\).', tag:'cs-qr'},
+  {statement:'Upper triangular means \\(R\\) has zeros above the diagonal.', answer:false, why:'The zeros are below the diagonal.', tag:'cs-qr'},
+  {statement:'The final orthonormality check is \\(Q^{T}Q = R\\).', answer:false, why:'Orthonormal columns give \\(Q^{T}Q = I\\); the separate factorization check is \\(QR = A\\).', tag:'cs-qr'}
+];
+
+const phaseSteps = [3,5,6,1];
+const phaseNames = ['Column 1','Column 2','Column 3','Check'];
+const ns = 'http://www.w3.org/2000/svg';
+const scene = document.getElementById('scene');
+const plotWrap = document.getElementById('plotWrap');
+const params = new URLSearchParams(window.location.search);
+const modeParam = (params.get('mode') || '').toLowerCase();
+const hasModeParam = params.has('mode') || params.has('exam');
+const quizParam = /^(1|true|yes)$/i.test(params.get('quiz') || '');
+let seedToken = params.get('seed') || String(Date.now());
+let examMode = hasModeParam ? (/^(exam|true|1)$/i.test(modeParam) || params.has('exam')) : storageGet('pn.lastMode','study') === 'exam';
+let puzzleOffset = Math.max(0, Number.parseInt(params.get('puzzle') || '0', 10) || 0);
+let gameSeed = normalizeSeed(seedToken);
+let puzzleIndex = choosePuzzleIndex(gameSeed, puzzleOffset);
+let Acols = [];
+let exact = null;
+let state = null;
+let steps = [];
+let currentStep = 0;
+let totalMisses = 0;
+let hintsUsed = 0;
+let stepMisses = [];
+let stepHints = [];
+let stepAuto = [];
+let answerHistory = [];
+let revealTimer = null;
+let inputLocked = false;
+let completed = false;
+let sessionResults = [];
+let choiceCache = [];
+let choiceCacheByStep = [];
+let eliminatedKeys = [];
+let stepFreeHints = [];
+const STANDARD_CAMERA = {yaw:-0.78, pitch:0.48};
+let camera = {...STANDARD_CAMERA};
+let camCenter = [0,0,0];
+let autoCam = !/^(off|false|0|manual)$/i.test(params.get('camera') || params.get('autocam') || 'on');
+let userMoved = false;
+let plotInteractionMode = 'rotate';
+let expandedRestoreFocus = null;
+let columnShotCache = [null,null,null];
+let drag = null;
+let axisRadius = 2.65;
+let anim = null;
+let camAnim = null;
+let zoomBias = 1;
+let finaleFade = null;
+let finaleOrbit = null;
+let finaleOrbitDisabled = false;
+let finaleTimers = [];
+let inertia = null;
+let renderFramePending = false;
+let lastRenderState = null;
+let lastSvgSize = {w:900,h:520};
+let labelBoxes = [];
+let vectorHits = [];
+let activePointers = new Map();
+let pinch = null;
+let tapCandidate = null;
+let multiTouchGesture = false;
+let lastTap = {time:0,x:0,y:0};
+let residualHomeAnim = null;
+let residualHomeFrameAfter = false;
+let plotHelpFadeTimer = null;
+let gameEverStarted = hasModeParam;
+let introVisible = !hasModeParam;
+let confirmResolve = null;
+let confirmRestoreFocus = null;
+let aboutRestoreFocus = null;
+let quizRoundCounter = 0;
+let quizRound = [];
+let quizIndex = 0;
+let quizScore = 0;
+let quizBest = storageNumber('pn.quizBest', 0);
+let quizLocked = false;
+let quizDrag = null;
+let quizVisible = false;
+let quizRestoreFocus = null;
+let quizAdvanceTimer = null;
+
+const C = {
+  a:'#2B55C8', aDim:'#6D7890', v:'#7B3FBF', q:'#1D8A50', projection:'#C7521F',
+  old:'#6D7890', grid:'rgba(31,42,68,.20)', axis:'rgba(31,42,68,.30)', right:'#D9930D', paper:'#FFFFFF', ink:'#1F2A44'
+};
+const SUB = ['₁','₂','₃'];
+
+
+function storageGet(key, fallback=''){
+  try{
+    const value = window.localStorage.getItem(key);
+    return value === null ? fallback : value;
+  }catch(e){ return fallback; }
+}
+function storageSet(key, value){
+  try{ window.localStorage.setItem(key, String(value)); return true; }
+  catch(e){ return false; }
+}
+function storageNumber(key, fallback=0){
+  const value = Number(storageGet(key, ''));
+  return Number.isFinite(value) ? value : fallback;
+}
+const modeBestStarKeys = {study:'pn.studyBestStars', exam:'pn.examBestStars'};
+function readModeBestStars(mode){
+  const key = modeBestStarKeys[mode];
+  if(!key) return null;
+  const raw = storageGet(key, '');
+  const value = Number(raw);
+  return raw !== '' && Number.isInteger(value) && value >= 1 && value <= 3 ? value : null;
+}
+function updateIntroModeBestStars(){
+  const study = readModeBestStars('study');
+  const exam = readModeBestStars('exam');
+  const studyBadge = document.getElementById('studyBestStars');
+  const examBadge = document.getElementById('examBestStars');
+  if(studyBadge) studyBadge.textContent = `best: ${study === null ? '-' : `${study}★`}`;
+  if(examBadge) examBadge.textContent = `best: ${exam === null ? '-' : `${exam}★`}`;
+}
+function recordModeBestStars(mode, stars){
+  if(!modeBestStarKeys[mode] || !Number.isInteger(stars) || stars < 1 || stars > 3) return;
+  const previous = readModeBestStars(mode) || 0;
+  if(stars > previous) storageSet(modeBestStarKeys[mode], stars);
+  updateIntroModeBestStars();
+}
+function escapeHtml(text){
+  return String(text).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+const mathSvgCache = new Map();
+let typesetFrame = null;
+const pendingTypesetRoots = new Set();
+function typesetMath(...roots){
+  roots.flat().filter(Boolean).forEach(root=>pendingTypesetRoots.add(root));
+  if(typesetFrame !== null) return;
+  typesetFrame = requestAnimationFrame(async()=>{
+    typesetFrame = null;
+    const targets = [...pendingTypesetRoots].filter(root=>root && document.contains(root));
+    pendingTypesetRoots.clear();
+    if(!targets.length || !window.MathJax || typeof window.MathJax.typesetPromise !== 'function') return;
+    try{ await window.MathJax.typesetPromise(targets); }
+    catch(error){ console.warn('MathJax typesetting skipped:', error); }
+  });
+}
+window.addEventListener('perfectly-normal-math-ready', ()=>{
+  mathSvgCache.clear();
+  typesetMath(document.body);
+  if(state) requestAnimationFrame(()=>renderPlot(lastRenderState || state));
+});
+
+function localDateToken(d){
+  const pad = n => String(n).padStart(2,'0');
+  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+}
+function hashStringToSeed(str){
+  let h = 2166136261 >>> 0;
+  for(let i=0;i<String(str).length;i++){
+    h ^= String(str).charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return (h >>> 0) || 1;
+}
+function normalizeSeed(value){
+  const text = String(value || '').trim() || String(Date.now());
+  if(/^\d+$/.test(text) && text.length <= 10){
+    return (Number.parseInt(text,10) >>> 0) || 1;
+  }
+  return hashStringToSeed(text);
+}
+function mixSeed(seed, part){
+  const p = typeof part === 'number' ? part >>> 0 : hashStringToSeed(String(part));
+  let x = (seed ^ p) >>> 0;
+  x = Math.imul(x ^ (x >>> 16), 0x85ebca6b);
+  x = Math.imul(x ^ (x >>> 13), 0xc2b2ae35);
+  return ((x ^ (x >>> 16)) >>> 0) || 1;
+}
+function mulberry32(seed){
+  return function(){
+    let t = seed += 0x6D2B79F5;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+function rngFor(...parts){
+  let s = gameSeed;
+  for(const part of parts) s = mixSeed(s, part);
+  return mulberry32(s);
+}
+function choosePuzzleIndex(seed, offset){
+  let idx = 0;
+  const rng = mulberry32(mixSeed(seed, 'puzzle-order'));
+  const order = [...puzzles.keys()];
+  for(let i=order.length-1;i>0;i--){
+    const j = Math.floor(rng() * (i+1));
+    [order[i],order[j]] = [order[j],order[i]];
+  }
+  idx = order[offset % order.length];
+  return idx;
+}
+function shuffle(arr, rng){
+  const out = arr.slice();
+  for(let i=out.length-1;i>0;i--){
+    const j = Math.floor(rng()*(i+1));
+    [out[i],out[j]] = [out[j],out[i]];
+  }
+  return out;
+}
+
+function cloneVec(v){ return v ? v.slice() : null; }
+function cloneMatrix(M){ return M.map(row => row.slice()); }
+function cloneProjectionList(list){ return (list || []).map(item => ({i:item.i, vec:cloneVec(item.vec)})); }
+function cloneState(s){
+  return {
+    V:s.V.map(cloneVec), Q:s.Q.map(cloneVec), R:cloneMatrix(s.R),
+    projectionSum:s.projectionSum.map(cloneVec),
+    measured:(s.measured || [[],[],[]]).map(cloneProjectionList),
+    lastProjection:cloneVec(s.lastProjection), activeJ:s.activeJ, activeI:s.activeI
+  };
+}
+function dot(a,b){ return a.reduce((sum,x,i)=>sum+x*b[i],0); }
+function add(a,b){ return a.map((x,i)=>x+b[i]); }
+function subV(a,b){ return a.map((x,i)=>x-b[i]); }
+function scale(k,a){ return a.map(x=>k*x); }
+function norm(a){ return Math.sqrt(dot(a,a)); }
+function normalize(v){ const n = norm(v); return n ? scale(1/n,v) : [0,0,0]; }
+function cross(a,b){ return [a[1]*b[2]-a[2]*b[1], a[2]*b[0]-a[0]*b[2], a[0]*b[1]-a[1]*b[0]]; }
+function clamp(x,lo,hi){ return Math.max(lo, Math.min(hi, x)); }
+function nearlyCollinear(a,b){
+  if(!a || !b || norm(a) < 1e-9 || norm(b) < 1e-9) return false;
+  return Math.abs(dot(normalize(a), normalize(b))) > .985;
+}
+function lerp(a,b,t){ return a + (b-a)*t; }
+function lerpVec(a,b,t){
+  if(!a && !b) return null;
+  if(!a) return scale(t,b);
+  if(!b) return scale(1-t,a);
+  return a.map((x,i)=>lerp(x,b[i],t));
+}
+function interpValue(a,b,t){
+  const aOk = Number.isFinite(a), bOk = Number.isFinite(b);
+  if(!aOk && !bOk) return null;
+  if(!aOk) return b*t;
+  if(!bOk) return a*(1-t);
+  return lerp(a,b,t);
+}
+function interpState(a,b,t){
+  return {
+    V:[0,1,2].map(i=>lerpVec(a.V[i],b.V[i],t)),
+    Q:[0,1,2].map(i=>lerpVec(a.Q[i],b.Q[i],t)),
+    R:a.R.map((row,i)=>row.map((x,j)=>interpValue(x,b.R[i][j],t))),
+    projectionSum:[0,1,2].map(i=>lerpVec(a.projectionSum[i],b.projectionSum[i],t)),
+    measured:[0,1,2].map(i=>cloneProjectionList(t > .98 ? b.measured[i] : a.measured[i])),
+    lastProjection:lerpVec(a.lastProjection,b.lastProjection,t),
+    activeJ:b.activeJ,
+    activeI:b.activeI
+  };
+}
+
+function m(tex){ return `<span class="math">\\(${tex}\\)</span>`; }
+function mathClass(cls,tex){ return `\\class{${cls}}{${tex}}`; }
+function vTex(j){ return mathClass('tok-v', `\\mathbf v_{${j+1}}`); }
+function aTex(j){ return mathClass('tok-a', `\\mathbf a_{${j+1}}`); }
+function qTex(j){ return mathClass('tok-q', `\\mathbf q_{${j+1}}`); }
+function rTex(i,j){ return mathClass('tok-r', `r_{${i+1}${j+1}}`); }
+function vName(j){ return m(vTex(j)); }
+function aName(j){ return m(aTex(j)); }
+function qName(j){ return m(qTex(j)); }
+function rName(i,j){ return m(rTex(i,j)); }
+function normTex(x){ return `\\lVert ${x} \\rVert`; }
+function innerTex(x,y){ return `\\langle ${x},\\, ${y} \\rangle`; }
+function productTex(...terms){ return terms.join('\\,'); }
+function sumTex(...terms){ return terms.join('\\; + \\;'); }
+function differenceTex(...terms){ return terms.join('\\; - \\;'); }
+function assignmentTex(lhs,rhs){ return `${lhs}\\;\\leftarrow\\;${rhs}`; }
+function formulaStart(j){ return m(assignmentTex(vTex(j), aTex(j))); }
+function formulaCoeff(i,j){ return m(assignmentTex(rTex(i,j), innerTex(qTex(i), aTex(j)))); }
+function formulaSubtract(j){
+  const terms = [];
+  for(let i=0;i < j;i++) terms.push(productTex(rTex(i,j), qTex(i)));
+  return m(assignmentTex(vTex(j), differenceTex(aTex(j), ...terms)));
+}
+function formulaDiag(j){ return m(assignmentTex(rTex(j,j), normTex(vTex(j)))); }
+function formulaNormalize(j){ return m(assignmentTex(qTex(j), `\\dfrac{${vTex(j)}}{${rTex(j,j)}}`)); }
+function textOnly(html){
+  const tmp = document.createElement('div');
+  tmp.innerHTML = html;
+  return tmp.textContent.replace(/\s+/g,' ').trim();
+}
+function fmt(x){
+  if(x === null || x === undefined || Number.isNaN(x)) return '·';
+  if(Math.abs(x) < 1e-10) return '0';
+  if(Math.abs(x-1) < 1e-10) return '1';
+  if(Math.abs(x+1) < 1e-10) return '−1';
+  const rounded = Math.round(x*100)/100;
+  return String(rounded).replace('-', '−');
+}
+function matrixFromCols(cols){ return [0,1,2].map(r=>cols.map(c=>c?c[r]:null)); }
+function transpose(A){ return A[0].map((_,j)=>A.map(row=>row[j])); }
+function matmul(A,B){
+  const rows=A.length, mid=A[0].length, cols=B[0].length;
+  const out=Array.from({length:rows},()=>Array(cols).fill(0));
+  for(let i=0;i<rows;i++) for(let j=0;j<cols;j++) for(let k=0;k<mid;k++) out[i][j] += (A[i][k] || 0)*(B[k][j] || 0);
+  return out;
+}
+
+function computeExact(cols){
+  const Q = [null,null,null];
+  const R = [[0,0,0],[0,0,0],[0,0,0]];
+  const V = [null,null,null];
+  const projections = [null,null,null];
+  for(let j=0;j<3;j++){
+    let v = cols[j].slice();
+    let pSum = [0,0,0];
+    for(let i=0;i < j;i++){
+      R[i][j] = dot(Q[i], cols[j]);
+      const p = scale(R[i][j], Q[i]);
+      pSum = add(pSum,p);
+      v = subV(v,p);
+    }
+    V[j] = v;
+    projections[j] = pSum;
+    R[j][j] = norm(v);
+    Q[j] = scale(1/R[j][j], v);
+  }
+  return {Q,R,V,projections};
+}
+
+function computeAxisRadius(){
+  const pts = [[0,0,0], ...Acols];
+  for(let j=0;j<3;j++){
+    pts.push(exact.V[j], exact.Q[j], exact.projections[j]);
+    for(let i=0;i < j;i++) pts.push(scale(exact.R[i][j], exact.Q[i]));
+  }
+  pts.push([1,0,0],[-1,0,0],[0,1,0],[0,-1,0],[0,0,1],[0,0,-1]);
+  const maxAbs = Math.max(...pts.flat().map(x=>Math.abs(x)));
+  return Math.max(2.1, maxAbs + 0.55);
+}
+
+function resetStateForPuzzle(){
+  closePlotExpanded(false);
+  Acols = puzzles[puzzleIndex].cols.map(c=>c.slice());
+  exact = computeExact(Acols);
+  axisRadius = computeAxisRadius();
+  camCenter = [0,0,0];
+  plotInteractionMode = 'rotate';
+  updatePlotModeButtons();
+  state = {
+    V:[null,null,null], Q:[null,null,null],
+    R:[[null,null,null],[0,null,null],[0,0,null]],
+    projectionSum:[null,null,null], measured:[[],[],[]], lastProjection:null, activeJ:0, activeI:null
+  };
+  steps = makeSteps();
+  currentStep = 0; totalMisses = 0; hintsUsed = 0; completed = false;
+  stepMisses = Array(steps.length).fill(0);
+  stepHints = Array(steps.length).fill(false);
+  stepFreeHints = Array(steps.length).fill(false);
+  stepAuto = Array(steps.length).fill(false);
+  choiceCacheByStep = Array(steps.length).fill(null);
+  eliminatedKeys = Array.from({length:steps.length}, () => new Set());
+  answerHistory = [];
+  userMoved = false;
+  columnShotCache = [null,null,null];
+  zoomBias = 1;
+  finaleFade = null;
+  stopFinaleOrbit(true);
+  finaleOrbitDisabled = false;
+  camera = {...STANDARD_CAMERA};
+  camCenter = [0,0,0];
+  clearTimeout(revealTimer);
+  revealTimer = null; inputLocked = false; anim = null; camAnim = null; inertia = null; finaleFade = null; renderFramePending = false; residualHomeAnim = null; residualHomeFrameAfter = false;
+  document.getElementById('endPanel').classList.remove('show');
+  hideVectorChip();
+  if(autoCam){
+    const shot = shotForStep(current(), state, false);
+    if(shot) applyCameraShot(shot);
+  }
+  renderAll();
+  updateIntroState();
+}
+
+function makeSteps(){
+  const out = [];
+  function addStep(step){ out.push(step); }
+  for(let j=0;j<3;j++){
+    addStep({
+      phase:j, j, kind:'start',
+      title:`Column ${j+1}: start ${vName(j)}, the residual.`,
+      sub:j===0 ? `There is no earlier span, so ${vName(j)} begins at ${aName(j)}.` : `Begin at ${aName(j)} before building its projection onto the old span.`,
+      hint:`Initialize the working residual with the current original column.`,
+      formula:formulaStart(j),
+      correct:formulaStart(j),
+      correctMsg:`Good. ${vName(j)} now starts at ${aName(j)}.`,
+      wrong:[
+        {html:m(assignmentTex(qTex(j), aTex(j))), msg:'Normalize only after the old-span projection has been removed and the residual length recorded.'},
+        {html:m(assignmentTex(vTex(j), aTex((j+1)%3))), msg:'Use the current column, not a neighboring column.'},
+        {html:m(assignmentTex(vTex(j), `\\dfrac{${aTex(j)}}{${normTex(aTex(j))}}`)), msg:'That normalizes too early; earlier directions may still need to be removed.'},
+        {html:m(assignmentTex(rTex(j,j), normTex(aTex(j)))), msg:'Record the diagonal length only after the residual has been formed.'}
+      ],
+      apply(){ state.V[j]=Acols[j].slice(); state.activeJ=j; state.activeI=null; state.projectionSum[j]=[0,0,0]; state.measured[j]=[]; state.lastProjection=null; }
+    });
+    for(let i=0;i < j;i++){
+      addStep({
+        phase:j, j, i, kind:'coeff',
+        title:`Column ${j+1}: measure the ${qName(i)} component.`,
+        sub:`Store how much of ${aName(j)} lies in the finished unit direction ${qName(i)}.`,
+        hint:`A projection coefficient pairs the earlier unit vector with the original current column.`,
+        formula:formulaCoeff(i,j),
+        correct:formulaCoeff(i,j),
+        correctMsg:`Good. ${rName(i,j)} is the scalar weight of ${qName(i)} in the old-span projection.`,
+        alsoCorrect:[
+          {html:m(assignmentTex(rTex(i,j), innerTex(vTex(j), qTex(i)))), msg:`Also correct here: before the projection is subtracted, ${vName(j)} still equals ${aName(j)}.`}
+        ],
+        wrong:[
+          {html:m(assignmentTex(rTex(j,i), innerTex(qTex(i), aTex(j)))), msg:`The coefficient belongs in row ${i+1}, column ${j+1}: above the diagonal, not below it.`},
+          {html:m(assignmentTex(rTex(i,j), innerTex(aTex(i), aTex(j)))), msg:`Use the finished unit vector ${qName(i)}, not the old original column ${aName(i)}.`},
+          {html:m(assignmentTex(vTex(j), differenceTex(vTex(j), qTex(i)))), msg:`First compute a scalar coefficient; the vector component is ${m(productTex(rTex(i,j), qTex(i)))}, not a bare unit vector.`}
+        ],
+        apply(){
+          const value = dot(state.Q[i], Acols[j]);
+          const component = scale(value, state.Q[i]);
+          state.R[i][j] = value;
+          state.activeJ=j; state.activeI=i; state.lastProjection=component;
+          state.measured[j] = (state.measured[j] || []).filter(item => item.i !== i);
+          state.measured[j].push({i, vec:component});
+        }
+      });
+    }
+    if(j>0){
+      addStep({
+        phase:j, j, kind:j===2?'planeSubtract':'subtract',
+        title:j===1 ? `Column 2: remove the ${qName(0)} component.` : `Column 3: remove the old-plane projection.`,
+        sub:j===1 ? `Subtract ${m(productTex(rTex(0,j), qTex(0)))} from ${aName(j)}.` : `Subtract ${m(sumTex(productTex(rTex(0,j), qTex(0)), productTex(rTex(1,j), qTex(1))))} from ${aName(j)}.`,
+        hint:`Residual = original column minus its full projection onto the previous span.`,
+        formula:formulaSubtract(j),
+        correct:formulaSubtract(j),
+        correctMsg:`Good. The residual ${vName(j)} is now perpendicular to the previous span.`,
+        wrong:[
+          {html:m(assignmentTex(vTex(j), differenceTex(vTex(j), qTex(0)))), msg:'Subtract a scaled component, not a bare unit vector.'},
+          {html:m(assignmentTex(vTex(j), differenceTex(aTex(j), productTex(rTex(j,j), qTex(0))))), msg:`${rName(j,j)} is a residual length, not an old-direction projection coefficient.`},
+          {html:j===1 ? m(assignmentTex(rTex(0,j), differenceTex(vTex(j), productTex(rTex(0,j), qTex(0))))) : m(assignmentTex(rTex(0,j), differenceTex(aTex(j), productTex(rTex(0,j), qTex(0))))), msg:`${m('R')} stores scalars. The residual vector is the object that changes.`},
+          ...(j===2 ? [{html:m(assignmentTex(vTex(j), differenceTex(aTex(j), productTex(rTex(1,j), qTex(1))))), msg:`Column 3 must remove both the ${qName(0)} and ${qName(1)} components.`}] : [])
+        ],
+        apply(){
+          let pSum = [0,0,0];
+          for(let i=0;i < j;i++) pSum = add(pSum, scale(state.R[i][j], state.Q[i]));
+          state.projectionSum[j] = pSum;
+          state.measured[j] = [];
+          state.V[j] = subV(Acols[j], pSum);
+          state.activeJ=j; state.activeI=null; state.lastProjection=pSum;
+        }
+      });
+    }
+    addStep({
+      phase:j, j, kind:'diag',
+      title:`Column ${j+1}: record the residual length.`,
+      sub:`The diagonal entry ${rName(j,j)} is the norm of ${vName(j)} before normalization.`,
+      hint:`Independent columns make the residual nonzero, so its length is positive.`,
+      formula:formulaDiag(j),
+      correct:formulaDiag(j),
+      correctMsg:`Good. ${rName(j,j)} records the remaining length.`,
+      wrong:[
+        {html:m(assignmentTex(rTex(j,j), innerTex(vTex(j), vTex(j)))), msg:'That is the squared length. The diagonal entry is the norm.'},
+        {html:m(assignmentTex(rTex(j,j), normTex(qTex(j)))), msg:`${qName(j)} is not built yet; after normalization its norm will be ${m('1')}.`},
+        {html:j===0 ? m(assignmentTex(rTex(0,0), innerTex(qTex(0), aTex(0)))) : m(assignmentTex(rTex(j,j), innerTex(qTex(j-1), aTex(j)))), msg:j===0 ? `${qName(0)} does not exist yet; record ${m(normTex(vTex(0)))} instead.` : 'That inner product is an old-direction coefficient, not the residual length.'},
+        {html:m(assignmentTex(qTex(j), `\\dfrac{${vTex(j)}}{${normTex(vTex(j))}}`)), msg:'That is the next move. Store the length on the diagonal first.'}
+      ],
+      apply(){ state.R[j][j]=norm(state.V[j]); state.activeJ=j; state.activeI=j; state.lastProjection=null; }
+    });
+    addStep({
+      phase:j, j, kind:'normalize',
+      title:`Column ${j+1}: normalize the residual.`,
+      sub:`Keep the direction of ${vName(j)} but scale it to norm ${m('1')}.`,
+      hint:`Divide the residual by the diagonal length just recorded.`,
+      formula:formulaNormalize(j),
+      correct:formulaNormalize(j),
+      correctMsg:`Good. ${qName(j)} is a unit vector in the residual direction.`,
+      alsoCorrect:j===0 ? [
+        {html:m(assignmentTex(qTex(j), `\\dfrac{${aTex(j)}}{${normTex(aTex(j))}}`)), msg:`Also correct for the first column because ${m(`${vTex(0)} = ${aTex(0)}`)}.`}
+      ] : [],
+      wrong:[
+        {html:m(assignmentTex(qTex(j), vTex(j))), msg:'That keeps the direction but not necessarily unit length.'},
+        {html:m(assignmentTex(qTex(j), productTex(rTex(j,j), vTex(j)))), msg:'Multiplying by the length makes the vector longer, not unit length.'},
+        ...(j===0 ? [] : [{html:m(assignmentTex(qTex(j), `\\dfrac{${aTex(j)}}{${normTex(aTex(j))}}`)), msg:'Normalize the residual after removing old directions, not the original column.'}]),
+        {html:m(assignmentTex(rTex(j,j), `\\dfrac{${vTex(j)}}{${rTex(j,j)}}`)), msg:`${m('R')} stores scalars. The normalized vector belongs in ${m('Q')}.`}
+      ],
+      apply(){ state.Q[j]=scale(1/state.R[j][j], state.V[j]); state.activeJ=j; state.activeI=j; state.lastProjection=null; }
+    });
+  }
+  addStep({
+    phase:3, j:2, kind:'check',
+    title:`Check the ${m('QR')} factorization.`,
+    sub:`The columns of ${m('Q')} should be orthonormal, and ${m('QR')} should reconstruct ${m('A')}.`,
+    hint:`Check both ${m('Q^{T}Q = I')} and ${m('QR = A')}.`,
+    formula:m(`Q^{T}Q = I\\quad\\text{and}\\quad QR = A`),
+    correct:m(`Q^{T}Q = I\\quad\\text{and}\\quad QR = A`),
+    correctMsg:'Good. The geometry and the factorization agree.',
+    wrong:[
+      {html:m('Q^{T}Q = R'), msg:`${m('Q^{T}Q')} checks orthonormality; it should equal ${m('I')}.`},
+      {html:m('RQ = A'), msg:`The factorization is ${m('A = QR')}, in that order.`},
+      {html:`${m('Q')} has the original columns of ${m('A')}`, msg:`${m('Q')} has unit orthogonal directions, not the unchanged original columns.`},
+      {html:`${m('R')} has zeros above the diagonal`, msg:`${m('R')} is upper triangular, so its forced zeros are below the diagonal.`}
+    ],
+    apply(){ completed = true; }
+  });
+  return out;
+}
+function current(){ return steps[currentStep]; }
+
+
+function appEl(){ return document.getElementById('app'); }
+function introEl(){ return document.getElementById('introScreen'); }
+function showGameScreen(){
+  const intro = introEl();
+  const app = appEl();
+  if(intro) intro.hidden = true;
+  if(app) app.hidden = false;
+  document.body.classList.remove('menuOpen');
+  introVisible = false;
+  window.scrollTo({top:0,left:0,behavior:'auto'});
+  requestAnimationFrame(()=>refreshPlotAfterResize({snap:true,force:true}));
+}
+function showIntroScreen(){
+  closePlotExpanded(false);
+  closeEnd();
+  const app = appEl();
+  const intro = introEl();
+  if(app) app.hidden = true;
+  if(intro) intro.hidden = false;
+  document.body.classList.add('menuOpen');
+  introVisible = true;
+  window.scrollTo({top:0,left:0,behavior:'auto'});
+  updateIntroState();
+  const resumeBtn = document.getElementById('resumeBtn');
+  const target = resumeBtn && !resumeBtn.parentElement.hidden
+    ? resumeBtn
+    : document.getElementById(examMode ? 'examModeCard' : 'studyModeCard');
+  if(target) target.focus({preventScroll:true});
+}
+function requestMenu(){
+  if(introVisible){ showIntroScreen(); return; }
+  confirmDialog({
+    title:'Return to menu?',
+    body:completed ? 'Return to the mode menu?' : 'Your current puzzle will remain available to resume.',
+    actions:[
+      {id:'menu', label:'return to menu', className:'primary'},
+      {id:'cancel', label:'keep playing'}
+    ]
+  }).then(action=>{ if(action === 'menu') showIntroScreen(); });
+}
+
+function startModeFromIntro(mode){
+  const wantsExam = mode === 'exam';
+  const modeChanged = gameEverStarted && wantsExam !== examMode;
+  if(quizVisible) closeQuizModal();
+  setExamMode(wantsExam, true, false);
+  gameEverStarted = true;
+  if(completed) nextPuzzle();
+  else if(modeChanged) resetStateForPuzzle();
+  showGameScreen();
+  renderAll();
+}
+function resumeCurrentPuzzle(){
+  gameEverStarted = true;
+  showGameScreen();
+  renderAll();
+}
+function updateIntroState(){
+  updateIntroModeBestStars();
+  const bestBadge = document.getElementById('quizBestBadge');
+  if(bestBadge) bestBadge.textContent = quizBest ? `BEST ${quizBest}/10` : 'BEST —';
+  const resume = document.getElementById('resumeBar');
+  const text = document.getElementById('resumeText');
+  const inProgress = gameEverStarted && !completed && currentStep > 0;
+  if(resume){ resume.hidden = !inProgress; }
+  if(text && inProgress) text.textContent = `resume current puzzle — step ${Math.min(currentStep+1, steps.length)}/${steps.length}`;
+}
+function confirmDialog({title, body, actions}){
+  return new Promise(resolve=>{
+    const panel = document.getElementById('confirmPanel');
+    const card = panel && panel.querySelector('.confirmCard');
+    const titleEl = document.getElementById('confirmTitle');
+    const bodyEl = document.getElementById('confirmBody');
+    const actionsEl = document.getElementById('confirmActions');
+    if(!panel || !card || !actionsEl){ resolve('cancel'); return; }
+    confirmResolve = resolve;
+    confirmRestoreFocus = document.activeElement;
+    titleEl.textContent = title || 'Confirm';
+    bodyEl.textContent = body || '';
+    actionsEl.innerHTML = (actions || [{id:'cancel', label:'cancel'}]).map(a=>`<button class="miniBtn ${a.className || ''}" data-confirm-action="${escapeAttr(a.id)}">${escapeHtml(a.label)}</button>`).join('');
+    panel.classList.add('show');
+    panel.setAttribute('aria-hidden','false');
+    actionsEl.querySelectorAll('button').forEach(btn=>btn.addEventListener('click',()=>closeConfirmDialog(btn.dataset.confirmAction)));
+    const primary = actionsEl.querySelector('.primary') || actionsEl.querySelector('button');
+    (primary || card).focus({preventScroll:true});
+  });
+}
+function closeConfirmDialog(value='cancel'){
+  const panel = document.getElementById('confirmPanel');
+  if(panel){ panel.classList.remove('show'); panel.setAttribute('aria-hidden','true'); }
+  const resolve = confirmResolve;
+  confirmResolve = null;
+  if(resolve) resolve(value);
+  if(confirmRestoreFocus && typeof confirmRestoreFocus.focus === 'function') confirmRestoreFocus.focus({preventScroll:true});
+  confirmRestoreFocus = null;
+}
+function isAboutOpen(){
+  const panel = document.getElementById('aboutPanel');
+  return !!(panel && panel.classList.contains('show'));
+}
+function openAbout(){
+  const panel = document.getElementById('aboutPanel');
+  const closeBtn = document.getElementById('aboutCloseBtn');
+  const card = panel && panel.querySelector('.aboutCard');
+  if(!panel) return;
+  aboutRestoreFocus = document.activeElement;
+  panel.classList.add('show');
+  panel.setAttribute('aria-hidden','false');
+  (closeBtn || card).focus({preventScroll:true});
+}
+function closeAbout(){
+  const panel = document.getElementById('aboutPanel');
+  if(panel){ panel.classList.remove('show'); panel.setAttribute('aria-hidden','true'); }
+  const target = aboutRestoreFocus;
+  aboutRestoreFocus = null;
+  if(target && typeof target.focus === 'function') target.focus({preventScroll:true});
+}
+function auditQuestionBank(){
+  const tags = new Set(Object.keys(CHEATSHEET_LABELS));
+  const trueCount = QUIZ_BANK.filter(q=>q.answer === true).length;
+  const falseCount = QUIZ_BANK.filter(q=>q.answer === false).length;
+  const valid = QUIZ_BANK.every(q=>q.statement && typeof q.answer === 'boolean' && q.why && tags.has(q.tag));
+  return {count:QUIZ_BANK.length,trueCount,falseCount,valid};
+}
+function sampleQuizRound(){
+  quizRoundCounter++;
+  const rngT = rngFor('quiz-true', gameSeed, puzzleOffset, quizRoundCounter);
+  const rngF = rngFor('quiz-false', gameSeed, puzzleOffset, quizRoundCounter);
+  const rngMix = rngFor('quiz-mix', gameSeed, puzzleOffset, quizRoundCounter);
+  const trues = shuffle(QUIZ_BANK.filter(q=>q.answer), rngT).slice(0,5);
+  const falses = shuffle(QUIZ_BANK.filter(q=>!q.answer), rngF).slice(0,5);
+  return shuffle([...trues, ...falses], rngMix);
+}
+function openQuizModal(){
+  const panel = document.getElementById('quizPanel');
+  const card = panel && panel.querySelector('.quizModalCard');
+  if(!panel || !card) return;
+  if(!quizVisible) quizRestoreFocus = document.activeElement;
+  quizVisible = true;
+  panel.classList.add('show');
+  panel.setAttribute('aria-hidden','false');
+  document.body.classList.add('quizOpen');
+  requestAnimationFrame(()=>{
+    const statement = document.getElementById('quizStatement');
+    (statement && !statement.closest('[hidden]') ? statement : card).focus({preventScroll:true});
+  });
+}
+function closeQuizModal(){
+  clearTimeout(quizAdvanceTimer);
+  quizAdvanceTimer = null;
+  const panel = document.getElementById('quizPanel');
+  if(panel){ panel.classList.remove('show'); panel.setAttribute('aria-hidden','true'); }
+  document.body.classList.remove('quizOpen');
+  quizVisible = false;
+  quizRound = [];
+  quizIndex = 0;
+  quizScore = 0;
+  quizLocked = false;
+  quizDrag = null;
+  resetQuizCard();
+  if(quizRestoreFocus && typeof quizRestoreFocus.focus === 'function') quizRestoreFocus.focus({preventScroll:true});
+  quizRestoreFocus = null;
+}
+function startQuiz(){
+  clearTimeout(quizAdvanceTimer);
+  quizAdvanceTimer = null;
+  openQuizModal();
+  quizRound = sampleQuizRound();
+  quizIndex = 0;
+  quizScore = 0;
+  quizLocked = false;
+  const play = document.getElementById('quizPlay');
+  const end = document.getElementById('quizEnd');
+  if(play) play.hidden = false;
+  if(end) end.hidden = true;
+  renderQuizCard();
+}
+function renderQuizCard(){
+  const item = quizRound[quizIndex];
+  const statement = document.getElementById('quizStatement');
+  const progress = document.getElementById('quizProgress');
+  const tag = document.getElementById('quizTag');
+  const feedback = document.getElementById('quizFeedback');
+  const cont = document.getElementById('quizContinueBtn');
+  if(!item){ finishQuiz(); return; }
+  quizLocked = false;
+  statement.innerHTML = `<span class="quizStatementText">${item.statement}</span>`;
+  statement.className = 'quizStatement';
+  statement.style.transform = '';
+  progress.textContent = `${quizIndex+1}/10`;
+  tag.textContent = CHEATSHEET_LABELS[item.tag] || item.tag;
+  feedback.textContent = 'Swipe right for true, left for false — or use the buttons.';
+  feedback.className = 'quizFeedback';
+  if(cont) cont.hidden = true;
+  typesetMath(statement, feedback);
+}
+function submitQuizAnswer(answer){
+  if(quizLocked || !quizRound[quizIndex]) return;
+  const item = quizRound[quizIndex];
+  const statement = document.getElementById('quizStatement');
+  const feedback = document.getElementById('quizFeedback');
+  const correct = answer === item.answer;
+  quizLocked = true;
+  if(correct){
+    quizScore++;
+    statement.classList.add('correctFlash');
+    feedback.innerHTML = `Correct — ${item.why}`;
+    feedback.className = 'quizFeedback good';
+    typesetMath(feedback);
+    const cont = document.getElementById('quizContinueBtn');
+    if(cont) cont.hidden = false;
+  }else{
+    statement.classList.add('wrongStay');
+    feedback.innerHTML = `Not quite — ${item.why}`;
+    feedback.className = 'quizFeedback bad';
+    typesetMath(feedback);
+    const cont = document.getElementById('quizContinueBtn');
+    if(cont) cont.hidden = false;
+  }
+}
+function advanceQuiz(){
+  quizIndex++;
+  if(quizIndex >= quizRound.length) finishQuiz();
+  else renderQuizCard();
+}
+function finishQuiz(){
+  clearTimeout(quizAdvanceTimer);
+  quizAdvanceTimer = null;
+  const play = document.getElementById('quizPlay');
+  const end = document.getElementById('quizEnd');
+  const score = document.getElementById('quizEndScore');
+  quizBest = Math.max(quizBest, storageNumber('pn.quizBest',0), quizScore);
+  storageSet('pn.quizBest', quizBest);
+  if(play) play.hidden = true;
+  if(end) end.hidden = false;
+  if(score) score.textContent = `score ${quizScore}/10 · best ${quizBest}/10`;
+  updateIntroState();
+  const again = document.getElementById('quizAgainBtn');
+  if(again) again.focus({preventScroll:true});
+}
+function resetQuizCard(){
+  const play = document.getElementById('quizPlay');
+  const end = document.getElementById('quizEnd');
+  if(play) play.hidden = true;
+  if(end) end.hidden = true;
+}
+
+function renderAll(){
+  renderStats(); renderProgress(); renderTask(); renderChoices(); renderTables(); renderPlot();
+}
+function renderStats(){
+  const best = readModeBestStars(examMode ? 'exam' : 'study');
+  const missesPill = document.getElementById('missesPill');
+  const bestPill = document.getElementById('bestPill');
+  if(missesPill) missesPill.textContent = `misses ${totalMisses}`;
+  if(bestPill){
+    bestPill.textContent = best === null ? 'best —' : `best ${best}★`;
+    bestPill.setAttribute('aria-label', best === null ? 'No best score yet' : `Best score: ${best} of 3 stars`);
+  }
+  updateModeSegments();
+  renderCameraButtons();
+}
+function starsForMisses(misses=totalMisses){ return misses === 0 ? 3 : (misses <= 2 ? 2 : 1); }
+function starText(n=currentStars()){ return `${'★'.repeat(n)}${'☆'.repeat(3-n)}`; }
+function starHTML(n=currentStars()){
+  return Array.from({length:3}, (_,i)=>`<span class="starIcon ${i<n?'filled':'empty'}" aria-hidden="true">★</span>`).join('');
+}
+function markClass(mark){
+  if(mark === '🟩') return 'clean';
+  if(mark === '🟨') return 'hint';
+  if(mark === '🟥') return 'revealed';
+  return 'upcoming';
+}
+function escapeAttr(text){
+  return String(text).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+function progressMarkFor(index){
+  if(answerHistory[index]) return answerHistory[index];
+  if(index === currentStep && !completed){
+    if(stepAuto[index]) return '🟥';
+    if(stepMisses[index] || stepHints[index]) return '🟨';
+  }
+  return '';
+}
+function progressGridHTML(includeLabels=true){
+  let start = 0;
+  return phaseSteps.map((count, groupIdx)=>{
+    const squares = Array.from({length:count}, (_,k)=>{
+      const index = start + k;
+      const mark = progressMarkFor(index);
+      const cls = mark ? markClass(mark) : (completed || index < currentStep ? 'clean' : 'upcoming');
+      const currentCls = (!completed && index === currentStep) ? ' current' : '';
+      return `<span class="progressSquare ${cls}${currentCls}" aria-label="step ${index+1}: ${cls}"></span>`;
+    }).join('');
+    start += count;
+    const label = [m('\\mathbf q_1'),m('\\mathbf q_2'),m('\\mathbf q_3'),m('\\checkmark')][groupIdx];
+    return `<div class="progressGroup"><div class="progressSquares" style="--count:${count}">${squares}</div>${includeLabels ? `<div class="progressLabel">${label}</div>` : ''}</div>`;
+  }).join('');
+}
+function shareGridHTML(marks){
+  let start = 0;
+  return phaseSteps.map((count, groupIdx)=>{
+    const label = [m('\\mathbf q_1'),m('\\mathbf q_2'),m('\\mathbf q_3'),m('\\checkmark')][groupIdx];
+    const row = marks.slice(start,start+count).map(mark=>`<span class="shareSquare ${markClass(mark)}"></span>`).join('');
+    start += count;
+    return `<div class="shareRow"><span class="shareRowLabel">${label}</span><span class="shareSquares" style="--count:${count}">${row}</span></div>`;
+  }).join('');
+}
+function marksSoFar(){
+  const marks = answerHistory.slice();
+  if(!completed && currentStep < steps.length){
+    if(stepAuto[currentStep]) marks[currentStep] = '🟥';
+    else if(stepMisses[currentStep] || stepHints[currentStep]) marks[currentStep] = '🟨';
+  }
+  return marks.filter(Boolean);
+}
+function currentStars(){ return starsForMisses(totalMisses); }
+
+function updateModeSegments(){
+  updateIntroState();
+}
+function setExamMode(on, updateUrl=false, rerender=true){
+  examMode = !!on;
+  document.body.classList.toggle('examMode', examMode);
+  storageSet('pn.lastMode', examMode ? 'exam' : 'study');
+  updateModeSegments();
+  if(updateUrl){
+    try{
+      const url = new URL(window.location.href);
+      url.searchParams.set('mode', examMode ? 'exam' : 'study');
+      url.searchParams.delete('exam');
+      history.replaceState(null,'',url);
+    }catch(e){}
+  }
+  if(rerender && state) renderAll();
+}
+function restartCurrentPuzzle(){
+  closePlotExpanded(false);
+  closeEnd();
+  resetStateForPuzzle();
+  showGameScreen();
+}
+function requestModeSegment(mode){
+  const wantsExam = mode === 'exam';
+  if(wantsExam === examMode){
+    confirmDialog({
+      title:'Restart this puzzle?',
+      body:'Start over in the same mode, start a fresh puzzle, or keep playing.',
+      actions:[
+        {id:'restart', label:'restart', className:'primary'},
+        {id:'new', label:'new puzzle'},
+        {id:'cancel', label:'cancel'}
+      ]
+    }).then(action=>{
+      if(action === 'restart') restartCurrentPuzzle();
+      if(action === 'new') newRandomPuzzle();
+    });
+    return;
+  }
+  confirmDialog({
+    title:`Switch to ${mode} mode?`,
+    body:'The current puzzle restarts when you switch modes.',
+    actions:[{id:'switch', label:'switch', className:'primary'}, {id:'cancel', label:'cancel'}]
+  }).then(action=>{
+    if(action === 'switch'){
+      setExamMode(wantsExam, true, false);
+      restartCurrentPuzzle();
+    }
+  });
+}
+function toggleMode(){ requestModeSegment(examMode ? 'study' : 'exam'); }
+
+function renderProgress(){
+  const phaseTitle = document.getElementById('phaseTitle');
+  const phaseHint = document.getElementById('phaseHint');
+  const progressStep = document.getElementById('progressStep');
+  const phaseBar = document.getElementById('phaseBar');
+  const s = current();
+  const stepText = completed ? 'done' : `step ${Math.min(currentStep+1,steps.length)}/${steps.length}`;
+  if(examMode){
+    phaseTitle.textContent = completed ? 'Complete' : `Step ${Math.min(currentStep+1,steps.length)} of ${steps.length}`;
+    if(phaseHint) phaseHint.textContent = '';
+  }else{
+    phaseTitle.innerHTML = s ? s.title : 'Complete';
+    if(phaseHint) phaseHint.innerHTML = s ? s.sub : `${m('QR')} complete`;
+  }
+  if(progressStep) progressStep.textContent = stepText;
+  phaseBar.innerHTML = progressGridHTML(false);
+  typesetMath(phaseTitle, phaseHint, phaseBar);
+}
+function renderTask(){
+  const s = current();
+  const taskTitle = document.getElementById('taskTitle');
+  const taskSub = document.getElementById('taskSub');
+  const feedback = document.getElementById('feedback');
+  const formula = document.getElementById('hintFormula');
+  const hintBtn = document.getElementById('hintBtn');
+  const formulaBtn = document.getElementById('formulaBtn');
+  formula.innerHTML = s.formula;
+  if(examMode){
+    taskTitle.textContent = s.kind === 'check' ? 'Final check' : `Step ${Math.min(currentStep+1,steps.length)} of ${steps.length}`;
+    taskSub.textContent = '';
+    feedback.textContent = stepMisses[currentStep] ? 'Not correct.' : 'Choose the next move.';
+    feedback.className = 'feedback';
+    formula.classList.remove('show');
+    hintBtn.disabled = true;
+    formulaBtn.disabled = true;
+    typesetMath(formula);
+    return;
+  }
+  taskTitle.innerHTML = s.title;
+  taskSub.innerHTML = s.sub;
+  feedback.textContent = stepMisses[currentStep] ? 'Try again after checking the figure and factorization.' : 'Choose your next move.';
+  feedback.className = 'feedback';
+  formula.classList.toggle('show', stepHints[currentStep]);
+  hintBtn.disabled = !!stepFreeHints[currentStep] || completed || inputLocked;
+  formulaBtn.disabled = !!stepHints[currentStep] || completed || inputLocked;
+  typesetMath(taskTitle, taskSub, feedback, formula);
+}
+function stripHtml(html){
+  const div = document.createElement('div'); div.innerHTML = html; return div.textContent;
+}
+function choiceKey(choice){ return stripHtml(choice.html || choice.correct || '').replace(/\s+/g,' ').trim(); }
+function stepChoices(){
+  if(choiceCacheByStep[currentStep]) return choiceCacheByStep[currentStep];
+  const s = current();
+  const accepted = [{html:s.correct, correct:true, msg:s.correctMsg}, ...(s.alsoCorrect || []).map(w=>({html:w.html, correct:true, accepted:true, msg:w.msg}))];
+  const wrongs = (s.wrong || []).map(w=>({html:w.html, correct:false, msg:w.msg}));
+  const rng = rngFor('choices', puzzleOffset, puzzleIndex, currentStep);
+  const unique = [];
+  const seen = new Set(accepted.map(choiceKey));
+  for(const w of shuffle(wrongs,rng)){
+    const key = choiceKey(w);
+    if(key && !seen.has(key)){ seen.add(key); unique.push(w); }
+  }
+  choiceCacheByStep[currentStep] = shuffle([...accepted, ...unique.slice(0, Math.max(0,4-accepted.length))], rngFor('display', puzzleOffset, puzzleIndex, currentStep));
+  return choiceCacheByStep[currentStep];
+}
+function renderChoices(){
+  const el = document.getElementById('choices');
+  choiceCache = stepChoices();
+  const eliminated = eliminatedKeys[currentStep] || new Set();
+  const letters = ['A','B','C','D'];
+  el.innerHTML = choiceCache.map((c,i)=>{
+    const key = choiceKey(c);
+    const gone = eliminated.has(key);
+    return `<button class="choice${gone?' wrong':''}" data-i="${i}" data-key="${escapeAttr(key)}" data-eliminated="${gone?'true':'false'}" ${gone || inputLocked || completed ? 'disabled' : ''}><span class="choiceMark" aria-hidden="true">${letters[i]}</span><span class="choiceFormula">${c.html}</span></button>`;
+  }).join('');
+  el.querySelectorAll('.choice').forEach(btn=>{
+    btn.addEventListener('click', () => handleChoice(btn, choiceCache[Number(btn.dataset.i)]));
+  });
+  typesetMath(el);
+}
+function setChoicesDisabled(disabled){
+  document.querySelectorAll('.choice').forEach(btn=>{ btn.disabled = disabled || btn.dataset.eliminated === 'true'; });
+  document.getElementById('hintBtn').disabled = examMode || disabled || !!stepFreeHints[currentStep] || completed;
+  document.getElementById('formulaBtn').disabled = examMode || disabled || !!stepHints[currentStep] || completed;
+}
+function handleChoice(btn, choice){
+  if(inputLocked || completed) return;
+  if(choice.correct){
+    if(current() && current().kind === 'check') stopFinaleOrbit(true);
+    btn.classList.add('correct');
+    const feedback = document.getElementById('feedback');
+    feedback.textContent = '';
+    feedback.className = 'feedback';
+    inputLocked = true;
+    setChoicesDisabled(true);
+    const mark = stepAuto[currentStep] ? '🟥' : (stepMisses[currentStep] || stepHints[currentStep] ? '🟨' : '🟩');
+    answerHistory[currentStep] = mark;
+    applyCurrentStep(true);
+  }else{
+    if(current() && current().kind === 'check') stopFinaleOrbit(true);
+    btn.classList.add('wrong');
+    btn.dataset.eliminated = 'true';
+    if(eliminatedKeys[currentStep]) eliminatedKeys[currentStep].add(choiceKey(choice));
+    btn.disabled = true;
+    totalMisses++;
+    stepMisses[currentStep]++;
+    renderStats();
+    const feedback = document.getElementById('feedback');
+    if(examMode) feedback.textContent = 'Not correct.';
+    else feedback.innerHTML = choice.msg;
+    feedback.className = 'feedback bad';
+    typesetMath(feedback);
+    inputLocked = true;
+    setChoicesDisabled(true);
+    if(!examMode && stepMisses[currentStep] >= 2){
+      stepAuto[currentStep] = true;
+      revealTimer = setTimeout(autoRevealStep, 900);
+    }else{
+      revealTimer = setTimeout(()=>{
+        inputLocked = false;
+        setChoicesDisabled(false);
+      }, examMode ? 650 : 1250);
+    }
+  }
+}
+function autoRevealStep(){
+  if(current() && current().kind === 'check') stopFinaleOrbit(true);
+  if(examMode){ inputLocked = false; setChoicesDisabled(false); return; }
+  const s = current();
+  const correctText = choiceKey({html:s.correct});
+  document.querySelectorAll('.choice').forEach(btn=>{
+    btn.disabled = true;
+    if(btn.dataset.key === correctText) btn.classList.add('correct','revealed');
+  });
+  const feedback = document.getElementById('feedback');
+  feedback.innerHTML = `Answer shown: ${s.correct}. ${s.correctMsg}`;
+  feedback.className = 'feedback warn';
+  typesetMath(feedback);
+  answerHistory[currentStep] = '🟥';
+  revealTimer = setTimeout(()=>applyCurrentStep(true), 1700);
+}
+function applyCurrentStep(advance){
+  const before = cloneState(state);
+  const s = current();
+  if(s.kind === 'normalize' && before.V[s.j]) before.Q[s.j] = cloneVec(before.V[s.j]);
+  s.apply();
+  const after = cloneState(state);
+  renderTables(); renderStats(); renderProgress();
+  animatePlot(before, after, () => {
+    if(s.kind === 'check'){
+      finishPuzzle();
+      return;
+    }
+    if(advance){
+      const oldKind = s.kind;
+      const oldJ = s.j;
+      currentStep++;
+      inputLocked = false;
+      userMoved = false;
+      const next = current();
+      const shouldHome = next && next.kind === 'diag' && (oldKind === 'subtract' || oldKind === 'planeSubtract');
+      if(next && next.kind === 'check') startFinaleMoment();
+      renderAll();
+      if(shouldHome) startResidualHomeAnimation(oldJ, autoCam);
+      else if(next && next.kind !== 'check' && autoCam) frameCurrentStep(false);
+    }
+  });
+}
+function startResidualHomeAnimation(j, frameAfter=false){
+  if(!state || !state.projectionSum[j] || !state.V[j] || norm(state.projectionSum[j]) < 1e-9){
+    if(frameAfter) frameCurrentStep(false);
+    return;
+  }
+  residualHomeAnim = {j,start:performance.now(),duration:420};
+  residualHomeFrameAfter = !!frameAfter;
+  requestAnimationFrame(residualHomeFrame);
+}
+function residualHomeFrame(){
+  if(!residualHomeAnim) return;
+  const raw = (performance.now() - residualHomeAnim.start) / residualHomeAnim.duration;
+  renderPlot(state);
+  if(raw < 1) requestAnimationFrame(residualHomeFrame);
+  else {
+    const frameAfter = residualHomeFrameAfter;
+    residualHomeAnim = null;
+    residualHomeFrameAfter = false;
+    renderPlot(state);
+    if(frameAfter) frameCurrentStep(false);
+  }
+}
+function prefersReducedMotion(){ return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches; }
+function easeOutCubic(t){ return 1 - Math.pow(1-t,3); }
+function requestRenderFrame(){
+  if(renderFramePending) return;
+  renderFramePending = true;
+  requestAnimationFrame(animationFrame);
+}
+function animatePlot(from,to,done){
+  if(prefersReducedMotion()){ renderPlot(to); if(done) done(); return; }
+  anim = {from,to,start:performance.now(),duration:460,done};
+  requestRenderFrame();
+}
+function animationFrame(now){
+  renderFramePending = false;
+  let keepGoing = false;
+  let done = null;
+  let renderState = state;
+  if(anim){
+    const t = clamp((now-anim.start)/anim.duration,0,1);
+    renderState = interpState(anim.from, anim.to, easeOutCubic(t));
+    if(t < 1) keepGoing = true;
+    else{
+      done = anim.done;
+      anim = null;
+      renderState = state;
+    }
+  }
+  if(camAnim){
+    const t = clamp((now-camAnim.start)/camAnim.duration,0,1);
+    const e = easeOutCubic(t);
+    camera.yaw = camAnim.fromYaw + shortestAngleDelta(camAnim.fromYaw, camAnim.toYaw) * e;
+    camera.pitch = camAnim.fromPitch + (camAnim.toPitch - camAnim.fromPitch) * e;
+    axisRadius = camAnim.fromRadius + (camAnim.toRadius - camAnim.fromRadius) * e;
+    camCenter = lerpVec(camAnim.fromCenter, camAnim.toCenter, e);
+    if(t < 1) keepGoing = true;
+    else{
+      camera.yaw = camAnim.toYaw;
+      camera.pitch = camAnim.toPitch;
+      axisRadius = camAnim.toRadius;
+      camCenter = camAnim.toCenter.slice();
+      clampCamCenter();
+      camAnim = null;
+    }
+  }
+  if(inertia){
+    camera.yaw += inertia.vYaw;
+    camera.pitch = clamp(camera.pitch + inertia.vPitch, -1.25, 1.25);
+    inertia.vYaw *= .90;
+    inertia.vPitch *= .90;
+    if(Math.hypot(inertia.vYaw, inertia.vPitch) < .002) inertia = null;
+    else keepGoing = true;
+  }
+  if(finaleOrbit && !prefersReducedMotion() && sceneModeForStep(current()) === 'finale'){
+    const dt = Math.max(0, Math.min(.05, (now - finaleOrbit.last) / 1000));
+    finaleOrbit.last = now;
+    camera.yaw += .14 * dt;
+    keepGoing = true;
+  }
+  if(finaleFade) keepGoing = true;
+  renderPlot(renderState);
+  if(keepGoing) requestRenderFrame();
+  if(done) done();
+}
+function useHint(){
+  if(examMode || inputLocked || completed || stepFreeHints[currentStep]) return;
+  stepFreeHints[currentStep] = true;
+  const feedback = document.getElementById('feedback');
+  feedback.innerHTML = `Hint: ${current().hint}`;
+  feedback.className = 'feedback warn';
+  typesetMath(feedback);
+  document.getElementById('hintBtn').disabled = true;
+}
+function useFormula(){
+  if(examMode || inputLocked || completed || stepHints[currentStep]) return;
+  hintsUsed++;
+  stepHints[currentStep] = true;
+  const formula = document.getElementById('hintFormula');
+  formula.classList.add('show');
+  const feedback = document.getElementById('feedback');
+  feedback.innerHTML = `Formula: ${current().formula}`;
+  feedback.className = 'feedback warn';
+  typesetMath(formula, feedback);
+  renderStats();
+  document.getElementById('formulaBtn').disabled = true;
+}
+function finishPuzzle(){
+  closePlotExpanded(false);
+  completed = true;
+  inputLocked = true;
+  answerHistory[currentStep] = stepAuto[currentStep] ? '🟥' : (stepMisses[currentStep] || stepHints[currentStep] ? '🟨' : '🟩');
+  const stars = currentStars();
+  const mode = examMode ? 'exam' : 'study';
+  recordModeBestStars(mode, stars);
+  const best = readModeBestStars(mode) || stars;
+  sessionResults.push({stars, grid:answerHistory.join('')});
+  const endStars = document.getElementById('endStars');
+  endStars.innerHTML = starHTML(stars);
+  endStars.setAttribute('aria-label', `${stars} of 3 stars`);
+  endStars.classList.remove('starReveal');
+  void endStars.offsetWidth;
+  endStars.classList.add('starReveal');
+  document.getElementById('endMisses').textContent = totalMisses;
+  document.getElementById('endBest').textContent = `${best}★`;
+  const congratulations = `Congratulations — you earned ${stars} ${stars === 1 ? 'star' : 'stars'}!`;
+  const guidance = stars === 3
+    ? `Perfect run: ${m('Q^{T}Q = I')} and ${m('QR = A')}, with no misses.`
+    : stars === 2
+      ? `Strong finish. Review the marked steps, then rebuild ${m('A = QR')} with fewer misses.`
+      : `Factorization complete. Trace projection → residual → normalization once more, then try for more stars.`;
+  const summary = `<strong>${congratulations}</strong> ${guidance}`;
+  const endSummary = document.getElementById('endSummary');
+  const shareGrid = document.getElementById('shareGrid');
+  endSummary.innerHTML = summary;
+  shareGrid.innerHTML = shareGridHTML(answerHistory);
+  typesetMath(endSummary, shareGrid);
+  renderMiniBasis();
+  document.getElementById('endPanel').classList.add('show');
+  const endCard = document.querySelector('.endCard');
+  if(endCard) endCard.focus({preventScroll:true});
+  renderAll();
+}
+
+function miniSvgEl(name, attrs, parent){
+  const el = document.createElementNS(ns,name);
+  for(const [k,v] of Object.entries(attrs || {})) el.setAttribute(svgAttrNames[k] || k, v);
+  parent.appendChild(el);
+  return el;
+}
+function renderMiniBasis(){
+  const mini = document.getElementById('miniScene');
+  if(!mini) return;
+  while(mini.firstChild) mini.removeChild(mini.firstChild);
+  const w=132,h=104, origin=[66,68];
+  const shot = finaleShot(false);
+  const basis = basisFromCamera(shot.yaw, shot.pitch);
+  const sc=38;
+  const p2 = v => [origin[0] + dot(v,basis.right)*sc, origin[1] - dot(v,basis.up)*sc];
+  miniSvgEl('rect',{x:1,y:1,width:w-2,height:h-2,rx:0,fill:'rgba(250,249,244,.70)',stroke:'rgba(31,42,68,.22)'},mini);
+  const qs = state && state.Q ? state.Q : [];
+  qs.forEach((q,idx)=>{
+    if(!q) return;
+    const end = p2(q);
+    miniSvgEl('line',{x1:origin[0],y1:origin[1],x2:end[0],y2:end[1],stroke:C.q,strokeWidth:3,strokeLinecap:'round'},mini);
+    miniSvgEl('circle',{cx:end[0],cy:end[1],r:3.2,fill:C.q},mini);
+    if(!appendMathSvgLabel(mini,{x:end[0]+4,y:end[1]-4},`q${SUB[idx]}`,C.q,13,1)){
+      miniSvgEl('text',{x:end[0]+4,y:end[1]-4,fill:C.q,'font-family':'Georgia, "Times New Roman", Times, serif','font-size':13,'font-style':'italic'},mini).textContent = `q${SUB[idx]}`;
+    }
+  });
+  miniSvgEl('path',{d:'M18 85h14v-14',fill:'none',stroke:C.right,strokeWidth:2,strokeLinecap:'round',strokeLinejoin:'round'},mini);
+}
+
+function resultText(includeUrl=true){
+  const stars = currentStars();
+  const rows = [];
+  let start=0;
+  for(const count of phaseSteps){
+    rows.push(answerHistory.slice(start,start+count).join(''));
+    start += count;
+  }
+  const url = shareUrl();
+  const label = examMode ? 'Perfectly Normal exam' : 'Perfectly Normal';
+  const missLabel = `${totalMisses} ${totalMisses === 1 ? 'miss' : 'misses'}`;
+  return `${label} ${seedToken} #${puzzleOffset+1}\n${starText(stars)} · ${missLabel}\n${rows.join('\n')}${includeUrl ? `\n${url}` : ''}`;
+}
+function shareUrl(){
+  try{
+    const url = new URL(window.location.href);
+    url.searchParams.set('seed', seedToken);
+    url.searchParams.set('puzzle', String(puzzleOffset));
+    if(examMode) url.searchParams.set('mode','exam');
+    else { url.searchParams.delete('mode'); url.searchParams.delete('exam'); }
+    return url.toString();
+  }catch(e){ return ''; }
+}
+async function copyResult(){
+  const text = resultText(true);
+  const btn = document.getElementById('shareBtn');
+  try{
+    await navigator.clipboard.writeText(text);
+    btn.textContent = 'copied';
+  }catch(e){
+    btn.textContent = 'select result';
+    document.getElementById('shareGrid').textContent = text;
+  }
+  setTimeout(()=>{ btn.textContent = 'copy result'; }, 1600);
+}
+function nextPuzzle(){
+  gameEverStarted = true;
+  puzzleOffset++;
+  puzzleIndex = choosePuzzleIndex(gameSeed, puzzleOffset);
+  resetStateForPuzzle();
+}
+function newRandomPuzzle(){
+  gameEverStarted = true;
+  seedToken = String(Date.now());
+  gameSeed = normalizeSeed(seedToken);
+  puzzleOffset = 0;
+  puzzleIndex = choosePuzzleIndex(gameSeed, puzzleOffset);
+  resetStateForPuzzle();
+  showGameScreen();
+}
+
+function fmtTex(x){
+  return fmt(x).replace(/−/g,'-').replace(/·/g,'\\cdot');
+}
+function wrapMathClasses(tex, classes){
+  return classes.filter(Boolean).reduce((inner, cls)=>`\\class{${cls}}{${inner}}`, tex);
+}
+function tableHTML(M, focus){
+  focus = focus || {};
+  const rows = M.map((row,i)=>row.map((x,j)=>{
+    const blank = x === null || x === undefined;
+    const classes = [];
+    if(blank) classes.push('blank');
+    else if(Math.abs(x)<1e-10) classes.push('zeroCell');
+    if(focus.i === i && focus.j === j) classes.push('focusCell');
+    if(focus.done && focus.done(i,j)) classes.push('doneCell');
+    return wrapMathClasses(blank ? '\\cdot' : fmtTex(x), classes);
+  }).join('&')).join('\\\\');
+  return m(`\\begin{bmatrix}${rows}\\end{bmatrix}`);
+}
+function renderTables(){
+  const s = current();
+  const qCols = state.Q.map(q=>q || null);
+  const Qdisplay = matrixFromCols(qCols);
+  const Rdisplay = state.R;
+  const Qcalc = matrixFromCols(state.Q.map(q=>q || [0,0,0]));
+  const QtQ = matmul(transpose(Qcalc),Qcalc);
+  const QR = matmul(Qcalc, Rdisplay.map(row=>row.map(x=>x || 0)));
+  const focusR = !examMode && s && ['coeff','diag'].includes(s.kind) ? {i:s.kind==='diag'?s.j:s.i, j:s.j} : {};
+  const matrixEquation = document.getElementById('matrixEquation');
+  const Ablock = document.getElementById('Ablock');
+  const Qblock = document.getElementById('Qblock');
+  const Rblock = document.getElementById('Rblock');
+  const QtQblock = document.getElementById('QtQblock');
+  const QRblock = document.getElementById('QRblock');
+  Ablock.innerHTML = tableHTML(matrixFromCols(Acols));
+  Qblock.innerHTML = tableHTML(Qdisplay, {done:(i,j)=>!!state.Q[j]});
+  Rblock.innerHTML = tableHTML(Rdisplay, focusR);
+  QtQblock.innerHTML = tableHTML(QtQ);
+  QRblock.innerHTML = tableHTML(QR);
+  const checkEq = document.getElementById('checkEquation');
+  if(checkEq){
+    checkEq.hidden = examMode || !(completed || (s && s.kind === 'check'));
+    const panel = document.querySelector('.matrixPanel');
+    if(panel) panel.classList.toggle('showChecks', !checkEq.hidden);
+  }
+  typesetMath(matrixEquation, checkEq);
+}
+
+function basisFromCamera(yaw=camera.yaw, pitch=camera.pitch){
+  const cy = Math.cos(yaw), sy = Math.sin(yaw);
+  const cp = Math.cos(pitch), sp = Math.sin(pitch);
+  const forward = normalize([sy*cp, -cy*cp, sp]);
+  const right = normalize([cy, sy, 0]);
+  const up = normalize(cross(forward, right));
+  return {right,up,forward};
+}
+function cameraBasis(){ return basisFromCamera(camera.yaw, camera.pitch); }
+function currentForward(){ return cameraBasis().forward; }
+function projectWithRadius(p,basis,radius,center=camCenter){
+  const rel = subV(p, center || [0,0,0]);
+  return {x:dot(rel,basis.right)/radius, y:dot(rel,basis.up)/radius, z:dot(rel,basis.forward)};
+}
+function plotScalePx(radius=axisRadius){
+  const {w,h} = lastSvgSize;
+  return Math.min(w,h) * .39 / Math.max(radius,1e-6);
+}
+function project(p,basis){
+  const {w,h} = lastSvgSize;
+  const scalePx = plotScalePx(axisRadius);
+  const rel = subV(p, camCenter);
+  return {
+    x:w/2 + dot(rel,basis.right)*scalePx,
+    y:h/2 - dot(rel,basis.up)*scalePx,
+    z:dot(rel,basis.forward)
+  };
+}
+function normalizeAngle(a){
+  while(a <= -Math.PI) a += Math.PI*2;
+  while(a > Math.PI) a -= Math.PI*2;
+  return a;
+}
+function shortestAngleDelta(from,to){ return normalizeAngle(to-from); }
+function finiteVec(v){ return Array.isArray(v) && v.length === 3 && v.every(Number.isFinite); }
+function pushKeyPoint(points,p){ if(finiteVec(p)) points.push(p.slice()); }
+function anyPerpendicular(u){
+  const n = normalize(u);
+  const ref = Math.abs(n[2]) < .8 ? [0,0,1] : [1,0,0];
+  return normalize(cross(n,ref));
+}
+function cameraAnglesFromForward(dir){
+  const d = normalize(dir);
+  return {yaw:Math.atan2(d[0], -d[1]), pitch:Math.asin(clamp(d[2], -.92, .92))};
+}
+function frameForKeyPoints(points,basis){
+  let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+  const aspect = Math.max(1, (lastSvgSize.w || 1) / Math.max(1, lastSvgSize.h || 1));
+  for(const p of points){
+    if(!finiteVec(p)) continue;
+    const padded = scale(1.08, p);
+    const x = dot(padded,basis.right);
+    const y = dot(padded,basis.up);
+    minX = Math.min(minX,x); maxX = Math.max(maxX,x);
+    minY = Math.min(minY,y); maxY = Math.max(maxY,y);
+  }
+  if(!Number.isFinite(minX)){
+    minX = minY = -0.55;
+    maxX = maxY = 0.55;
+  }
+  const cx2 = (minX + maxX) / 2;
+  const cy2 = (minY + maxY) / 2;
+  const halfX = Math.max(0, (maxX - minX) / 2);
+  const halfY = Math.max(0, (maxY - minY) / 2);
+  const maxExtent = Math.max(halfY, halfX / aspect, .55);
+  const radius = clamp((maxExtent + .12) / .90, 1.0, 5.5);
+  const center = add(scale(cx2,basis.right), scale(cy2,basis.up));
+  return {radius, center};
+}
+function radiusForKeyPoints(points,basis){ return frameForKeyPoints(points,basis).radius; }
+function shotFromForward(forward,points,tilt=0,continuity=true){
+  let f = finiteVec(forward) && norm(forward) > 1e-6 ? normalize(forward) : null;
+  if(!f){
+    const fallback = points.find(p=>finiteVec(p) && norm(p)>1e-6) || [1,0,0];
+    f = anyPerpendicular(fallback);
+  }
+  if(continuity && dot(f,currentForward()) < 0) f = scale(-1,f);
+  let {yaw,pitch} = cameraAnglesFromForward(f);
+  pitch = clamp(pitch + tilt, -1.25, 1.25);
+  const basis = basisFromCamera(yaw,pitch);
+  const frame = frameForKeyPoints(points,basis);
+  return {yaw,pitch,radius:frame.radius,center:frame.center,keyPoints:points.map(p=>p.slice())};
+}
+function componentVec(i,j){ return scale(exact.R[i][j], exact.Q[i]); }
+function projectionForColumn(j){ return exact && exact.projections[j] ? exact.projections[j] : [0,0,0]; }
+function cumulativeProjectionTips(j){
+  const pts = [];
+  let at = [0,0,0];
+  for(let i=0;i < j;i++){
+    at = add(at, componentVec(i,j));
+    pushKeyPoint(pts, at);
+  }
+  return pts;
+}
+function keyPointsForColumnStep(step,s=state){
+  const points = [[0,0,0]];
+  const j = Number.isInteger(step && step.j) ? step.j : 0;
+  pushKeyPoint(points,Acols[j]);
+  for(let i=0;i < j;i++) pushKeyPoint(points,(s && s.Q[i]) || exact.Q[i]);
+  for(const p of cumulativeProjectionTips(j)) pushKeyPoint(points,p);
+  pushKeyPoint(points,projectionForColumn(j));
+  pushKeyPoint(points,exact.V[j]);
+  if(s && s.V && s.V[j]) pushKeyPoint(points,s.V[j]);
+  if(s && s.Q && s.Q[j]) pushKeyPoint(points,s.Q[j]);
+  if(step && (step.kind === 'diag' || step.kind === 'normalize') && exact.V[j] && norm(exact.V[j]) > 1e-9){
+    const dir = normalize(exact.V[j]);
+    pushKeyPoint(points,dir);
+    pushKeyPoint(points,scale(-1,dir));
+  }
+  return points;
+}
+function columnThreeForward(s=state){
+  const q0 = (s && s.Q[0]) || exact.Q[0];
+  const q1 = (s && s.Q[1]) || exact.Q[1];
+  const n = normalize(cross(q0,q1));
+  const f0raw = cross(n,Acols[2]);
+  const f0 = norm(f0raw) > 1e-8 ? normalize(f0raw) : anyPerpendicular(n);
+  const sign = dot(Acols[2], n) >= 0 ? 1 : -1;
+  const theta = 24 * Math.PI / 180;
+  return normalize(add(scale(Math.cos(theta), f0), scale(Math.sin(theta) * sign, n)));
+}
+function baseShotForColumn(j,s=state,continuity=true){
+  const pseudoStep = {kind:'start', j};
+  const points = keyPointsForColumnStep(pseudoStep,s);
+  let forward, tilt = 8 * Math.PI / 180;
+  if(j === 0){
+    forward = cross(Acols[0], [0,0,1]);
+    tilt = 14 * Math.PI / 180;
+  }else if(j === 1){
+    const q0 = (s && s.Q[0]) || exact.Q[0];
+    forward = cross(q0,Acols[1]);
+  }else{
+    forward = columnThreeForward(s);
+    tilt = 0;
+  }
+  const shot = shotFromForward(forward, points, tilt, continuity);
+  columnShotCache[j] = shot;
+  return shot;
+}
+function refitCachedColumnShot(j,points,s=state,continuity=true){
+  const base = columnShotCache[j] || baseShotForColumn(j,s,continuity);
+  const basis = basisFromCamera(base.yaw,base.pitch);
+  const frame = frameForKeyPoints(points,basis);
+  return {yaw:base.yaw,pitch:base.pitch,radius:frame.radius,center:frame.center,keyPoints:points.map(p=>p.slice())};
+}
+function finaleShot(continuity=true){
+  const points = [[0,0,0]];
+  if(exact && exact.Q){
+    for(let j=0;j<3;j++) pushKeyPoint(points, scale(1.08, state.Q[j] || exact.Q[j]));
+  }
+  let f = exact && exact.Q ? normalize(add(add(state.Q[0] || exact.Q[0], state.Q[1] || exact.Q[1]), state.Q[2] || exact.Q[2])) : [1,-1,1];
+  if(continuity && dot(f,currentForward()) < 0) f = scale(-1,f);
+  const {yaw,pitch} = cameraAnglesFromForward(f);
+  const basis = basisFromCamera(yaw,pitch);
+  const frame = frameForKeyPoints(points,basis);
+  return {yaw,pitch,radius:frame.radius,center:frame.center,keyPoints:points.map(p=>p.slice())};
+}
+function trueAngleShot(step=current(),s=state,continuity=true){
+  if(!step || step.kind !== 'coeff' || !Number.isInteger(step.i)) return null;
+  const q = (s && s.Q[step.i]) || exact.Q[step.i];
+  if(!q) return null;
+  const points = keyPointsForColumnStep(step,s);
+  return shotFromForward(cross(q,Acols[step.j]), points, 0, continuity);
+}
+function shotForStep(step,s=state,continuity=true){
+  if(!step || !exact) return overviewShot(continuity);
+  const j = Number.isInteger(step.j) ? step.j : 0;
+  if(step.kind === 'check') return finaleShot(continuity);
+  if(step.kind === 'start') return baseShotForColumn(j,s,continuity);
+  if(step.kind === 'coeff' || step.kind === 'subtract' || step.kind === 'planeSubtract' || step.kind === 'diag' || step.kind === 'normalize'){
+    return refitCachedColumnShot(j,keyPointsForColumnStep(step,s),s,continuity);
+  }
+  return overviewShot(continuity);
+}
+function overviewShot(continuity=true, preserveCurrentAngle=false){
+  const points = [[0,0,0], ...Acols];
+  if(exact){
+    for(let j=0;j<3;j++){
+      pushKeyPoint(points,exact.V[j]);
+      pushKeyPoint(points,exact.Q[j]);
+      pushKeyPoint(points,exact.projections[j]);
+      for(const p of cumulativeProjectionTips(j)) pushKeyPoint(points,p);
+    }
+  }
+  const yaw = preserveCurrentAngle ? camera.yaw : STANDARD_CAMERA.yaw;
+  const pitch = preserveCurrentAngle ? camera.pitch : STANDARD_CAMERA.pitch;
+  const basis = basisFromCamera(yaw,pitch);
+  const frame = frameForKeyPoints(points,basis);
+  const radius = preserveCurrentAngle ? Math.max(axisRadius, frame.radius) : frame.radius;
+  return {yaw,pitch,radius,center:frame.center,keyPoints:points};
+}
+function cameraAngularDistance(shot){ return Math.acos(clamp(dot(currentForward(), basisFromCamera(shot.yaw,shot.pitch).forward), -1, 1)); }
+function applyCameraShot(shot){
+  camera.yaw = shot.yaw;
+  camera.pitch = clamp(shot.pitch, -1.25, 1.25);
+  axisRadius = shot.radius;
+  camCenter = finiteVec(shot.center) ? shot.center.slice() : [0,0,0];
+  clampCamCenter();
+}
+function cancelCameraMotion(){ camAnim = null; }
+function cancelInertia(){ inertia = null; }
+function shotWithZoomBias(shot,useBias=true){
+  if(!shot) return shot;
+  const copy = Object.assign({}, shot, {
+    keyPoints:shot.keyPoints ? shot.keyPoints.map(p=>p.slice()) : [],
+    center:finiteVec(shot.center) ? shot.center.slice() : [0,0,0]
+  });
+  if(useBias) copy.radius = clamp(copy.radius * zoomBias, 1.0, 5.5);
+  return copy;
+}
+function rememberZoomBias(){
+  const shot = shotForStep(current(), state, true);
+  if(shot && Number.isFinite(shot.radius) && shot.radius > 1e-6) zoomBias = clamp(axisRadius / shot.radius, .62, 1.35);
+}
+function clearFinaleTimers(){
+  for(const id of finaleTimers) clearTimeout(id);
+  finaleTimers = [];
+}
+function stopFinaleOrbit(disable=false){
+  clearFinaleTimers();
+  finaleOrbit = null;
+  if(disable) finaleOrbitDisabled = true;
+}
+function tweenToShot(shot,{snap=false,force=false,duration=550,useZoomBias=true}={}){
+  if(!shot) return;
+  const target = shotWithZoomBias(shot,useZoomBias);
+  cancelInertia();
+  if(!force){
+    const angle = cameraAngularDistance(target);
+    const radiusChange = Math.abs(target.radius - axisRadius) / Math.max(axisRadius, .001);
+    const centerChange = norm(subV(target.center || [0,0,0], camCenter)) / Math.max(axisRadius, .001);
+    if(angle < 12*Math.PI/180 && radiusChange < .12 && centerChange < .08){ renderPlot(lastRenderState || state); return; }
+  }
+  if(snap || prefersReducedMotion()){
+    cancelCameraMotion();
+    applyCameraShot(target);
+    renderPlot(lastRenderState || state);
+    return;
+  }
+  camAnim = {
+    fromYaw:camera.yaw,fromPitch:camera.pitch,fromRadius:axisRadius,fromCenter:camCenter.slice(),
+    toYaw:target.yaw,toPitch:target.pitch,toRadius:target.radius,toCenter:target.center.slice(),start:performance.now(),duration
+  };
+  requestRenderFrame();
+}
+function frameCurrentStep(snap=false, force=false){ tweenToShot(shotForStep(current(), state, true), {snap, force}); }
+function startInertia(vYaw,vPitch){
+  if(prefersReducedMotion() || Math.hypot(vYaw,vPitch) < .002) return;
+  inertia = {vYaw,vPitch};
+  requestRenderFrame();
+}
+function sceneModeForStep(step){
+  return (completed || (step && step.kind === 'check')) ? 'finale' : 'work';
+}
+function finaleProgress(){
+  if(sceneModeForStep(current()) !== 'finale') return 0;
+  if(!finaleFade) return 1;
+  const t = clamp((performance.now() - finaleFade.start) / finaleFade.duration, 0, 1);
+  if(t >= 1) finaleFade = null;
+  return t;
+}
+function startFinaleMoment(){
+  if(sceneModeForStep(current()) !== 'finale') return;
+  clearFinaleTimers();
+  finaleFade = prefersReducedMotion() ? null : {start:performance.now(), duration:350};
+  finaleOrbit = null;
+  finaleOrbitDisabled = false;
+  const shot = finaleShot(true);
+  if(prefersReducedMotion()){
+    tweenToShot(shot,{snap:true,force:true,useZoomBias:false});
+    return;
+  }
+  requestRenderFrame();
+  finaleTimers.push(setTimeout(()=>{
+    if(finaleOrbitDisabled || sceneModeForStep(current()) !== 'finale') return;
+    tweenToShot(finaleShot(true),{force:true,duration:700,useZoomBias:false});
+  },250));
+  finaleTimers.push(setTimeout(()=>{
+    if(finaleOrbitDisabled || sceneModeForStep(current()) !== 'finale' || prefersReducedMotion()) return;
+    finaleOrbit = {last:performance.now()};
+    requestRenderFrame();
+  },950));
+}
+const svgAttrNames = {
+  strokeWidth:'stroke-width', strokeDasharray:'stroke-dasharray', strokeLinecap:'stroke-linecap', strokeLinejoin:'stroke-linejoin',
+  markerEnd:'marker-end', markerStart:'marker-start', fontSize:'font-size', fontWeight:'font-weight', paintOrder:'paint-order'
+};
+function svgEl(name, attrs, parent){
+  const el = document.createElementNS(ns,name);
+  for(const [k,v] of Object.entries(attrs || {})) el.setAttribute(svgAttrNames[k] || k, v);
+  (parent || scene).appendChild(el);
+  return el;
+}
+function plotLabelTex(text){
+  const value = String(text || '');
+  const subMap = {'₁':'1','₂':'2','₃':'3'};
+  const vectorMatch = value.match(/^([aqv])([₁₂₃])$/);
+  if(vectorMatch) return `\\mathbf {${vectorMatch[1]}}_{${subMap[vectorMatch[2]]}}`;
+  if(value === 'proj' || value === 'projection') return '\\operatorname{proj}';
+  if(/^[xyz]$/.test(value)) return value;
+  if(/^[−-]?\d+(?:\.\d+)?$/.test(value)) return value.replace('−','-');
+  return null;
+}
+function requestMathSvg(tex){
+  if(!tex || !window.MathJax || typeof window.MathJax.tex2svgPromise !== 'function') return null;
+  const cached = mathSvgCache.get(tex);
+  if(cached) return cached.ready ? cached : null;
+  const entry = {ready:false, pending:true, template:null, viewBox:[0,-750,1000,1000]};
+  mathSvgCache.set(tex, entry);
+  window.MathJax.tex2svgPromise(tex, {display:false}).then(wrapper=>{
+    const source = wrapper && wrapper.querySelector ? wrapper.querySelector('svg') : null;
+    if(!source) return;
+    const viewBox = (source.getAttribute('viewBox') || '0 -750 1000 1000').split(/\s+/).map(Number);
+    entry.template = source.cloneNode(true);
+    entry.viewBox = viewBox.length === 4 && viewBox.every(Number.isFinite) ? viewBox : [0,-750,1000,1000];
+    entry.ready = true;
+    entry.pending = false;
+    requestAnimationFrame(()=>{
+      if(state) renderPlot(lastRenderState || state);
+      const endPanel = document.getElementById('endPanel');
+      if(endPanel && endPanel.classList.contains('show')) renderMiniBasis();
+    });
+  }).catch(()=>mathSvgCache.delete(tex));
+  return null;
+}
+function appendMathSvgLabel(parent, point, text, color, size=13, opacity=1){
+  const tex = plotLabelTex(text);
+  const entry = requestMathSvg(tex);
+  if(!entry || !entry.template) return null;
+  const [minX,minY,vbW,vbH] = entry.viewBox;
+  const height = Math.max(8, size * 1.28);
+  const width = height * vbW / Math.max(vbH,1);
+  const baselineFraction = (0 - minY) / Math.max(vbH,1);
+  const node = entry.template.cloneNode(true);
+  node.removeAttribute('style');
+  node.setAttribute('class','mathSvgLabel');
+  node.setAttribute('x', point.x);
+  node.setAttribute('y', point.y - baselineFraction * height);
+  node.setAttribute('width', width);
+  node.setAttribute('height', height);
+  node.setAttribute('viewBox', `${minX} ${minY} ${vbW} ${vbH}`);
+  node.setAttribute('preserveAspectRatio','xMinYMid meet');
+  node.setAttribute('aria-hidden','true');
+  node.style.color = color;
+  node.style.opacity = String(opacity);
+  node.style.filter = `drop-shadow(1px 0 0 ${C.paper}) drop-shadow(-1px 0 0 ${C.paper}) drop-shadow(0 1px 0 ${C.paper}) drop-shadow(0 -1px 0 ${C.paper})`;
+  parent.appendChild(node);
+  return {node,width,height};
+}
+function clearSvg(){ while(scene.firstChild) scene.removeChild(scene.firstChild); }
+function getRenderState(given){
+  if(given) return given;
+  if(anim){
+    const t = clamp((performance.now()-anim.start)/anim.duration,0,1);
+    return interpState(anim.from,anim.to,easeOutCubic(t));
+  }
+  return state;
+}
+function renderPlot(givenState){
+  const renderState = getRenderState(givenState);
+  lastRenderState = renderState;
+  const rect = plotWrap.getBoundingClientRect();
+  const w = Math.max(320, rect.width || 900), h = Math.max(300, rect.height || 520);
+  lastSvgSize = {w,h};
+  scene.setAttribute('viewBox', `0 0 ${w} ${h}`);
+  scene.setAttribute('width', w);
+  scene.setAttribute('height', h);
+  clearSvg();
+  labelBoxes = [];
+  vectorHits = [];
+  const basis = cameraBasis();
+  const root = svgEl('g',{},scene);
+  drawGrid(root,basis);
+  drawUnitSphere(root,basis,renderState);
+  drawSpans(root,basis,renderState);
+  drawVectors(root,basis,renderState);
+}
+function parseColor(color){
+  const s = String(color || '').trim();
+  if(/^#[0-9a-f]{6}$/i.test(s)) return [parseInt(s.slice(1,3),16),parseInt(s.slice(3,5),16),parseInt(s.slice(5,7),16)];
+  const m = s.match(/rgba?\(([^)]+)\)/i);
+  if(m){
+    const parts = m[1].split(',').map(x=>Number.parseFloat(x));
+    if(parts.length >= 3 && parts.slice(0,3).every(Number.isFinite)) return parts.slice(0,3);
+  }
+  return [31,42,68];
+}
+function mixColor(color, toward=C.ink, amount=.2){
+  const a = parseColor(color), b = parseColor(toward);
+  const rgb = a.map((x,i)=>Math.round(x*(1-amount)+b[i]*amount));
+  return `rgb(${rgb[0]}, ${rgb[1]}, ${rgb[2]})`;
+}
+function linePath(points,basis){
+  return points.map((p,i)=>{
+    const s = project(p,basis); return `${i?'L':'M'}${s.x.toFixed(2)},${s.y.toFixed(2)}`;
+  }).join(' ');
+}
+function drawPolyline(parent,basis,pts,attrs){
+  svgEl('path', Object.assign({d:linePath(pts,basis), fill:'none', strokeLinecap:'round', strokeLinejoin:'round'}, attrs), parent);
+}
+function drawLine(parent,basis,a,b,attrs){ drawPolyline(parent,basis,[a,b],attrs); }
+function drawGrid(parent,basis){
+  const r = axisRadius + Math.min(norm(camCenter), axisRadius);
+  const grid = svgEl('g',{opacity:.92},parent);
+  const axes = [
+    {name:'x', from:[-r,0,0], to:[r,0,0], tick:(k,t)=>[[k,-t,0],[k,t,0]], label:k=>[k,-.18,0], numbered:true},
+    {name:'y', from:[0,-r,0], to:[0,r,0], tick:(k,t)=>[[-t,k,0],[t,k,0]], label:k=>[.16,k,0], numbered:false},
+    {name:'z', from:[0,0,-r], to:[0,0,r], tick:(k,t)=>[[-t,0,k],[t,0,k]], label:k=>[.14,0,k], numbered:true}
+  ];
+  for(const ax of axes){
+    drawLine(grid,basis,ax.from,ax.to,{stroke:C.axis, strokeWidth:1.15});
+    const maxTick = Math.floor(r);
+    for(let k=-maxTick;k<=maxTick;k++){
+      if(k===0) continue;
+      const ends = ax.tick(k,.045);
+      drawLine(grid,basis,ends[0],ends[1],{stroke:C.axis, strokeWidth:.8, opacity:.75});
+      if(ax.numbered && Math.abs(k) <= 2){
+        const lp = project(ax.label(k),basis);
+        if(!appendMathSvgLabel(grid,{x:lp.x-3,y:lp.y},String(k),C.ink,9,.32)){
+          svgEl('text',{x:lp.x,y:lp.y,fill:C.ink,'font-size':9,'font-family':'Georgia, serif','font-weight':600,opacity:.32,'text-anchor':'middle'},grid).textContent = String(k).replace('-', '−');
+        }
+      }
+    }
+    const p = project(ax.to,basis);
+    if(!appendMathSvgLabel(grid,{x:p.x+6,y:p.y-5},ax.name,C.ink,12,.55)){
+      svgEl('text',{x:p.x+6,y:p.y-5,fill:C.ink,'font-size':12,'font-family':'Georgia, serif','font-style':'italic','font-weight':700,opacity:.55},grid).textContent = ax.name;
+    }
+  }
+}
+function circlePts(axis){
+  const pts=[];
+  for(let k=0;k<=96;k++){
+    const t=2*Math.PI*k/96;
+    const c=Math.cos(t), s=Math.sin(t);
+    if(axis==='xy') pts.push([c,s,0]);
+    if(axis==='xz') pts.push([c,0,s]);
+    if(axis==='yz') pts.push([0,c,s]);
+  }
+  return pts;
+}
+function drawUnitSphere(parent,basis,s){
+  const g = svgEl('g',{opacity:.62},parent);
+  const o = project([0,0,0], basis);
+  const r = plotScalePx(axisRadius);
+  svgEl('circle',{cx:o.x,cy:o.y,r,fill:'none',stroke:'rgba(31,42,68,.22)',strokeWidth:1.25,strokeDasharray:'6 7'},g);
+  if(sceneModeForStep(current()) !== 'finale' && s && s.Q[0] && s.Q[1]){
+    const pts=[];
+    for(let k=0;k<=112;k++){
+      const t=2*Math.PI*k/112;
+      pts.push(add(scale(Math.cos(t),s.Q[0]), scale(Math.sin(t),s.Q[1])));
+    }
+    drawPolyline(g,basis,pts,{stroke:C.q,strokeWidth:1.25,strokeDasharray:'5 6',opacity:.52});
+  }
+  if(sceneModeForStep(current()) !== 'finale' && !(s && s.Q[0])){
+    const labelP = project([1.05,.12,.12],basis);
+    svgEl('text',{x:labelP.x,y:labelP.y,fill:C.ink,'font-size':11,'font-family':'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif','font-weight':650,opacity:.42},g).textContent = 'unit sphere';
+  }
+}
+function drawSpans(parent,basis,s){
+  if(sceneModeForStep(current()) === 'finale') return;
+  const g = svgEl('g',{},parent);
+  if(s.Q[0]){
+    drawLine(g,basis,scale(-axisRadius,s.Q[0]),scale(axisRadius,s.Q[0]),{stroke:C.q,strokeWidth:1.6,strokeDasharray:'8 8',opacity:.38});
+  }
+  if(s.Q[0] && s.Q[1]){
+    const q1=s.Q[0], q2=s.Q[1];
+    const corners = [add(scale(-1.65,q1),scale(-1.65,q2)), add(scale(1.65,q1),scale(-1.65,q2)), add(scale(1.65,q1),scale(1.65,q2)), add(scale(-1.65,q1),scale(1.65,q2))].map(p=>project(p,basis));
+    svgEl('polygon',{points:corners.map(p=>`${p.x.toFixed(2)},${p.y.toFixed(2)}`).join(' '),fill:C.v,opacity:.05,stroke:C.v,'stroke-width':1,'stroke-opacity':.16},g);
+    const plane = svgEl('g',{opacity:.24},g);
+    for(let t=-1.5;t<=1.51;t+=.75){
+      drawLine(plane,basis,add(scale(-1.5,q1),scale(t,q2)),add(scale(1.5,q1),scale(t,q2)),{stroke:C.v,strokeWidth:.9});
+      drawLine(plane,basis,add(scale(t,q1),scale(-1.5,q2)),add(scale(t,q1),scale(1.5,q2)),{stroke:C.v,strokeWidth:.9});
+    }
+  }
+}
+function approxLabelBox(q,text,size){
+  const width = Math.max(18, String(text).length * size * .58);
+  const height = size + 6;
+  return {x1:q.x-3,y1:q.y-height+3,x2:q.x+width,y2:q.y+4};
+}
+function boxesOverlap(a,b){ return !(a.x2 < b.x1 || b.x2 < a.x1 || a.y2 < b.y1 || b.y2 < a.y1); }
+function labelScreen(parent,screenPoint,text,color,size=13,weight=600,options={}){
+  let q = {x:screenPoint.x, y:screenPoint.y};
+  let box = approxLabelBox(q,text,size);
+  const dir = options.screenDir || {x:1,y:0};
+  const len = Math.hypot(dir.x,dir.y) || 1;
+  let nx = -dir.y/len, ny = dir.x/len;
+  const side = options.side || ((labelBoxes.length % 2) ? -1 : 1);
+  const priority = options.priority ?? 1;
+  for(let attempt=0; attempt<5; attempt++){
+    const hit = labelBoxes.find(b=>boxesOverlap(box,b));
+    if(!hit) break;
+    const step = (options.dim || priority <= hit.priority) ? 13 : 9;
+    q = {x:q.x + nx*side*step, y:q.y + ny*side*step};
+    box = approxLabelBox(q,text,size);
+  }
+  labelBoxes.push({...box, priority});
+  if(!appendMathSvgLabel(parent,q,text,color,size,options.dim ? .66 : 1)){
+    const el = svgEl('text',{x:q.x,y:q.y,fill:color,'font-size':size,'font-family':'Georgia, "Times New Roman", Times, serif','font-style':'italic','font-weight':weight,'paint-order':'stroke',stroke:C.paper,'stroke-width':4,'stroke-linejoin':'round'},parent);
+    el.textContent = text;
+  }
+}
+function label(parent,basis,p,text,color,size=13,weight=600,options={}){
+  const q = project(p,basis);
+  const vector = options.vector || p;
+  const end = project(vector,basis), start = project([0,0,0],basis);
+  labelScreen(parent,{x:q.x,y:q.y},text,color,size,weight,Object.assign({},options,{screenDir:{x:end.x-start.x,y:end.y-start.y}}));
+}
+function depthAdjustedAttrs(attrs,from,to,basis){
+  const out = Object.assign({}, attrs || {});
+  const mid = scale(.5, add(from,to));
+  const z = clamp(project(mid,basis).z / Math.max(axisRadius,1e-6), -1, 1);
+  const width = out.strokeWidth ?? out['stroke-width'];
+  const opacity = out.opacity ?? 1;
+  if(Number.isFinite(width)) out.strokeWidth = Number(width) * (1 + .10*z);
+  out.opacity = clamp(Number(opacity) * (1 + .12*z), .06, 1);
+  return out;
+}
+function registerVectorHit(basis,from,to,labelText,options={}){
+  if(options.hit === false || !labelText) return;
+  const a = project(from,basis), b = project(to,basis);
+  const value = subV(to,from);
+  vectorHits.push({x1:a.x,y1:a.y,x2:b.x,y2:b.y,label:labelText, color:options.hitColor || options.labelColor || options.stroke || C.ink, value, norm:norm(value), priority:options.priority || 1});
+}
+function arrow(parent,basis,from,to,attrs,labelText,labelColor,labelOffset,options={}){
+  const stroke = attrs && attrs.stroke ? attrs.stroke : C.old;
+  const adjusted = depthAdjustedAttrs(Object.assign({stroke,strokeWidth:2,opacity:1},attrs || {}),from,to,basis);
+  const p0 = project(from,basis), p1 = project(to,basis);
+  const dx = p1.x - p0.x, dy = p1.y - p0.y;
+  const projectedLength = Math.hypot(dx,dy);
+  const ux = projectedLength > 1e-6 ? dx/projectedLength : 1;
+  const uy = projectedLength > 1e-6 ? dy/projectedLength : 0;
+  const width = Number(adjusted.strokeWidth ?? adjusted['stroke-width'] ?? 2);
+  const baseOpacity = Number(adjusted.opacity ?? 1);
+  const fade = projectedLength < 14 ? clamp(projectedLength / 14, 0, 1) : 1;
+  const opacity = clamp(baseOpacity * fade, 0, 1);
+  const head = Math.max(6, Math.min(7 + 1.6*width, 0.40 * projectedLength));
+  const notchBack = .78 * head;
+  const shaftEnd = {x:p1.x - ux*notchBack, y:p1.y - uy*notchBack};
+  if(projectedLength > 1.5){
+    const lineAttrs = {x1:p0.x,y1:p0.y,x2:shaftEnd.x,y2:shaftEnd.y,stroke,strokeWidth:width,strokeLinecap:'round',opacity};
+    const dash = adjusted.strokeDasharray || adjusted['stroke-dasharray'];
+    if(dash) lineAttrs.strokeDasharray = dash;
+    svgEl('line',lineAttrs,parent);
+    const cos = Math.cos(25*Math.PI/180), sin = Math.sin(25*Math.PI/180);
+    const px = -uy, py = ux;
+    const left = {x:p1.x - ux*head*cos + px*head*sin, y:p1.y - uy*head*cos + py*head*sin};
+    const right = {x:p1.x - ux*head*cos - px*head*sin, y:p1.y - uy*head*cos - py*head*sin};
+    const notch = {x:p1.x - ux*notchBack, y:p1.y - uy*notchBack};
+    svgEl('polygon',{points:[[p1.x,p1.y],[left.x,left.y],[notch.x,notch.y],[right.x,right.y]].map(p=>`${p[0].toFixed(2)},${p[1].toFixed(2)}`).join(' '),fill:stroke,stroke:mixColor(stroke,C.ink,.20),strokeWidth:.9,strokeLinejoin:'round',opacity},parent);
+  }
+  registerVectorHit(basis,from,to,labelText,Object.assign({},options,{stroke,labelColor}));
+  if(labelText){
+    const anchor = {x:p1.x + ux*15, y:p1.y + uy*15};
+    labelScreen(parent,anchor,labelText,labelColor || stroke,13,800,Object.assign({},options,{screenDir:{x:ux,y:uy}}));
+  }
+}
+function dimForA(j,currentStepObj){
+  if(!currentStepObj || sceneModeForStep(currentStepObj) === 'finale') return 0;
+  return currentStepObj.j === j ? 1 : .32;
+}
+function drawCoeffConstruction(parent,basis,step,s){
+  if(!step || step.kind !== 'coeff' || !s.Q[step.i]) return;
+  const q = s.Q[step.i], a = Acols[step.j];
+  const foot = scale(dot(q,a), q);
+  const resid = subV(a, foot);
+  const g = svgEl('g',{opacity:.72},parent);
+  drawLine(g,basis,foot,a,{stroke:'rgba(31,42,68,.45)',strokeWidth:1.25,strokeDasharray:'4 5'});
+  const fp = project(foot,basis);
+  svgEl('circle',{cx:fp.x,cy:fp.y,r:4.2,fill:'#fff',stroke:'rgba(31,42,68,.50)',strokeWidth:1.25},g);
+  if(norm(foot)>1e-9 && norm(resid)>1e-9) drawRightAngle(g,basis,foot,resid,.17);
+}
+function homeResidualEndpoints(j,pSum){
+  const t = residualHomeProgress(j);
+  if(t <= 0) return {from:pSum, to:Acols[j]};
+  return {from:lerpVec(pSum,[0,0,0],t), to:lerpVec(Acols[j],state.V[j],t)};
+}
+function residualHomeProgress(j){
+  if(!residualHomeAnim || residualHomeAnim.j !== j){
+    const s = current();
+    return (s && s.kind === 'diag' && s.j === j) ? 1 : 0;
+  }
+  const raw = clamp((performance.now() - residualHomeAnim.start) / residualHomeAnim.duration, 0, 1);
+  return 1 - Math.pow(1-raw,3);
+}
+function projectionPreview(parent,basis,components,j){
+  let at = [0,0,0];
+  let sum = [0,0,0];
+  components.forEach((item,idx)=>{
+    const next = add(at,item.vec);
+    sum = add(sum,item.vec);
+    arrow(parent,basis,at,next,{stroke:C.projection,strokeWidth:2.6,opacity:.9,strokeDasharray:'6 5'}, idx===components.length-1 ? (j===2?'projection':'proj') : '', C.projection,[.08,-.06,.05],{priority:2,hitColor:C.projection});
+    at = next;
+  });
+  return sum;
+}
+function drawWorkVectors(parent,basis,s){
+  const step = current();
+  const activeJ = step && Number.isInteger(step.j) ? step.j : s.activeJ;
+  const activeVVisible = Number.isInteger(activeJ) && s.V[activeJ] && step && ((step.kind !== 'normalize' && (norm(subV(s.V[activeJ], Acols[activeJ])) > 1e-9 || step.kind === 'diag')) || (step.kind === 'normalize' && !s.Q[activeJ]));
+  const gGuide = svgEl('g',{},parent);
+  drawCoeffConstruction(gGuide,basis,step,s);
+  const gA = svgEl('g',{},parent);
+  for(let j=0;j<3;j++){
+    const op = dimForA(j,step);
+    if(op <= 0) continue;
+    const active = step && step.j === j;
+    if(active && activeVVisible && norm(subV(s.V[j], Acols[j])) < 1e-9) continue;
+    if(active && step.kind === 'normalize' && s.Q[j]) continue;
+    const color = active ? C.a : C.aDim;
+    const suppressALabel = s.Q[j] && nearlyCollinear(Acols[j], s.Q[j]);
+    arrow(gA,basis,[0,0,0],Acols[j],{stroke:color,strokeWidth:active?3.6:2.1,opacity:op},suppressALabel?'':`a${SUB[j]}`, active?C.a:C.old,[.08,.08,.08],{priority:active?2:0,dim:!active,hitColor:color});
+  }
+  const gQ = svgEl('g',{},parent);
+  for(let j=0;j<3;j++) if(s.Q[j]){
+    const active = step && (step.i === j || step.j === j || step.kind === 'check');
+    arrow(gQ,basis,[0,0,0],s.Q[j],{stroke:C.q,strokeWidth:active?3.8:2.8,opacity:active?1:.62},`q${SUB[j]}`,C.q,[.07,.06,.07],{priority:active?3:2,hitColor:C.q});
+  }
+  const gP = svgEl('g',{},parent);
+  const j = activeJ;
+  if(Number.isInteger(j)){
+    const ps = s.projectionSum[j];
+    let pSum = (ps && norm(ps) > 1e-9) ? ps : null;
+    const components = ((s.measured && s.measured[j]) || []).filter(item => item && item.vec && norm(item.vec)>1e-9);
+    if(pSum){
+      arrow(gP,basis,[0,0,0],pSum,{stroke:C.projection,strokeWidth:3.1,opacity:.95,strokeDasharray:'7 5'}, j===2?'projection':'proj', C.projection,[.08,-.06,.05],{priority:2,hitColor:C.projection});
+    }else if(components.length){
+      pSum = projectionPreview(gP,basis,components,j);
+    }else if(s.lastProjection && norm(s.lastProjection)>1e-9){
+      pSum = s.lastProjection;
+      arrow(gP,basis,[0,0,0],pSum,{stroke:C.projection,strokeWidth:2.6,opacity:.9,strokeDasharray:'7 5'}, j===2?'projection':'proj', C.projection,[.08,-.06,.05],{priority:2,hitColor:C.projection});
+    }
+    if(s.V[j]){
+      const diverged = norm(subV(s.V[j], Acols[j])) > 1e-9;
+      const showV = step && !(step.kind === 'normalize' && s.Q[j]) && (diverged || step.kind === 'diag' || step.kind === 'normalize');
+      if(showV){
+        if(pSum && norm(pSum)>1e-9 && diverged && !(step && step.kind === 'normalize')){
+          const home = (step && step.kind === 'diag') ? homeResidualEndpoints(j,pSum) : {from:pSum,to:Acols[j]};
+          arrow(gP,basis,home.from,home.to,{stroke:C.v,strokeWidth:3.6,opacity:.92},`v${SUB[j]}`,C.v,[.07,.07,.07],{priority:3,hitColor:C.v});
+          if(j>0 && residualHomeProgress(j) < .2) drawRightAngle(gP,basis,pSum,s.V[j]);
+        }else{
+          arrow(gP,basis,[0,0,0],s.V[j],{stroke:C.v,strokeWidth:3.8,opacity:.95},`v${SUB[j]}`,C.v,[.08,.08,.08],{priority:3,hitColor:C.v});
+        }
+      }
+    }
+  }
+}
+function drawFinaleVectors(parent,basis,s){
+  const gQ = svgEl('g',{},parent);
+  for(let j=0;j<3;j++) if(s.Q[j]){
+    arrow(gQ,basis,[0,0,0],s.Q[j],{stroke:C.q,strokeWidth:3.8,opacity:1},`q${SUB[j]}`,C.q,[.07,.06,.07],{priority:4,hitColor:C.q});
+  }
+  if(s.Q[0] && s.Q[1]) drawRightAngleBetween(gQ,basis,s.Q[0],s.Q[1]);
+  if(s.Q[0] && s.Q[2]) drawRightAngleBetween(gQ,basis,s.Q[0],s.Q[2]);
+  if(s.Q[1] && s.Q[2]) drawRightAngleBetween(gQ,basis,s.Q[1],s.Q[2]);
+}
+function drawVectors(parent,basis,s){
+  if(sceneModeForStep(current()) === 'finale'){
+    const t = finaleProgress();
+    if(t < 1){
+      const fading = svgEl('g',{opacity:1-t},parent);
+      drawWorkVectors(fading,basis,s);
+    }
+    drawFinaleVectors(parent,basis,s);
+    return;
+  }
+  drawWorkVectors(parent,basis,s);
+}
+function drawRightAngle(parent,basis,p,resid,eps=.22){
+  const rdir = normalize(resid);
+  const idir = norm(p) > 1e-9 ? scale(-1, normalize(p)) : [1,0,0];
+  const a = p;
+  const b = add(a, scale(eps, idir));
+  const c = add(b, scale(eps, rdir));
+  const d = add(a, scale(eps, rdir));
+  drawPolyline(parent,basis,[b,c,d],{stroke:C.right,strokeWidth:2.2,opacity:.95});
+}
+function drawRightAngleBetween(parent,basis,u,v){
+  if(!u || !v) return;
+  const scalePx = plotScalePx(axisRadius);
+  const px = clamp(scalePx * .20, 10, 22);
+  const eps = px / Math.max(scalePx,1e-6);
+  const a = scale(eps, normalize(u));
+  const b = add(a, scale(eps, normalize(v)));
+  const c = scale(eps, normalize(v));
+  drawPolyline(parent,basis,[a,b,c],{stroke:C.right,strokeWidth:2.2,opacity:.96,strokeLinecap:'square',strokeLinejoin:'miter'});
+}
+
+function setCameraToward(dir){
+  const shot = shotFromForward(dir, [[0,0,0], ...Acols], 0, true);
+  applyCameraShot(shot);
+}
+function setPlotInteractionMode(mode){
+  plotInteractionMode = mode === 'pan' ? 'pan' : 'rotate';
+  updatePlotModeButtons();
+}
+function updatePlotModeButtons(){
+  const rotateBtn = document.getElementById('rotateModeBtn');
+  const panBtn = document.getElementById('panModeBtn');
+  if(rotateBtn){
+    rotateBtn.classList.toggle('modeActive', plotInteractionMode === 'rotate');
+    rotateBtn.setAttribute('aria-pressed', String(plotInteractionMode === 'rotate'));
+  }
+  if(panBtn){
+    panBtn.classList.toggle('modeActive', plotInteractionMode === 'pan');
+    panBtn.setAttribute('aria-pressed', String(plotInteractionMode === 'pan'));
+  }
+  plotWrap.classList.toggle('panMode', plotInteractionMode === 'pan');
+}
+function refreshPlotAfterResize({snap=true,force=false}={}){
+  updatePlotHelp();
+  renderPlot(lastRenderState || state);
+  if(autoCam && !userMoved) frameCurrentStep(snap, force);
+}
+function isPlotExpanded(){
+  const stage = document.querySelector('.figureStage');
+  return !!(stage && stage.classList.contains('expanded'));
+}
+function openPlotExpanded(){
+  const stage = document.querySelector('.figureStage');
+  const backdrop = document.getElementById('plotBackdrop');
+  const btn = document.getElementById('expandBtn');
+  if(!stage || !backdrop || stage.classList.contains('expanded')) return;
+  expandedRestoreFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+  stage.classList.add('expanded');
+  stage.setAttribute('role','dialog');
+  stage.setAttribute('aria-modal','true');
+  backdrop.hidden = false;
+  requestAnimationFrame(()=>backdrop.classList.add('show'));
+  document.body.style.overflow = 'hidden';
+  if(btn){ btn.textContent = 'close'; btn.setAttribute('aria-pressed','true'); btn.classList.add('modeActive'); btn.focus({preventScroll:true}); }
+  requestAnimationFrame(()=>refreshPlotAfterResize({snap:true,force:true}));
+}
+function closePlotExpanded(restoreFocus=true){
+  const stage = document.querySelector('.figureStage');
+  const backdrop = document.getElementById('plotBackdrop');
+  const btn = document.getElementById('expandBtn');
+  if(!stage || !stage.classList.contains('expanded')) return;
+  stage.classList.remove('expanded');
+  stage.removeAttribute('role');
+  stage.removeAttribute('aria-modal');
+  if(backdrop){ backdrop.classList.remove('show'); backdrop.hidden = true; }
+  document.body.style.overflow = '';
+  if(btn){ btn.textContent = 'expand'; btn.setAttribute('aria-pressed','false'); btn.classList.remove('modeActive'); }
+  requestAnimationFrame(()=>refreshPlotAfterResize({snap:true,force:true}));
+  if(restoreFocus && expandedRestoreFocus && document.contains(expandedRestoreFocus)) expandedRestoreFocus.focus({preventScroll:true});
+  expandedRestoreFocus = null;
+}
+function togglePlotExpanded(){ isPlotExpanded() ? closePlotExpanded(true) : openPlotExpanded(); }
+function renderCameraButtons(){
+  const autoBtn = document.getElementById('autoCamBtn');
+  if(autoBtn){
+    autoBtn.textContent = autoCam ? 'auto view on' : 'auto view off';
+    autoBtn.setAttribute('aria-pressed', String(autoCam));
+    autoBtn.classList.toggle('modeActive', autoCam);
+  }
+  updatePlotModeButtons();
+  const expandBtn = document.getElementById('expandBtn');
+  const stage = document.querySelector('.figureStage');
+  if(expandBtn && stage){
+    const open = stage.classList.contains('expanded');
+    expandBtn.textContent = open ? 'close' : 'expand';
+    expandBtn.setAttribute('aria-pressed', String(open));
+    expandBtn.classList.toggle('modeActive', open);
+  }
+  document.querySelectorAll('.plotBtn[data-camera]').forEach(btn=>{
+    const requiresCoeff = btn.dataset.camera === 'trueAngle';
+    const disabled = requiresCoeff && !(current() && current().kind === 'coeff');
+    btn.disabled = disabled;
+    btn.setAttribute('aria-disabled', String(disabled));
+  });
+}
+function presetCamera(which){
+  stopFinaleOrbit(true);
+  userMoved = false;
+  if(which === 'best') zoomBias = 1;
+  if(which === 'overview') tweenToShot(overviewShot(true, true), {force:true,useZoomBias:false});
+  else if(which === 'trueAngle') tweenToShot(trueAngleShot(current(), state, true), {force:true});
+  else tweenToShot(shotForStep(current(), state, true), {force:true});
+  renderCameraButtons();
+}
+function toggleAutoCamera(){
+  stopFinaleOrbit(true);
+  autoCam = !autoCam;
+  userMoved = false;
+  renderCameraButtons();
+  if(autoCam) frameCurrentStep(false, true);
+}
+
+function closeEnd(){ document.getElementById('endPanel').classList.remove('show'); }
+function resetView(){ presetCamera('best'); }
+function plotLocalPoint(clientX,clientY){
+  const rect = plotWrap.getBoundingClientRect();
+  return {x:clientX - rect.left, y:clientY - rect.top};
+}
+function worldPointAtLocal(local,basis=cameraBasis(),radius=axisRadius,center=camCenter){
+  const {w,h} = lastSvgSize;
+  const scalePx = plotScalePx(radius);
+  return add(center, add(scale((local.x - w/2)/scalePx,basis.right), scale(-(local.y - h/2)/scalePx,basis.up)));
+}
+function clampCamCenter(){
+  const n = norm(camCenter);
+  const maxN = 1.25 * Math.max(axisRadius, 1e-6);
+  if(n > maxN) camCenter = scale(maxN/n, camCenter);
+}
+function panCameraByScreenDelta(dx,dy,basis=cameraBasis(),radius=axisRadius){
+  const scalePx = plotScalePx(radius);
+  camCenter = add(camCenter, add(scale(-dx/scalePx,basis.right), scale(dy/scalePx,basis.up)));
+  clampCamCenter();
+}
+function zoomAboutLocal(local,newRadius,basis=cameraBasis()){
+  const oldRadius = axisRadius;
+  const q = worldPointAtLocal(local,basis,oldRadius,camCenter);
+  axisRadius = clamp(newRadius, 1.0, 5.5);
+  camCenter = add(q, scale(axisRadius / Math.max(oldRadius,1e-6), subV(camCenter, q)));
+  clampCamCenter();
+}
+function pointerDistance(a,b){ return Math.hypot(a.x-b.x,a.y-b.y); }
+function hideVectorChip(){ const chip = document.getElementById('vectorChip'); if(chip) chip.hidden = true; }
+function fmtCoord(x){ return fmt(Math.round(x*100)/100); }
+function vectorText(hit){
+  const labelTex = plotLabelTex(hit.label) || `\\mathrm{${String(hit.label).replace(/[^A-Za-z]/g,'')}}`;
+  const nums = hit.value.map(value=>fmtCoord(value).replace(/−/g,'-')).join(',');
+  const tex = `${labelTex}=(${nums})\\qquad\\lVert ${labelTex}\\rVert=${fmtCoord(hit.norm).replace(/−/g,'-')}`;
+  return `<span style="color:${escapeAttr(hit.color)}">${m(tex)}</span>`;
+}
+function distToSegment(px,py,h){
+  const vx=h.x2-h.x1, vy=h.y2-h.y1;
+  const len2 = vx*vx + vy*vy || 1;
+  const t = clamp(((px-h.x1)*vx + (py-h.y1)*vy)/len2, 0, 1);
+  const x = h.x1 + t*vx, y = h.y1 + t*vy;
+  return Math.hypot(px-x, py-y);
+}
+function handlePlotTap(clientX,clientY){
+  const rect = plotWrap.getBoundingClientRect();
+  const x = clientX - rect.left, y = clientY - rect.top;
+  let best = null, bestD = 1e9;
+  for(const hit of vectorHits){
+    const d = distToSegment(x,y,hit);
+    if(d < bestD){ bestD = d; best = hit; }
+  }
+  const chip = document.getElementById('vectorChip');
+  if(!chip) return;
+  if(best && bestD <= 14){
+    chip.innerHTML = vectorText(best);
+    const left = clamp(x + 10, 8, rect.width - 270);
+    const top = clamp(y + 10, 8, rect.height - 58);
+    chip.style.left = `${left}px`;
+    chip.style.top = `${top}px`;
+    chip.hidden = false;
+    typesetMath(chip);
+  }else chip.hidden = true;
+}
+function updatePlotHelp(){
+  const help = document.getElementById('plotHelp');
+  if(!help) return;
+  const coarse = window.matchMedia && window.matchMedia('(pointer:coarse)').matches;
+  help.textContent = coarse ? '1 finger rotate · 2 fingers pan/zoom' : 'drag rotate · shift-drag pan · scroll zoom';
+}
+function fadePlotHelpAfterFirstDrag(){
+  const help = document.getElementById('plotHelp');
+  if(!help || plotHelpFadeTimer || help.classList.contains('plotHelpFaded')) return;
+  plotHelpFadeTimer = setTimeout(()=>{
+    help.classList.add('plotHelpFaded');
+    plotHelpFadeTimer = null;
+  }, 6000);
+}
+plotWrap.addEventListener('pointerdown', e=>{
+  e.preventDefault();
+  hideVectorChip();
+  stopFinaleOrbit(true);
+  cancelCameraMotion();
+  cancelInertia();
+  plotWrap.setPointerCapture(e.pointerId);
+  const pt = {x:e.clientX,y:e.clientY};
+  activePointers.set(e.pointerId, pt);
+  if(activePointers.size >= 2) multiTouchGesture = true;
+  tapCandidate = activePointers.size === 1 ? {id:e.pointerId,x:e.clientX,y:e.clientY,time:performance.now(),moved:false} : null;
+  if(activePointers.size === 1){
+    const rect = plotWrap.getBoundingClientRect();
+    const mode = (plotInteractionMode === 'pan' || e.shiftKey || e.button === 1) ? 'pan' : 'rotate';
+    drag = {id:e.pointerId,mode,x:e.clientX,y:e.clientY,yaw:camera.yaw,pitch:camera.pitch,center:camCenter.slice(),rectW:Math.max(1,rect.width),rectH:Math.max(1,rect.height),lastX:e.clientX,lastY:e.clientY,lastT:performance.now(),vYaw:0,vPitch:0,moved:false};
+    pinch = null;
+  }else if(activePointers.size === 2){
+    const pts = [...activePointers.values()];
+    const mid = {x:(pts[0].x+pts[1].x)/2, y:(pts[0].y+pts[1].y)/2};
+    pinch = {dist:Math.max(1,pointerDistance(pts[0],pts[1])), mid, axisRadius, center:camCenter.slice(), basis:cameraBasis()};
+    drag = null;
+  }
+});
+plotWrap.addEventListener('pointermove', e=>{
+  if(!activePointers.has(e.pointerId)) return;
+  const currentPt = {x:e.clientX,y:e.clientY};
+  if(tapCandidate && tapCandidate.id === e.pointerId && pointerDistance(currentPt,tapCandidate)>6) tapCandidate.moved = true;
+  activePointers.set(e.pointerId,currentPt);
+  if(pinch && activePointers.size >= 2){
+    fadePlotHelpAfterFirstDrag();
+    userMoved = true;
+    multiTouchGesture = true;
+    const pts = [...activePointers.values()];
+    const dist = Math.max(1,pointerDistance(pts[0],pts[1]));
+    const mid = {x:(pts[0].x+pts[1].x)/2, y:(pts[0].y+pts[1].y)/2};
+    const rect = plotWrap.getBoundingClientRect();
+    const startLocal = {x:pinch.mid.x - rect.left, y:pinch.mid.y - rect.top};
+    const q = worldPointAtLocal(startLocal, pinch.basis, pinch.axisRadius, pinch.center);
+    const newRadius = clamp(pinch.axisRadius * (pinch.dist / dist), 1.0, 5.5);
+    camCenter = add(q, scale(newRadius / Math.max(pinch.axisRadius,1e-6), subV(pinch.center, q)));
+    axisRadius = newRadius;
+    panCameraByScreenDelta(mid.x - pinch.mid.x, mid.y - pinch.mid.y, pinch.basis, axisRadius);
+    rememberZoomBias();
+    renderPlot(lastRenderState || state);
+    return;
+  }
+  if(!drag || drag.id !== e.pointerId) return;
+  const dx = e.clientX - drag.x;
+  const dy = e.clientY - drag.y;
+  if(Math.hypot(dx,dy) > 6){ drag.moved = true; userMoved = true; fadePlotHelpAfterFirstDrag(); }
+  if(drag.mode === 'pan'){
+    const mdx = e.clientX - drag.lastX;
+    const mdy = e.clientY - drag.lastY;
+    panCameraByScreenDelta(mdx, mdy);
+    drag.lastX = e.clientX; drag.lastY = e.clientY; drag.lastT = performance.now();
+    renderPlot(lastRenderState || state);
+    return;
+  }
+  const nextYaw = drag.yaw + dx / drag.rectW * 3.2;
+  const nextPitch = clamp(drag.pitch + dy / drag.rectH * 3.2, -1.25, 1.25);
+  const now = performance.now();
+  const dt = Math.max(16, now - drag.lastT);
+  drag.vYaw = (nextYaw - camera.yaw) * (16/dt);
+  drag.vPitch = (nextPitch - camera.pitch) * (16/dt);
+  drag.lastX = e.clientX; drag.lastY = e.clientY; drag.lastT = now;
+  camera.yaw = nextYaw;
+  camera.pitch = nextPitch;
+  renderPlot(lastRenderState || state);
+});
+function finishPointer(e){
+  const pt = {x:e.clientX,y:e.clientY};
+  const tap = tapCandidate && tapCandidate.id === e.pointerId ? tapCandidate : null;
+  const finishedDrag = drag && drag.id === e.pointerId ? drag : null;
+  activePointers.delete(e.pointerId);
+  if(finishedDrag){
+    drag = null;
+    if(finishedDrag.mode === 'rotate' && finishedDrag.moved) startInertia(finishedDrag.vYaw, finishedDrag.vPitch);
+  }
+  if(activePointers.size < 2) pinch = null;
+  if(!multiTouchGesture && tap && !tap.moved && pointerDistance(pt,tap) < 9 && performance.now()-tap.time < 450){
+    const now = performance.now();
+    if(now - lastTap.time < 300 && pointerDistance(pt,lastTap) < 28){
+      lastTap = {time:0,x:0,y:0};
+      resetView();
+      return;
+    }
+    lastTap = {time:now,x:pt.x,y:pt.y};
+    handlePlotTap(e.clientX,e.clientY);
+  }
+  if(activePointers.size === 0){
+    multiTouchGesture = false;
+    tapCandidate = null;
+  }
+}
+plotWrap.addEventListener('pointerup', finishPointer);
+plotWrap.addEventListener('pointercancel', e=>{
+  activePointers.delete(e.pointerId);
+  if(activePointers.size === 0) multiTouchGesture = false;
+  drag=null; pinch=null; tapCandidate=null; cancelInertia();
+});
+plotWrap.addEventListener('dblclick', e=>{ e.preventDefault(); resetView(); });
+window.addEventListener('resize',()=>refreshPlotAfterResize({snap:true,force:true}));
+
+function attachEvents(){
+  document.getElementById('menuBtn').addEventListener('click', requestMenu);
+  document.getElementById('studyModeCard').addEventListener('click', ()=>startModeFromIntro('study'));
+  document.getElementById('examModeCard').addEventListener('click', ()=>startModeFromIntro('exam'));
+  document.getElementById('resumeBtn').addEventListener('click', resumeCurrentPuzzle);
+  document.getElementById('aboutBtn').addEventListener('click', openAbout);
+  document.getElementById('aboutCloseBtn').addEventListener('click', closeAbout);
+  const aboutPanel = document.getElementById('aboutPanel');
+  if(aboutPanel) aboutPanel.addEventListener('click', e=>{ if(e.target === aboutPanel) closeAbout(); });
+  document.getElementById('quizStartBtn').addEventListener('click', startQuiz);
+  document.getElementById('quizAgainBtn').addEventListener('click', startQuiz);
+  document.getElementById('quizDoneBtn').addEventListener('click', closeQuizModal);
+  document.getElementById('quizCloseBtn').addEventListener('click', closeQuizModal);
+  const quizPanel = document.getElementById('quizPanel');
+  if(quizPanel) quizPanel.addEventListener('click', e=>{ if(e.target === quizPanel) closeQuizModal(); });
+  document.getElementById('quizFalseBtn').addEventListener('click', ()=>submitQuizAnswer(false));
+  document.getElementById('quizTrueBtn').addEventListener('click', ()=>submitQuizAnswer(true));
+  document.getElementById('quizContinueBtn').addEventListener('click', advanceQuiz);
+  const qStatement = document.getElementById('quizStatement');
+  if(qStatement){
+    qStatement.addEventListener('pointerdown', e=>{
+      if(quizLocked || !quizRound[quizIndex]) return;
+      quizDrag = {id:e.pointerId, x:e.clientX, y:e.clientY, dx:0};
+      qStatement.setPointerCapture(e.pointerId);
+    });
+    qStatement.addEventListener('pointermove', e=>{
+      if(!quizDrag || quizDrag.id !== e.pointerId || quizLocked) return;
+      quizDrag.dx = e.clientX - quizDrag.x;
+      if(prefersReducedMotion()) return;
+      const rot = clamp(quizDrag.dx / 18, -12, 12);
+      qStatement.style.transform = `translateX(${quizDrag.dx}px) rotate(${rot}deg)`;
+    });
+    qStatement.addEventListener('pointerup', e=>{
+      if(!quizDrag || quizDrag.id !== e.pointerId) return;
+      const dx = quizDrag.dx;
+      quizDrag = null;
+      const rect = qStatement.getBoundingClientRect();
+      qStatement.style.transform = '';
+      if(Math.abs(dx) > rect.width * .30) submitQuizAnswer(dx > 0);
+    });
+    qStatement.addEventListener('pointercancel', ()=>{ quizDrag = null; qStatement.style.transform = ''; });
+  }
+  document.getElementById('hintBtn').addEventListener('click', useHint);
+  document.getElementById('formulaBtn').addEventListener('click', useFormula);
+  document.getElementById('resetViewBtn').addEventListener('click', resetView);
+  document.getElementById('autoCamBtn').addEventListener('click', toggleAutoCamera);
+  document.getElementById('rotateModeBtn').addEventListener('click', ()=>setPlotInteractionMode('rotate'));
+  document.getElementById('panModeBtn').addEventListener('click', ()=>setPlotInteractionMode('pan'));
+  document.getElementById('expandBtn').addEventListener('click', togglePlotExpanded);
+  const backdrop = document.getElementById('plotBackdrop');
+  if(backdrop) backdrop.addEventListener('click', ()=>closePlotExpanded(true));
+  const confirmPanel = document.getElementById('confirmPanel');
+  if(confirmPanel) confirmPanel.addEventListener('click', e=>{ if(e.target === confirmPanel) closeConfirmDialog('cancel'); });
+  document.getElementById('againBtn').addEventListener('click', nextPuzzle);
+  document.getElementById('closeEndBtn').addEventListener('click', closeEnd);
+  document.getElementById('shareBtn').addEventListener('click', copyResult);
+  document.querySelectorAll('.plotBtn[data-camera]').forEach(btn=>btn.addEventListener('click',()=>{ if(!btn.disabled) presetCamera(btn.dataset.camera); }));
+  window.addEventListener('keydown', e=>{
+    if(e.key === 'Escape'){
+      if(isAboutOpen()){ closeAbout(); return; }
+      if(confirmResolve){ closeConfirmDialog('cancel'); return; }
+      if(quizVisible){ closeQuizModal(); return; }
+      if(isPlotExpanded()) closePlotExpanded(true);
+      else closeEnd();
+    }
+    if(quizVisible && quizRound[quizIndex] && !quizLocked){
+      if(e.key === 'ArrowLeft'){ e.preventDefault(); submitQuizAnswer(false); return; }
+      if(e.key === 'ArrowRight'){ e.preventDefault(); submitQuizAnswer(true); return; }
+    }
+    if(introVisible && !quizVisible && e.key === 'Enter' && !quizRound[quizIndex]){
+      const mode = storageGet('pn.lastMode', examMode ? 'exam' : 'study');
+      const active = document.activeElement;
+      if(active && ['BUTTON','SUMMARY'].includes(active.tagName)) return;
+      e.preventDefault(); startModeFromIntro(mode === 'exam' ? 'exam' : 'study'); return;
+    }
+    if(/^[1-4]$/.test(e.key) && !e.metaKey && !e.ctrlKey && !e.altKey){
+      if(introVisible) return;
+      const active = document.activeElement;
+      if(active && ['INPUT','TEXTAREA','SELECT','BUTTON'].includes(active.tagName)) return;
+      const btn = document.querySelectorAll('.choice')[Number(e.key)-1];
+      if(btn && !btn.disabled){ e.preventDefault(); btn.click(); }
+    }
+  });
+  plotWrap.addEventListener('wheel', e=>{
+    e.preventDefault();
+    hideVectorChip();
+    stopFinaleOrbit(true);
+    cancelCameraMotion();
+    cancelInertia();
+    userMoved = true;
+    const factor = e.deltaY > 0 ? 1.08 : .92;
+    zoomAboutLocal(plotLocalPoint(e.clientX,e.clientY), axisRadius * factor);
+    rememberZoomBias();
+    renderPlot(lastRenderState || state);
+  }, {passive:false});
+  updatePlotHelp();
+  const coarseQuery = window.matchMedia && window.matchMedia('(pointer:coarse)');
+  if(coarseQuery && coarseQuery.addEventListener) coarseQuery.addEventListener('change', updatePlotHelp);
+  setExamMode(examMode, false, false);
+  updateIntroState();
+}
+window.__perfectlyNormalDiagnostics = {
+  shots(){ return steps.map((step,index)=>({index,kind:step.kind,j:step.j,i:step.i,shot:shotForStep(step,state,false)})); },
+  shotForStep(){ return this.shots(); },
+  camera(){ return {...camera, axisRadius, camCenter:camCenter.slice(), autoCam}; },
+  quizAudit: auditQuestionBank,
+  sampleQuizRound(){ return sampleQuizRound().map(q=>q.answer); }
+};
+
+attachEvents();
+resetStateForPuzzle();
+if(hasModeParam){
+  gameEverStarted = true;
+  showGameScreen();
+}else{
+  showIntroScreen();
+}
+if(quizParam){
+  showIntroScreen();
+  startQuiz();
+}
+
+})();
+</script>
+</body>
+</html>

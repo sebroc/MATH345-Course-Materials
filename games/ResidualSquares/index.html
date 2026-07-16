@@ -1,0 +1,3257 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-060RZGCFFW"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-060RZGCFFW');
+  </script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Residual Squares</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap" rel="stylesheet" />
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] },
+      svg: { fontCache: 'global' },
+      options: { skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'] }
+    };
+  </script>
+  <script id="mathjaxScript" defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+  <style>
+    :root {
+      --ink: #0f172a;
+      --muted: #64748b;
+      --soft: #f8fafc;
+      --edge: #e2e8f0;
+      --pink: #ec4899;
+      --green: #10b981;
+      --purple: #7c3aed;
+      --cyan: #06b6d4;
+      --amber: #f59e0b;
+      --shadow: 0 18px 55px rgba(15, 23, 42, 0.12);
+      --radius: 24px;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(125, 211, 252, 0.35), transparent 34rem),
+        radial-gradient(circle at 85% 12%, rgba(196, 181, 253, 0.35), transparent 30rem),
+        linear-gradient(135deg, #f8fbff 0%, #f6f7ff 48%, #fff7ed 100%);
+    }
+
+    button, input { font: inherit; }
+    button { touch-action: manipulation; }
+
+    .hidden { display: none !important; }
+
+    .app {
+      width: min(1240px, calc(100% - 28px));
+      margin: 0 auto;
+      padding: 18px 0 32px;
+    }
+
+    h1, h2, h3, p { margin: 0; }
+
+    .hero-banner {
+      position: relative;
+      min-height: 236px;
+      margin-bottom: 14px;
+      padding: 24px 28px;
+      overflow: hidden;
+      border-radius: 26px;
+      color: #f5f7ff;
+      background: #141838;
+      box-shadow: 0 20px 58px rgba(20, 24, 56, 0.28);
+      isolation: isolate;
+    }
+
+    .hero-banner::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: linear-gradient(90deg, rgba(20,24,56,0.98) 0%, rgba(20,24,56,0.88) 44%, rgba(20,24,56,0.18) 82%, rgba(20,24,56,0.05) 100%);
+      pointer-events: none;
+    }
+
+    .hero-art {
+      position: absolute;
+      inset: 0 0 0 auto;
+      z-index: -2;
+      width: 58%;
+      height: 100%;
+      object-fit: cover;
+      pointer-events: none;
+      opacity: 0.95;
+    }
+
+    .hero-text {
+      position: relative;
+      z-index: 1;
+      width: min(62%, 760px);
+    }
+
+    .hero-banner h1 {
+      font-family: 'Archivo Black', 'Arial Black', 'Helvetica Neue', sans-serif;
+      font-size: clamp(2.6rem, 7vw, 5.1rem);
+      line-height: 0.88;
+      letter-spacing: -0.015em;
+    }
+
+    .hero-banner h1 span {
+      display: block;
+      text-transform: uppercase;
+    }
+
+    .hero-banner .t1 { color: #f5f7ff; }
+    .hero-banner .t2 { color: var(--pink); }
+
+    .hero-sub {
+      max-width: 680px;
+      margin-top: 13px;
+      color: #c7cdf0;
+      line-height: 1.48;
+      font-size: 1rem;
+      font-weight: 650;
+    }
+
+    .info-button {
+      position: absolute;
+      right: 22px;
+      bottom: 20px;
+      z-index: 2;
+      display: grid;
+      width: 44px;
+      height: 44px;
+      padding: 0;
+      place-items: center;
+      border: 1px solid rgba(199,205,240,0.42);
+      border-radius: 50%;
+      color: #f5f7ff;
+      background: rgba(255,255,255,0.12);
+      box-shadow: 0 10px 28px rgba(15,23,42,0.2);
+      backdrop-filter: blur(12px);
+      font-size: 1.35rem;
+      line-height: 1;
+      font-weight: 950;
+      cursor: pointer;
+      transition: transform 0.16s ease, background 0.16s ease, border-color 0.16s ease;
+    }
+    .info-button:hover { transform: translateY(-2px); background: rgba(255,255,255,0.2); border-color: rgba(103,232,249,0.75); }
+    .info-button:focus-visible { outline: 4px solid rgba(34,211,238,0.38); outline-offset: 3px; }
+
+    .info-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      display: grid;
+      place-items: center;
+      padding: 18px;
+      background: rgba(20,24,56,0.5);
+      backdrop-filter: blur(8px);
+    }
+    .info-overlay[hidden] { display: none; }
+    .info-dialog {
+      width: min(570px, 100%);
+      max-height: calc(100vh - 36px);
+      overflow: auto;
+      padding: 22px;
+      border: 1px solid rgba(196,181,253,0.55);
+      border-radius: 24px;
+      color: #334155;
+      background: rgba(255,255,255,0.97);
+      box-shadow: 0 28px 90px rgba(15,23,42,0.28);
+    }
+    .info-dialog h2 { color: #1e293b; font-size: 1.45rem; letter-spacing: -0.035em; }
+    .info-list { display: grid; gap: 11px; margin-top: 15px; }
+    .info-list p { color: #475569; line-height: 1.45; overflow-wrap: anywhere; }
+    .info-list strong { color: #1e293b; }
+    .info-list a { color: var(--purple); text-decoration-thickness: 1.5px; text-underline-offset: 2px; }
+    .info-list a:hover { color: #5b21b6; text-decoration-thickness: 2px; }
+    .info-actions { display: flex; justify-content: flex-end; margin-top: 18px; }
+    .info-close {
+      min-width: 92px;
+      padding: 10px 17px;
+      border: 0;
+      border-radius: 999px;
+      color: #fff;
+      background: linear-gradient(135deg, var(--purple), #6d28d9);
+      box-shadow: 0 10px 24px rgba(124,58,237,0.24);
+      font-weight: 950;
+      cursor: pointer;
+    }
+    .info-close:hover { transform: translateY(-1px); }
+    .info-close:focus-visible { outline: 4px solid rgba(6,182,212,0.28); outline-offset: 2px; }
+
+    .tip-dialog { width: min(640px, 100%); }
+    .tip-lead {
+      margin-top: 14px;
+      color: #475569;
+      line-height: 1.5;
+    }
+    .tip-formula {
+      margin-top: 13px;
+      padding: 11px 13px;
+      border: 1px solid rgba(196,181,253,0.62);
+      border-radius: 16px;
+      color: #312e81;
+      background: linear-gradient(135deg, rgba(245,243,255,0.96), rgba(239,246,255,0.96));
+      font-weight: 800;
+      line-height: 1.55;
+    }
+    .tip-formula mjx-container { max-width: 100%; overflow-x: auto; overflow-y: hidden; }
+    .tip-gradient-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 5px 18px;
+      margin-top: 2px;
+    }
+    .tip-gradient-row > span {
+      flex: 0 0 auto;
+      max-width: 100%;
+      white-space: nowrap;
+    }
+    .tip-rule {
+      margin-top: 11px;
+      color: #334155;
+      font-weight: 800;
+      line-height: 1.45;
+    }
+    .tip-advice { display: grid; gap: 8px; margin-top: 12px; }
+    .tip-advice-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border: 1px solid var(--edge);
+      border-radius: 14px;
+      background: #f8fafc;
+    }
+    .tip-moment { color: #475569; font-weight: 800; font-variant-numeric: tabular-nums; }
+    .tip-direction {
+      justify-self: end;
+      padding: 6px 10px;
+      border-radius: 999px;
+      white-space: nowrap;
+      font-weight: 950;
+    }
+    .tip-direction.raise { color: #047857; background: #d1fae5; }
+    .tip-direction.lower { color: #be123c; background: #ffe4e6; }
+    .tip-direction.hold { color: #475569; background: #e2e8f0; }
+    .tip-note {
+      margin-top: 11px;
+      padding: 9px 11px;
+      border-left: 4px solid var(--cyan);
+      border-radius: 0 12px 12px 0;
+      color: #475569;
+      background: #ecfeff;
+      line-height: 1.45;
+    }
+
+    .hero-banner.slim {
+      min-height: 138px;
+      padding: 14px 20px 15px;
+      border-radius: 22px;
+    }
+
+    .hero-banner.slim .hero-art { width: 48%; opacity: 0.78; }
+    .hero-banner.slim .hero-text { width: min(69%, 820px); }
+    .hero-banner.slim h1 { font-size: clamp(1.65rem, 3.7vw, 2.45rem); }
+    .hero-banner.slim .hero-sub { margin-top: 7px; font-size: 0.94rem; }
+
+    .back-button {
+      position: absolute;
+      top: 16px;
+      right: 20px;
+      z-index: 2;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin: 0;
+      padding: 6px 10px;
+      border: 1px solid rgba(199,205,240,0.34);
+      border-radius: 999px;
+      color: #e7eaff;
+      background: rgba(255,255,255,0.08);
+      font-size: 0.78rem;
+      font-weight: 900;
+      cursor: pointer;
+      backdrop-filter: blur(8px);
+    }
+
+    .back-button:hover { background: rgba(255,255,255,0.14); }
+
+    .slim-title-row {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .level-best-pill {
+      position: absolute;
+      right: 18px;
+      bottom: 16px;
+      z-index: 2;
+      margin: 0;
+      background: rgba(255,255,255,0.92);
+    }
+
+    .best-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      border-radius: 999px;
+      padding: 6px 11px;
+      background: #eef2ff;
+      color: #334155;
+      font-weight: 950;
+      font-size: 0.95rem;
+      border: 1px solid rgba(203,213,225,0.6);
+      white-space: nowrap;
+    }
+    .best-pill .emoji { font-size: 1.12rem; line-height: 1; }
+    .best-pill.gold { background: #fef3c7; color: #78350f; border-color: rgba(251,191,36,0.6); }
+    .best-pill.silver { background: #e2e8f0; color: #334155; border-color: rgba(148,163,184,0.7); }
+    .best-pill.bronze { background: #ffedd5; color: #7c2d12; border-color: rgba(251,146,60,0.62); }
+    .best-pill.just-awarded { animation: medalPop 0.9s ease both; }
+    @keyframes medalPop {
+      0% { transform: scale(1); }
+      34% { transform: scale(1.22) rotate(-2deg); box-shadow: 0 0 0 9px rgba(251,191,36,0.20); }
+      100% { transform: scale(1); }
+    }
+
+    .intro-stack {
+      display: grid;
+      gap: 14px;
+    }
+
+    .intro-card,
+    .cheatsheet {
+      border: 1px solid rgba(226,232,240,0.96);
+      border-radius: 22px;
+      background: rgba(255,255,255,0.9);
+      box-shadow: 0 12px 40px rgba(15,23,42,0.08);
+    }
+
+    .cheatsheet { overflow: hidden; }
+
+    .cheatsheet summary {
+      position: relative;
+      padding: 16px 48px 16px 18px;
+      color: #1e293b;
+      font-weight: 950;
+      cursor: pointer;
+      list-style: none;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .cheatsheet summary::-webkit-details-marker { display: none; }
+    .cheatsheet summary::after {
+      content: '⌄';
+      position: absolute;
+      right: 18px;
+      top: 50%;
+      transform: translateY(-52%) rotate(0deg);
+      color: var(--purple);
+      font-size: 1.45rem;
+      transition: transform 0.18s ease;
+    }
+    .cheatsheet[open] summary::after { transform: translateY(-46%) rotate(180deg); }
+    .cheatsheet[open] summary { border-bottom: 1px solid var(--edge); }
+
+    .cheatsheet-body {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      padding: 14px 16px 16px;
+      line-height: 1.35;
+    }
+
+    .cheat-group {
+      min-width: 0;
+      padding: 11px 13px;
+      border: 1px solid var(--edge);
+      border-radius: 15px;
+      background: #f8fafc;
+    }
+
+    .cheat-group h3 {
+      margin: 0 0 5px;
+      color: #64748b;
+      font-size: 0.72rem;
+      font-weight: 950;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+
+    .cheat-list {
+      display: grid;
+      margin: 0;
+    }
+
+    .cheat-list > div {
+      display: grid;
+      grid-template-columns: 82px minmax(0, 1fr);
+      gap: 10px;
+      align-items: baseline;
+      padding: 7px 0;
+      border-top: 1px solid rgba(226, 232, 240, 0.9);
+    }
+
+    .cheat-list > div:first-child {
+      border-top: 0;
+    }
+
+    .cheat-list dt {
+      color: #334155;
+      font-size: 0.8rem;
+      font-weight: 950;
+    }
+
+    .cheat-list dd {
+      min-width: 0;
+      margin: 0;
+      overflow-x: auto;
+      overflow-y: hidden;
+      color: #334155;
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .cheat-list dd mjx-container {
+      max-width: 100%;
+      overflow-x: auto;
+      overflow-y: hidden;
+    }
+
+    .cheat-note {
+      grid-column: 1 / -1;
+      padding: 9px 11px;
+      border-left: 4px solid var(--cyan);
+      border-radius: 0 12px 12px 0;
+      color: #475569;
+      background: #ecfeff;
+      font-size: 0.86rem;
+      line-height: 1.4;
+    }
+
+    .howto-card {
+      padding: 15px 17px;
+      color: #334155;
+      background:
+        linear-gradient(
+          135deg,
+          rgba(253, 242, 248, 0.96),
+          rgba(252, 231, 243, 0.9)
+        );
+      border-color: rgba(244,114,182,0.42);
+    }
+
+    .howto-card h2 {
+      color: #1e293b;
+      font-size: 1rem;
+      font-weight: 950;
+      letter-spacing: -0.02em;
+    }
+
+    .howto-steps {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .howto-step {
+      display: grid;
+      grid-template-columns: 25px minmax(0, 1fr);
+      gap: 8px;
+      align-items: start;
+      min-width: 0;
+      padding: 9px 10px;
+      border: 1px solid rgba(244, 114, 182, 0.28);
+      border-radius: 13px;
+      background: rgba(255, 255, 255, 0.72);
+    }
+
+    .step-number {
+      display: grid;
+      width: 23px;
+      height: 23px;
+      place-items: center;
+      border-radius: 50%;
+      color: #fff;
+      background: var(--pink);
+      font-size: 0.72rem;
+      font-weight: 950;
+    }
+
+    .howto-step p {
+      color: #334155;
+      font-size: 0.88rem;
+      line-height: 1.35;
+    }
+
+    .howto-step strong {
+      color: #1e293b;
+    }
+
+    .howto-legend,
+    .howto-score {
+      margin-top: 9px;
+      color: #334155;
+      font-size: 0.88rem;
+      line-height: 1.4;
+    }
+
+    .howto-legend {
+      padding-top: 9px;
+      border-top: 1px solid rgba(244, 114, 182, 0.28);
+    }
+
+    .keyboard-note {
+      margin-top: 5px;
+      color: #64748b;
+      font-size: 0.79rem;
+      line-height: 1.35;
+    }
+
+    .howto-save {
+      margin-top: 5px;
+      color: #64748b;
+      font-size: 0.79rem;
+      line-height: 1.35;
+    }
+
+    .mode-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .mode-button {
+      display: grid;
+      grid-template-rows: 92px auto auto;
+      gap: 10px;
+      min-width: 0;
+      padding: 12px;
+      overflow: hidden;
+      text-align: left;
+      color: #1e293b;
+      border: 1px solid rgba(203,213,225,0.9);
+      border-radius: 22px;
+      background: rgba(255,255,255,0.94);
+      box-shadow: 0 12px 34px rgba(15,23,42,0.08);
+      cursor: pointer;
+      transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
+    }
+
+    .mode-button:hover {
+      transform: translateY(-3px);
+      border-color: rgba(124,58,237,0.45);
+      box-shadow: 0 18px 42px rgba(15,23,42,0.12);
+    }
+    .mode-button:active { transform: translateY(-1px); }
+    .mode-button:focus-visible { outline: 4px solid rgba(6,182,212,0.28); outline-offset: 2px; }
+
+    .mode-preview {
+      width: 100%;
+      height: 92px;
+      overflow: hidden;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #f8fbff, #eef2ff);
+      border: 1px solid #e2e8f0;
+    }
+    .mode-preview svg { display: block; width: 100%; height: 100%; }
+
+    .mode-kicker {
+      display: block;
+      color: #7c3aed;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      font-size: 0.66rem;
+      font-weight: 950;
+    }
+    .mode-name {
+      display: block;
+      margin-top: 3px;
+      font-size: 1.1rem;
+      font-weight: 950;
+      letter-spacing: -0.025em;
+    }
+    .mode-tagline {
+      display: block;
+      margin-top: 4px;
+      color: #64748b;
+      line-height: 1.35;
+      font-size: 0.86rem;
+      font-weight: 650;
+    }
+    .mode-record { justify-self: start; font-size: 0.82rem; }
+
+    .game-card {
+      background: rgba(255,255,255,0.88);
+      border: 1px solid rgba(226,232,240,0.94);
+      box-shadow: var(--shadow);
+      border-radius: var(--radius);
+      padding: 14px;
+      overflow: hidden;
+    }
+
+    .visually-hidden {
+      position: absolute !important;
+      width: 1px !important;
+      height: 1px !important;
+      padding: 0 !important;
+      margin: -1px !important;
+      overflow: hidden !important;
+      clip: rect(0, 0, 0, 0) !important;
+      white-space: nowrap !important;
+      border: 0 !important;
+    }
+
+    .play-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(288px, 326px);
+      gap: 12px;
+      align-items: start;
+    }
+
+    .plot-column { min-width: 0; }
+
+    .canvas-shell {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1.52 / 1;
+      min-height: 330px;
+      max-height: 500px;
+      border-radius: 22px;
+      border: 1px solid #dbe4f0;
+      background: #fff;
+      overflow: hidden;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.9), 0 10px 34px rgba(15,23,42,0.08);
+      touch-action: none;
+    }
+
+    #plotCanvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+      touch-action: none;
+      cursor: crosshair;
+      outline: none;
+    }
+
+    .canvas-shell:focus-within {
+      box-shadow: inset 0 0 0 3px rgba(6,182,212,0.22), 0 10px 34px rgba(15,23,42,0.08);
+    }
+
+    .strip-panel, .canvas-shell, .plot-card, .controls {
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .plot-card {
+      position: absolute;
+      left: 12px;
+      top: 12px;
+      z-index: 3;
+      border-radius: 14px;
+      border: 1px solid rgba(203,213,225,0.85);
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 12px 30px rgba(15,23,42,0.10);
+      padding: 8px 11px;
+      pointer-events: none;
+      transition: left 0.22s ease, top 0.22s ease;
+    }
+
+    .area-card { min-width: 132px; }
+    .area-card .label {
+      display: block;
+      text-transform: uppercase;
+      font-weight: 950;
+      letter-spacing: 0.08em;
+      font-size: 0.62rem;
+      color: #64748b;
+    }
+    .area-card strong {
+      display: block;
+      font-size: 1.28rem;
+      letter-spacing: -0.03em;
+      font-variant-numeric: tabular-nums;
+      line-height: 1.15;
+    }
+    .area-card small {
+      display: block;
+      color: #64748b;
+      font-weight: 750;
+      font-variant-numeric: tabular-nums;
+      font-size: 0.74rem;
+    }
+
+    .eq-card { font-weight: 850; font-size: 0.92rem; max-width: 300px; }
+    .eq-row {
+      display: flex;
+      align-items: baseline;
+      gap: 3px;
+      flex-wrap: wrap;
+      line-height: 1.35;
+      white-space: nowrap;
+    }
+    .eq-row .math { display: inline-flex; align-items: baseline; }
+    .num { font-variant-numeric: tabular-nums; }
+    .num.purple { color: var(--purple); }
+    .num.cyan { color: #0891b2; }
+    .num.amber { color: #b45309; }
+    .num.green { color: #059669; }
+    .eq-opt {
+      color: #047857;
+      font-size: 0.84rem;
+      opacity: 0;
+      transform: translateY(-2px);
+      transition: opacity 0.18s ease, transform 0.18s ease;
+    }
+    .eq-opt.visible { opacity: 1; transform: translateY(0); }
+
+    .quad-card {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 10px;
+      padding: 11px 14px 10px;
+      border: 1px solid rgba(203,213,225,0.9);
+      border-radius: 18px;
+      background: rgba(255,255,255,0.9);
+      box-shadow: 0 10px 28px rgba(15,23,42,0.08);
+      pointer-events: auto;
+    }
+    .quad-card .slider-row { min-width: 0; }
+    .quad-card .slider-row.a { --slider-color: var(--amber); }
+    .quad-card .slider-row.b { --slider-color: var(--cyan); }
+    .quad-card .slider-row.c { --slider-color: var(--purple); }
+    .quad-card .slider-row label {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 8px;
+      font-weight: 900;
+      font-size: 0.85rem;
+      color: #334155;
+      margin-bottom: 2px;
+    }
+    .quad-card input[type="range"] {
+      --fill: 50%;
+      appearance: none;
+      -webkit-appearance: none;
+      width: 100%;
+      height: 6px;
+      margin: 6px 0;
+      border: 0;
+      border-radius: 999px;
+      outline: none;
+      background: linear-gradient(to right, var(--slider-color) 0 var(--fill), #dbe3ef var(--fill) 100%);
+    }
+    .quad-card input[type="range"]::-webkit-slider-thumb {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      border: 0;
+      border-radius: 50%;
+      background: var(--slider-color);
+      box-shadow: 0 1px 3px rgba(15,23,42,0.2);
+      cursor: pointer;
+    }
+    .quad-card input[type="range"]::-moz-range-track,
+    .quad-card input[type="range"]::-moz-range-progress {
+      height: 6px;
+      border: 0;
+      background: transparent;
+    }
+    .quad-card input[type="range"]::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+      border: 0;
+      border-radius: 50%;
+      background: var(--slider-color);
+      box-shadow: 0 1px 3px rgba(15,23,42,0.2);
+      cursor: pointer;
+    }
+    .quad-card input[type="range"]:focus-visible { box-shadow: 0 0 0 4px rgba(6,182,212,0.22); }
+
+    .gauge-card {
+      width: min(260px, calc(100% - 24px));
+      border-radius: 16px;
+      border: 1px solid rgba(203,213,225,0.9);
+      background: rgba(255,255,255,0.84);
+      backdrop-filter: blur(12px);
+      padding: 7px 9px 6px;
+      box-shadow: 0 14px 32px rgba(15,23,42,0.10);
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 7px;
+      align-items: start;
+    }
+    .gauge-unit { min-width: 0; }
+    .gauge-label {
+      text-align: center;
+      font-weight: 950;
+      font-size: 0.82rem;
+      color: #334155;
+      height: 22px;
+      line-height: 1.1;
+      white-space: nowrap;
+    }
+    .gauge-card canvas { display: block; width: 100%; height: 34px; }
+    .gauge-value {
+      text-align: center;
+      font-weight: 950;
+      font-variant-numeric: tabular-nums;
+      color: #0f172a;
+      font-size: 0.78rem;
+      line-height: 1;
+    }
+
+    .recap {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: min(92%, 450px);
+      border-radius: 22px;
+      background: rgba(255,255,255,0.95);
+      border: 1px solid #dbe4f0;
+      box-shadow: 0 24px 80px rgba(15,23,42,0.22);
+      padding: 16px;
+      z-index: 6;
+      backdrop-filter: blur(14px);
+      max-height: calc(100% - 20px);
+      overflow: auto;
+    }
+    .recap h3 { letter-spacing: -0.03em; font-size: 1.22rem; }
+    .recap-body { display: grid; gap: 7px; margin-top: 7px; }
+    .recap-body p { color: #475569; line-height: 1.42; }
+    .recap-body .coefficient-check { padding: 7px 9px; border-radius: 12px; background: #f8fafc; border: 1px solid var(--edge); }
+    .recap-body .retry-line { color: #1e3a8a; font-weight: 820; }
+    .recap-actions { margin-top: 12px; display: flex; gap: 8px; flex-wrap: wrap; }
+
+    .strip-panel {
+      border-radius: 22px;
+      border: 1px solid var(--edge);
+      background: #ffffff;
+      box-shadow: 0 10px 34px rgba(15,23,42,0.06);
+      padding: 12px;
+      height: min(540px, calc(100vh - 190px));
+      min-height: 388px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .strip-scroll {
+      overflow: auto;
+      border: 1px solid var(--edge);
+      border-radius: 16px;
+      background: #f8fafc;
+      flex: 1;
+      min-height: 0;
+    }
+
+    .strip-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      font-size: 0.79rem;
+      font-variant-numeric: tabular-nums;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .strip-table th {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      background: #f8fafc;
+      color: #334155;
+      padding: 7px 5px;
+      border-bottom: 1px solid var(--edge);
+      font-weight: 950;
+      white-space: nowrap;
+      text-align: center;
+    }
+
+    .strip-table td {
+      padding: 7px 6px;
+      text-align: center;
+      border-bottom: 1px solid rgba(226,232,240,0.75);
+      color: #334155;
+      cursor: pointer;
+      min-width: 38px;
+      transition: background 0.12s ease, color 0.12s ease;
+    }
+
+    .strip-table.quad { font-size: 0.74rem; table-layout: fixed; }
+    .strip-table.quad td { min-width: 30px; padding: 6px 3px; }
+    .strip-table.quad td.op, .strip-table.quad th.op { min-width: 10px; width: 10px; padding: 6px 0; }
+    .strip-table.quad .coef { font-size: 0.66rem; }
+    .strip-table td.op, .strip-table th.op {
+      color: #94a3b8;
+      font-weight: 850;
+      min-width: 13px;
+      width: 13px;
+      padding: 7px 1px;
+      text-align: center;
+      cursor: default;
+    }
+    .strip-table .coef { font-size: 0.72rem; color: #64748b; }
+    .strip-table .coef .num { font-weight: 950; }
+    .strip-table .coef-dot { color: #94a3b8; margin-left: 1px; }
+    .strip-table .data-sep { border-left: 2px solid #e2e8f0; }
+    .strip-table tr.highlighted td:not(.op) {
+      outline: 2px solid rgba(245,158,11,0.8);
+      outline-offset: -2px;
+      background: rgba(254,243,199,0.96) !important;
+      color: #78350f;
+      font-weight: 950;
+    }
+
+    .panel-blurb {
+      margin-top: 9px;
+      padding: 8px 10px;
+      border-radius: 14px;
+      background: #f8fafc;
+      border: 1px solid var(--edge);
+      color: #475569;
+      line-height: 1.4;
+      font-size: 0.85rem;
+    }
+
+    .controls {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      margin-top: 10px;
+    }
+
+    .action {
+      border: 0;
+      color: white;
+      background: linear-gradient(135deg, #2563eb, #7c3aed);
+      padding: 11px 15px;
+      border-radius: 999px;
+      font-weight: 950;
+      cursor: pointer;
+      box-shadow: 0 10px 25px rgba(37,99,235,0.22);
+      min-height: 42px;
+    }
+
+    .action.primary-big {
+      background: linear-gradient(135deg, #ec4899, #8b5cf6);
+      box-shadow: 0 12px 30px rgba(236,72,153,0.30);
+      font-size: 1.05rem;
+      padding: 13px 40px;
+      min-width: min(300px, 100%);
+      letter-spacing: 0.01em;
+    }
+    .action.primary-big:active { transform: translateY(1px); }
+
+    .action.secondary {
+      color: #334155;
+      background: #fff;
+      border: 1px solid #dbe3ef;
+      box-shadow: 0 8px 20px rgba(15,23,42,0.05);
+    }
+
+    .action.ghost {
+      color: #475569;
+      background: #f8fafc;
+      border: 1px solid #dbe3ef;
+      box-shadow: none;
+    }
+
+    .action:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+
+    .columns-toggle { display: none; }
+
+    @media (max-width: 920px) {
+      .play-layout { grid-template-columns: 1fr; }
+      .strip-panel { display: none; height: 470px; }
+      .play-layout.show-columns .strip-panel { display: flex; }
+      .columns-toggle { display: inline-flex; }
+      .canvas-shell { min-height: 350px; max-height: 64vh; aspect-ratio: 1.12 / 1; }
+    }
+
+    @media (max-width: 700px) {
+      .hero-banner.slim .hero-art { display: none; }
+      .hero-banner.slim .hero-text { width: 100%; }
+      .hero-banner.slim .hero-sub { max-width: calc(100% - 112px); }
+      .hero-banner.slim::after { background: rgba(20,24,56,0.96); }
+    }
+
+    @media (max-width: 640px) {
+      .cheatsheet-body {
+        grid-template-columns: 1fr;
+        padding: 12px;
+      }
+      .cheat-note { grid-column: auto; }
+      .cheat-list > div {
+        grid-template-columns: 76px minmax(0, 1fr);
+      }
+      .howto-steps { grid-template-columns: 1fr; }
+      .mode-grid { grid-template-columns: 1fr; }
+      .mode-button { grid-template-columns: 118px minmax(0, 1fr); grid-template-rows: auto auto; align-items: center; }
+      .mode-preview { grid-row: 1 / span 2; height: 100%; min-height: 112px; }
+      .mode-record { align-self: start; }
+      .hero-banner:not(.slim) .hero-text { width: 86%; }
+      .hero-banner:not(.slim) .hero-art { width: 72%; opacity: 0.52; }
+    }
+
+    @media (max-width: 520px) {
+      .app { width: min(100% - 16px, 1240px); padding-top: 10px; }
+      .hero-banner { min-height: 224px; padding: 20px 18px; border-radius: 22px; }
+      .info-button { right: 16px; bottom: 16px; width: 42px; height: 42px; }
+      .hero-banner h1 { font-size: clamp(2.35rem, 15vw, 3.65rem); }
+      .hero-banner.slim { min-height: 136px; padding: 13px 15px 14px; }
+      .hero-banner.slim h1 { font-size: 1.72rem; }
+      .back-button { top: 14px; right: 15px; }
+      .slim-title-row { align-items: flex-start; flex-direction: column; gap: 8px; }
+      .level-best-pill { right: 15px; bottom: 16px; }
+      .game-card { padding: 10px; border-radius: 20px; }
+      .intro-card, .cheatsheet { border-radius: 18px; }
+      .mode-button { grid-template-columns: 92px minmax(0, 1fr); padding: 10px; border-radius: 18px; }
+      .mode-preview { min-height: 102px; }
+      .canvas-shell { min-height: 340px; border-radius: 18px; }
+      .gauge-card { width: min(254px, calc(100% - 18px)); padding: 6px 8px 5px; gap: 6px; }
+      .gauge-card canvas { height: 30px; }
+      .quad-card { gap: 7px; padding: 10px; }
+      .quad-card .slider-row label { gap: 4px; font-size: 0.74rem; }
+      .canvas-shell.quad-mode .eq-card { display: none; }
+      .controls .action { flex: 1 1 auto; }
+      .strip-table { font-size: 0.74rem; }
+      .strip-table:not(.quad) td { padding: 6px 5px; min-width: 36px; }
+      .strip-table.quad td { min-width: 28px; padding: 6px 2px; }
+      .strip-table.quad td.op, .strip-table.quad th.op { min-width: 9px; width: 9px; padding: 6px 0; }
+      .recap { padding: 13px; }
+      .recap-body { font-size: 0.88rem; }
+      .tip-advice-row { grid-template-columns: 1fr; }
+      .tip-direction { justify-self: start; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <section id="introScreen" class="intro-stack" aria-label="Residual Squares mode menu">
+      <header class="hero-banner">
+        <svg class="hero-art" viewBox="0 0 400 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <rect x="246" y="18" width="68" height="68" rx="5" fill="#22d3ee" fill-opacity="0.82" />
+          <circle cx="246" cy="18" r="5" fill="#67e8f9" />
+          <rect x="198" y="55" width="58" height="58" rx="5" fill="#ec4899" fill-opacity="0.86" />
+          <circle cx="256" cy="55" r="5" fill="#f9a8d4" />
+          <rect x="305" y="78" width="48" height="48" rx="4" fill="#8b5cf6" fill-opacity="0.83" />
+          <circle cx="353" cy="126" r="5" fill="#c4b5fd" />
+          <rect x="158" y="102" width="42" height="42" rx="4" fill="#fbbf24" fill-opacity="0.86" />
+          <circle cx="158" cy="144" r="4.5" fill="#fde68a" />
+          <rect x="267" y="137" width="36" height="36" rx="4" fill="#10b981" fill-opacity="0.82" />
+          <circle cx="303" cy="137" r="4.5" fill="#6ee7b7" />
+          <rect x="123" y="62" width="31" height="31" rx="4" fill="#8b5cf6" fill-opacity="0.8" />
+          <circle cx="123" cy="62" r="4" fill="#c4b5fd" />
+          <rect x="342" y="35" width="25" height="25" rx="3" fill="#fbbf24" fill-opacity="0.85" />
+          <circle cx="367" cy="35" r="3.8" fill="#fde68a" />
+          <rect x="91" y="128" width="20" height="20" rx="3" fill="#22d3ee" fill-opacity="0.85" />
+          <circle cx="91" cy="148" r="3.5" fill="#67e8f9" />
+          <rect x="-62" y="104" width="560" height="10" rx="5" fill="#ffffff" fill-opacity="0.92" transform="rotate(-24 200 120)" />
+        </svg>
+        <div class="hero-text">
+          <h1><span class="t1">Residual</span><span class="t2">Squares</span></h1>
+          <p class="hero-sub">An interactive least-squares lab: shrink residuals, balance the normal equations, and bend polynomial models.</p>
+        </div>
+        <button id="infoBtn" class="info-button" type="button" aria-label="About Residual Squares" aria-haspopup="dialog">?</button>
+      </header>
+
+      <details id="cheatsheet" class="cheatsheet">
+        <summary>Least-squares cheatsheet</summary>
+
+        <div class="cheatsheet-body">
+          <section class="cheat-group" aria-labelledby="scalarCheatTitle">
+            <h3 id="scalarCheatTitle">Scalar view</h3>
+
+            <dl class="cheat-list">
+              <div>
+                <dt>Model</dt>
+                <dd>\(\hat y_i=b+mx_i\)</dd>
+              </div>
+
+              <div>
+                <dt>Residual</dt>
+                <dd>\(r_i=y_i-\hat y_i\)</dd>
+              </div>
+
+              <div>
+                <dt>Goal</dt>
+                <dd>Minimize \(\mathrm{SSE}(b,m)=\sum_i r_i^2\)</dd>
+              </div>
+
+              <div>
+                <dt>Picture</dt>
+                <dd>Square side \(=|r_i|\); area \(=r_i^2\)</dd>
+              </div>
+            </dl>
+          </section>
+
+          <section class="cheat-group" aria-labelledby="vectorCheatTitle">
+            <h3 id="vectorCheatTitle">Vector view</h3>
+
+            <dl class="cheat-list">
+              <div>
+                <dt>Design</dt>
+                <dd>\(X=[\,\mathbf{1}\;\mathbf{x}\,]\), \(\beta=(b,m)^\top\)</dd>
+              </div>
+
+              <div>
+                <dt>Prediction</dt>
+                <dd>\(\hat{\mathbf{y}}=X\beta\)</dd>
+              </div>
+
+              <div>
+                <dt>Projection</dt>
+                <dd>\(\hat{\mathbf{y}}=\mathrm{proj}_{\mathrm{col}(X)}(\mathbf{y})\)</dd>
+              </div>
+
+              <div>
+                <dt>Optimum</dt>
+                <dd>\(X^\top\mathbf{r}=\mathbf{0}\)</dd>
+              </div>
+
+              <div>
+                <dt>For a line</dt>
+                <dd>\(\sum_i r_i=0,\quad \sum_i x_i r_i=0\)</dd>
+              </div>
+            </dl>
+          </section>
+
+          <p class="cheat-note">
+            <strong>Quadratic:</strong> add \(\mathbf{x}^2\); also require
+            \(\sum_i x_i^2r_i=0\).
+          </p>
+        </div>
+      </details>
+
+      <section class="intro-card howto-card" aria-labelledby="howtoTitle">
+        <h2 id="howtoTitle">How to play</h2>
+
+        <div class="howto-steps" aria-label="Three steps">
+          <div class="howto-step">
+            <span class="step-number" aria-hidden="true">1</span>
+            <p><strong>Adjust.</strong> Move the pink model.</p>
+          </div>
+
+          <div class="howto-step">
+            <span class="step-number" aria-hidden="true">2</span>
+            <p>
+              <strong>Aim.</strong> Shrink blue square area.
+              Gauge mode: both dials to zero.
+            </p>
+          </div>
+
+          <div class="howto-step">
+            <span class="step-number" aria-hidden="true">3</span>
+            <p><strong>Lock.</strong> Green reveals the least-squares fit.</p>
+          </div>
+        </div>
+
+        <p class="howto-legend">
+          <strong>Dots</strong> = data ·
+          <strong>Pink</strong> = yours ·
+          <strong>Green</strong> = least-squares fit ·
+          <strong>Blue area</strong> = \(r_i^2\)
+        </p>
+
+        <p class="howto-score">
+          <strong>Medal</strong> = your total area ÷ minimum area · lower is better
+        </p>
+
+        <p class="keyboard-note">
+          <strong>Keys</strong>: B/M or C/B/A · arrows nudge · Shift = larger step
+        </p>
+
+        <p class="howto-save">
+          One lock per cloud · best result saved on this device
+        </p>
+      </section>
+
+      <div id="modeGrid" class="mode-grid" aria-label="Choose a game mode"></div>
+    </section>
+
+    <section id="gameScreen" class="hidden" aria-label="Residual Squares game">
+      <header class="hero-banner slim">
+        <svg class="hero-art" viewBox="0 0 400 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <rect x="246" y="18" width="68" height="68" rx="5" fill="#22d3ee" fill-opacity="0.82" />
+          <circle cx="246" cy="18" r="5" fill="#67e8f9" />
+          <rect x="198" y="55" width="58" height="58" rx="5" fill="#ec4899" fill-opacity="0.86" />
+          <circle cx="256" cy="55" r="5" fill="#f9a8d4" />
+          <rect x="305" y="78" width="48" height="48" rx="4" fill="#8b5cf6" fill-opacity="0.83" />
+          <circle cx="353" cy="126" r="5" fill="#c4b5fd" />
+          <rect x="158" y="102" width="42" height="42" rx="4" fill="#fbbf24" fill-opacity="0.86" />
+          <circle cx="158" cy="144" r="4.5" fill="#fde68a" />
+          <rect x="267" y="137" width="36" height="36" rx="4" fill="#10b981" fill-opacity="0.82" />
+          <circle cx="303" cy="137" r="4.5" fill="#6ee7b7" />
+          <rect x="123" y="62" width="31" height="31" rx="4" fill="#8b5cf6" fill-opacity="0.8" />
+          <circle cx="123" cy="62" r="4" fill="#c4b5fd" />
+          <rect x="-62" y="104" width="560" height="10" rx="5" fill="#ffffff" fill-opacity="0.92" transform="rotate(-24 200 120)" />
+        </svg>
+        <button id="backBtn" class="back-button" type="button">⟵ all modes</button>
+        <div class="hero-text">
+          <div class="slim-title-row">
+            <h1><span class="t1">Residual</span><span class="t2">Squares</span></h1>
+          </div>
+          <p id="gameSubtitle" class="hero-sub"></p>
+        </div>
+        <span id="levelBestPill" class="best-pill level-best-pill" aria-live="polite">best —</span>
+      </header>
+
+      <section class="game-card">
+        <div id="playLayout" class="play-layout">
+          <div class="plot-column">
+            <div id="quadCard" class="quad-card hidden" aria-label="Quadratic coefficient sliders">
+              <div class="slider-row c">
+                <label><span>\(c\) · lifts</span><span id="cValue" class="num purple">0.00</span></label>
+                <input id="cSlider" type="range" min="-4" max="9" step="0.05" value="0" aria-keyshortcuts="c" />
+              </div>
+              <div class="slider-row b">
+                <label><span>\(b\,x\) · tilts</span><span id="qbValue" class="num cyan">0.00</span></label>
+                <input id="bSlider" type="range" min="-3" max="3" step="0.02" value="0" aria-keyshortcuts="b" />
+              </div>
+              <div class="slider-row a">
+                <label><span>\(a\,x^2\) · bends</span><span id="aValue" class="num amber">0.00</span></label>
+                <input id="aSlider" type="range" min="-0.35" max="0.35" step="0.005" value="0" aria-keyshortcuts="a" />
+              </div>
+            </div>
+
+            <div class="canvas-shell" id="canvasShell">
+              <canvas id="plotCanvas" tabindex="0" aria-describedby="gameKeyboardHint" aria-label="Interactive regression plot"></canvas>
+
+              <div id="areaCard" class="plot-card area-card" aria-live="polite">
+                <span class="label">total area</span>
+                <strong id="areaMain">—</strong>
+                <small id="areaSub">drag to start</small>
+              </div>
+
+              <div id="eqCard" class="plot-card eq-card" aria-live="polite"></div>
+
+              <div id="gaugePanel" class="plot-card gauge-card gauge-panel hidden" aria-hidden="true">
+                <div id="gaugeCard0" class="gauge-unit">
+                  <div class="gauge-label">\(\sum_i r_i\)</div>
+                  <canvas id="gauge0"></canvas>
+                  <div id="gauge0Value" class="gauge-value">0.0</div>
+                </div>
+                <div id="gaugeCard1" class="gauge-unit">
+                  <div class="gauge-label">\(\sum_i x_i r_i\)</div>
+                  <canvas id="gauge1"></canvas>
+                  <div id="gauge1Value" class="gauge-value">0.0</div>
+                </div>
+              </div>
+
+              <div id="recap" class="recap hidden" role="dialog" aria-live="polite" aria-labelledby="recapTitle">
+                <h3 id="recapTitle">Round complete</h3>
+                <div id="recapBody" class="recap-body">Nice fit.</div>
+                <div class="recap-actions">
+                  <button id="recapNewBtn" class="action" type="button">new cloud</button>
+                  <button id="recapNextBtn" class="action secondary" type="button">all modes</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="controls">
+              <button id="primaryBtn" class="action primary-big" type="button">lock fit</button>
+              <button id="restoreBestBtn" class="action ghost hidden" type="button">restore best so far</button>
+              <button id="tipBtn" class="action ghost hidden" type="button" aria-haspopup="dialog" aria-controls="tipModal">tip</button>
+              <button id="columnsToggle" class="action ghost columns-toggle" type="button" aria-expanded="false">plot ⇄ columns</button>
+            </div>
+            <p id="gameKeyboardHint" class="visually-hidden">Focus the plot. Press B or M to choose a line handle, then use the arrow keys. In parabola mode press C, B, or A. Hold Shift for larger steps.</p>
+            <p id="keyboardLive" class="visually-hidden" aria-live="polite"></p>
+          </div>
+
+          <aside id="sidePanel" class="strip-panel" aria-label="Model columns and residuals">
+            <div class="strip-scroll">
+              <table id="stripTable" class="strip-table"></table>
+            </div>
+            <p id="panelBlurb" class="panel-blurb">Each row is one point. Tap a row or a point to cross-highlight it; tap again to clear.</p>
+          </aside>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <div id="infoModal" class="info-overlay" hidden>
+    <div class="info-dialog" role="dialog" aria-modal="true" aria-labelledby="infoTitle">
+      <h2 id="infoTitle">About Residual Squares</h2>
+      <div class="info-list">
+        <p><strong>Version:</strong> Residual Squares [v0.2(beta)]</p>
+        <p><strong>Copyright:</strong> © 2026 <a href="https://people.math.wisc.edu/~roch/" target="_blank" rel="noopener noreferrer">Sébastien Roch</a></p>
+        <p><strong>License:</strong> <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener noreferrer">Creative Commons Attribution-NonCommercial 4.0 International License</a></p>
+        <p><strong>Textbook:</strong> <a href="https://math345-textbook.github.io/" target="_blank" rel="noopener noreferrer">math345-textbook.github.io</a></p>
+        <p><strong>Credit:</strong> The residual-square visualization used in this game was popularized by Gonick and Smith, <em>The Cartoon Guide to Statistics</em> (1993); an early interactive version is due to Bill Finzer (1995).</p>
+        <p><strong>Privacy:</strong> Your best scores are saved in this browser on this device. They are not uploaded anywhere. If you use a private window, clear site data, switch browsers, or block site storage, your best scores may reset.</p>
+      </div>
+      <div class="info-actions">
+        <button id="closeInfo" class="info-close" type="button">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="tipModal" class="info-overlay" hidden>
+    <div class="info-dialog tip-dialog" role="dialog" aria-modal="true" aria-labelledby="tipTitle">
+      <h2 id="tipTitle">Derivative tip</h2>
+      <div id="tipBody"></div>
+      <div class="info-actions">
+        <button id="closeTip" class="info-close" type="button">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (() => {
+      'use strict';
+
+      const canvas = document.getElementById('plotCanvas');
+      const ctx = canvas.getContext('2d');
+      const shell = document.getElementById('canvasShell');
+      const gauge0 = document.getElementById('gauge0');
+      const gauge1 = document.getElementById('gauge1');
+
+      const ui = {
+        introScreen: document.getElementById('introScreen'),
+        gameScreen: document.getElementById('gameScreen'),
+        cheatsheet: document.getElementById('cheatsheet'),
+        infoBtn: document.getElementById('infoBtn'),
+        infoModal: document.getElementById('infoModal'),
+        closeInfo: document.getElementById('closeInfo'),
+        tipBtn: document.getElementById('tipBtn'),
+        tipModal: document.getElementById('tipModal'),
+        tipTitle: document.getElementById('tipTitle'),
+        tipBody: document.getElementById('tipBody'),
+        closeTip: document.getElementById('closeTip'),
+        modeGrid: document.getElementById('modeGrid'),
+        backBtn: document.getElementById('backBtn'),
+        gameSubtitle: document.getElementById('gameSubtitle'),
+        levelBestPill: document.getElementById('levelBestPill'),
+        areaCard: document.getElementById('areaCard'),
+        areaMain: document.getElementById('areaMain'),
+        areaSub: document.getElementById('areaSub'),
+        eqCard: document.getElementById('eqCard'),
+        quadCard: document.getElementById('quadCard'),
+        gaugePanel: document.getElementById('gaugePanel'),
+        gaugeCard0: document.getElementById('gaugeCard0'),
+        gaugeCard1: document.getElementById('gaugeCard1'),
+        gauge0Value: document.getElementById('gauge0Value'),
+        gauge1Value: document.getElementById('gauge1Value'),
+        recap: document.getElementById('recap'),
+        recapTitle: document.getElementById('recapTitle'),
+        recapBody: document.getElementById('recapBody'),
+        recapNewBtn: document.getElementById('recapNewBtn'),
+        recapNextBtn: document.getElementById('recapNextBtn'),
+        stripTable: document.getElementById('stripTable'),
+        panelBlurb: document.getElementById('panelBlurb'),
+        aSlider: document.getElementById('aSlider'),
+        bSlider: document.getElementById('bSlider'),
+        cSlider: document.getElementById('cSlider'),
+        aValue: document.getElementById('aValue'),
+        qbValue: document.getElementById('qbValue'),
+        cValue: document.getElementById('cValue'),
+        primaryBtn: document.getElementById('primaryBtn'),
+        restoreBestBtn: document.getElementById('restoreBestBtn'),
+        columnsToggle: document.getElementById('columnsToggle'),
+        playLayout: document.getElementById('playLayout'),
+        keyboardLive: document.getElementById('keyboardLive')
+      };
+
+      const LEVELS = {
+        1: {
+          type: 'line', mode: 'squares', dataset: 'line', title: 'Fit the Line',
+          subtitle: 'Fit the Line — drag \\(b\\) and \\(m\\) to shrink the total squared-miss area, then lock.',
+          tagline: 'Drag intercept and slope to shrink every squared miss.'
+        },
+        2: {
+          type: 'line', mode: 'gauges', dataset: 'line', title: 'Balance the Gauges',
+          subtitle: 'Balance the Gauges — drive \\(\\sum_i r_i\\) and \\(\\sum_i x_i r_i\\) to zero, then lock.',
+          tagline: 'Steer the two normal-equation dials to zero.'
+        },
+        3: {
+          type: 'quad', mode: 'squares', dataset: 'quad', title: 'Parabola Sliders',
+          subtitle: 'Parabola Sliders — tune \\(a\\), \\(b\\), \\(c\\) to shrink the squares, then lock.',
+          tagline: 'Lift, tilt, and bend a quadratic model with three sliders.'
+        }
+      };
+      const LEVEL_ORDER = [1, 2, 3];
+      const levelDef = () => LEVELS[state.level];
+      const usesGauges = () => levelDef().mode === 'gauges';
+      const usesSliders = () => levelDef().type === 'quad';
+
+      const X_MIN = -1;
+      const X_MAX = 10;
+      const GEN_Y_LO = -4;
+      const GEN_Y_HI = 10;
+      const DATA_X_MIN = 0.35;
+      const DATA_X_MAX = 9.35;
+      const SLOPE_X = 7.5;
+      const EPS = 1e-9;
+      const REVEAL_MS = 960;
+      const STORAGE_KEY = 'residualSquares.medals.v3';
+      const COLORS = {
+        yours: '#ec4899', best: '#10b981', purple: '#7c3aed', cyan: '#06b6d4', grid: '#eef2f7'
+      };
+      const lineArchetypes = ['tight-rising', 'tight-falling', 'clustered', 'round', 'strays', 'negative-intercept'];
+
+      let W = 800;
+      let H = 520;
+      let dpr = 1;
+      let plot = { left: 54, right: 780, top: 22, bottom: 480, width: 726, height: 458 };
+      let eqRefs = {};
+      let lastCardSig = '';
+
+      const state = {
+        screen: 'intro',
+        level: 1,
+        cloudIndex: 0,
+        phase: 'fit',
+        points: [],
+        model: { type: 'line', b: 1, m: 0.5 },
+        initialModel: null,
+        optModel: null,
+        lockedModel: null,
+        lockedScore: null,
+        lockedRatio: null,
+        lockedMedal: null,
+        liveBest: Infinity,
+        bestModel: null,
+        revealStart: 0,
+        revealed: false,
+        drag: null,
+        hoverHandle: null,
+        lastTouched: 'b',
+        highlightIndex: null,
+        gaugeScale: { g0: 1, g1: 1 },
+        medals: loadMedals(),
+        flashBest: false,
+        introTypesetDone: false,
+        view: { yMin: GEN_Y_LO, yMax: GEN_Y_HI },
+        tableCols: []
+      };
+
+      function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+      function lerp(a, b, t) { return a + (b - a) * t; }
+      function rand(lo, hi) { return lo + Math.random() * (hi - lo); }
+      function sample(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+      function ease(t) { return t * t * (3 - 2 * t); }
+      function fmt(v, digits = 1) { return Number.isFinite(v) ? v.toFixed(digits) : '—'; }
+      function fmtSigned(v, digits = 2) {
+        if (!Number.isFinite(v)) return '—';
+        const s = Math.abs(v).toFixed(digits);
+        return v < 0 ? `−${s}` : s;
+      }
+      function fmtBalance(v, digits = 1) {
+        if (!Number.isFinite(v)) return '—';
+        const s = Math.abs(v).toFixed(digits);
+        if (Math.abs(v) < 0.5 * Math.pow(10, -digits)) return s;
+        return v < 0 ? `−${s}` : `+${s}`;
+      }
+      function fmtTerm(v, digits = 2) {
+        if (!Number.isFinite(v)) return ' + —·';
+        const sign = v < 0 ? ' − ' : ' + ';
+        return `${sign}${Math.abs(v).toFixed(digits)}·`;
+      }
+      function fmtRatio(v) { return Number.isFinite(v) ? `${v.toFixed(2)}×` : '—'; }
+      function randn() {
+        let u = 0, v = 0;
+        while (u === 0) u = Math.random();
+        while (v === 0) v = Math.random();
+        return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+      }
+      function vibrate(ms) { if (navigator.vibrate) navigator.vibrate(ms); }
+      function clearNativeSelection() { try { document.getSelection()?.removeAllRanges(); } catch (_) {} }
+
+      function normalizeRecord(value) {
+        if (typeof value === 'string') {
+          return { medal: ['gold', 'silver', 'bronze'].includes(value) ? value : 'practice', bestRatio: null };
+        }
+        if (!value || typeof value !== 'object') return { medal: 'practice', bestRatio: null };
+        const medal = ['gold', 'silver', 'bronze', 'practice'].includes(value.medal) ? value.medal : 'practice';
+        const bestRatio = Number.isFinite(Number(value.bestRatio)) && Number(value.bestRatio) > 0 ? Number(value.bestRatio) : null;
+        return { medal, bestRatio };
+      }
+
+      function loadMedals() {
+        try {
+          const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+          const records = {};
+          for (const level of LEVEL_ORDER) records[level] = normalizeRecord(parsed[level]);
+          return records;
+        } catch (_) {
+          return {};
+        }
+      }
+
+      function saveMedals() {
+        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state.medals)); } catch (_) {}
+      }
+
+      function recordFor(level = state.level) {
+        return normalizeRecord(state.medals[level]);
+      }
+
+      let mathFallbackActive = false;
+      const pendingMathRoots = new Set();
+      let mathTypesetChain = Promise.resolve();
+
+      function mathJaxReady() {
+        return window.MathJax && typeof window.MathJax.typesetPromise === 'function';
+      }
+
+      function flushMathQueue() {
+        if (!mathJaxReady() || !pendingMathRoots.size) return;
+        const roots = Array.from(pendingMathRoots).filter(root => root && root.isConnected);
+        pendingMathRoots.clear();
+        const startup = window.MathJax.startup?.promise || Promise.resolve();
+        mathTypesetChain = mathTypesetChain
+          .then(() => startup)
+          .then(() => roots.length ? window.MathJax.typesetPromise(roots) : undefined)
+          .catch(() => {});
+      }
+
+      function typesetMath(root) {
+        const target = root || document.body;
+        if (mathJaxReady()) {
+          pendingMathRoots.add(target);
+          flushMathQueue();
+        } else if (mathFallbackActive) {
+          fallbackMath(target);
+        } else {
+          pendingMathRoots.add(target);
+        }
+      }
+
+      function fallbackMath(root) {
+        const replacements = [
+          [/\\color\{[^}]*\}/g, ''],
+          [/\\hat\s*y_\{\\rm LS\}\s*=/g, 'ŷLS ='],
+          [/\\hat\{\\mathbf\{y\}\}/g, 'ŷ'],
+          [/\\hat\{\\mathbf y\}/g, 'ŷ'],
+          [/\\hat\s*y/g, 'ŷ'],
+          [/\\mathbf\{1\}/g, '1'],
+          [/\\mathbf\{0\}/g, '0'],
+          [/\\mathbf\{x\}\^2/g, 'x²'],
+          [/\\mathbf\{x\}/g, 'x'],
+          [/\\mathbf\{y\}/g, 'y'],
+          [/\\mathbf\{r\}/g, 'r'],
+          [/\\mathbb\{R\}/g, 'ℝ'],
+          [/\\beta/g, 'β'],
+          [/\^\\top/g, 'ᵀ'],
+          [/\\top/g, 'ᵀ'],
+          [/\\in/g, '∈'],
+          [/\\le/g, '≤'],
+          [/\\perp/g, '⟂'],
+          [/\\sum_i\s*r_i\^2/g, 'Σᵢ rᵢ²'],
+          [/\\sum_i\s*x_i\s*r_i/g, 'Σᵢ xᵢrᵢ'],
+          [/\\sum_i\s*r_i/g, 'Σᵢ rᵢ'],
+          [/r_i\^2/g, 'rᵢ²'],
+          [/_i/g, 'ᵢ'],
+          [/\^n/g, 'ⁿ'],
+          [/\^2/g, '²'],
+          [/\\mathrm\{([^}]*)\}/g, '$1'],
+          [/\\text\{([^}]*)\}/g, '$1'],
+          [/\\rm\s*/g, ''],
+          [/\\,/g, ' '],
+          [/\\;/g, ' '],
+          [/\\cdot/g, '·'],
+          [/\\times/g, '×'],
+          [/x\^2/g, 'x²']
+        ];
+        const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+          acceptNode(node) {
+            if (!node.nodeValue.includes('\\(')) return NodeFilter.FILTER_REJECT;
+            const parent = node.parentElement;
+            if (!parent || ['SCRIPT', 'STYLE', 'TEXTAREA', 'CODE', 'PRE'].includes(parent.tagName)) return NodeFilter.FILTER_REJECT;
+            return NodeFilter.FILTER_ACCEPT;
+          }
+        });
+        const nodes = [];
+        while (walker.nextNode()) nodes.push(walker.currentNode);
+        for (const node of nodes) {
+          node.nodeValue = node.nodeValue.replace(/\\\((.*?)\\\)/g, (_, tex) => {
+            let out = tex;
+            for (const [re, repl] of replacements) out = out.replace(re, repl);
+            out = out.replace(/\\/g, '').replace(/[{}]/g, '').replace(/\s+/g, ' ').trim();
+            return out;
+          });
+        }
+      }
+
+      function activateMathFallback() {
+        if (mathFallbackActive || mathJaxReady()) { flushMathQueue(); return; }
+        mathFallbackActive = true;
+        pendingMathRoots.clear();
+        fallbackMath(document.body);
+      }
+
+      const mathScript = document.getElementById('mathjaxScript');
+      mathScript?.addEventListener('error', activateMathFallback, { once: true });
+      mathScript?.addEventListener('load', () => {
+        window.setTimeout(() => {
+          if (mathJaxReady()) flushMathQueue();
+          else activateMathFallback();
+        }, 400);
+      }, { once: true });
+      window.setTimeout(() => {
+        if (mathJaxReady()) flushMathQueue();
+        else activateMathFallback();
+      }, 3000);
+
+      function yAt(model, x) {
+        if (model.type === 'quad') return model.c + model.b * x + model.a * x * x;
+        return model.b + model.m * x;
+      }
+
+      function cloneModel(model) { return model.type === 'quad' ? { type: 'quad', a: model.a, b: model.b, c: model.c } : { type: 'line', b: model.b, m: model.m }; }
+
+      function setModel(model) {
+        state.model = cloneModel(model);
+        if (state.model.type === 'line') state.model = clampLine(state.model);
+        else state.model = clampQuad(state.model);
+        syncSlidersFromModel();
+      }
+
+      function clampLine(model) {
+        const v = state.view;
+        const b = clamp(model.b, v.yMin + 0.05, v.yMax - 0.05);
+        const handleY = clamp(b + model.m * SLOPE_X, v.yMin + 0.05, v.yMax - 0.05);
+        return { type: 'line', b, m: clamp((handleY - b) / SLOPE_X, -2.4, 2.4) };
+      }
+
+      function clampQuad(model) {
+        const v = state.view;
+        return {
+          type: 'quad',
+          a: clamp(model.a, -0.35, 0.35),
+          b: clamp(model.b, -3, 3),
+          c: clamp(model.c, v.yMin + 0.2, v.yMax - 0.2)
+        };
+      }
+
+      function sse(points, model) {
+        let total = 0;
+        for (const p of points) {
+          const r = p.y - yAt(model, p.x);
+          total += r * r;
+        }
+        return total;
+      }
+
+      function residuals(points, model) { return points.map(p => p.y - yAt(model, p.x)); }
+
+      function fitLine(points) {
+        const n = points.length;
+        let sx = 0, sy = 0;
+        for (const p of points) { sx += p.x; sy += p.y; }
+        const mx = sx / n, my = sy / n;
+        let sxx = 0, sxy = 0;
+        for (const p of points) {
+          const dx = p.x - mx;
+          sxx += dx * dx;
+          sxy += dx * (p.y - my);
+        }
+        const m = Math.abs(sxx) < EPS ? 0 : sxy / sxx;
+        return { type: 'line', b: my - m * mx, m };
+      }
+
+      function solve3(A, b) {
+        const M = A.map((row, i) => row.slice().concat([b[i]]));
+        for (let col = 0; col < 3; col++) {
+          let pivot = col;
+          for (let r = col + 1; r < 3; r++) if (Math.abs(M[r][col]) > Math.abs(M[pivot][col])) pivot = r;
+          if (Math.abs(M[pivot][col]) < 1e-10) return [0, 0, 0];
+          if (pivot !== col) [M[pivot], M[col]] = [M[col], M[pivot]];
+          const div = M[col][col];
+          for (let c = col; c < 4; c++) M[col][c] /= div;
+          for (let r = 0; r < 3; r++) {
+            if (r === col) continue;
+            const factor = M[r][col];
+            for (let c = col; c < 4; c++) M[r][c] -= factor * M[col][c];
+          }
+        }
+        return [M[0][3], M[1][3], M[2][3]];
+      }
+
+      function fitQuad(points) {
+        let n = points.length, sx = 0, sx2 = 0, sx3 = 0, sx4 = 0;
+        let sy = 0, sxy = 0, sx2y = 0;
+        for (const p of points) {
+          const x = p.x, x2 = x * x;
+          sx += x; sx2 += x2; sx3 += x2 * x; sx4 += x2 * x2;
+          sy += p.y; sxy += x * p.y; sx2y += x2 * p.y;
+        }
+        const [c, b, a] = solve3([
+          [n, sx, sx2],
+          [sx, sx2, sx3],
+          [sx2, sx3, sx4]
+        ], [sy, sxy, sx2y]);
+        return { type: 'quad', a, b, c };
+      }
+
+      function correlation(points) {
+        const n = points.length;
+        let sx = 0, sy = 0;
+        for (const p of points) { sx += p.x; sy += p.y; }
+        const mx = sx / n, my = sy / n;
+        let sxx = 0, syy = 0, sxy = 0;
+        for (const p of points) {
+          const dx = p.x - mx, dy = p.y - my;
+          sxx += dx * dx; syy += dy * dy; sxy += dx * dy;
+        }
+        return sxx * syy <= EPS ? 0 : sxy / Math.sqrt(sxx * syy);
+      }
+
+      function residualMoments(model) {
+        let g0 = 0, g1 = 0, g2 = 0;
+        for (const p of state.points) {
+          const r = p.y - yAt(model, p.x);
+          g0 += r;
+          g1 += p.x * r;
+          g2 += p.x * p.x * r;
+        }
+        return { g0, g1, g2 };
+      }
+
+      function cloudSafeLine(points, opt) {
+        if (!points.every(p => p.y > GEN_Y_LO + 0.45 && p.y < GEN_Y_HI - 0.45 && p.x >= DATA_X_MIN && p.x <= DATA_X_MAX)) return false;
+        const bOk = opt.b > GEN_Y_LO + 0.35 && opt.b < GEN_Y_HI - 0.35;
+        const slopeY = yAt(opt, SLOPE_X);
+        const handleOk = slopeY > GEN_Y_LO + 0.35 && slopeY < GEN_Y_HI - 0.35;
+        return bOk && handleOk && sse(points, opt) > 0.55;
+      }
+
+      function cloudSafeQuad(points, opt) {
+        if (!points.every(p => p.y > GEN_Y_LO + 0.45 && p.y < GEN_Y_HI - 0.45)) return false;
+        if (opt.a < -0.32 || opt.a > 0.32 || opt.b < -2.7 || opt.b > 2.7 || opt.c < GEN_Y_LO + 0.4 || opt.c < -3.6 || opt.c > 8.6) return false;
+        for (let x = X_MIN; x <= X_MAX; x += 1) {
+          const y = yAt(opt, x);
+          if (y < GEN_Y_LO + 0.2 || y > GEN_Y_HI - 0.2) return false;
+        }
+        return sse(points, opt) > 0.65;
+      }
+
+      function makeXs(kind, n) {
+        const xs = [];
+        if (kind === 'clustered') {
+          const c1 = rand(2.0, 3.2), c2 = rand(6.6, 8.2);
+          for (let i = 0; i < n - 1; i++) {
+            const center = i < Math.floor(n * 0.55) ? c1 : c2;
+            xs.push(clamp(center + randn() * rand(0.45, 0.85), DATA_X_MIN, DATA_X_MAX));
+          }
+          xs.push(rand(DATA_X_MIN, DATA_X_MAX));
+        } else if (kind === 'round') {
+          for (let i = 0; i < n; i++) xs.push(clamp(5 + randn() * 2.1, DATA_X_MIN, DATA_X_MAX));
+        } else {
+          for (let i = 0; i < n; i++) xs.push(rand(DATA_X_MIN, DATA_X_MAX));
+        }
+        xs.sort((a, b) => a - b);
+        return xs;
+      }
+
+      function makeLinePoints() {
+        const n = 10;
+        for (let attempt = 0; attempt < 400; attempt++) {
+          const kind = lineArchetypes[(state.cloudIndex + attempt) % lineArchetypes.length];
+          const xs = makeXs(kind, n);
+          let m0, b0, noise;
+          if (kind === 'tight-rising') { m0 = rand(0.38, 0.95); b0 = rand(-1.2, 3.0); noise = rand(0.32, 0.58); }
+          else if (kind === 'tight-falling') { m0 = -rand(0.34, 0.85); b0 = rand(4.8, 8.8); noise = rand(0.35, 0.65); }
+          else if (kind === 'clustered') { m0 = sample([-1, 1]) * rand(0.35, 0.8); b0 = m0 < 0 ? rand(5.0, 8.2) : rand(-0.6, 2.6); noise = rand(0.42, 0.75); }
+          else if (kind === 'round') { m0 = rand(-0.16, 0.16); b0 = rand(2.8, 5.8); noise = rand(1.05, 1.65); }
+          else if (kind === 'negative-intercept') { m0 = rand(0.52, 1.02); b0 = rand(-2.4, -0.2); noise = rand(0.38, 0.75); }
+          else { m0 = sample([-1, 1]) * rand(0.28, 0.72); b0 = m0 < 0 ? rand(4.6, 8.3) : rand(-0.8, 2.8); noise = rand(0.42, 0.75); }
+
+          const pts = xs.map((x, i) => {
+            let y = b0 + m0 * x + randn() * noise;
+            const contaminated = kind === 'strays' || (kind !== 'round' && Math.random() < 0.22);
+            if (contaminated && Math.random() < 0.16) y += sample([-1, 1]) * rand(1.8, 3.1);
+            return { x, y, id: i, stray: false };
+          });
+          if (kind === 'strays') {
+            const idx = Math.floor(rand(0, pts.length));
+            pts[idx].y += sample([-1, 1]) * rand(2.2, 3.35);
+            pts[idx].stray = true;
+          }
+          const opt = fitLine(pts);
+          if (cloudSafeLine(pts, opt)) {
+            pts.meta = { kind };
+            return pts;
+          }
+        }
+        const pts = [0.6, 1.5, 2.2, 3.4, 4.1, 5.7, 6.5, 7.8, 8.6, 9.25].map((x, i) => ({ x, y: 1.1 + 0.55 * x + randn() * 0.65, id: i }));
+        pts.meta = { kind: 'fallback' };
+        return pts;
+      }
+
+      function makeQuadPoints() {
+        const n = 10;
+        for (let attempt = 0; attempt < 450; attempt++) {
+          const xs = makeXs(attempt % 3 === 0 ? 'clustered' : 'random', n);
+          const a0 = sample([-1, 1]) * rand(0.035, 0.11);
+          const b0 = rand(-1.25, 1.25) - a0 * rand(5.5, 8.2);
+          const c0 = rand(-1.4, 5.6);
+          const noise = rand(0.34, 0.72);
+          const pts = xs.map((x, i) => {
+            let y = c0 + b0 * x + a0 * x * x + randn() * noise;
+            if (Math.random() < 0.08) y += sample([-1, 1]) * rand(1.2, 2.0);
+            return { x, y, id: i };
+          });
+          const opt = fitQuad(pts);
+          if (cloudSafeQuad(pts, opt)) {
+            pts.meta = { kind: 'quadratic' };
+            return pts;
+          }
+        }
+        const pts = [0.5, 1.4, 2.1, 3.2, 4.6, 5.3, 6.5, 7.7, 8.8, 9.2].map((x, i) => ({ x, y: 1.2 + 1.0 * x - 0.07 * x * x + randn() * 0.55, id: i }));
+        pts.meta = { kind: 'fallback quadratic' };
+        return pts;
+      }
+
+      function computeView() {
+        const def = levelDef();
+        const opt = state.optModel;
+        const ys = state.points.map(p => p.y);
+        if (def.type === 'line') {
+          ys.push(opt.b, yAt(opt, X_MAX), opt.b - 1.9, opt.b + 1.9);
+          if (state.optModelWithout) ys.push(state.optModelWithout.b, yAt(state.optModelWithout, X_MAX));
+        } else {
+          for (let x = 0; x <= 10; x += 1) ys.push(yAt(opt, x));
+          ys.push(opt.c - 1.3, opt.c + 1.3);
+        }
+        let lo = Math.min(...ys) - 1.0;
+        let hi = Math.max(...ys) + 1.0;
+        if (usesGauges() || usesSliders()) { lo -= 1; hi += 1; }
+        if (hi - lo < 6) {
+          const mid = (hi + lo) / 2;
+          lo = mid - 3;
+          hi = mid + 3;
+        }
+        lo = Math.max(-6, Math.floor(lo));
+        hi = Math.min(12, Math.ceil(hi));
+        if (hi - lo < 6) {
+          if (lo > -6) lo = Math.max(-6, hi - 6);
+          if (hi - lo < 6) hi = Math.min(12, lo + 6);
+        }
+        state.view = { yMin: lo, yMax: hi };
+      }
+
+      function makeInitialModel() {
+        const opt = state.optModel;
+        if (levelDef().type === 'quad') {
+          for (let i = 0; i < 120; i++) {
+            const candidate = clampQuad({ type: 'quad', a: opt.a + rand(-0.08, 0.08), b: opt.b + rand(-0.65, 0.65), c: opt.c + rand(-1.15, 1.15) });
+            if (sse(state.points, candidate) / Math.max(sse(state.points, opt), EPS) > 1.2) return candidate;
+          }
+          return clampQuad({ type: 'quad', a: opt.a + 0.05, b: opt.b - 0.4, c: opt.c + 0.8 });
+        }
+        for (let i = 0; i < 120; i++) {
+          const candidate = clampLine({ type: 'line', b: opt.b + rand(-1.8, 1.8), m: opt.m + rand(-0.45, 0.45) });
+          if (sse(state.points, candidate) / Math.max(sse(state.points, opt), EPS) > 1.18) return candidate;
+        }
+        return clampLine({ type: 'line', b: opt.b + 1.2, m: opt.m - 0.35 });
+      }
+
+      function newCloud(keepLevel = true) {
+        if (!keepLevel) state.cloudIndex = 0;
+        state.cloudIndex += 1;
+        state.phase = 'fit';
+        state.lockedModel = null;
+        state.lockedScore = null;
+        state.lockedRatio = null;
+        state.lockedMedal = null;
+        state.revealed = false;
+        state.revealStart = 0;
+        state.highlightIndex = null;
+        state.drag = null;
+        state.hoverHandle = null;
+        state.lastTouched = usesSliders() ? 'c' : 'b';
+        canvas.style.cursor = 'crosshair';
+        clearNativeSelection();
+        if (usesSliders()) {
+          state.points = makeQuadPoints();
+          state.optModel = fitQuad(state.points);
+        } else {
+          state.points = makeLinePoints();
+          state.optModel = fitLine(state.points);
+        }
+        computeView();
+        syncSliderBounds();
+        state.initialModel = makeInitialModel();
+        setModel(state.initialModel);
+        state.liveBest = sse(state.points, state.model);
+        state.bestModel = cloneModel(state.model);
+        state.gaugeScale = computeGaugeScale();
+        lastCardSig = '';
+        buildEquationCard();
+        buildStripTable();
+        updateLevelUI();
+        hideRecap();
+      }
+
+      function syncSliderBounds() {
+        if (levelDef().type !== 'quad') return;
+        ui.cSlider.min = (state.view.yMin + 0.2).toFixed(2);
+        ui.cSlider.max = (state.view.yMax - 0.2).toFixed(2);
+      }
+
+      function computeGaugeScale() {
+        if (levelDef().type !== 'line') return { g0: 1, g1: 1 };
+        const probes = [state.initialModel, { type: 'line', b: state.optModel.b + 1.4, m: state.optModel.m - 0.35 }, { type: 'line', b: state.optModel.b - 1.4, m: state.optModel.m + 0.35 }];
+        let g0 = 1, g1 = 1;
+        for (const model of probes) {
+          let s0 = 0, s1 = 0;
+          for (const p of state.points) { const r = p.y - yAt(model, p.x); s0 += r; s1 += p.x * r; }
+          g0 = Math.max(g0, Math.abs(s0));
+          g1 = Math.max(g1, Math.abs(s1));
+        }
+        return { g0: Math.max(2.5, g0), g1: Math.max(12, g1) };
+      }
+
+      function medalThresholds() {
+        const rho = Math.abs(correlation(state.points));
+        const isRound = rho < 0.4 && levelDef().type === 'line';
+        return {
+          gold: isRound ? 1.12 : levelDef().type === 'quad' ? 1.10 : 1.08,
+          silver: 1.25,
+          bronze: 1.60
+        };
+      }
+
+      function medalForRatio(ratio) {
+        const t = medalThresholds();
+        if (ratio <= t.gold) return 'gold';
+        if (ratio <= t.silver) return 'silver';
+        if (ratio <= t.bronze) return 'bronze';
+        return 'practice';
+      }
+
+      function medalRank(medal) { return { practice: 0, bronze: 1, silver: 2, gold: 3 }[medal] ?? 0; }
+      function medalLabel(medal) { return { gold: 'gold', silver: 'silver', bronze: 'bronze', practice: 'practice' }[medal] || 'practice'; }
+      function medalEmoji(medal) { return { gold: '🥇', silver: '🥈', bronze: '🥉', practice: '↻' }[medal] || '↻'; }
+
+      function lockFit() {
+        if (state.phase !== 'fit') {
+          if (state.phase === 'reveal') newCloud(true);
+          return;
+        }
+        rememberBestModel();
+        state.lockedModel = cloneModel(state.model);
+        state.lockedScore = sse(state.points, state.lockedModel);
+        const optScore = Math.max(sse(state.points, state.optModel), EPS);
+        state.lockedRatio = state.lockedScore / optScore;
+        state.lockedMedal = medalForRatio(state.lockedRatio);
+        state.phase = 'revealing';
+        state.revealStart = performance.now();
+        state.revealed = false;
+        state.drag = null;
+        state.hoverHandle = null;
+        canvas.style.cursor = 'crosshair';
+        vibrate(state.lockedMedal === 'gold' ? 28 : 12);
+        hideRecap();
+        updateButtons();
+      }
+
+      function finishReveal() {
+        if (state.revealed) return;
+        state.revealed = true;
+        state.phase = 'reveal';
+        const prev = recordFor();
+        const medalImproved = medalRank(state.lockedMedal) > medalRank(prev.medal);
+        const ratioImproved = prev.bestRatio == null || state.lockedRatio < prev.bestRatio - 1e-10;
+        if (medalImproved || ratioImproved) {
+          state.medals[state.level] = {
+            medal: medalImproved ? state.lockedMedal : prev.medal,
+            bestRatio: ratioImproved ? state.lockedRatio : prev.bestRatio
+          };
+          saveMedals();
+          state.flashBest = true;
+          renderLevelBest();
+          renderModeButtons();
+          window.setTimeout(() => {
+            state.flashBest = false;
+            renderLevelBest();
+          }, 980);
+        } else {
+          renderLevelBest();
+        }
+        showRecap();
+        updateButtons();
+      }
+
+      function describeDelta(symbol, actual, optimal, digits) {
+        const delta = actual - optimal;
+        const cutoff = 0.5 * Math.pow(10, -digits);
+        if (Math.abs(delta) < cutoff) return `\\(${symbol}\\) matched to the shown precision`;
+        return `\\(${symbol}\\) was <strong>${Math.abs(delta).toFixed(digits)}</strong> ${delta > 0 ? 'high' : 'low'}`;
+      }
+
+      function coefficientFeedback() {
+        if (state.lockedModel.type === 'quad') {
+          return `${describeDelta('c', state.lockedModel.c, state.optModel.c, 2)}; ${describeDelta('b', state.lockedModel.b, state.optModel.b, 2)}; ${describeDelta('a', state.lockedModel.a, state.optModel.a, 3)}.`;
+        }
+        return `${describeDelta('b', state.lockedModel.b, state.optModel.b, 2)}; ${describeDelta('m', state.lockedModel.m, state.optModel.m, 2)}.`;
+      }
+
+      function showRecap() {
+        const optScore = sse(state.points, state.optModel);
+        const medal = state.lockedMedal;
+        const t = medalThresholds();
+        const paragraphs = [
+          `<p>Your area was <strong>${fmt(state.lockedScore, 2)}</strong>; the least-squares area was <strong>${fmt(optScore, 2)}</strong>. Ratio: <strong>${fmtRatio(state.lockedRatio)}</strong>.</p>`
+        ];
+
+        let pedagogy = '';
+        if (usesGauges()) {
+          pedagogy = 'Both sums reach zero exactly when the residual vector is orthogonal to every model column, so the zero-dial target and the minimum-square target are the same line.';
+        } else if (usesSliders()) {
+          pedagogy = 'The model is still least squares: the columns are now \\(\\mathbf{1}\\), \\(\\mathbf{x}\\), and \\(\\mathbf{x}^2\\).';
+        } else {
+          const rs = residuals(state.points, state.lockedModel).map(r => r * r);
+          const maxR2 = Math.max(...rs);
+          const share = maxR2 / Math.max(state.lockedScore, EPS);
+          if (share > 0.35) pedagogy += `One point contributes ${Math.round(share * 100)}% of your total area; squared loss makes far points loud. `;
+          const rho = Math.abs(correlation(state.points));
+          if (rho < 0.4) pedagogy += 'Even with a roundish cloud, the least-squares line still exists and passes through the centroid.';
+        }
+        if (pedagogy.trim()) paragraphs.push(`<p>${pedagogy.trim()}</p>`);
+        paragraphs.push(`<p class="coefficient-check"><strong>Coefficient check.</strong> ${coefficientFeedback()}</p>`);
+
+        let retry;
+        if (medal === 'gold') retry = `You beat the gold bar (≤ ${t.gold.toFixed(2)}×). Try a new cloud — some are harder than others.`;
+        else if (medal === 'silver') retry = `Silver needs ≤ ${t.silver.toFixed(2)}× — you made it. Gold is ≤ ${t.gold.toFixed(2)}×: grab a new cloud and beat your best.`;
+        else if (medal === 'bronze') retry = `Bronze needs ≤ ${t.bronze.toFixed(2)}× — you made it. Silver is ≤ ${t.silver.toFixed(2)}×: try a new cloud.`;
+        else retry = `No medal yet — bronze needs ≤ ${t.bronze.toFixed(2)}×. New cloud, new chance.`;
+
+        const record = recordFor();
+        const savedBest = record.bestRatio == null ? '' : ` Saved mode best: <strong>${fmtRatio(record.bestRatio)}</strong>.`;
+        paragraphs.push(`<p class="retry-line">${retry}${savedBest}</p>`);
+
+        ui.recapTitle.textContent = `${medalEmoji(medal)} ${capitalize(medalLabel(medal))} reveal`;
+        ui.recapBody.innerHTML = paragraphs.join('');
+        ui.recapNextBtn.textContent = 'all modes';
+        ui.recap.classList.remove('hidden');
+        typesetMath(ui.recap);
+      }
+
+      function hideRecap() { ui.recap.classList.add('hidden'); }
+
+      function capitalize(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : s; }
+
+      function updateLevelUI() {
+        const level = levelDef();
+        ui.gameSubtitle.innerHTML = level.subtitle;
+        ui.gaugePanel.classList.toggle('hidden', !usesGauges());
+        ui.gaugePanel.setAttribute('aria-hidden', usesGauges() ? 'false' : 'true');
+        ui.quadCard.classList.toggle('hidden', !usesSliders());
+        shell.classList.toggle('quad-mode', usesSliders());
+        ui.areaCard.classList.toggle('hidden', usesGauges());
+        ui.panelBlurb.textContent = 'Each row is one point. Tap a row or a point to cross-highlight it; tap again to clear.';
+        canvas.setAttribute('aria-label', usesSliders()
+          ? 'Interactive quadratic regression plot with coefficient sliders'
+          : usesGauges()
+            ? 'Interactive line-fitting plot with residual squares and two normal-equation gauges'
+            : 'Interactive line-fitting plot with intercept and slope handles');
+        lastCardSig = '';
+        updateButtons();
+        renderLevelBest();
+        typesetMath(ui.gameSubtitle);
+        typesetMath(ui.quadCard);
+        typesetMath(ui.gaugePanel);
+      }
+
+      function updateButtons() {
+        ui.primaryBtn.textContent = state.phase === 'reveal'
+          ? 'new cloud'
+          : usesGauges() ? 'lock the gauges' : 'lock fit';
+        ui.primaryBtn.disabled = state.phase === 'revealing';
+        const fit = state.phase === 'fit';
+        ui.restoreBestBtn.classList.toggle('hidden', state.level !== 1);
+        ui.tipBtn.classList.toggle('hidden', state.level === 1);
+        ui.tipBtn.disabled = !fit;
+        ui.quadCard.querySelectorAll('input').forEach(input => { input.disabled = !fit; });
+        updateRestoreButton();
+      }
+
+      function updateRestoreButton(score = sse(state.points, state.model)) {
+        const canRestore = state.level === 1 && state.phase === 'fit' && state.bestModel && Number.isFinite(state.liveBest);
+        const alreadyBest = canRestore && score <= state.liveBest + 1e-8;
+        ui.restoreBestBtn.disabled = !canRestore || alreadyBest;
+        ui.restoreBestBtn.title = !canRestore
+          ? 'Available while fitting a line'
+          : alreadyBest
+            ? 'This is the best line reached on this cloud'
+            : `Restore the line with area ${fmt(state.liveBest, 2)}`;
+      }
+
+      function rememberBestModel() {
+        if (state.level !== 1 || state.phase !== 'fit') return;
+        const score = sse(state.points, state.model);
+        if (!state.bestModel || score < state.liveBest - 1e-10) {
+          state.liveBest = score;
+          state.bestModel = cloneModel(state.model);
+        }
+      }
+
+      function restoreBestSoFar() {
+        if (state.level !== 1 || state.phase !== 'fit' || !state.bestModel) return;
+        setModel(state.bestModel);
+        state.drag = null;
+        state.hoverHandle = null;
+        canvas.style.cursor = 'crosshair';
+        announceKeyboard(`Restored the best line reached on this cloud, with total area ${fmt(state.liveBest, 2)}.`);
+        updateRestoreButton(state.liveBest);
+      }
+
+      function renderLevelBest() {
+        const record = recordFor();
+        const medal = record.medal;
+        const flash = state.flashBest ? ' just-awarded' : '';
+        const icon = medalRank(medal) ? medalEmoji(medal) : '—';
+        const ratio = record.bestRatio == null ? '' : `<span class="num">${fmtRatio(record.bestRatio)}</span>`;
+        ui.levelBestPill.className = `best-pill level-best-pill ${medal}${flash}`;
+        ui.levelBestPill.innerHTML = `<span>best</span><span class="emoji">${icon}</span>${ratio}`;
+        ui.levelBestPill.title = record.bestRatio == null
+          ? `No saved result yet for ${levelDef().title}`
+          : `${levelDef().title}: ${medalLabel(medal)} medal, best ratio ${fmtRatio(record.bestRatio)}`;
+      }
+
+      function modePreview(level) {
+        if (level === 1) return `
+          <svg viewBox="0 0 240 92" aria-hidden="true">
+            <g stroke="#dbe4f0" stroke-width="1"><path d="M18 18H224M18 46H224M18 74H224"/><path d="M42 10V82M104 10V82M166 10V82"/></g>
+            <g fill="#2563eb" fill-opacity="0.16" stroke="#2563eb" stroke-opacity="0.34"><rect x="54" y="38" width="17" height="17"/><rect x="105" y="34" width="24" height="24"/><rect x="171" y="42" width="14" height="14"/></g>
+            <path d="M22 68L220 24" fill="none" stroke="#ec4899" stroke-width="6" stroke-linecap="round"/>
+            <g fill="#111827" stroke="#fff" stroke-width="2"><circle cx="62" cy="38" r="5"/><circle cx="117" cy="58" r="5"/><circle cx="178" cy="42" r="5"/><circle cx="205" cy="30" r="5"/></g>
+            <rect x="26" y="59.17" width="13" height="13" rx="3" transform="rotate(45 32.5 65.67)" fill="#fff" stroke="#7c3aed" stroke-width="4"/><circle cx="194" cy="29.78" r="9" fill="#fff" stroke="#06b6d4" stroke-width="4"/>
+          </svg>`;
+        if (level === 2) return `
+          <svg viewBox="0 0 240 92" aria-hidden="true">
+            <g transform="translate(58 7)"><path d="M0 22A24 24 0 0 1 48 22" fill="none" stroke="#cbd5e1" stroke-width="5" stroke-linecap="round"/><path d="M24 22L24 5" stroke="#10b981" stroke-width="3.5" stroke-linecap="round"/><circle cx="24" cy="22" r="3.5" fill="#0f172a"/></g>
+            <g transform="translate(134 7)"><path d="M0 22A24 24 0 0 1 48 22" fill="none" stroke="#cbd5e1" stroke-width="5" stroke-linecap="round"/><path d="M24 22L36 8" stroke="#f43f5e" stroke-width="3.5" stroke-linecap="round"/><circle cx="24" cy="22" r="3.5" fill="#0f172a"/></g>
+            <path d="M16 82L224 47" fill="none" stroke="#ec4899" stroke-width="6" stroke-linecap="round"/>
+            <g fill="#2563eb" fill-opacity="0.14" stroke="#2563eb" stroke-opacity="0.3"><rect x="44" y="61" width="18" height="18"/><rect x="95" y="54" width="24" height="24"/><rect x="169" y="57" width="15" height="15"/></g>
+            <g fill="#111827" stroke="#fff" stroke-width="2"><circle cx="53" cy="61" r="5"/><circle cx="107" cy="78" r="5"/><circle cx="176.5" cy="57" r="5"/></g>
+          </svg>`;
+        return `
+          <svg viewBox="0 0 240 92" aria-hidden="true">
+            <g transform="translate(17 8)"><rect width="58" height="6" rx="3" fill="#e2e8f0"/><circle cx="39" cy="3" r="6" fill="#7c3aed"/></g>
+            <g transform="translate(91 8)"><rect width="58" height="6" rx="3" fill="#e2e8f0"/><circle cx="25" cy="3" r="6" fill="#06b6d4"/></g>
+            <g transform="translate(165 8)"><rect width="58" height="6" rx="3" fill="#e2e8f0"/><circle cx="44" cy="3" r="6" fill="#f59e0b"/></g>
+            <g stroke="#dbe4f0" stroke-width="1"><path d="M18 38H224M18 61H224M18 84H224"/><path d="M42 30V88M104 30V88M166 30V88"/></g>
+            <g fill="#2563eb" fill-opacity="0.14" stroke="#2563eb" stroke-opacity="0.3"><rect x="45" y="50" width="16" height="16"/><rect x="107" y="63" width="18" height="18"/><rect x="176" y="46" width="14" height="14"/></g>
+            <path d="M20 43Q118 96 222 38" fill="none" stroke="#ec4899" stroke-width="6" stroke-linecap="round"/>
+            <g fill="#111827" stroke="#fff" stroke-width="2"><circle cx="53" cy="50" r="5"/><circle cx="116" cy="81" r="5"/><circle cx="183" cy="46" r="5"/><circle cx="210" cy="40" r="5"/></g>
+          </svg>`;
+      }
+
+      function renderModeButtons() {
+        if (!ui.modeGrid) return;
+        ui.modeGrid.innerHTML = LEVEL_ORDER.map(level => {
+          const def = LEVELS[level];
+          const record = recordFor(level);
+          const medal = record.medal;
+          const icon = medalRank(medal) ? medalEmoji(medal) : '—';
+          const ratio = record.bestRatio == null ? 'no saved run' : `${fmtRatio(record.bestRatio)} best`;
+          const accessible = record.bestRatio == null ? 'no saved result' : `${medalLabel(medal)} medal, best ratio ${fmtRatio(record.bestRatio)}`;
+          return `<button class="mode-button" type="button" data-level="${level}" aria-label="Mode ${level}, ${def.title}; ${accessible}">
+            <span class="mode-preview">${modePreview(level)}</span>
+            <span><span class="mode-kicker">Mode ${level}</span><span class="mode-name">${def.title}</span><span class="mode-tagline">${def.tagline}</span></span>
+            <span class="best-pill mode-record ${medal}"><span class="emoji">${icon}</span><span>${ratio}</span></span>
+          </button>`;
+        }).join('');
+      }
+
+      function buildEquationCard() {
+        if (levelDef().type === 'quad') {
+          ui.eqCard.innerHTML = `
+            <div class="eq-row" id="eqCurrent"><span class="math">\\(\\hat y =\\)</span><span id="eqC" class="num purple"></span><span id="eqQBTerm" class="num cyan"></span><span class="math">\\(x\\)</span><span id="eqATerm" class="num amber"></span><span class="math">\\(x^2\\)</span></div>
+            <div class="eq-row eq-opt" id="eqOpt"><span class="math">\\(\\hat y_{\\rm LS}=\\)</span><span id="optC" class="num green"></span><span id="optQBTerm" class="num green"></span><span class="math">\\(x\\)</span><span id="optATerm" class="num green"></span><span class="math">\\(x^2\\)</span></div>`;
+        } else {
+          ui.eqCard.innerHTML = `
+            <div class="eq-row" id="eqCurrent"><span class="math">\\(\\hat y =\\)</span><span id="eqB" class="num purple"></span><span id="eqMTerm" class="num cyan"></span><span class="math">\\(x\\)</span></div>
+            <div class="eq-row eq-opt" id="eqOpt"><span class="math">\\(\\hat y_{\\rm LS}=\\)</span><span id="optB" class="num green"></span><span id="optMTerm" class="num green"></span><span class="math">\\(x\\)</span></div>`;
+        }
+        eqRefs = {
+          eqB: document.getElementById('eqB'), eqMTerm: document.getElementById('eqMTerm'), optB: document.getElementById('optB'), optMTerm: document.getElementById('optMTerm'),
+          eqC: document.getElementById('eqC'), eqQBTerm: document.getElementById('eqQBTerm'), eqATerm: document.getElementById('eqATerm'), optC: document.getElementById('optC'), optQBTerm: document.getElementById('optQBTerm'), optATerm: document.getElementById('optATerm'),
+          eqOpt: document.getElementById('eqOpt')
+        };
+        typesetMath(ui.eqCard);
+      }
+
+      function updateEquation() {
+        const model = state.model;
+        if (model.type === 'quad') {
+          if (!eqRefs.eqC) return;
+          eqRefs.eqC.textContent = fmtSigned(model.c, 2);
+          eqRefs.eqQBTerm.textContent = fmtTerm(model.b, 2);
+          eqRefs.eqATerm.textContent = fmtTerm(model.a, 3);
+          eqRefs.optC.textContent = fmtSigned(state.optModel.c, 2);
+          eqRefs.optQBTerm.textContent = fmtTerm(state.optModel.b, 2);
+          eqRefs.optATerm.textContent = fmtTerm(state.optModel.a, 3);
+        } else {
+          if (!eqRefs.eqB) return;
+          eqRefs.eqB.textContent = fmtSigned(model.b, 2);
+          eqRefs.eqMTerm.textContent = fmtTerm(model.m, 2);
+          eqRefs.optB.textContent = fmtSigned(state.optModel.b, 2);
+          eqRefs.optMTerm.textContent = fmtTerm(state.optModel.m, 2);
+        }
+        eqRefs.eqOpt.classList.toggle('visible', state.phase === 'reveal' || state.phase === 'revealing');
+      }
+
+      function buildStripTable() {
+        const isQuad = usesSliders();
+        state.tableCols = isQuad
+          ? [
+              { key: 'one', label: '\\(\\mathbf{1}\\)', coef: 'coefC', cls: 'purple' },
+              { key: 'op1', label: '', op: true },
+              { key: 'x', label: '\\(\\mathbf{x}\\)', coef: 'coefQB', cls: 'cyan' },
+              { key: 'op2', label: '', op: true },
+              { key: 'x2', label: '\\(\\mathbf{x}^2\\)', coef: 'coefA', cls: 'amber' },
+              { key: 'eq', label: '', op: true },
+              { key: 'yhat', label: '\\(\\hat{\\mathbf{y}}\\)' },
+              { key: 'y', label: '\\(\\mathbf{y}\\)', sep: true },
+              { key: 'r2', label: '\\(r_i^2\\)' }
+            ]
+          : [
+              { key: 'one', label: '\\(\\mathbf{1}\\)', coef: 'coefB', cls: 'purple' },
+              { key: 'op1', label: '', op: true },
+              { key: 'x', label: '\\(\\mathbf{x}\\)', coef: 'coefM', cls: 'cyan' },
+              { key: 'eq', label: '', op: true },
+              { key: 'yhat', label: '\\(\\hat{\\mathbf{y}}\\)' },
+              { key: 'y', label: '\\(\\mathbf{y}\\)', sep: true },
+              { key: 'r2', label: '\\(r_i^2\\)' }
+            ];
+        const thead = document.createElement('thead');
+        const coefRow = document.createElement('tr');
+        const symbolRow = document.createElement('tr');
+        for (const col of state.tableCols) {
+          const thCoef = document.createElement('th');
+          thCoef.className = `${col.op ? 'op' : ''} ${col.sep ? 'data-sep' : ''}`.trim();
+          if (col.coef) thCoef.innerHTML = `<span class="coef"><span id="${col.coef}" class="num ${col.cls}">0.00</span><span class="coef-dot">·</span></span>`;
+          coefRow.appendChild(thCoef);
+          const th = document.createElement('th');
+          th.className = `${col.op ? 'op' : ''} ${col.sep ? 'data-sep' : ''}`.trim();
+          th.innerHTML = col.label;
+          symbolRow.appendChild(th);
+        }
+        thead.appendChild(coefRow);
+        thead.appendChild(symbolRow);
+        const tbody = document.createElement('tbody');
+        state.points.forEach((_, i) => {
+          const tr = document.createElement('tr');
+          tr.dataset.index = String(i);
+          tr.tabIndex = 0;
+          tr.setAttribute('aria-label', `Point ${i + 1}; press Enter to highlight`);
+          tr.addEventListener('click', () => { clearNativeSelection(); setHighlight(i); });
+          tr.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); clearNativeSelection(); setHighlight(i); }
+          });
+          for (const col of state.tableCols) {
+            const td = document.createElement('td');
+            td.dataset.key = col.key;
+            td.dataset.index = String(i);
+            td.className = `${col.op ? 'op' : ''} ${col.sep ? 'data-sep' : ''}`.trim();
+            if (!col.op) td.addEventListener('click', (event) => { event.stopPropagation(); clearNativeSelection(); setHighlight(i); });
+            tr.appendChild(td);
+          }
+          tbody.appendChild(tr);
+        });
+        ui.stripTable.innerHTML = '';
+        ui.stripTable.classList.toggle('quad', isQuad);
+        ui.stripTable.appendChild(thead);
+        ui.stripTable.appendChild(tbody);
+        typesetMath(ui.stripTable);
+      }
+
+      function updateStripTable(model) {
+        const rows = Array.from(ui.stripTable.tBodies[0]?.rows || []);
+        const rs = residuals(state.points, model);
+        const maxR2 = Math.max(0.01, ...rs.map(r => r * r));
+        const coefB = document.getElementById('coefB');
+        const coefM = document.getElementById('coefM');
+        const coefC = document.getElementById('coefC');
+        const coefQB = document.getElementById('coefQB');
+        const coefA = document.getElementById('coefA');
+        if (model.type === 'quad') {
+          if (coefC) coefC.textContent = fmtSigned(model.c, 2);
+          if (coefQB) coefQB.textContent = fmtSigned(model.b, 2);
+          if (coefA) coefA.textContent = fmtSigned(model.a, 3);
+        } else {
+          if (coefB) coefB.textContent = fmtSigned(model.b, 2);
+          if (coefM) coefM.textContent = fmtSigned(model.m, 2);
+        }
+        rows.forEach((tr, i) => {
+          const p = state.points[i];
+          const yhat = yAt(model, p.x);
+          const r = p.y - yhat;
+          const r2 = r * r;
+          const values = {
+            one: '1.0',
+            op1: '+',
+            op2: '+',
+            eq: '=',
+            x: fmt(p.x, 1),
+            x2: p.x * p.x >= 10 ? fmt(p.x * p.x, 0) : fmt(p.x * p.x, 1),
+            y: fmt(p.y, 1),
+            yhat: fmt(yhat, 1),
+            r2: r2 >= 10 ? fmt(r2, 1) : fmt(r2, 2)
+          };
+          tr.classList.toggle('highlighted', i === state.highlightIndex);
+          for (const td of tr.cells) {
+            const key = td.dataset.key;
+            td.textContent = values[key] ?? '';
+            if (key === 'r2') {
+              const alpha = clamp(0.10 + 0.58 * (r2 / maxR2), 0.08, 0.68);
+              td.style.backgroundColor = `rgba(251, 146, 60, ${alpha})`;
+              td.style.color = alpha > 0.42 ? '#7c2d12' : '#334155';
+              td.style.fontWeight = alpha > 0.42 ? '950' : '750';
+            } else if (!td.classList.contains('op')) {
+              td.style.backgroundColor = '';
+              td.style.color = '';
+              td.style.fontWeight = '';
+            }
+          }
+        });
+      }
+
+      function syncSlidersFromModel() {
+        if (!state.model || state.model.type !== 'quad') return;
+        ui.aSlider.value = state.model.a;
+        ui.bSlider.value = state.model.b;
+        ui.cSlider.value = state.model.c;
+        [ui.aSlider, ui.bSlider, ui.cSlider].forEach(input => {
+          const min = Number(input.min);
+          const max = Number(input.max);
+          const fill = ((Number(input.value) - min) / Math.max(max - min, EPS)) * 100;
+          input.style.setProperty('--fill', `${clamp(fill, 0, 100)}%`);
+        });
+        ui.aValue.textContent = fmt(state.model.a, 3);
+        ui.qbValue.textContent = fmt(state.model.b, 2);
+        ui.cValue.textContent = fmt(state.model.c, 2);
+      }
+
+      function sliderKeyFor(input) {
+        return input === ui.aSlider ? 'a' : input === ui.bSlider ? 'b' : 'c';
+      }
+
+      function announceKeyboard(text) {
+        ui.keyboardLive.textContent = '';
+        requestAnimationFrame(() => { ui.keyboardLive.textContent = text; });
+      }
+
+      function sliderChanged(event) {
+        if (state.phase !== 'fit' || !usesSliders()) return;
+        if (event?.target) state.lastTouched = sliderKeyFor(event.target);
+        state.model = clampQuad({ type: 'quad', a: parseFloat(ui.aSlider.value), b: parseFloat(ui.bSlider.value), c: parseFloat(ui.cSlider.value) });
+        syncSlidersFromModel();
+      }
+
+      function setHighlight(index) { state.highlightIndex = state.highlightIndex === index ? null : index; }
+
+      function resizeCanvas() {
+        const rect = shell.getBoundingClientRect();
+        const w = Math.max(320, rect.width || 800);
+        const h = Math.max(300, rect.height || 500);
+        const nextDpr = Math.max(1, Math.min(2.5, window.devicePixelRatio || 1));
+        if (Math.abs(w - W) > 0.5 || Math.abs(h - H) > 0.5 || nextDpr !== dpr) {
+          W = w; H = h; dpr = nextDpr;
+          canvas.width = Math.round(W * dpr);
+          canvas.height = Math.round(H * dpr);
+        }
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        const left = clamp(W * 0.072, 44, 60);
+        const right = Math.max(16, W * 0.028);
+        const top = Math.max(18, H * 0.04);
+        const bottom = Math.max(34, H * 0.075);
+        plot = { left, top, right: W - right, bottom: H - bottom };
+        plot.width = plot.right - plot.left;
+        plot.height = plot.bottom - plot.top;
+      }
+
+      function toScreen(p) {
+        const v = state.view;
+        return {
+          x: plot.left + (p.x - X_MIN) / (X_MAX - X_MIN) * plot.width,
+          y: plot.bottom - (p.y - v.yMin) / (v.yMax - v.yMin) * plot.height
+        };
+      }
+      function toData(s) {
+        const v = state.view;
+        return {
+          x: X_MIN + (s.x - plot.left) / plot.width * (X_MAX - X_MIN),
+          y: v.yMin + (plot.bottom - s.y) / plot.height * (v.yMax - v.yMin)
+        };
+      }
+
+      function slopeHandleScreen(model = state.model) {
+        const v = state.view;
+        const pivot = toScreen({ x: 0, y: model.b });
+        const unitX = plot.width / (X_MAX - X_MIN);
+        const unitY = plot.height / (v.yMax - v.yMin);
+        let dx = unitX;
+        let dy = -model.m * unitY;
+        const len = Math.hypot(dx, dy) || 1;
+        dx /= len; dy /= len;
+        const targetX = plot.left + plot.width * 0.84;
+        let r = (targetX - pivot.x) / Math.max(dx, 0.15);
+        const rMax = (plot.right - 26 - pivot.x) / Math.max(dx, 0.15);
+        r = clamp(r, 84, Math.max(90, rMax));
+        let pos = { x: pivot.x + dx * r, y: pivot.y + dy * r };
+        while (r > 70 && (pos.y < plot.top + 26 || pos.y > plot.bottom - 26)) {
+          r -= 10;
+          pos = { x: pivot.x + dx * r, y: pivot.y + dy * r };
+        }
+        return pos;
+      }
+
+      function slopeFromPointer(pos) {
+        const v = state.view;
+        const pivot = toScreen({ x: 0, y: state.model.b });
+        const unitX = plot.width / (X_MAX - X_MIN);
+        const unitY = plot.height / (v.yMax - v.yMin);
+        const dxData = Math.max(0.35, (pos.x - pivot.x) / unitX);
+        const dyData = -(pos.y - pivot.y) / unitY;
+        return clamp(dyData / dxData, -2.4, 2.4);
+      }
+
+      function roundedPath(c, x, y, w, h, r) {
+        r = Math.min(r, w / 2, h / 2);
+        c.beginPath();
+        c.moveTo(x + r, y);
+        c.lineTo(x + w - r, y);
+        c.quadraticCurveTo(x + w, y, x + w, y + r);
+        c.lineTo(x + w, y + h - r);
+        c.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+        c.lineTo(x + r, y + h);
+        c.quadraticCurveTo(x, y + h, x, y + h - r);
+        c.lineTo(x, y + r);
+        c.quadraticCurveTo(x, y, x + r, y);
+        c.closePath();
+      }
+
+      function clipPlot() {
+        roundedPath(ctx, plot.left, plot.top, plot.width, plot.height, 18);
+        ctx.clip();
+      }
+
+      function drawBackground() {
+        ctx.clearRect(0, 0, W, H);
+        const bg = ctx.createLinearGradient(0, 0, W, H);
+        bg.addColorStop(0, '#ffffff');
+        bg.addColorStop(1, '#f8fbff');
+        ctx.fillStyle = bg;
+        ctx.fillRect(0, 0, W, H);
+        roundedPath(ctx, plot.left, plot.top, plot.width, plot.height, 18);
+        ctx.fillStyle = '#ffffff';
+        ctx.fill();
+        ctx.lineWidth = 1.2;
+        ctx.strokeStyle = '#dbe4f0';
+        ctx.stroke();
+      }
+
+      function yTicks() {
+        const v = state.view;
+        const span = v.yMax - v.yMin;
+        const step = span > 9 ? 2 : 1;
+        const ticks = [];
+        const start = Math.ceil(v.yMin / step) * step;
+        for (let y = start; y <= v.yMax + 1e-6; y += step) ticks.push(y);
+        return ticks;
+      }
+
+      function drawGridAxes() {
+        const v = state.view;
+        const xTicks = [0, 2, 4, 6, 8, 10];
+        const yT = yTicks();
+        ctx.save();
+        clipPlot();
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = COLORS.grid;
+        for (const x of xTicks) {
+          const sx = toScreen({ x, y: v.yMin }).x;
+          ctx.beginPath(); ctx.moveTo(sx, plot.top); ctx.lineTo(sx, plot.bottom); ctx.stroke();
+        }
+        for (const y of yT) {
+          const sy = toScreen({ x: 0, y }).y;
+          ctx.beginPath(); ctx.moveTo(plot.left, sy); ctx.lineTo(plot.right, sy); ctx.stroke();
+        }
+        const x0 = toScreen({ x: 0, y: v.yMin }).x;
+        ctx.strokeStyle = '#94a3b8';
+        ctx.lineWidth = 2.1;
+        ctx.beginPath(); ctx.moveTo(x0, plot.top); ctx.lineTo(x0, plot.bottom); ctx.stroke();
+        if (v.yMin < 0 && v.yMax > 0) {
+          const y0 = toScreen({ x: 0, y: 0 }).y;
+          ctx.beginPath(); ctx.moveTo(plot.left, y0); ctx.lineTo(plot.right, y0); ctx.stroke();
+        }
+        ctx.restore();
+
+        ctx.save();
+        ctx.font = '800 11px ui-sans-serif, system-ui, sans-serif';
+        ctx.fillStyle = '#64748b';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'top';
+        for (const x of xTicks) {
+          const sx = toScreen({ x, y: v.yMin }).x;
+          if (sx >= plot.left - 2 && sx <= plot.right + 2) ctx.fillText(String(x), sx, plot.bottom + 7);
+        }
+        ctx.textAlign = 'right';
+        ctx.textBaseline = 'middle';
+        for (const y of yT) {
+          const sy = toScreen({ x: 0, y }).y;
+          if (sy >= plot.top - 2 && sy <= plot.bottom + 2) ctx.fillText(String(y), plot.left - 8, sy);
+        }
+        ctx.fillStyle = '#475569';
+        ctx.font = '900 12px ui-sans-serif, system-ui, sans-serif';
+        ctx.textAlign = 'left';
+        ctx.fillText('x=0', toScreen({ x: 0, y: v.yMin }).x + 5, plot.bottom - 14);
+        ctx.restore();
+      }
+
+      function drawResidualSquares(model, options = {}) {
+        const excludeIndex = options.excludeIndex ?? -1;
+        const rs = residuals(state.points, model);
+        const maxR2 = Math.max(0.01, ...rs.map((r, i) => i === excludeIndex ? 0 : r * r));
+        ctx.save();
+        clipPlot();
+        for (let i = 0; i < state.points.length; i++) {
+          if (i === excludeIndex) continue;
+          const p = state.points[i];
+          const point = toScreen(p);
+          const fit = toScreen({ x: p.x, y: yAt(model, p.x) });
+          const side = Math.abs(fit.y - point.y);
+          if (side < 0.7) continue;
+          const top = Math.min(point.y, fit.y);
+          let left = point.x;
+          if (left + side > plot.right) left = point.x - side;
+          const r2Frac = rs[i] * rs[i] / maxR2;
+          const alpha = clamp(0.055 + 0.17 * r2Frac, 0.05, 0.23);
+          ctx.fillStyle = `rgba(37, 99, 235, ${alpha})`;
+          ctx.strokeStyle = i === state.highlightIndex ? 'rgba(245, 158, 11, 0.86)' : `rgba(37, 99, 235, ${0.16 + 0.22 * r2Frac})`;
+          ctx.lineWidth = i === state.highlightIndex ? 2.3 : 1.1;
+          ctx.fillRect(left, top, side, side);
+          ctx.strokeRect(left, top, side, side);
+        }
+        ctx.lineCap = 'round';
+        for (let i = 0; i < state.points.length; i++) {
+          if (i === excludeIndex) continue;
+          const p = state.points[i];
+          const point = toScreen(p);
+          const fit = toScreen({ x: p.x, y: yAt(model, p.x) });
+          if (Math.abs(fit.y - point.y) < 1) continue;
+          ctx.strokeStyle = i === state.highlightIndex ? 'rgba(245, 158, 11, 0.92)' : 'rgba(15, 23, 42, 0.42)';
+          ctx.lineWidth = i === state.highlightIndex ? 3.5 : 2.4;
+          ctx.beginPath(); ctx.moveTo(point.x, point.y); ctx.lineTo(fit.x, fit.y); ctx.stroke();
+        }
+        ctx.restore();
+      }
+
+      function drawModel(model, opts = {}) {
+        const color = opts.color || COLORS.yours;
+        const width = opts.width || 4.5;
+        const dash = opts.dash || [];
+        const alpha = opts.alpha == null ? 1 : opts.alpha;
+        ctx.save();
+        clipPlot();
+        ctx.globalAlpha = alpha;
+        ctx.strokeStyle = color;
+        ctx.lineWidth = width;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.setLineDash(dash);
+        ctx.beginPath();
+        if (model.type === 'line') {
+          const p0 = toScreen({ x: X_MIN, y: yAt(model, X_MIN) });
+          const p1 = toScreen({ x: X_MAX, y: yAt(model, X_MAX) });
+          ctx.moveTo(p0.x, p0.y); ctx.lineTo(p1.x, p1.y);
+        } else {
+          const steps = 160;
+          for (let i = 0; i <= steps; i++) {
+            const x = X_MIN + (X_MAX - X_MIN) * i / steps;
+            const p = toScreen({ x, y: yAt(model, x) });
+            if (i === 0) ctx.moveTo(p.x, p.y); else ctx.lineTo(p.x, p.y);
+          }
+        }
+        ctx.stroke();
+        ctx.restore();
+        if (opts.label) drawModelLabel(model, opts.label, color, opts.labelOffset || 0);
+      }
+
+      function drawModelLabel(model, text, color, offset = 0) {
+        const x = model.type === 'quad' ? 8.7 : 8.85;
+        const p = toScreen({ x, y: yAt(model, x) });
+        ctx.save();
+        ctx.font = '850 12px ui-sans-serif, system-ui, sans-serif';
+        const w = ctx.measureText(text).width + 16, h = 24;
+        const px = clamp(p.x - w - 3, plot.left + 4, plot.right - w - 4);
+        const py = clamp(p.y - h / 2 + offset, plot.top + 4, plot.bottom - h - 4);
+        roundedPath(ctx, px, py, w, h, 999);
+        ctx.fillStyle = 'rgba(255,255,255,0.9)'; ctx.fill();
+        ctx.strokeStyle = color; ctx.lineWidth = 2; ctx.stroke();
+        ctx.fillStyle = color; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.fillText(text, px + w / 2, py + h / 2 + 0.5);
+        ctx.restore();
+      }
+
+      function drawPoints() {
+        const now = performance.now();
+        for (let i = 0; i < state.points.length; i++) {
+          const p = state.points[i];
+          const s = toScreen(p);
+          const highlighted = i === state.highlightIndex;
+          ctx.save();
+          if (highlighted) {
+            const pulse = 0.5 + 0.5 * Math.sin(now / 160);
+            ctx.fillStyle = `rgba(245, 158, 11, ${0.16 + 0.15 * pulse})`;
+            ctx.beginPath(); ctx.arc(s.x, s.y, 18 + 5 * pulse, 0, Math.PI * 2); ctx.fill();
+          }
+          ctx.shadowColor = 'rgba(15, 23, 42, 0.18)';
+          ctx.shadowBlur = 9;
+          ctx.fillStyle = highlighted ? '#f59e0b' : '#111827';
+          ctx.strokeStyle = '#ffffff';
+          ctx.lineWidth = highlighted ? 4 : 3;
+          ctx.beginPath(); ctx.arc(s.x, s.y, 6.2, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+          ctx.restore();
+        }
+      }
+
+      function drawHandles() {
+        if (state.phase !== 'fit' || levelDef().type !== 'line') return;
+        const bPos = toScreen({ x: 0, y: state.model.b });
+        const mPos = slopeHandleScreen(state.model);
+        const activeB = state.drag?.type === 'intercept';
+        const activeM = state.drag?.type === 'slope';
+        const selectedB = document.activeElement === canvas && state.lastTouched === 'b';
+        const selectedM = document.activeElement === canvas && state.lastTouched === 'm';
+        const showB = activeB || state.hoverHandle === 'b' || selectedB;
+        const showM = activeM || state.hoverHandle === 'm' || selectedM;
+        if (showB) drawInterceptAffordance(bPos, activeB ? 0.36 : state.hoverHandle === 'b' ? 0.20 : 0.14);
+        drawDiamondHandle(bPos, 'b', COLORS.purple, activeB);
+        drawRoundHandle(mPos, 'm', COLORS.cyan, activeM);
+        if (showM) drawSlopeAffordance(mPos, activeM ? 0.42 : state.hoverHandle === 'm' ? 0.20 : 0.14);
+      }
+
+      function drawHandleLabel(pos, label, color) {
+        ctx.save();
+        ctx.fillStyle = color;
+        ctx.font = '950 12px ui-sans-serif, system-ui, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(label, pos.x, pos.y + 0.5);
+        ctx.restore();
+      }
+
+      function drawDiamondHandle(pos, label, color, active) {
+        ctx.save();
+        ctx.translate(pos.x, pos.y); ctx.rotate(Math.PI / 4);
+        ctx.shadowColor = 'rgba(15,23,42,0.20)'; ctx.shadowBlur = 12; ctx.shadowOffsetY = 4;
+        ctx.fillStyle = '#fff'; ctx.strokeStyle = color; ctx.lineWidth = active ? 6.5 : 5.2;
+        const r = active ? 17 : 15;
+        roundedPath(ctx, -r, -r, 2 * r, 2 * r, 6);
+        ctx.fill(); ctx.stroke();
+        ctx.rotate(-Math.PI / 4);
+        ctx.shadowColor = 'transparent'; ctx.fillStyle = color; ctx.font = '950 12px ui-sans-serif, system-ui, sans-serif';
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(label, 0, 0.5);
+        ctx.restore();
+      }
+
+      function drawRoundHandle(pos, label, color, active) {
+        ctx.save();
+        const r = active ? 18.5 : 16;
+        ctx.shadowColor = 'rgba(15,23,42,0.20)'; ctx.shadowBlur = 12; ctx.shadowOffsetY = 4;
+        ctx.fillStyle = '#fff'; ctx.strokeStyle = color; ctx.lineWidth = active ? 6.5 : 5.2;
+        ctx.beginPath(); ctx.arc(pos.x, pos.y, r, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+        ctx.shadowColor = 'transparent'; ctx.fillStyle = color; ctx.font = '950 12px ui-sans-serif, system-ui, sans-serif';
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(label, pos.x, pos.y + 0.5);
+        ctx.restore();
+      }
+
+      function drawInterceptAffordance(pos, alpha = 0.36) {
+        ctx.save();
+        clipPlot();
+        ctx.globalAlpha = alpha;
+        ctx.strokeStyle = COLORS.purple;
+        ctx.fillStyle = COLORS.purple;
+        ctx.lineWidth = 3.6;
+        ctx.lineCap = 'round';
+        const gap = 26;
+        const len = 34;
+        const topEnd = Math.max(plot.top + 14, pos.y - gap - len);
+        const bottomEnd = Math.min(plot.bottom - 14, pos.y + gap + len);
+        ctx.beginPath(); ctx.moveTo(pos.x, pos.y - gap); ctx.lineTo(pos.x, topEnd); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(pos.x, pos.y + gap); ctx.lineTo(pos.x, bottomEnd); ctx.stroke();
+        const arrowSize = 14;
+        drawArrowHead(pos.x, topEnd, -Math.PI / 2, arrowSize);
+        drawArrowHead(pos.x, bottomEnd, Math.PI / 2, arrowSize);
+        ctx.restore();
+      }
+
+      function drawSlopeAffordance(pos, alpha = 0.42) {
+        const pivot = toScreen({ x: 0, y: state.model.b });
+        const r = Math.max(48, Math.hypot(pos.x - pivot.x, pos.y - pivot.y));
+        const a = Math.atan2(pos.y - pivot.y, pos.x - pivot.x);
+        const spread = clamp(40 / Math.max(r, 1), 0.07, 0.24);
+        const arrowSize = 14;
+        ctx.save();
+        clipPlot();
+        ctx.globalAlpha = alpha;
+        ctx.strokeStyle = '#10b981';
+        ctx.fillStyle = '#10b981';
+        ctx.lineWidth = 3.5;
+        ctx.lineCap = 'round';
+        ctx.beginPath();
+        ctx.arc(pivot.x, pivot.y, r, a - spread, a + spread);
+        ctx.stroke();
+        const a1 = a + spread;
+        const a0 = a - spread;
+        drawArrowHead(pivot.x + Math.cos(a1) * r, pivot.y + Math.sin(a1) * r, a1 + Math.PI / 2, arrowSize);
+        drawArrowHead(pivot.x + Math.cos(a0) * r, pivot.y + Math.sin(a0) * r, a0 - Math.PI / 2, arrowSize);
+        ctx.restore();
+      }
+
+      function drawArrowHead(x, y, angle, size = 14) {
+        const wing = 0.72;
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(x - Math.cos(angle - wing) * size, y - Math.sin(angle - wing) * size);
+        ctx.lineTo(x - Math.cos(angle + wing) * size, y - Math.sin(angle + wing) * size);
+        ctx.closePath();
+        ctx.fill();
+      }
+
+      function drawGauges(revealT = 0) {
+        if (!usesGauges()) return;
+        let g;
+        if (state.phase === 'fit') {
+          g = residualMoments(state.model);
+        } else {
+          const start = residualMoments(state.lockedModel || state.model);
+          const remaining = state.phase === 'reveal' ? 0 : 1 - revealT;
+          g = { g0: start.g0 * remaining, g1: start.g1 * remaining };
+        }
+        ui.gauge0Value.textContent = fmt(g.g0, 1);
+        ui.gauge1Value.textContent = fmt(g.g1, 1);
+        drawGauge(gauge0, g.g0, state.gaugeScale.g0);
+        drawGauge(gauge1, g.g1, state.gaugeScale.g1);
+      }
+
+      function drawGauge(gaugeCanvas, value, scale) {
+        const rect = gaugeCanvas.getBoundingClientRect();
+        const gw = Math.max(72, rect.width || 100), gh = Math.max(30, rect.height || 34);
+        const gdpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+        if (gaugeCanvas.width !== Math.round(gw * gdpr) || gaugeCanvas.height !== Math.round(gh * gdpr)) {
+          gaugeCanvas.width = Math.round(gw * gdpr); gaugeCanvas.height = Math.round(gh * gdpr);
+        }
+        const c = gaugeCanvas.getContext('2d');
+        c.setTransform(gdpr, 0, 0, gdpr, 0, 0);
+        c.clearRect(0, 0, gw, gh);
+        const cx = gw / 2, cy = gh * 0.96, r = Math.min(gw * 0.34, gh * 0.68);
+        c.lineCap = 'round';
+        c.lineWidth = 5;
+        c.strokeStyle = '#e2e8f0';
+        c.beginPath(); c.arc(cx, cy, r, Math.PI * 1.08, Math.PI * 1.92); c.stroke();
+        c.strokeStyle = 'rgba(16,185,129,0.72)';
+        c.beginPath(); c.arc(cx, cy, r, Math.PI * 1.46, Math.PI * 1.54); c.stroke();
+        const norm = clamp(value / Math.max(scale, EPS), -1, 1);
+        const angle = lerp(Math.PI * 1.08, Math.PI * 1.92, (norm + 1) / 2);
+        c.strokeStyle = Math.abs(norm) < 0.08 ? '#10b981' : '#f43f5e';
+        c.lineWidth = 3;
+        c.beginPath(); c.moveTo(cx, cy); c.lineTo(cx + Math.cos(angle) * r * 0.82, cy + Math.sin(angle) * r * 0.82); c.stroke();
+        c.fillStyle = '#0f172a';
+        c.beginPath(); c.arc(cx, cy, 3.6, 0, Math.PI * 2); c.fill();
+      }
+
+      function interpolateModel(a, b, t) {
+        if (!a || !b) return a || b;
+        if (a.type === 'quad') return { type: 'quad', a: lerp(a.a, b.a, t), b: lerp(a.b, b.b, t), c: lerp(a.c, b.c, t) };
+        return { type: 'line', b: lerp(a.b, b.b, t), m: lerp(a.m, b.m, t) };
+      }
+
+      function updateStats(scoreModel) {
+        const score = sse(state.points, scoreModel);
+        const optScore = sse(state.points, state.optModel);
+        ui.areaMain.textContent = fmt(score, 2);
+        ui.areaSub.textContent = state.phase === 'fit'
+          ? `best this cloud ${fmt(state.liveBest, 2)}`
+          : `LS ${fmt(optScore, 2)} · ${fmtRatio(state.lockedRatio)}`;
+        updateRestoreButton(score);
+      }
+
+      function cardSig() {
+        return [
+          state.cloudIndex, state.level, state.phase === 'fit' ? 'f' : 'r',
+          Math.round(W), Math.round(H),
+          ui.eqCard.offsetWidth, ui.eqCard.offsetHeight,
+          ui.areaCard.offsetWidth,
+          ui.gaugePanel.offsetWidth, ui.gaugePanel.offsetHeight
+        ].join('|');
+      }
+
+      function placePlotCards() {
+        const sig = cardSig();
+        if (sig === lastCardSig) return;
+        lastCardSig = sig;
+        const pad = 10;
+        const used = [];
+        const cornerRect = (key, w, h) => {
+          if (key === 'tl') return { left: plot.left + pad, top: plot.top + pad, w, h };
+          if (key === 'tr') return { left: plot.right - pad - w, top: plot.top + pad, w, h };
+          if (key === 'bl') return { left: plot.left + pad, top: plot.bottom - pad - h, w, h };
+          if (key === 'br') return { left: plot.right - pad - w, top: plot.bottom - pad - h, w, h };
+          if (key === 'ml') return { left: plot.left + pad, top: (plot.top + plot.bottom) / 2 - h / 2, w, h };
+          if (key === 'mr') return { left: plot.right - pad - w, top: (plot.top + plot.bottom) / 2 - h / 2, w, h };
+          if (key === 'tc') return { left: (plot.left + plot.right) / 2 - w / 2, top: plot.top + pad, w, h };
+          if (key === 'bc') return { left: (plot.left + plot.right) / 2 - w / 2, top: plot.bottom - pad - h, w, h };
+          return { left: (plot.left + plot.right) / 2 - w / 2, top: (plot.top + plot.bottom) / 2 - h / 2, w, h };
+        };
+        const sampleStaticModels = () => {
+          const models = [];
+          if (usesGauges()) {
+            if (state.optModel) models.push(state.optModel);
+            if (state.initialModel) models.push(state.initialModel);
+          }
+          if (usesSliders() && state.optModel) models.push(state.optModel);
+          if ((state.phase === 'reveal' || state.phase === 'revealing') && state.lockedModel) models.push(state.lockedModel);
+          return models;
+        };
+        const overlapPts = (r, opts = {}) => {
+          let c = 0;
+          for (const p of state.points) {
+            const s = toScreen(p);
+            if (s.x > r.left - 12 && s.x < r.left + r.w + 12 && s.y > r.top - 12 && s.y < r.top + r.h + 12) c++;
+          }
+          const modelSamples = opts.modelSamples || 24;
+          const modelWeight = opts.modelWeight || 1.5;
+          const modelMargin = opts.modelMargin || 0;
+          for (const model of sampleStaticModels()) {
+            for (let i = 0; i < modelSamples; i++) {
+              const x = X_MIN + (X_MAX - X_MIN) * i / Math.max(1, modelSamples - 1);
+              const s = toScreen({ x, y: yAt(model, x) });
+              if (s.x > r.left - modelMargin && s.x < r.left + r.w + modelMargin && s.y > r.top - modelMargin && s.y < r.top + r.h + modelMargin) c += modelWeight;
+            }
+          }
+          return c;
+        };
+        const conflicts = (r) => used.some(u => !(r.left + r.w < u.left || u.left + u.w < r.left || r.top + r.h < u.top || u.top + u.h < r.top));
+        const put = (el, prefs, opts = {}) => {
+          if (el.classList.contains('hidden') || el.offsetParent === null) return;
+          const w = el.offsetWidth || 150, h = el.offsetHeight || 58;
+          let best = null, bestScore = Infinity;
+          for (const key of prefs) {
+            const r = cornerRect(key, w, h);
+            if (conflicts(r)) continue;
+            let s = overlapPts(r, opts);
+            if (opts.avoidAxis) {
+              const x0 = toScreen({ x: 0, y: state.view.yMin }).x;
+              if (x0 > r.left - 30 && x0 < r.left + r.w + 30) s += 0.35;
+            }
+            if (s < bestScore) { bestScore = s; best = r; }
+            if (s === 0) break;
+          }
+          if (!best) best = cornerRect(prefs[0], w, h);
+          el.style.left = `${Math.round(best.left)}px`;
+          el.style.top = `${Math.round(best.top)}px`;
+          used.push(best);
+        };
+        if (usesGauges()) {
+          put(ui.gaugePanel, ['tr', 'tl'], { avoidAxis: true });
+        }
+        if (!usesGauges()) put(ui.areaCard, usesSliders() ? ['tr', 'br', 'bl', 'tl'] : ['tr', 'tl'], usesSliders() ? { modelWeight: 4, modelSamples: 60, modelMargin: 3 } : {});
+        put(ui.eqCard, ['bl', 'br']);
+      }
+
+      function drawScene(now) {
+        if (state.screen !== 'play' || !state.points.length) {
+          requestAnimationFrame(drawScene);
+          return;
+        }
+        resizeCanvas();
+        const scoreModel = state.phase === 'fit' ? state.model : state.lockedModel || state.model;
+        rememberBestModel();
+
+        let tRaw = 0;
+        let revealT = 0;
+        let revealModel = null;
+        if (state.phase === 'revealing' || state.phase === 'reveal') {
+          tRaw = state.phase === 'reveal' ? 1 : clamp((now - state.revealStart) / REVEAL_MS, 0, 1);
+          revealT = ease(tRaw);
+          revealModel = interpolateModel(state.lockedModel, state.optModel, revealT);
+        }
+        const residualModel = usesGauges() && revealModel ? revealModel : scoreModel;
+
+        drawBackground();
+        drawGridAxes();
+        drawResidualSquares(residualModel);
+
+        if (revealModel) {
+          drawModel(state.lockedModel, { color: COLORS.yours, width: 4.2, alpha: 0.78, label: tRaw >= 0.85 ? 'yours' : '', labelOffset: -16 });
+          drawModel(revealModel, { color: COLORS.best, width: 5, alpha: 0.96, label: tRaw >= 0.85 ? 'best' : '', labelOffset: 20 });
+          if (tRaw >= 1) finishReveal();
+        } else {
+          drawModel(state.model, { color: COLORS.yours, width: 5 });
+        }
+
+        drawPoints();
+        drawHandles();
+        drawGauges(revealT);
+        updateStats(scoreModel);
+        updateEquation();
+        updateStripTable(residualModel);
+        placePlotCards();
+        requestAnimationFrame(drawScene);
+      }
+
+      function pointerPosition(event) {
+        const rect = canvas.getBoundingClientRect();
+        return { x: event.clientX - rect.left, y: event.clientY - rect.top };
+      }
+
+      function distance(a, b) { return Math.hypot(a.x - b.x, a.y - b.y); }
+      function distanceToSegment(p, a, b) {
+        const vx = b.x - a.x, vy = b.y - a.y;
+        const wx = p.x - a.x, wy = p.y - a.y;
+        const c1 = vx * wx + vy * wy;
+        if (c1 <= 0) return distance(p, a);
+        const c2 = vx * vx + vy * vy;
+        if (c2 <= c1) return distance(p, b);
+        const t = c1 / c2;
+        return distance(p, { x: a.x + t * vx, y: a.y + t * vy });
+      }
+
+      function pointerDown(event) {
+        clearNativeSelection();
+        try { canvas.focus({ preventScroll: true }); } catch (_) { canvas.focus(); }
+        const pos = pointerPosition(event);
+        if (state.phase !== 'fit' || levelDef().type !== 'line') {
+          const hit = hitPoint(pos);
+          if (hit >= 0) setHighlight(hit);
+          return;
+        }
+        const bPos = toScreen({ x: 0, y: state.model.b });
+        const mPos = slopeHandleScreen(state.model);
+        if (distance(pos, bPos) < 26) {
+          state.drag = { type: 'intercept' };
+          state.lastTouched = 'b';
+          state.hoverHandle = null;
+          canvas.style.cursor = 'grabbing';
+          canvas.setPointerCapture?.(event.pointerId);
+          event.preventDefault(); return;
+        }
+        if (distance(pos, mPos) < 28) {
+          state.drag = { type: 'slope' };
+          state.lastTouched = 'm';
+          state.hoverHandle = null;
+          canvas.style.cursor = 'grabbing';
+          canvas.setPointerCapture?.(event.pointerId);
+          event.preventDefault(); return;
+        }
+        const p0 = toScreen({ x: X_MIN, y: yAt(state.model, X_MIN) });
+        const p1 = toScreen({ x: X_MAX, y: yAt(state.model, X_MAX) });
+        if (distanceToSegment(pos, p0, p1) < 13) {
+          state.drag = { type: 'line', startData: toData(pos), startB: state.model.b };
+          state.lastTouched = 'b';
+          state.hoverHandle = null;
+          canvas.style.cursor = 'grabbing';
+          canvas.setPointerCapture?.(event.pointerId);
+          event.preventDefault(); return;
+        }
+        const hit = hitPoint(pos);
+        if (hit >= 0) setHighlight(hit);
+      }
+
+      function pointerMove(event) {
+        const pos = pointerPosition(event);
+        if (!state.drag && event.pointerType === 'mouse' && state.phase === 'fit' && levelDef().type === 'line') {
+          const overB = distance(pos, toScreen({ x: 0, y: state.model.b })) < 26;
+          const overM = !overB && distance(pos, slopeHandleScreen(state.model)) < 28;
+          state.hoverHandle = overB ? 'b' : overM ? 'm' : null;
+          canvas.style.cursor = state.hoverHandle ? 'grab' : 'crosshair';
+        }
+        if (!state.drag) return;
+        const data = toData(pos);
+        if (state.drag.type === 'intercept') {
+          state.model.b = data.y;
+          state.model = clampLine(state.model);
+        } else if (state.drag.type === 'slope') {
+          state.model.m = slopeFromPointer(pos);
+          state.model = clampLine(state.model);
+        } else if (state.drag.type === 'line') {
+          state.model.b = state.drag.startB + (data.y - state.drag.startData.y);
+          state.model = clampLine(state.model);
+        }
+        rememberBestModel();
+        event.preventDefault();
+      }
+
+      function pointerLeave() {
+        if (state.drag) return;
+        state.hoverHandle = null;
+        canvas.style.cursor = 'crosshair';
+      }
+
+      function pointerUp(event) {
+        state.drag = null;
+        state.hoverHandle = null;
+        canvas.style.cursor = 'crosshair';
+        try { canvas.releasePointerCapture?.(event.pointerId); } catch (_) {}
+      }
+
+      function hitPoint(pos) {
+        let best = -1, bestD = 16;
+        for (let i = 0; i < state.points.length; i++) {
+          const d = distance(pos, toScreen(state.points[i]));
+          if (d < bestD) { bestD = d; best = i; }
+        }
+        return best;
+      }
+
+      function showIntro() {
+        if (!ui.tipModal.hidden) closeTip(false);
+        state.screen = 'intro';
+        state.drag = null;
+        state.hoverHandle = null;
+        canvas.style.cursor = 'crosshair';
+        hideRecap();
+        ui.playLayout.classList.remove('show-columns');
+        ui.columnsToggle.setAttribute('aria-expanded', 'false');
+        ui.introScreen.classList.remove('hidden');
+        ui.gameScreen.classList.add('hidden');
+        renderModeButtons();
+        if (!state.introTypesetDone) {
+          state.introTypesetDone = true;
+          typesetMath(ui.introScreen);
+        }
+        requestAnimationFrame(() => window.scrollTo({ top: 0, behavior: 'auto' }));
+      }
+
+      function enterLevel(level) {
+        state.level = level;
+        state.screen = 'play';
+        ui.introScreen.classList.add('hidden');
+        ui.gameScreen.classList.remove('hidden');
+        ui.playLayout.classList.remove('show-columns');
+        ui.columnsToggle.setAttribute('aria-expanded', 'false');
+        ui.columnsToggle.textContent = 'plot ⇄ columns';
+        newCloud(false);
+        requestAnimationFrame(() => {
+          resizeCanvas();
+          window.scrollTo({ top: 0, behavior: 'auto' });
+        });
+      }
+
+      function selectQuadKey(key) {
+        const target = key === 'a' ? ui.aSlider : key === 'b' ? ui.bSlider : ui.cSlider;
+        state.lastTouched = key;
+        try { target.focus({ preventScroll: true }); } catch (_) { target.focus(); }
+        announceKeyboard(`${key} coefficient selected; use arrow keys to adjust.`);
+      }
+
+      function canvasKeydown(event) {
+        if (state.screen !== 'play' || state.phase !== 'fit') return;
+        const key = event.key.toLowerCase();
+        if (usesSliders() && ['a', 'b', 'c'].includes(key)) {
+          event.preventDefault();
+          selectQuadKey(key);
+          return;
+        }
+        if (!usesSliders() && ['b', 'm'].includes(key)) {
+          event.preventDefault();
+          state.lastTouched = key;
+          announceKeyboard(`${key === 'b' ? 'Intercept b' : 'Slope m'} selected; use arrow keys to adjust.`);
+          return;
+        }
+        if (!['ArrowUp', 'ArrowRight', 'ArrowDown', 'ArrowLeft'].includes(event.key)) return;
+        const direction = (event.key === 'ArrowUp' || event.key === 'ArrowRight') ? 1 : -1;
+        const multiplier = event.shiftKey ? 5 : 1;
+        event.preventDefault();
+        if (usesSliders()) {
+          const active = ['a', 'b', 'c'].includes(state.lastTouched) ? state.lastTouched : 'c';
+          if (active === 'a') state.model.a += direction * 0.005 * multiplier;
+          else if (active === 'b') state.model.b += direction * 0.02 * multiplier;
+          else state.model.c += direction * 0.05 * multiplier;
+          state.model = clampQuad(state.model);
+          syncSlidersFromModel();
+          announceKeyboard(`${active} is now ${active === 'a' ? fmt(state.model.a, 3) : fmt(state.model[active], 2)}.`);
+        } else {
+          const active = state.lastTouched === 'm' ? 'm' : 'b';
+          if (active === 'm') state.model.m += direction * 0.01 * multiplier;
+          else state.model.b += direction * 0.05 * multiplier;
+          state.model = clampLine(state.model);
+          rememberBestModel();
+          announceKeyboard(`${active === 'm' ? 'Slope m' : 'Intercept b'} is now ${fmt(state.model[active], 2)}.`);
+        }
+      }
+
+      function toggleColumns() {
+        const shown = ui.playLayout.classList.toggle('show-columns');
+        ui.columnsToggle.setAttribute('aria-expanded', shown ? 'true' : 'false');
+        ui.columnsToggle.textContent = shown ? 'columns ⇄ plot' : 'plot ⇄ columns';
+      }
+
+      function momentTolerance(power) {
+        let basisNormSq = 0;
+        for (const p of state.points) {
+          const basis = Math.pow(p.x, power);
+          basisNormSq += basis * basis;
+        }
+        const residualNorm = Math.sqrt(Math.max(sse(state.points, state.model), 0));
+        return Math.max(1e-8, 0.015 * Math.sqrt(basisNormSq) * residualNorm);
+      }
+
+      function tipAdviceRow(momentTex, value, coefficient, color, tolerance, digits = 1) {
+        const nearZero = Math.abs(value) <= tolerance;
+        const direction = nearZero ? 'hold' : value > 0 ? 'raise' : 'lower';
+        const arrow = direction === 'raise' ? '↑' : direction === 'lower' ? '↓' : '•';
+        const action = nearZero ? `leave \\(${coefficient}\\) for now` : `${direction} \\(${coefficient}\\) ${arrow}`;
+        return `<div class="tip-advice-row">
+          <span class="tip-moment"><strong class="num ${color}">\\(${momentTex}\\)</strong> = ${fmtBalance(value, digits)}</span>
+          <strong class="tip-direction ${direction}">${action}</strong>
+        </div>`;
+      }
+
+      function buildTipContent() {
+        const moments = residualMoments(state.model);
+        if (usesGauges()) {
+          ui.tipTitle.textContent = 'Gauge derivative tip';
+          return `
+            <p class="tip-lead">The game uses \\(r_i=y_i-\\hat y_i\\). A point above the line has a positive residual; a point below has a negative residual.</p>
+            <div class="tip-formula">
+              <div>\\(S=\\sum_i r_i^2\\)</div>
+              <div>\\(\\displaystyle \\frac{\\partial S}{\\partial b}=-2\\sum_i r_i,\\qquad \\frac{\\partial S}{\\partial m}=-2\\sum_i x_i r_i\\)</div>
+            </div>
+            <p class="tip-rule">A positive gauge means raise its coefficient; a negative gauge means lower it.</p>
+            <div class="tip-advice">
+              ${tipAdviceRow('\\sum_i r_i', moments.g0, 'b', 'purple', 0.08 * state.gaugeScale.g0)}
+              ${tipAdviceRow('\\sum_i x_i r_i', moments.g1, 'm', 'cyan', 0.08 * state.gaugeScale.g1)}
+            </div>
+            <p class="tip-note">Make a small adjustment, then check again. Changing either coefficient can move both gauges.</p>`;
+        }
+
+        ui.tipTitle.textContent = 'Quadratic gradient tip';
+        return `
+          <p class="tip-lead">For \\(\\hat y_i=ax_i^2+bx_i+c\\) and \\(r_i=y_i-\\hat y_i\\), the three partial derivatives give the local direction that lowers the squared area.</p>
+          <div class="tip-formula">
+            <div>\\(S=\\sum_i r_i^2\\)</div>
+            <div class="tip-gradient-row">
+              <span>\\(\\displaystyle \\frac{\\partial S}{\\partial a}=-2\\sum_i x_i^2r_i\\)</span>
+              <span>\\(\\displaystyle \\frac{\\partial S}{\\partial b}=-2\\sum_i x_i r_i\\)</span>
+              <span>\\(\\displaystyle \\frac{\\partial S}{\\partial c}=-2\\sum_i r_i\\)</span>
+            </div>
+          </div>
+          <p class="tip-rule">Current quick advice:</p>
+          <div class="tip-advice">
+            ${tipAdviceRow('\\sum_i x_i^2r_i', moments.g2, 'a', 'amber', momentTolerance(2))}
+            ${tipAdviceRow('\\sum_i x_i r_i', moments.g1, 'b', 'cyan', momentTolerance(1))}
+            ${tipAdviceRow('\\sum_i r_i', moments.g0, 'c', 'purple', momentTolerance(0))}
+          </div>
+          <p class="tip-note">Move one slider a little, then reopen the tip. The coefficients are coupled, so every adjustment can change all three directions.</p>`;
+      }
+
+      function openTip() {
+        if (state.level === 1 || state.phase !== 'fit') return;
+        ui.tipBody.innerHTML = buildTipContent();
+        ui.tipModal.hidden = false;
+        typesetMath(ui.tipModal);
+        ui.closeTip.focus();
+      }
+
+      function closeTip(returnFocus = true) {
+        ui.tipModal.hidden = true;
+        if (returnFocus && !ui.tipBtn.classList.contains('hidden')) ui.tipBtn.focus();
+      }
+
+      function openInfo() {
+        ui.infoModal.hidden = false;
+        ui.closeInfo.focus();
+      }
+
+      function closeInfo() {
+        ui.infoModal.hidden = true;
+        ui.infoBtn.focus();
+      }
+
+      function setupEvents() {
+        ui.modeGrid.addEventListener('click', (event) => {
+          const button = event.target.closest('.mode-button');
+          if (button) enterLevel(Number(button.dataset.level));
+        });
+        ui.backBtn.addEventListener('click', showIntro);
+        ui.primaryBtn.addEventListener('click', () => state.phase === 'reveal' ? newCloud(true) : lockFit());
+        ui.recapNewBtn.addEventListener('click', () => newCloud(true));
+        ui.recapNextBtn.addEventListener('click', showIntro);
+        ui.columnsToggle.addEventListener('click', toggleColumns);
+        ui.restoreBestBtn.addEventListener('click', restoreBestSoFar);
+        ui.tipBtn.addEventListener('click', openTip);
+        ui.closeTip.addEventListener('click', closeTip);
+        ui.tipModal.addEventListener('click', (event) => { if (event.target === ui.tipModal) closeTip(); });
+        ui.infoBtn.addEventListener('click', openInfo);
+        ui.closeInfo.addEventListener('click', closeInfo);
+        ui.infoModal.addEventListener('click', (event) => { if (event.target === ui.infoModal) closeInfo(); });
+        window.addEventListener('keydown', (event) => {
+          if (event.key !== 'Escape') return;
+          if (!ui.tipModal.hidden) closeTip();
+          else if (!ui.infoModal.hidden) closeInfo();
+        });
+        canvas.addEventListener('pointerdown', pointerDown);
+        canvas.addEventListener('pointermove', pointerMove);
+        canvas.addEventListener('pointerup', pointerUp);
+        canvas.addEventListener('pointercancel', pointerUp);
+        canvas.addEventListener('pointerleave', pointerLeave);
+        canvas.addEventListener('keydown', canvasKeydown);
+        [ui.aSlider, ui.bSlider, ui.cSlider].forEach(input => {
+          input.addEventListener('input', sliderChanged);
+          input.addEventListener('focus', () => { state.lastTouched = sliderKeyFor(input); });
+          input.addEventListener('pointerdown', () => { state.lastTouched = sliderKeyFor(input); });
+        });
+        ui.cheatsheet.addEventListener('toggle', () => { if (ui.cheatsheet.open) typesetMath(ui.cheatsheet); });
+        if ('ResizeObserver' in window) new ResizeObserver(resizeCanvas).observe(shell);
+        else window.addEventListener('resize', resizeCanvas);
+      }
+
+      function init() {
+        setupEvents();
+        renderModeButtons();
+        showIntro();
+        typesetMath(document.body);
+        requestAnimationFrame(drawScene);
+      }
+
+      init();
+    })();
+  </script>
+</body>
+</html>

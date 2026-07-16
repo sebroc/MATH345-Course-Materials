@@ -4,7 +4,8 @@
       "title": "MatriX Match",
       "slug": "MatriXMatch",
       "href": "MatriXMatch/",
-      "image": "matrix-match-small.jpg"
+      "image": "matrix-match-small.jpg",
+      "version": "v0.2(beta)"
     },
     {
       "title": "Order Matters!",
@@ -13,10 +14,11 @@
       "image": "order-matters-small.jpg"
     },
     {
-      "title": "Echelon Escape",
-      "slug": "EchelonEscape",
-      "href": "EchelonEscape/",
-      "image": "echelon-escape-small.jpg"
+      "title": "The Elimination Game",
+      "slug": "TheEliminationGame",
+      "href": "TheEliminationGame/",
+      "image": "the-elimination-game-small.jpg",
+      "version": "v0.2(beta)"
     },
     {
       "title": "Null & Order",
@@ -37,16 +39,25 @@
       "image": "optimal-recall-small.jpg"
     },
     {
-      "title": "Gram-Schmidt 3D",
-      "slug": "GramSchmidt3D",
-      "href": "GramSchmidt3D/",
-      "image": "gram-schmidt-3d-small.jpg"
+      "title": "Perfectly Normal",
+      "slug": "PerfectlyNormal",
+      "href": "PerfectlyNormal/",
+      "image": "perfectly-normal-small.jpg",
+      "version": "v0.2(beta)"
+    },
+    {
+      "title": "Residual Squares",
+      "slug": "ResidualSquares",
+      "href": "ResidualSquares/",
+      "image": "residual-squares-small.jpg",
+      "version": "v0.2(beta)"
     },
     {
       "title": "Extreme Quest",
       "slug": "ExtremeQuest",
       "href": "ExtremeQuest/",
-      "image": "extreme-quest-small.jpg"
+      "image": "extreme-quest-small.jpg",
+      "version": "v0.2(beta)"
     }
   ]
 }
