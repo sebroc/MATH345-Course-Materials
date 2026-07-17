@@ -11,7 +11,8 @@
       "title": "Order Matters!",
       "slug": "OrderMatters",
       "href": "OrderMatters/",
-      "image": "order-matters-small.jpg"
+      "image": "order-matters-small.jpg",
+      "version": "v0.1(beta)"
     },
     {
       "title": "The Elimination Game",
@@ -24,19 +25,22 @@
       "title": "Null & Order",
       "slug": "NullAndOrder",
       "href": "NullAndOrder/",
-      "image": "null-and-order-small.jpg"
+      "image": "null-and-order-small.jpg",
+      "version": "v0.1(beta)"
     },
     {
       "title": "Differential Diagnosis",
       "slug": "DifferentialDiagnosis",
       "href": "DifferentialDiagnosis/",
-      "image": "differential-diagnosis-small.jpg"
+      "image": "differential-diagnosis-small.jpg",
+      "version": "v0.1(beta)"
     },
     {
       "title": "Optimal Recall",
       "slug": "OptimalRecall",
       "href": "OptimalRecall/",
-      "image": "optimal-recall-small.jpg"
+      "image": "optimal-recall-small.jpg",
+      "version": "v0.1(beta)"
     },
     {
       "title": "Perfectly Normal",
