@@ -32,181 +32,333 @@ window.MathJax = {
   --blue:#e7f7ff;
   --blue-2:#bdefff;
   --blue-3:#63d2ff;
+  --blue-deep:#055f85;
   --red:#ff173f;
   --red-soft:#ffe7ec;
+  --amber:#fff2bf;
+  --green:#dff9e7;
   --line:#050505;
   --muted:#60656f;
-  --shadow:0 18px 60px rgba(0,0,0,.16);
-  --radius:24px;
+  --shadow:0 16px 48px rgba(0,0,0,.14);
+  --radius:22px;
 }
 * { box-sizing:border-box; }
-html, body { min-height:100%; }
+html { min-height:100%; }
 body {
+  min-height:100%;
   margin:0;
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  padding:14px 10px;
+  font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   color:var(--ink);
   background:
-    radial-gradient(circle at 12% 10%, rgba(99,210,255,.40), transparent 22rem),
-    radial-gradient(circle at 86% 18%, rgba(255,23,63,.13), transparent 18rem),
-    linear-gradient(180deg, #f6fcff 0%, #ffffff 62%, #eaf8ff 100%);
-  display:grid;
-  place-items:center;
-  padding:24px 12px;
+    radial-gradient(circle at 12% 8%, rgba(99,210,255,.36), transparent 22rem),
+    radial-gradient(circle at 88% 12%, rgba(255,23,63,.10), transparent 18rem),
+    linear-gradient(180deg, #f7fcff 0%, #fff 64%, #eaf8ff 100%);
 }
-.app {
-  width:min(960px, 100%);
-  background:rgba(255,255,255,.96);
+button, select { font:inherit; }
+button {
+  color:var(--ink);
   border:2px solid var(--line);
-  border-radius:32px;
+  background:#fff;
+  cursor:pointer;
+  font-weight:900;
+  transition:transform .1s ease, box-shadow .1s ease, background .12s ease, opacity .12s ease;
+}
+button:hover:not(:disabled) { transform:translateY(-1px); }
+button:active:not(:disabled) { transform:translateY(1px); }
+button:focus-visible,
+select:focus-visible {
+  outline:4px solid rgba(99,210,255,.55);
+  outline-offset:3px;
+}
+button:disabled { cursor:default; opacity:.72; transform:none; }
+.hidden { display:none !important; }
+
+.app {
+  width:min(940px, 100%);
+  margin:0 auto;
+  border:2px solid var(--line);
+  border-radius:28px;
+  background:rgba(255,255,255,.97);
   box-shadow:var(--shadow);
   overflow:hidden;
 }
-.header {
-  display:grid;
-  grid-template-columns:1fr;
-  gap:18px;
-  align-items:start;
-  padding:22px 24px 24px;
-  background:linear-gradient(135deg, var(--blue), #fff 62%);
-  border-bottom:2px solid var(--line);
-}
-.brand { display:flex; gap:14px; align-items:flex-start; }
 .cross {
-  width:46px;
-  height:46px;
-  border:2px solid var(--line);
-  border-radius:14px;
-  background:var(--red);
-  position:relative;
+  width:42px;
+  height:42px;
   flex:0 0 auto;
-  box-shadow:4px 4px 0 var(--line);
+  position:relative;
+  border:2px solid var(--line);
+  border-radius:13px;
+  background:var(--red);
+  box-shadow:3px 3px 0 var(--line);
 }
 .cross::before,
 .cross::after {
   content:"";
   position:absolute;
-  left:50%; top:50%;
+  left:50%;
+  top:50%;
   transform:translate(-50%,-50%);
-  background:#fff;
   border-radius:3px;
+  background:#fff;
 }
-.cross::before { width:26px; height:8px; }
-.cross::after { width:8px; height:26px; }
-h1 {
+.cross::before { width:24px; height:7px; }
+.cross::after { width:7px; height:24px; }
+
+/* Intro */
+.introScreen {
+  padding:clamp(20px, 4vw, 34px);
+  background:linear-gradient(135deg, var(--blue), #fff 64%);
+}
+.introHero {
+  display:flex;
+  gap:15px;
+  align-items:center;
+  margin-bottom:18px;
+}
+.helpBtn {
+  display:grid;
+  place-items:center;
+  width:44px;
+  height:44px;
+  flex:0 0 auto;
+  align-self:flex-start;
+  margin-left:auto;
+  padding:0;
+  border-radius:50%;
+  background:#fff;
+  color:var(--ink);
+  box-shadow:3px 3px 0 var(--line);
+  font-size:23px;
+  line-height:1;
+  font-weight:1000;
+}
+.introHero > .cross {
+  width:78px;
+  height:78px;
+  border-radius:21px;
+  box-shadow:4px 4px 0 var(--line);
+}
+.introHero > .cross::before { width:44px; height:11px; }
+.introHero > .cross::after { width:11px; height:44px; }
+.introHero h1 {
   margin:0;
-  font-size:clamp(32px, 5vw, 58px);
+  font-size:clamp(34px, 6vw, 58px);
   line-height:.9;
-  letter-spacing:-.075em;
+  letter-spacing:-.07em;
 }
-.subtitle {
-  margin:9px 0 0;
-  max-width:680px;
-  color:#222;
-  font-size:15px;
-  line-height:1.35;
+.tagline {
+  margin:8px 0 0;
+  color:#20242d;
+  font-size:clamp(15px, 2.3vw, 18px);
+  line-height:1.25;
+  font-weight:820;
+}
+.introGrid {
+  display:grid;
+  grid-template-columns:1fr;
+  gap:12px;
+  align-items:start;
+}
+.infoCard,
+.modePanel {
+  border:2px solid var(--line);
+  border-radius:var(--radius);
+  background:#fff;
+}
+.infoCard { padding:16px 17px; }
+.infoCard h2,
+.learningCard summary,
+.modePanel h2 {
+  margin:0 0 10px;
+  font-family:inherit;
+  font-size:16px;
+  font-style:normal;
+  line-height:1;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  font-weight:800;
+}
+.infoCard p {
+  margin:0;
+  color:#20242d;
+  font-size:14.5px;
+  line-height:1.42;
+  font-weight:720;
+}
+.learningCard {
+  padding:0;
+  overflow:hidden;
+}
+.learningCard summary {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:16px 17px;
+  cursor:pointer;
+  list-style:none;
+  margin:0;
+}
+.learningCard summary::-webkit-details-marker { display:none; }
+.learningCard summary::after {
+  content:"+";
+  display:grid;
+  place-items:center;
+  width:28px;
+  height:28px;
+  flex:0 0 auto;
+  border:2px solid var(--line);
+  border-radius:50%;
+  background:var(--blue);
+  font-size:20px;
+  line-height:1;
+}
+.learningCard[open] summary::after { content:"−"; }
+.learningCard summary:focus-visible {
+  outline:4px solid rgba(99,210,255,.55);
+  outline-offset:-5px;
+}
+.learningCard p { padding:0 17px 16px; }
+.howList {
+  display:grid;
+  gap:8px;
+  margin:0;
+  padding:0;
+  list-style:none;
+}
+.howList li {
+  display:grid;
+  grid-template-columns:28px minmax(0,1fr);
+  gap:8px;
+  align-items:start;
+  color:#20242d;
+  font-size:14px;
+  line-height:1.34;
   font-weight:760;
 }
-.hud {
+.stepNum {
   display:grid;
-  grid-template-columns:minmax(0, 1fr) auto;
-  gap:8px 14px;
-  align-items:center;
-  width:100%;
+  place-items:center;
+  width:26px;
+  height:26px;
+  border:2px solid var(--line);
+  border-radius:50%;
+  background:var(--blue);
+  color:var(--ink);
+  font-size:12px;
+  font-weight:1000;
 }
-.hudStats,
-.hudActions {
+.primaryBtn,
+.secondaryBtn {
+  min-height:46px;
+  padding:10px 18px;
+  border-radius:999px;
+  white-space:nowrap;
+  box-shadow:3px 3px 0 var(--line);
+}
+.primaryBtn { background:var(--ink); color:#fff; }
+.secondaryBtn { background:#fff; }
+
+/* Game header */
+.gameHeader {
+  display:grid;
+  grid-template-columns:auto minmax(180px,1fr) auto;
+  gap:12px;
+  align-items:center;
+  min-height:64px;
+  padding:10px 14px;
+  border-bottom:2px solid var(--line);
+  background:linear-gradient(135deg, var(--blue), #fff 72%);
+}
+.compactBrand {
+  display:flex;
+  gap:10px;
+  align-items:center;
+  min-width:0;
+}
+.compactBrand .cross {
+  width:36px;
+  height:36px;
+  border-radius:11px;
+  box-shadow:2px 2px 0 var(--line);
+}
+.compactBrand .cross::before { width:20px; height:6px; }
+.compactBrand .cross::after { width:6px; height:20px; }
+.compactBrand h1 {
+  margin:0;
+  font-size:clamp(22px, 3.2vw, 30px);
+  line-height:.92;
+  letter-spacing:-.055em;
+  white-space:nowrap;
+}
+.progressDots {
+  display:flex;
+  gap:6px;
+  align-items:center;
+  justify-content:center;
+  min-width:0;
+}
+.progressDot {
+  width:15px;
+  height:15px;
+  flex:0 0 auto;
+  border:2px solid var(--line);
+  border-radius:50%;
+  background:#fff;
+}
+.progressDot.current { box-shadow:0 0 0 3px rgba(99,210,255,.40); }
+.progressDot.tier-3 { background:var(--blue-3); }
+.progressDot.tier-2 { background:var(--amber); }
+.progressDot.tier-1 { background:var(--red-soft); }
+.headerActions {
   display:flex;
   gap:8px;
   align-items:center;
-}
-.hudStats {
-  min-width:0;
-  flex-wrap:wrap;
-}
-.hudActions {
   justify-content:flex-end;
-  flex-wrap:nowrap;
 }
-.pill {
-  min-width:86px;
-  padding:9px 11px;
+.statusChip {
+  min-width:76px;
+  padding:7px 9px;
   border:2px solid var(--line);
   border-radius:999px;
   background:#fff;
   text-align:center;
-  box-shadow:3px 3px 0 var(--line);
+  box-shadow:2px 2px 0 var(--line);
+}
+.statusChip span {
+  display:block;
+  color:var(--muted);
+  font-size:9px;
+  line-height:1;
+  letter-spacing:.10em;
+  text-transform:uppercase;
   font-weight:1000;
 }
-.pill span { display:block; font-size:10px; letter-spacing:.11em; text-transform:uppercase; color:var(--muted); }
-.pill b { display:block; margin-top:2px; font-size:20px; line-height:1; font-variant-numeric:tabular-nums; }
-.hudRoundBtn {
-  min-width:86px;
-  padding:9px 11px;
+.statusChip b {
+  display:block;
+  margin-top:3px;
+  font-size:18px;
+  line-height:1;
+  font-variant-numeric:tabular-nums;
+}
+.newRoundBtn {
+  min-height:40px;
+  padding:8px 12px;
   border-radius:999px;
   background:var(--red-soft);
-  box-shadow:3px 3px 0 var(--line);
-  text-align:center;
+  box-shadow:2px 2px 0 var(--line);
+  white-space:nowrap;
 }
-.hudRoundBtn span {
-  display:block;
-  font-size:10px;
-  letter-spacing:.11em;
-  text-transform:uppercase;
-  color:var(--muted);
-  line-height:1;
-}
-.hudRoundBtn b {
-  display:block;
-  margin-top:2px;
-  font-size:20px;
-  line-height:1;
-}
-.hintGateBtn {
-  min-width:86px;
-  padding:9px 11px;
-  border-radius:999px;
-  background:#fff;
-  box-shadow:3px 3px 0 var(--line);
-  text-align:center;
-}
-.hintGateBtn.active { background:var(--blue-2); }
-.hintGateBtn span {
-  display:block;
-  font-size:10px;
-  letter-spacing:.11em;
-  text-transform:uppercase;
-  color:var(--muted);
-  line-height:1;
-}
-.hintGateBtn b {
-  display:block;
-  margin-top:2px;
-  font-size:20px;
-  line-height:1;
-}
-.main { padding:20px 24px 24px; }
-button {
-  font:inherit;
-  color:var(--ink);
-  border:2px solid var(--line);
-  border-radius:18px;
-  background:#fff;
-  cursor:pointer;
-  font-weight:950;
-  transition:transform .08s ease, box-shadow .08s ease, background .12s ease;
-}
-button:hover { transform:translateY(-1px); }
-button:active { transform:translateY(1px); }
-button:disabled { cursor:not-allowed; opacity:.65; transform:none; }
-.smallBtn { padding:10px 14px; box-shadow:3px 3px 0 var(--line); white-space:nowrap; }
-.smallBtn.primary { background:var(--ink); color:#fff; }
-.grid {
+
+/* Play area */
+.gameMain {
   display:grid;
-  grid-template-columns:1fr;
-  gap:16px;
-  align-items:stretch;
-  max-width:780px;
+  gap:10px;
+  max-width:790px;
   margin:0 auto;
+  padding:12px 14px 14px;
 }
 .card {
   border:2px solid var(--line);
@@ -216,485 +368,973 @@ button:disabled { cursor:not-allowed; opacity:.65; transform:none; }
 }
 .cardHead {
   display:flex;
-  justify-content:space-between;
   gap:12px;
   align-items:center;
-  padding:11px 15px;
+  justify-content:space-between;
+  min-height:47px;
+  padding:8px 12px;
   border-bottom:2px solid var(--line);
   background:var(--blue);
 }
-.cardHead b {
-  font-size:12px;
-  letter-spacing:.13em;
-  text-transform:uppercase;
-  line-height:1;
+.cardTitleGroup {
+  min-width:0;
 }
-.patientHead {
-  justify-content:flex-start;
-}
-.patientHead b {
-  font-size:16px;
-  letter-spacing:-.01em;
-  text-transform:none;
-}
-.tag {
-  display:inline-flex;
+.chartTitleLine {
+  display:flex;
   align-items:center;
-  justify-content:center;
-  min-width:82px;
-  padding:6px 9px;
-  border:2px solid var(--line);
+  gap:8px;
+  min-width:0;
+}
+.chartMeta {
+  max-width:min(58vw, 430px);
+  overflow:hidden;
+  padding:4px 7px;
+  border:1.5px solid var(--line);
   border-radius:999px;
   background:#fff;
-  color:var(--ink);
-  font-size:12px;
-  font-weight:1000;
+  font-size:9.5px;
   line-height:1;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  font-weight:950;
+  text-overflow:ellipsis;
+  white-space:nowrap;
 }
-.patientBody { padding:18px; font-size:16px; line-height:1.45; }
-.patientBody p { margin:0 0 12px; }
-.patientBody p:last-child { margin-bottom:0; }
+.cardHead h2 {
+  margin:0;
+  font-size:14px;
+  line-height:1;
+  letter-spacing:.11em;
+  text-transform:uppercase;
+}
+.chartGoal {
+  display:block;
+  margin-top:4px;
+  max-width:620px;
+  overflow:hidden;
+  color:#273142;
+  font-size:12px;
+  line-height:1.25;
+  font-weight:760;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.hintBtn {
+  min-height:35px;
+  padding:7px 11px;
+  border-radius:999px;
+  background:#fff;
+  box-shadow:2px 2px 0 var(--line);
+  white-space:nowrap;
+  font-size:12px;
+}
+.hintBtn.used { background:var(--amber); }
+.patientBody {
+  max-height:230px;
+  padding:10px 12px;
+  overflow:auto;
+  overscroll-behavior:contain;
+  font-size:15px;
+  line-height:1.35;
+  scrollbar-width:thin;
+}
+.patientBody > :first-child { margin-top:0; }
+.patientBody > :last-child { margin-bottom:0; }
+.patientBody p { margin:0 0 9px; }
 .mathDisplay {
-  margin:12px 0 4px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  max-width:100%;
+  min-height:88px;
+  margin:4px 0;
   padding:12px 10px;
-  border:2px solid #111;
-  border-radius:18px;
+  border:2px solid var(--line);
+  border-radius:15px;
   background:#fbfdff;
   overflow-x:auto;
   overflow-y:hidden;
   text-align:center;
+  font-size:clamp(14px, 2.2vw, 17px);
+}
+.mathDisplay.wrappedMath {
+  flex-direction:column;
+  gap:8px;
+  min-height:112px;
+}
+.mathLine {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  min-width:0;
 }
 .mathDisplay.chartLines {
   display:grid;
-  gap:8px;
-  padding:18px 20px;
+  align-content:center;
+  gap:5px;
+  padding:10px 12px;
   text-align:left;
-  font-size:clamp(16px, 2.8vw, 20px);
 }
-.chartLine {
-  display:block;
+.chartLine { display:block; line-height:1.28; }
+.mathDisplay mjx-container,
+.choiceContent mjx-container {
   max-width:100%;
-  line-height:1.35;
-}
-.mathDisplay mjx-container[jax="SVG"] {
-  max-width:100%;
+  margin:0 !important;
   overflow-x:auto;
   overflow-y:hidden;
-  padding-bottom:2px;
 }
-.mathDisplay mjx-container[jax="SVG"][display="true"] {
-  display:inline-block;
-}
+.mathDisplay mjx-container[jax="SVG"][display="true"] { display:inline-block; }
 pre {
-  margin:12px 0 0;
-  padding:14px 15px;
+  max-width:100%;
+  margin:4px 0;
+  padding:10px 12px;
   border:2px solid var(--line);
-  border-radius:18px;
+  border-radius:15px;
   background:#07090d;
   color:#f6fbff;
-  font:850 14px/1.45 ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
-  max-width:100%;
-  overflow-x:hidden;
+  overflow:auto;
   white-space:pre-wrap;
   overflow-wrap:anywhere;
-  word-break:normal;
+  font:800 13px/1.36 ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
 }
-pre code {
-  white-space:inherit;
-  overflow-wrap:inherit;
-}
-.patientContextNote {
-  margin:0 0 12px;
-  padding:12px 14px;
-  border:2px solid var(--line);
-  border-radius:18px;
-  background:var(--blue);
-  color:#172132;
-  font-size:15px;
-  line-height:1.35;
-  font-weight:780;
-}
-.goalNote {
-  color:#20242d;
-  font-size:16px;
-  line-height:1.38;
-  font-weight:760;
-  font-style:italic;
-}
-.chartMeta {
-  margin:0 0 12px;
-  display:flex;
-  align-items:baseline;
-  gap:10px;
-  flex-wrap:wrap;
-  color:#20242d;
-  font-size:16px;
-  line-height:1.38;
-}
-.chartMeta b {
-  font-weight:1000;
-}
-.patientContextNote b,
-.goalNote b {
-  font-weight:1000;
-}
-.hintToggle {
-  width:calc(100% - 36px);
-  min-height:52px;
-  margin:0 18px 18px;
-  padding:12px 18px;
-  display:flex;
+pre code { white-space:inherit; }
+
+.decisionCard { min-height:278px; }
+.decisionHead {
   align-items:center;
-  justify-content:space-between;
-  gap:16px;
-  border-radius:18px;
-  background:var(--blue);
-  box-shadow:4px 4px 0 var(--line);
-  text-align:left;
 }
-.hintToggle span:first-child {
-  font-size:16px;
-  line-height:1;
-}
-.hintToggle span:last-child {
-  font-size:22px;
-  line-height:1;
-}
-.hintPanel {
-  display:none;
-  margin:0 18px 18px;
-  padding:13px 15px;
+.phaseBadge {
+  flex:0 0 auto;
+  padding:5px 9px;
   border:2px solid var(--line);
-  border-radius:18px;
-  background:#fbfdff;
-}
-.hintPanel.show { display:block; }
-.hintPanel p {
-  margin:0;
-  font-size:15px;
-  line-height:1.35;
-  font-weight:780;
-  color:#222;
-}
-.side { display:grid; gap:14px; }
-.section { padding:14px; }
-.sectionTitle {
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-  margin-bottom:14px;
-}
-.sectionTitle h2 {
-  margin:0;
-  font-size:16px;
+  border-radius:999px;
+  background:#fff;
+  font-size:10px;
   line-height:1;
-  letter-spacing:-.02em;
+  letter-spacing:.08em;
+  text-transform:uppercase;
   font-weight:1000;
 }
-.statusDot {
-  width:15px;
-  height:15px;
+.confirmedStrip {
+  display:grid;
+  grid-template-columns:auto minmax(0,1fr);
+  gap:8px;
+  align-items:center;
+  margin:9px 11px 0;
+  padding:8px 10px;
+  border:2px solid var(--line);
+  border-radius:14px;
+  background:var(--green);
+  font-size:13px;
+  line-height:1.25;
+  font-weight:820;
+  animation:phaseIn .16s ease both;
+}
+.confirmedCheck {
+  display:grid;
+  place-items:center;
+  width:24px;
+  height:24px;
   border:2px solid var(--line);
   border-radius:50%;
   background:#fff;
+  font-weight:1000;
 }
-.statusDot.good { background:var(--blue-3); }
-.statusDot.bad { background:var(--red); }
-.choices { display:grid; gap:9px; min-width:0; }
+.confirmedText {
+  min-width:0;
+  max-height:2.6em;
+  overflow:hidden;
+}
+.decisionBody {
+  padding:10px 11px 11px;
+}
+.choiceGrid {
+  display:grid;
+  gap:7px;
+  animation:phaseIn .16s ease both;
+}
 .choice {
+  display:grid;
+  grid-template-columns:26px minmax(0,1fr);
+  gap:8px;
+  align-items:center;
   width:100%;
   min-width:0;
-  max-width:100%;
   min-height:48px;
-  padding:11px 12px;
-  text-align:left;
+  padding:7px 10px;
+  border-radius:15px;
   background:#fff;
-  line-height:1.25;
-  font-weight:600;
+  text-align:left;
+  line-height:1.22;
+  font-weight:650;
   overflow:hidden;
+}
+.choice:hover:not(:disabled) { background:#f5fcff; }
+.choice.wrong {
+  background:var(--red-soft);
+  box-shadow:3px 3px 0 var(--red);
+}
+.choice.correct {
+  background:var(--green);
+  box-shadow:3px 3px 0 var(--blue-3);
+}
+.keyBadge {
+  display:grid;
+  place-items:center;
+  width:25px;
+  height:25px;
+  border:2px solid var(--line);
+  border-radius:8px;
+  background:var(--blue);
+  font-size:11px;
+  line-height:1;
+  font-weight:1000;
+}
+.choiceContent {
+  min-width:0;
   overflow-wrap:anywhere;
 }
-.choice:hover { background:#f5fcff; }
-.choice.correct { background:var(--blue); box-shadow:4px 4px 0 var(--blue-3); }
-.choice.wrong { background:var(--red-soft); color:#111; box-shadow:4px 4px 0 var(--red); }
-.choice .mathDisplay {
-  width:100%;
-  max-width:100%;
+.choiceContent .mathDisplay {
   margin:0;
-  padding:8px;
-  border-width:0;
-  background:transparent;
+  padding:1px 2px;
+  border:0;
   border-radius:0;
-  overflow-x:auto;
-  overflow-y:hidden;
-  text-align:center;
-  font-size:clamp(13px, 3.65vw, 16px);
+  background:transparent;
+  font-size:clamp(13px, 2vw, 15px);
 }
-.choice .mathDisplay mjx-container {
-  max-width:100%;
+.choiceContent pre {
+  margin:0;
+  padding:7px 9px;
+  border-radius:11px;
+  font-size:12px;
 }
 .choiceFormula {
-  width:100%;
-  max-width:100%;
   overflow-x:auto;
-  overflow-y:hidden;
   text-align:center;
-  font-size:clamp(13px, 3.65vw, 16px);
+  font-size:clamp(13px, 2vw, 15px);
 }
 .choiceProse {
-  margin-top:6px;
+  margin-top:4px;
   text-align:center;
-  font-size:clamp(13px, 3.65vw, 16px);
-  overflow-wrap:anywhere;
-  word-break:normal;
+  font-size:13px;
 }
-.choice pre { margin:0; font-size:13px; font-weight:650; }
-.feedback {
-  min-height:24px;
-  margin-top:10px;
-  font-size:14px;
-  line-height:1.25;
-  font-weight:880;
-  color:var(--muted);
-}
-.feedback.good { color:#055f85; }
-.feedback.bad { color:var(--red); }
-.treatmentCard { opacity:.46; pointer-events:none; }
-.treatmentCard.active { opacity:1; pointer-events:auto; }
-.discharge {
-  display:none;
-  margin-top:14px;
-  padding:14px 15px;
-  border:2px solid var(--line);
-  border-radius:20px;
-  background:linear-gradient(135deg, #fff, var(--blue));
-}
-.discharge.show { display:block; }
-.discharge b { display:block; margin-bottom:6px; font-size:12px; letter-spacing:.13em; text-transform:uppercase; }
-.discharge p { margin:0; font-size:14px; line-height:1.35; font-weight:760; }
-.nextRow { display:none; justify-content:flex-end; }
-.nextRow.show { display:flex; }
-.nextBtn { padding:12px 16px; color:#fff; background:var(--red); box-shadow:4px 4px 0 var(--line); }
-.endPanel {
-  display:none;
-  padding:28px 24px 32px;
-  text-align:center;
-}
-.endPanel.show { display:block; }
-.endCard {
-  max-width:620px;
-  margin:0 auto;
-  border:2px solid var(--line);
-  border-radius:30px;
-  background:linear-gradient(135deg, var(--blue), #fff 62%);
-  padding:28px 24px;
-  box-shadow:7px 7px 0 var(--line);
-}
-.endCard h2 {
-  margin:0;
-  font-size:clamp(32px, 5vw, 52px);
-  line-height:.9;
-  letter-spacing:-.06em;
-}
-.endStats { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin:18px 0; }
-.endStat {
-  min-width:120px;
-  padding:13px 12px;
-  border:2px solid var(--line);
-  border-radius:22px;
+.dischargeChoice {
+  width:100%;
+  min-height:38px;
+  margin-top:8px;
+  padding:7px 11px;
+  border-radius:13px;
   background:#fff;
+  border-style:dashed;
+  color:#29303b;
+  font-size:12.5px;
+  box-shadow:none;
 }
-.endStat span { display:block; font-size:11px; letter-spacing:.13em; text-transform:uppercase; color:var(--muted); font-weight:1000; }
-.endStat b { display:block; margin-top:5px; font-size:28px; line-height:1; }
-.confirmOverlay {
-  position:fixed;
-  inset:0;
-  z-index:20;
-  display:grid;
-  place-items:center;
-  padding:20px;
-  background:rgba(5, 5, 5, .34);
-}
-.confirmBox {
-  width:min(420px, 100%);
-  border:2px solid var(--line);
-  border-radius:24px;
-  background:linear-gradient(135deg, var(--red-soft), #fff 70%);
-  box-shadow:8px 8px 0 var(--line);
-  padding:20px;
-}
-.confirmBox h2 {
-  margin:0;
-  font-size:28px;
-  line-height:1;
-  letter-spacing:-.045em;
-}
-.confirmBox p {
-  margin:10px 0 18px;
-  font-size:15px;
-  line-height:1.35;
-  font-weight:760;
-  color:#222;
-}
-.confirmActions {
-  display:flex;
-  justify-content:flex-end;
-  gap:10px;
-  flex-wrap:wrap;
-}
-.confirmActions .smallBtn {
-  min-width:116px;
-}
-.confirmActions .danger {
+.dischargeChoice:hover:not(:disabled) { background:var(--amber); }
+.dischargeChoice.wrong {
+  border-style:solid;
   background:var(--red-soft);
+  box-shadow:3px 3px 0 var(--red);
 }
-.introOverlay {
-  position:fixed;
-  inset:0;
-  z-index:30;
-  display:grid;
-  place-items:center;
-  padding:20px;
-  background:rgba(5, 5, 5, .28);
+.feedback {
+  display:flex;
+  align-items:center;
+  min-height:46px;
+  max-height:46px;
+  margin-top:7px;
+  padding:5px 7px;
+  overflow:auto;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.3;
+  font-weight:780;
 }
-.introBox {
-  width:min(520px, 100%);
+.feedback.bad { color:#a00022; }
+.feedback.good { color:var(--blue-deep); }
+
+/* End screen */
+.endScreen {
+  min-height:560px;
+  padding:clamp(22px, 5vw, 42px);
+  background:linear-gradient(135deg, var(--blue), #fff 65%);
+  text-align:center;
+}
+.endCard {
+  max-width:680px;
+  margin:0 auto;
+  padding:24px;
   border:2px solid var(--line);
   border-radius:28px;
-  background:linear-gradient(135deg, var(--blue), #fff 68%);
-  box-shadow:8px 8px 0 var(--line);
-  padding:24px;
-  text-align:center;
+  background:#fff;
+  box-shadow:7px 7px 0 var(--line);
 }
-.introBox h2 {
-  margin:0 0 14px;
-  font-size:clamp(32px, 5vw, 48px);
+.endCard h1 {
+  margin:0;
+  font-size:clamp(38px, 7vw, 62px);
   line-height:.9;
-  letter-spacing:-.055em;
+  letter-spacing:-.065em;
 }
-.introCopy {
+.endKicker {
+  margin:10px 0 0;
+  color:#29303b;
+  font-size:15px;
+  line-height:1.35;
+  font-weight:780;
+}
+.endStats {
+  display:grid;
+  grid-template-columns:repeat(3, minmax(0,1fr));
+  gap:9px;
+  margin:18px 0 14px;
+}
+.endStat {
+  padding:12px 9px;
+  border:2px solid var(--line);
+  border-radius:18px;
+  background:var(--blue);
+}
+.endStat span {
+  display:block;
+  color:var(--muted);
+  font-size:10px;
+  line-height:1;
+  letter-spacing:.11em;
+  text-transform:uppercase;
+  font-weight:1000;
+}
+.endStat b {
+  display:block;
+  margin-top:5px;
+  font-size:29px;
+  line-height:1;
+  font-variant-numeric:tabular-nums;
+}
+.endDots {
+  display:flex;
+  gap:8px;
+  justify-content:center;
+  flex-wrap:wrap;
+  margin:15px 0 18px;
+}
+.endDot {
+  display:grid;
+  place-items:center;
+  width:34px;
+  height:34px;
+  border:2px solid var(--line);
+  border-radius:50%;
+  background:#fff;
+  font-size:13px;
+  font-weight:1000;
+}
+.endDot.tier-3 { background:var(--blue-3); }
+.endDot.tier-2 { background:var(--amber); }
+.endDot.tier-1 { background:var(--red-soft); }
+.endActions {
+  display:flex;
+  gap:10px;
+  justify-content:center;
+  flex-wrap:wrap;
+}
+.newBest {
+  display:inline-flex;
+  margin-top:12px;
+  padding:6px 11px;
+  border:2px solid var(--line);
+  border-radius:999px;
+  background:var(--amber);
+  font-size:12px;
+  font-weight:1000;
+}
+
+/* Modals */
+.modalOverlay {
+  position:fixed;
+  inset:0;
+  z-index:50;
+  display:grid;
+  place-items:center;
+  padding:18px;
+  background:rgba(5,5,5,.36);
+}
+.modalBox {
+  width:min(470px, 100%);
+  max-height:min(88dvh, 720px);
+  padding:20px;
+  border:2px solid var(--line);
+  border-radius:24px;
+  background:linear-gradient(135deg, var(--blue), #fff 70%);
+  box-shadow:8px 8px 0 var(--line);
+  overflow:auto;
+}
+.modalBox h2 {
+  margin:0;
+  font-size:clamp(27px, 5vw, 38px);
+  line-height:.95;
+  letter-spacing:-.045em;
+}
+.modalBox p {
+  margin:10px 0 0;
+  color:#20242d;
+  font-size:14px;
+  line-height:1.4;
+  font-weight:740;
+}
+.aboutBox { width:min(600px, 100%); }
+.aboutList {
   display:grid;
   gap:10px;
-  margin:0 0 22px;
+  margin-top:16px;
 }
-.introCopy p {
+.aboutList p {
   margin:0;
-  font-size:17px;
-  line-height:1.35;
-  font-weight:820;
-  color:#20242d;
+  padding:10px 12px;
+  border:2px solid var(--line);
+  border-radius:15px;
+  background:rgba(255,255,255,.9);
 }
-.introStartBtn {
-  min-width:180px;
-  padding:13px 20px;
-  color:#fff;
-  background:var(--ink);
+.aboutList a {
+  color:var(--blue-deep);
+  text-decoration-thickness:2px;
+  text-underline-offset:2px;
+}
+.modalActions {
+  display:flex;
+  gap:9px;
+  justify-content:flex-end;
+  flex-wrap:wrap;
+  margin-top:17px;
+}
+.modalActions button {
+  min-height:42px;
+  padding:8px 15px;
   border-radius:999px;
-  box-shadow:4px 4px 0 var(--line);
+  box-shadow:3px 3px 0 var(--line);
 }
-.hidden { display:none !important; }
+.resultBox { text-align:center; }
+.resultScore {
+  display:grid;
+  place-items:center;
+  width:82px;
+  height:82px;
+  margin:0 auto 14px;
+  border:2px solid var(--line);
+  border-radius:50%;
+  background:var(--blue-3);
+  box-shadow:5px 5px 0 var(--line);
+  font-size:31px;
+  font-weight:1000;
+}
+.resultBox.tier-2 .resultScore { background:var(--amber); }
+.resultBox.tier-1 .resultScore { background:var(--red-soft); }
+.resultDetail { color:var(--muted) !important; }
+.dischargeNote {
+  margin-top:15px;
+  padding:12px 13px;
+  border:2px solid var(--line);
+  border-radius:17px;
+  background:#fff;
+  text-align:left;
+}
+.dischargeNote b {
+  display:block;
+  margin-bottom:5px;
+  font-size:10px;
+  line-height:1;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+.dischargeNote p { margin:0; }
+.hintBox { background:linear-gradient(135deg, var(--amber), #fff 72%); }
+.hintPenalty {
+  margin-top:12px !important;
+  padding:8px 10px;
+  border:2px solid var(--line);
+  border-radius:13px;
+  background:#fff;
+  font-size:12.5px !important;
+}
+.confirmBox { background:linear-gradient(135deg, var(--red-soft), #fff 72%); }
+
+@keyframes phaseIn {
+  from { opacity:0; transform:translateY(5px); }
+  to { opacity:1; transform:translateY(0); }
+}
+@media (prefers-reduced-motion:reduce) {
+  *, *::before, *::after {
+    scroll-behavior:auto !important;
+    animation-duration:.001ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.001ms !important;
+  }
+}
 @media (max-width:760px) {
-  body { padding:10px; align-items:start; }
-  .app { border-radius:24px; }
-  .header { grid-template-columns:1fr; padding:18px; }
-  .main { padding:16px; }
-  .smallBtn { width:100%; }
-  .hudRoundBtn { width:auto; }
-  .hintGateBtn { width:auto; }
-  .pill { min-width:78px; }
+  body { padding:8px; }
+  .app { border-radius:22px; }
+  .introScreen { padding:18px 14px; }
+  .introGrid { grid-template-columns:1fr; }
+  .gameHeader {
+    grid-template-columns:minmax(0,1fr) auto;
+    gap:8px;
+  }
+  .progressDots {
+    grid-column:1 / -1;
+    grid-row:2;
+    padding-top:2px;
+  }
+  .headerActions { grid-column:2; grid-row:1; }
+  .compactBrand h1 { white-space:normal; }
+  .gameMain { padding:9px; }
+  .patientBody { max-height:220px; }
 }
 @media (max-width:520px) {
-  .hud { grid-template-columns:1fr; }
-  .hudActions { width:100%; }
+  .introScreen { padding:12px 10px; }
+  .introHero { margin-bottom:12px; }
+  .introHero { gap:10px; align-items:flex-start; }
+  .helpBtn { width:40px; height:40px; font-size:21px; }
+  .introHero > .cross { width:70px; height:70px; border-radius:19px; }
+  .introHero > .cross::before { width:40px; height:10px; }
+  .introHero > .cross::after { width:10px; height:40px; }
+  .introGrid { gap:9px; }
+  .infoCard { padding:13px 14px; }
+  .learningCard { padding:0; }
+  .learningCard summary { padding:13px 14px; }
+  .learningCard p { padding:0 14px 13px; }
+  .compactBrand .cross { display:none; }
+  .compactBrand h1 { font-size:22px; }
+  .statusChip { min-width:64px; }
+  .statusChip:first-child { display:none; }
+  .newRoundBtn { padding:8px 10px; font-size:12px; }
+  .progressDots { gap:4px; }
+  .progressDot { width:13px; height:13px; }
+  .cardHead { padding:8px 9px; }
+  .chartGoal { max-width:225px; }
+  .hintBtn { padding:7px 9px; font-size:11px; }
+  .patientBody { padding:8px; max-height:215px; }
+  .decisionBody { padding:8px; }
+  .choice { min-height:47px; padding:7px 8px; }
+  .feedback { min-height:50px; max-height:50px; }
+  .endStats { grid-template-columns:1fr; }
+  .endStat { display:flex; align-items:center; justify-content:space-between; }
+  .endStat b { margin:0; }
+}
+
+
+/* v3 modes */
+:root {
+  --graphite:#dfe3e8;
+  --graphite-deep:#59616d;
+  --mode-accent:var(--blue-3);
+}
+.app[data-mode="standard"] { --mode-accent:var(--blue-3); }
+.app[data-mode="challenge"] { --mode-accent:#f1c84f; }
+.app[data-mode="exam"] { --mode-accent:#8b94a0; }
+.modePanel {
+  margin-top:12px;
+  padding:14px 15px;
+  border:2px solid var(--line);
+  border-radius:var(--radius);
+  background:rgba(255,255,255,.82);
+}
+.modePanel h2 {
+  margin-bottom:10px;
+}
+.modeSelector {
+  display:grid;
+  grid-template-columns:repeat(3, minmax(0,1fr));
+  gap:9px;
+}
+.modeCard {
+  display:grid;
+  gap:5px;
+  min-height:112px;
+  padding:12px 13px;
+  border-radius:17px;
+  text-align:left;
+  align-content:start;
+  box-shadow:3px 3px 0 var(--line);
+}
+.modeCard[data-mode="standard"] { --card-accent:var(--blue-3); }
+.modeCard[data-mode="challenge"] { --card-accent:#f1c84f; }
+.modeCard[data-mode="exam"] { --card-accent:#8b94a0; }
+.modeCard:hover:not(:disabled),
+.modeCard:focus-visible { background:color-mix(in srgb, var(--card-accent) 24%, white); }
+.modeName { font-size:15px; line-height:1.1; font-weight:1000; }
+.modeDescription { color:#343a44; font-size:12.5px; line-height:1.3; font-weight:720; }
+.modeBest {
+  display:flex;
+  align-items:baseline;
+  justify-content:flex-end;
+  gap:10px;
+  margin-top:auto;
+  padding-top:8px;
+  border-top:2px solid color-mix(in srgb, var(--card-accent) 58%, var(--line));
+  color:var(--graphite-deep);
+  font-size:10px;
+  line-height:1;
+  letter-spacing:.11em;
+  text-transform:uppercase;
+  font-weight:1000;
+  text-align:right;
+}
+.modeBest b {
+  color:var(--ink);
+  font-size:18px;
+  line-height:1;
+  letter-spacing:0;
+  font-variant-numeric:tabular-nums;
+}
+.howCard { display:grid; align-content:start; }
+.scoringLine {
+  margin:10px 0 0 !important;
+  padding:8px 10px;
+  border:2px solid var(--line);
+  border-radius:13px;
+  background:var(--blue);
+  font-size:12.5px !important;
+  font-weight:850 !important;
+}
+.modeChip { background:color-mix(in srgb, var(--mode-accent) 34%, white); }
+.modeChip b { font-size:13px; white-space:nowrap; }
+.progressDot.tier-0,
+.endDot.tier-0 { background:#e6e9ed; color:#5c6470; }
+.inlineNextBtn {
+  width:100%;
+  min-height:44px;
+  margin-top:8px;
+  padding:9px 14px;
+  border-radius:14px;
+  background:var(--ink);
+  color:#fff;
+  box-shadow:3px 3px 0 var(--line);
+}
+.decisionCard.examMode .feedback {
+  display:block;
+  min-height:44px;
+  max-height:none;
+  overflow:visible;
+  padding:9px 8px;
+}
+.examReveal { display:grid; gap:9px; }
+.examReveal p { margin:0; }
+.examLesson {
+  padding:9px 10px;
+  border:2px solid var(--line);
+  border-radius:13px;
+  background:var(--blue);
+  color:#20242d;
+}
+.badgeRow {
+  display:flex;
+  justify-content:center;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.perfectBadge {
+  display:inline-flex;
+  margin-top:12px;
+  padding:6px 11px;
+  border:2px solid var(--line);
+  border-radius:999px;
+  background:var(--green);
+  font-size:12px;
+  font-weight:1000;
+}
+.endCard { max-width:760px; }
+.examReview {
+  margin:18px 0;
+  padding-top:16px;
+  border-top:2px solid var(--line);
+  text-align:left;
+}
+.examReview h2 {
+  margin:0 0 10px;
+  font-size:18px;
+  line-height:1;
+}
+.examReviewList { display:grid; gap:10px; }
+.examReviewItem {
+  padding:12px 13px;
+  border:2px solid var(--line);
+  border-radius:17px;
+  background:#fff;
+}
+.examReviewItem h3 {
+  margin:0 0 7px;
+  font-size:12px;
+  line-height:1.15;
+  letter-spacing:.09em;
+  text-transform:uppercase;
+}
+.examReviewItem p {
+  margin:6px 0 0;
+  color:#20242d;
+  font-size:13px;
+  line-height:1.35;
+  font-weight:720;
+}
+.reviewCorrect {
+  margin-top:8px;
+  padding:8px 9px;
+  border:2px solid var(--line);
+  border-radius:13px;
+  background:var(--green);
+}
+.reviewCorrect > b {
+  display:block;
+  margin-bottom:4px;
+  font-size:10px;
+  line-height:1;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+}
+.reviewCorrect .mathDisplay { margin:2px 0; padding:4px; }
+.confettiLayer {
+  position:fixed;
+  inset:0;
+  z-index:80;
+  pointer-events:none;
+  overflow:hidden;
+}
+.confettiPiece {
+  position:absolute;
+  top:-18px;
+  left:var(--x);
+  width:10px;
+  height:16px;
+  border:2px solid var(--line);
+  background:var(--piece);
+  transform:rotate(var(--r));
+  animation:confettiFall 1.25s cubic-bezier(.16,.72,.34,1) forwards;
+  animation-delay:var(--delay);
+}
+@keyframes confettiFall {
+  to { transform:translate(var(--drift), 110vh) rotate(calc(var(--r) + 680deg)); opacity:.1; }
+}
+@media (max-width:760px) {
+  .modeSelector { grid-template-columns:1fr; }
+  .modeCard { min-height:0; }
+  .headerActions { flex-wrap:wrap; }
+  .modeChip { order:-1; }
+}
+@media (max-width:520px) {
+  .modePanel { padding:11px; }
+  .modeCard { padding:10px 11px; }
+  .statusChip.modeChip { display:block; }
+  .headerActions { gap:5px; }
+  .statusChip { min-width:62px; }
+  .modeChip b { font-size:11px; }
+  .examReviewItem { padding:10px; }
+}
+
+/* v3 compactness and small-screen header refinements */
+@media (min-width:761px) {
+  .introScreen { padding:22px 24px; }
+  .introHero { margin-bottom:12px; }
+  .modePanel { margin-top:9px; padding:11px 13px; }
+  .infoCard { padding:13px 15px; }
+  .learningCard { padding:0; }
+  .learningCard summary { padding:13px 15px; }
+  .learningCard p { padding:0 15px 13px; }
+}
+@media (max-width:520px) {
+  .gameHeader { grid-template-columns:1fr; }
+  .compactBrand { grid-column:1; grid-row:1; }
+  .compactBrand h1 { white-space:nowrap; font-size:20px; }
+  .headerActions {
+    grid-column:1;
+    grid-row:2;
+    display:grid;
+    grid-template-columns:repeat(4, minmax(0,1fr));
+    width:100%;
+  }
+  .headerActions > * { min-width:0; width:100%; }
+  .newRoundBtn { white-space:normal; line-height:1.05; }
+  .progressDots { grid-column:1; grid-row:3; }
 }
 </style>
 </head>
 <body>
-<main class="app" id="app">
-  <header class="header">
-    <div class="brand">
+<main class="app" id="app" data-mode="standard">
+  <section class="introScreen" id="introScreen" aria-labelledby="introTitle">
+    <div class="introHero">
       <div class="cross" aria-hidden="true"></div>
       <div>
+        <h1 id="introTitle">Differential diagnosis</h1>
+        <p class="tagline">Diagnose the mistake. Pick the treatment.</p>
+      </div>
+      <button class="helpBtn" id="helpBtn" type="button" aria-label="About Differential Diagnosis" aria-haspopup="dialog">?</button>
+    </div>
+
+    <div class="introGrid">
+      <details class="infoCard learningCard">
+        <summary>Learning goals</summary>
+        <p>Practice recognizing common errors in multivariable differential calculus: domains and limits, partial derivatives, gradients and Hessians, Jacobians, the chain rule, and local linearization. Cases include mathematical statements and SymPy/NumPy code.</p>
+      </details>
+      <article class="infoCard howCard">
+        <h2>How to play</h2>
+        <ol class="howList">
+          <li><span class="stepNum">1</span><span>Choose a mode below to start a 10-patient round.</span></li>
+          <li><span class="stepNum">2</span><span>Read each chart and make the decision that mode asks for.</span></li>
+          <li><span class="stepNum">3</span><span>First-try accuracy determines your score. Each round is worth up to 30 points.</span></li>
+        </ol>
+        <p class="scoringLine">Standard and Challenge award 3, 2, or 1 point per patient; a hint caps that patient at 1. Board Exam awards 3 or 0.</p>
+      </article>
+    </div>
+
+    <section class="modePanel" aria-labelledby="modeHeading">
+      <h2 id="modeHeading">Choose a mode</h2>
+      <div class="modeSelector" id="modeSelector" aria-label="Start a practice mode">
+        <button class="modeCard" type="button" data-mode="standard">
+          <span class="modeName">Standard Rotation</span>
+          <span class="modeDescription">Every chart has an error — diagnose, then treat.</span>
+          <span class="modeBest">Best <b id="standardBest">0/30</b></span>
+        </button>
+        <button class="modeCard" type="button" data-mode="challenge">
+          <span class="modeName">Challenge Rotation</span>
+          <span class="modeDescription">Some charts are already correct — treat or discharge?</span>
+          <span class="modeBest">Best <b id="challengeBest">0/30</b></span>
+        </button>
+        <button class="modeCard" type="button" data-mode="exam">
+          <span class="modeName">Board Exam</span>
+          <span class="modeDescription">No hints, no diagnosis. One try per chart.</span>
+          <span class="modeBest">Best <b id="examBest">0/30</b></span>
+        </button>
+      </div>
+    </section>
+  </section>
+
+  <section class="playScreen hidden" id="playScreen" aria-label="Differential diagnosis game">
+    <header class="gameHeader">
+      <div class="compactBrand">
+        <div class="cross" aria-hidden="true"></div>
         <h1>Differential diagnosis</h1>
-        <p class="subtitle">Diagnose the issue, then choose the treatment.</p>
       </div>
-    </div>
-    <div class="hud" aria-label="Round status">
-      <div class="hudStats">
-        <div class="pill"><span>patient</span><b id="patientCount">1/10</b></div>
-        <div class="pill"><span>treated</span><b id="treatedCount">0</b></div>
-        <div class="pill"><span>misses</span><b id="missCount">0</b></div>
+      <div class="progressDots" id="progressDots" aria-label="Patient scores"></div>
+      <div class="headerActions">
+        <div class="statusChip modeChip"><span>mode</span><b id="modeChip">Standard</b></div>
+        <div class="statusChip"><span>patient</span><b id="patientCount">1/10</b></div>
+        <div class="statusChip"><span>score</span><b id="scoreCount">0/30</b></div>
+        <button class="newRoundBtn" id="newRoundBtn" type="button">New round</button>
       </div>
-      <div class="hudActions">
-        <button class="hintGateBtn" id="allowHintsBtn" type="button"><span>allow</span><b>hints</b></button>
-        <button class="hudRoundBtn" id="newRoundBtn" type="button"><span>new</span><b>round</b></button>
-      </div>
-    </div>
-  </header>
+    </header>
 
-  <section class="main hidden" id="gameScreen">
-    <div class="grid">
-      <article class="card patientCard">
-        <div class="cardHead patientHead"><b id="patientTitle">Patient 1</b></div>
+    <div class="gameMain">
+      <article class="card chartCard">
+        <div class="cardHead">
+          <div class="cardTitleGroup">
+            <div class="chartTitleLine">
+              <h2>Chart</h2>
+              <span class="chartMeta" id="chartMeta"></span>
+            </div>
+            <span class="chartGoal hidden" id="chartGoal"></span>
+          </div>
+          <button class="hintBtn" id="hintBtn" type="button" aria-haspopup="dialog">Hint · max 1 pt</button>
+        </div>
         <div class="patientBody" id="patientBody"></div>
-        <button class="hintToggle hidden" id="hintToggle" type="button" aria-expanded="false" aria-controls="hintPanel"><span>Hint chart</span><span id="hintIcon">+</span></button>
-        <div class="hintPanel" id="hintPanel"><p id="hintText"></p></div>
       </article>
 
-      <article class="card">
-        <div class="section">
-          <div class="sectionTitle"><h2>Diagnosis</h2><span class="statusDot" id="diagnosisDot"></span></div>
-          <div class="choices" id="diagnosisChoices"></div>
-          <div class="feedback" id="diagnosisFeedback">Choose a diagnosis</div>
+      <article class="card decisionCard" id="decisionCard">
+        <div class="cardHead decisionHead">
+          <h2 id="decisionTitle">Diagnosis</h2>
+          <span class="phaseBadge" id="phaseBadge">Step 1 of 2</span>
+        </div>
+        <div class="confirmedStrip hidden" id="confirmedStrip">
+          <span class="confirmedCheck" aria-hidden="true">✓</span>
+          <span class="confirmedText" id="confirmedText"></span>
+        </div>
+        <div class="decisionBody">
+          <div class="choiceGrid" id="choiceGrid"></div>
+          <button class="dischargeChoice hidden" id="dischargeChoice" type="button" aria-label="Discharge this patient because the chart has no pathology">Discharge — no pathology</button>
+          <div class="feedback" id="feedback" aria-live="polite"></div>
+          <button class="inlineNextBtn hidden" id="inlineNextBtn" type="button">Next patient</button>
         </div>
       </article>
-
-      <article class="card treatmentCard" id="treatmentCard">
-        <div class="section">
-          <div class="sectionTitle"><h2>Treatment</h2><span class="statusDot" id="treatmentDot"></span></div>
-          <div class="choices" id="treatmentChoices"></div>
-          <div class="feedback" id="treatmentFeedback">Diagnosis required first.</div>
-          <div class="discharge" id="discharge"><b>Discharge note</b><p id="dischargeText"></p></div>
-        </div>
-      </article>
-
-      <div class="nextRow" id="nextRow"><button class="nextBtn" id="nextBtn" type="button">Next patient</button></div>
     </div>
   </section>
 
-  <section class="endPanel" id="endPanel">
+  <section class="endScreen hidden" id="endScreen" aria-labelledby="endTitle">
     <div class="endCard">
-      <h2>Round complete.</h2>
-      <div class="endStats">
-        <div class="endStat"><span>treated</span><b id="endTreated">10</b></div>
-        <div class="endStat"><span>misses</span><b id="endMisses">0</b></div>
-        <div class="endStat"><span>accuracy</span><b id="endAccuracy">100%</b></div>
+      <h1 id="endTitle">Round complete.</h1>
+      <p class="endKicker" id="endKicker">Ten cases resolved.</p>
+      <div class="badgeRow">
+        <div class="newBest hidden" id="newBestBadge">New mode best!</div>
+        <div class="perfectBadge hidden" id="perfectBadge">Perfect round!</div>
       </div>
-      <button class="smallBtn primary" id="againBtn" type="button">Start another round</button>
+      <div class="endStats">
+        <div class="endStat"><span id="endScoreLabel">score</span><b id="endScore">0/30</b></div>
+        <div class="endStat"><span id="endFlawlessLabel">flawless</span><b id="endFlawless">0/10</b></div>
+        <div class="endStat"><span id="endBestLabel">mode best</span><b id="endBest">0/30</b></div>
+      </div>
+      <div class="endDots" id="endDots" aria-label="Points earned for each patient"></div>
+      <section class="examReview hidden" id="examReview" aria-labelledby="examReviewTitle">
+        <h2 id="examReviewTitle">Review your misses</h2>
+        <div class="examReviewList" id="examReviewList"></div>
+      </section>
+      <div class="endActions">
+        <button class="primaryBtn" id="playAgainBtn" type="button">Play again</button>
+        <button class="secondaryBtn hidden" id="retryMissesBtn" type="button">Retry my misses</button>
+        <button class="secondaryBtn" id="changeWardBtn" type="button">Back to modes</button>
+      </div>
     </div>
   </section>
 
-  <div class="introOverlay" id="introOverlay" role="dialog" aria-modal="true" aria-label="Differential diagnosis instructions">
-    <div class="introBox">
-      <div class="introCopy">
-        <p>A round consists of 10 patients.</p>
-        <p>For each patient, identify the issue in the statement. Then choose the treatment that fixes it.</p>
+  <div class="modalOverlay hidden" id="aboutModal" role="dialog" aria-modal="true" aria-labelledby="aboutModalTitle">
+    <div class="modalBox aboutBox">
+      <h2 id="aboutModalTitle">About Differential Diagnosis</h2>
+      <div class="aboutList">
+        <p><strong>Version:</strong> Differential Diagnosis [v0.2(beta)]</p>
+        <p><strong>Copyright:</strong> © 2026 <a href="https://people.math.wisc.edu/~roch/" target="_blank" rel="noopener noreferrer">Sébastien Roch</a></p>
+        <p><strong>License:</strong> <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener noreferrer">Creative Commons Attribution-NonCommercial 4.0 International License</a></p>
+        <p><strong>Textbook:</strong> <a href="https://math345-textbook.github.io/" target="_blank" rel="noopener noreferrer">math345-textbook.github.io</a></p>
+        <p><strong>Privacy:</strong> Your best scores are saved in this browser on this device. They are not uploaded anywhere. If you use a private window, clear site data, switch browsers, or block site storage, your best scores may reset.</p>
       </div>
-      <button class="introStartBtn" id="introStartBtn" type="button">Start</button>
+      <div class="modalActions">
+        <button class="primaryBtn" id="closeAboutBtn" type="button">Close</button>
+      </div>
     </div>
   </div>
 
-  <div class="confirmOverlay hidden" id="newRoundConfirm" role="dialog" aria-modal="true" aria-labelledby="newRoundConfirmTitle">
-    <div class="confirmBox">
-      <h2 id="newRoundConfirmTitle">Start a new round?</h2>
-      <p>This will reset the current patients, treated count, and misses.</p>
-      <div class="confirmActions">
-        <button class="smallBtn" id="cancelNewRoundBtn" type="button">Cancel</button>
-        <button class="smallBtn danger" id="confirmNewRoundBtn" type="button">New round</button>
+  <div class="modalOverlay hidden" id="hintModal" role="dialog" aria-modal="true" aria-labelledby="hintModalTitle">
+    <div class="modalBox hintBox">
+      <h2 id="hintModalTitle">Chart hint</h2>
+      <p id="hintModalText"></p>
+      <p class="hintPenalty">This patient can now earn at most 1 point.</p>
+      <div class="modalActions">
+        <button class="primaryBtn" id="closeHintBtn" type="button">Back to chart</button>
       </div>
     </div>
   </div>
+
+  <div class="modalOverlay hidden" id="resultModal" role="dialog" aria-modal="true" aria-labelledby="resultTitle">
+    <div class="modalBox resultBox" id="resultBox">
+      <div class="resultScore" id="resultScore">+3</div>
+      <h2 id="resultTitle">Flawless!</h2>
+      <p class="resultDetail" id="resultDetail"></p>
+      <div class="dischargeNote">
+        <b>Discharge note</b>
+        <p id="resultDischarge"></p>
+      </div>
+      <div class="modalActions">
+        <button class="primaryBtn" id="resultNextBtn" type="button">Next patient</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modalOverlay hidden" id="newRoundConfirm" role="dialog" aria-modal="true" aria-labelledby="newRoundConfirmTitle">
+    <div class="modalBox confirmBox">
+      <h2 id="newRoundConfirmTitle">Leave this round?</h2>
+      <p>Your current score will not be saved. You will return to mode selection.</p>
+      <div class="modalActions">
+        <button class="secondaryBtn" id="cancelNewRoundBtn" type="button">Keep playing</button>
+        <button class="primaryBtn" id="confirmNewRoundBtn" type="button">Leave round</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="confettiLayer" id="confettiLayer" aria-hidden="true"></div>
 </main>
 
 <script>
@@ -5484,41 +6124,473 @@ function generateRandomCases() {
   for (let k = 0; k < 3; k++) generators.forEach(push);
   return out;
 }
-function buildCasePool() {
-  return CASES.concat(generateRandomCases());
-}
-let state = { queue: [], index: 0, treated: 0, misses: 0, diagnosisDone: false, treatmentDone: false, diagnosisChoices: [], treatmentChoices: [], hintsAllowed: false };
 
-const patientCount = document.getElementById('patientCount');
-const treatedCount = document.getElementById('treatedCount');
-const missCount = document.getElementById('missCount');
-const patientTitle = document.getElementById('patientTitle');
-const patientBody = document.getElementById('patientBody');
-const hintToggle = document.getElementById('hintToggle');
-const hintPanel = document.getElementById('hintPanel');
-const hintText = document.getElementById('hintText');
-const hintIcon = document.getElementById('hintIcon');
-const diagnosisChoicesEl = document.getElementById('diagnosisChoices');
-const treatmentChoicesEl = document.getElementById('treatmentChoices');
-const diagnosisFeedback = document.getElementById('diagnosisFeedback');
-const treatmentFeedback = document.getElementById('treatmentFeedback');
-const diagnosisDot = document.getElementById('diagnosisDot');
-const treatmentDot = document.getElementById('treatmentDot');
-const treatmentCard = document.getElementById('treatmentCard');
-const discharge = document.getElementById('discharge');
-const dischargeText = document.getElementById('dischargeText');
-const nextRow = document.getElementById('nextRow');
-const nextBtn = document.getElementById('nextBtn');
-const gameScreen = document.getElementById('gameScreen');
-const endPanel = document.getElementById('endPanel');
-const introOverlay = document.getElementById('introOverlay');
-const introStartBtn = document.getElementById('introStartBtn');
-const allowHintsBtn = document.getElementById('allowHintsBtn');
-const newRoundBtn = document.getElementById('newRoundBtn');
-const newRoundConfirm = document.getElementById('newRoundConfirm');
-const cancelNewRoundBtn = document.getElementById('cancelNewRoundBtn');
-const confirmNewRoundBtn = document.getElementById('confirmNewRoundBtn');
-const againBtn = document.getElementById('againBtn');
+
+function makeGeneratedExpansionCase(id, family, patientHtml, hint, diagnoses, treatments, discharge) {
+  const c = makeCase(`C${String(id).padStart(3,'0')}`, patientHtml, hint, diagnoses, treatments, discharge);
+  c.familyOverride = family;
+  c.convertedFromStatic = true;
+  return c;
+}
+
+function tagExpansionCase(c, key, namespace = 'converted') {
+  c.generatedKey = `${namespace}:${key}`;
+  c.roundKey = `${namespace}:${key}`;
+  return c;
+}
+
+function generateConvertedStaticCases() {
+  const out = [];
+  let cid = 1;
+  const push = (fn, repeats = 4) => {
+    for (let k = 0; k < repeats; k++) {
+      const c = fn(cid++);
+      tagExpansionCase(c, fn.name || `converted-${cid}`, 'converted');
+      out.push(c);
+    }
+  };
+
+  function domainSqrtDisk(id) {
+    const r = pickR([2,3,4,5]);
+    const r2 = r * r;
+    return makeGeneratedExpansionCase(id, 'domain',
+      math(String.raw`f(x,y)=\sqrt{${r2}-x^2-y^2},\qquad \operatorname{dom}(f)=\{(x,y):x^2+y^2<${r2}\}.`),
+      'A square root allows zero inside.',
+      [
+        cchoice(String.raw`The inequality is too strict; equality is allowed under a square root.`, true),
+        cchoice(String.raw`The inequality points in the wrong direction.`),
+        cchoice(String.raw`The domain should be only the boundary circle.`),
+        cchoice(String.raw`The domain condition belongs on the output value, not on \(x,y\).`)
+      ],
+      [
+        cchoice(math(String.raw`\operatorname{dom}(f)=\{(x,y):x^2+y^2\le ${r2}\}.`), true),
+        cchoice(math(String.raw`\operatorname{dom}(f)=\{(x,y):x^2+y^2<${r2}\}.`)),
+        cchoice(math(String.raw`\operatorname{dom}(f)=\{(x,y):x^2+y^2=${r2}\}.`)),
+        cchoice(math(String.raw`\operatorname{dom}(f)=\{(x,y):x^2+y^2>${r2}\}.`))
+      ],
+      String.raw`For \(\sqrt{${r2}-x^2-y^2}\), the inside must be nonnegative, so the disk includes its edge.`);
+  }
+
+  function domainLogHalfPlane(id) {
+    const a = pickR([1,2,3]);
+    const b = pickR([-3,-2,-1,1,2,3]);
+    const inside = `y${term(-a, 'x')}${term(b, '')}`;
+    return makeGeneratedExpansionCase(id, 'domain',
+      math(String.raw`f(x,y)=\log(${inside}),\qquad \operatorname{dom}(f)=\{(x,y):${inside}\ge 0\}.`),
+      'A logarithm requires a positive input.',
+      [
+        cchoice(String.raw`The inequality should be strict because the logarithm cannot take input zero.`, true),
+        cchoice(String.raw`The inequality should be reversed.`),
+        cchoice(String.raw`The domain is the boundary line only.`),
+        cchoice(String.raw`A logarithm has no domain restriction in two variables.`)
+      ],
+      [
+        cchoice(math(String.raw`\operatorname{dom}(f)=\{(x,y):${inside}>0\}.`), true),
+        cchoice(math(String.raw`\operatorname{dom}(f)=\{(x,y):${inside}\ge 0\}.`)),
+        cchoice(math(String.raw`\operatorname{dom}(f)=\{(x,y):${inside}<0\}.`)),
+        cchoice(math(String.raw`\operatorname{dom}(f)=\{(x,y):${inside}=0\}.`))
+      ],
+      'The input to a logarithm must be positive, not merely nonnegative.');
+  }
+
+  function graphVsLevelSet(id) {
+    const a = pickR([1,2,3,4]);
+    const b = pickR([1,2,3]);
+    return makeGeneratedExpansionCase(id, 'general',
+      math(String.raw`\operatorname{graph}(f)=\{(x,y):${a}x^2+${b}y^2=0\}\qquad\text{for }f(x,y)=${a}x^2+${b}y^2.`),
+      'A graph records input coordinates and the output value.',
+      [
+        cchoice(String.raw`A level set has been written instead of the graph.`, true),
+        cchoice(String.raw`The graph should stay in \(\mathbb{R}^2\) because there are two inputs.`),
+        cchoice(String.raw`The formula is missing only a base point.`),
+        cchoice(String.raw`The graph should be built from first partial derivatives.`)
+      ],
+      [
+        cchoice(math(String.raw`\operatorname{graph}(f)=\{(x,y,z):z=${a}x^2+${b}y^2\}\subseteq\mathbb{R}^3.`), true),
+        cchoice(math(String.raw`\operatorname{graph}(f)=\{(x,y):${a}x^2+${b}y^2=0\}.`)),
+        cchoice(math(String.raw`\operatorname{graph}(f)=\{z:${a}x^2+${b}y^2=z\}.`)),
+        cchoice(math(String.raw`\operatorname{graph}(f)=\{(x,y):z=f(x,y)\}.`))
+      ],
+      'The graph of a scalar-valued function of two variables lives in three-dimensional space.');
+  }
+
+  function boundaryDiskGenerator(id) {
+    const r = pickR([2,3,4,5,6]);
+    const r2 = r * r;
+    return makeGeneratedExpansionCase(id, 'general',
+      math(String.raw`D=\{(x,y):x^2+y^2\le ${r2}\},\qquad \partial D=\{(x,y):x^2+y^2\le ${r2}\}.`),
+      'The boundary is only the edge of the region.',
+      [
+        cchoice(String.raw`The whole closed disk is being used instead of its boundary circle.`, true),
+        cchoice(String.raw`The boundary should use a strict inequality.`),
+        cchoice(String.raw`This bounded region has no boundary.`),
+        cchoice(String.raw`The boundary should be written as a graph in \(\mathbb{R}^3\).`)
+      ],
+      [
+        cchoice(math(String.raw`\partial D=\{(x,y):x^2+y^2=${r2}\}.`), true),
+        cchoice(math(String.raw`\partial D=\{(x,y):x^2+y^2\le ${r2}\}.`)),
+        cchoice(math(String.raw`\partial D=\{(x,y):x^2+y^2<${r2}\}.`)),
+        cchoice(math(String.raw`\partial D=\{(x,y):x^2+y^2>${r2}\}.`))
+      ],
+      'For a disk, the boundary is the circle where the defining inequality becomes equality.');
+  }
+
+  function centeredBallGenerator(id) {
+    const r = pickR([1,2,3,4]);
+    const ax = pickR([-3,-2,-1,1,2,3]);
+    const ay = pickR([-3,-2,-1,1,2,3]);
+    const av = col([ax, ay]);
+    return makeGeneratedExpansionCase(id, 'general',
+      math(String.raw`B_${r}(${av})=\{\mathbf{x}:\|\mathbf{x}\|<${r}\}.`),
+      String.raw`A ball centered at \(\mathbf{a}\) measures distance from \(\mathbf{a}\).`,
+      [
+        cchoice(String.raw`The center is missing from the distance.`, true),
+        cchoice(String.raw`The inequality should be equality because balls are boundaries.`),
+        cchoice(String.raw`The radius should be subtracted from the input vector.`),
+        cchoice(String.raw`The norm should be applied to the output of a function.`)
+      ],
+      [
+        cchoice(math(String.raw`B_${r}(${av})=\{\mathbf{x}:\|\mathbf{x}-${av}\|<${r}\}.`), true),
+        cchoice(math(String.raw`B_${r}(${av})=\{\mathbf{x}:\|\mathbf{x}\|<${r}\}.`)),
+        cchoice(math(String.raw`B_${r}(${av})=\{\mathbf{x}:\|\mathbf{x}-${av}\|=${r}\}.`)),
+        cchoice(math(String.raw`B_${r}(${av})=\{\mathbf{x}:\|\mathbf{x}+${av}\|<${r}\}.`))
+      ],
+      String.raw`A local ball uses the distance \(\|\mathbf{x}-\mathbf{a}\|\), not the distance from the origin.`);
+  }
+
+  function onePathLimitGenerator(id) {
+    const k = pickR([1,2,3,4]);
+    return makeGeneratedExpansionCase(id, 'limit-continuity',
+      math(String.raw`\frac{${k}xy}{x^2+y^2}\to 0\text{ as }(x,y)\to(0,0)\text{ because along }y=0\text{ the value is }0.`),
+      'One path can disprove a limit, but it cannot prove one.',
+      [
+        cchoice(String.raw`Only one approach path was checked.`, true),
+        cchoice(String.raw`The path \(y=0\) is not allowed in a multivariable limit.`),
+        cchoice(String.raw`The expression should be evaluated at the origin.`),
+        cchoice(String.raw`The numerator and denominator should be differentiated first.`)
+      ],
+      [
+        cchoice(math(String.raw`\text{This path check alone does not prove the limit. Along }y=x,\quad \frac{${k}xy}{x^2+y^2}=\frac{${k}}{2}.`), true),
+        cchoice(math(String.raw`\lim_{(x,y)\to(0,0)}\frac{${k}xy}{x^2+y^2}=0.`)),
+        cchoice(math(String.raw`\lim_{(x,y)\to(0,0)}\frac{${k}xy}{x^2+y^2}=\frac{0}{0}=0.`)),
+        cchoice(math(String.raw`\text{Checking }x=0\text{ and }y=0\text{ proves the limit.}`))
+      ],
+      'A single path is evidence, not a proof of a multivariable limit.');
+  }
+
+  function curvedPathLimitGenerator(id) {
+    const k = pickR([1,2,3]);
+    return makeGeneratedExpansionCase(id, 'limit-continuity',
+      math(String.raw`\frac{${k}x^2y}{x^4+y^2}\to 0\text{ because every line }y=mx\text{ gives a limit of }0.`),
+      'Straight lines are not all possible paths.',
+      [
+        cchoice(String.raw`Checking only lines misses possible curved paths.`, true),
+        cchoice(String.raw`The line calculation itself uses the wrong variable.`),
+        cchoice(String.raw`The limit must equal the value at \((0,0)\).`),
+        cchoice(String.raw`The denominator should be replaced by \(x^4\) near the origin.`)
+      ],
+      [
+        cchoice(math(String.raw`\text{Line checks are not enough. Along }y=x^2,\quad \frac{${k}x^2y}{x^4+y^2}=\frac{${k}}{2}.`), true),
+        cchoice(math(String.raw`\lim_{(x,y)\to(0,0)}\frac{${k}x^2y}{x^4+y^2}=0\text{ because lines give }0.`)),
+        cchoice(math(String.raw`\text{It is enough to check }x=0\text{ and }y=0.`)),
+        cchoice(math(String.raw`\text{The limit is }${k}\text{ because the degrees match.}`))
+      ],
+      'Line tests can miss curved paths; a proof needs an estimate or a path-independent argument.');
+  }
+
+  function pointValueContinuityGenerator(id) {
+    const value = pickR([10,25,50,100]);
+    const a = pickR([1,2,3,-1]);
+    const b = pickR([1,2,-2]);
+    return makeGeneratedExpansionCase(id, 'limit-continuity',
+      math(String.raw`g(x,y)=\begin{cases}${a}x${b<0?' - '+Math.abs(b):' + '+b}y,&(x,y)\ne(0,0),\\ ${value},&(x,y)=(0,0),\end{cases}\qquad \lim_{(x,y)\to(0,0)}g(x,y)=${value}.`),
+      'A limit looks near the point, not at the value exactly at the point.',
+      [
+        cchoice(String.raw`The point value is being confused with the limiting value.`, true),
+        cchoice(String.raw`The formula is not defined near the origin.`),
+        cchoice(String.raw`The output should be vector-valued because there are two inputs.`),
+        cchoice(String.raw`Only one path should be checked.`)
+      ],
+      [
+        cchoice(math(String.raw`\lim_{(x,y)\to(0,0)}g(x,y)=0,\quad\text{but }g(0,0)=${value}.`), true),
+        cchoice(math(String.raw`\lim_{(x,y)\to(0,0)}g(x,y)=${value}.`)),
+        cchoice(math(String.raw`\lim_{(x,y)\to(0,0)}g(x,y)\text{ does not exist because }g(0,0)=${value}.`)),
+        cchoice(math(String.raw`\lim_{(x,y)\to(0,0)}g(x,y)=${a}x${b<0?' - '+Math.abs(b):' + '+b}y.`))
+      ],
+      'Changing only the center value changes continuity, not the surrounding limit.');
+  }
+
+  function tangentPositionGenerator(id) {
+    const p = pickR([2,3,4]);
+    const q = pickR([2,3]);
+    return makeGeneratedExpansionCase(id, 'path-rate',
+      math(String.raw`\mathbf{r}(t)=\begin{bmatrix}t^${p}\\\sin(${q}t)\end{bmatrix},\qquad \text{tangent vector at }t=0:\quad \mathbf{r}(0)=\begin{bmatrix}0\\0\end{bmatrix}.`),
+      'A tangent vector is a velocity vector.',
+      [
+        cchoice(String.raw`The position vector was used instead of the derivative vector.`, true),
+        cchoice(String.raw`The speed was computed instead of the tangent vector.`),
+        cchoice(String.raw`The tangent vector should be scalar because \(t\) is scalar.`),
+        cchoice(String.raw`The derivative was taken with the wrong sign only.`)
+      ],
+      [
+        cchoice(math(String.raw`\mathbf{r}'(t)=\begin{bmatrix}${p}t^{${p-1}}\\${q}\cos(${q}t)\end{bmatrix},\qquad \mathbf{r}'(0)=\begin{bmatrix}0\\${q}\end{bmatrix}.`), true),
+        cchoice(math(String.raw`\mathbf{r}(0)=\begin{bmatrix}0\\0\end{bmatrix}.`)),
+        cchoice(math(String.raw`\|\mathbf{r}'(0)\|=${q}\text{ is the tangent vector.}`)),
+        cchoice(math(String.raw`\mathbf{r}'(0)=\begin{bmatrix}${q}\\0\end{bmatrix}.`))
+      ],
+      "The point on the path is \\(\\mathbf{r}(t_0)\\). The tangent vector is \\(\\mathbf{r}\'(t_0)\\).");
+  }
+
+  function speedNormGenerator(id) {
+    const a = pickR([1,2,3]);
+    const b = pickR([2,3,4]);
+    return makeGeneratedExpansionCase(id, 'path-rate',
+      math(String.raw`\mathbf{r}(t)=\begin{bmatrix}${a}t\\${b}t^2\end{bmatrix},\qquad \text{speed}=\mathbf{r}'(t)=\begin{bmatrix}${a}\\${2*b}t\end{bmatrix}.`),
+      'Velocity is a vector; speed is its norm.',
+      [
+        cchoice(String.raw`Velocity and speed have been confused.`, true),
+        cchoice(String.raw`The position vector was used instead of the velocity vector.`),
+        cchoice(String.raw`The derivative of \(t^2\) has the wrong coefficient.`),
+        cchoice(String.raw`The speed should be the dot product \(\mathbf{r}\cdot\mathbf{r}'\).`)
+      ],
+      [
+        cchoice(math(String.raw`\text{velocity}=\mathbf{r}'(t)=\begin{bmatrix}${a}\\${2*b}t\end{bmatrix},\qquad \text{speed}=\|\mathbf{r}'(t)\|=\sqrt{${a*a}+${4*b*b}t^2}.`), true),
+        cchoice(math(String.raw`\text{speed}=\begin{bmatrix}${a}\\${2*b}t\end{bmatrix}.`)),
+        cchoice(math(String.raw`\text{speed}=${a}+${2*b}t.`)),
+        cchoice(math(String.raw`\text{speed}=\|\mathbf{r}(t)\|.`))
+      ],
+      'Speed is scalar. It measures the length of the velocity vector.');
+  }
+
+  function valueInsteadOfJacobianGenerator(id) {
+    const ax = pickR([-2,-1,1,2]);
+    const ay = pickR([-2,-1,1,2]);
+    const f1 = ax + ay;
+    const f2 = ax * ay;
+    return makeGeneratedExpansionCase(id, 'jacobian',
+      math(String.raw`F(x,y)=\begin{bmatrix}x+y\\xy\end{bmatrix},\qquad J_F(${ax},${ay})=\begin{bmatrix}F_1(${ax},${ay})&F_2(${ax},${ay})\end{bmatrix}=\begin{bmatrix}${f1}&${f2}\end{bmatrix}.`),
+      'A Jacobian is built from partial derivatives, not component values.',
+      [
+        cchoice(String.raw`Function values are being arranged instead of derivative values.`, true),
+        cchoice(String.raw`The two component values should be a column vector only.`),
+        cchoice(String.raw`The Jacobian was evaluated at the wrong point.`),
+        cchoice(String.raw`The matrix should simply be transposed.`)
+      ],
+      [
+        cchoice(math(String.raw`J_F(x,y)=\begin{bmatrix}1&1\\y&x\end{bmatrix},\qquad J_F(${ax},${ay})=\begin{bmatrix}1&1\\${ay}&${ax}\end{bmatrix}.`), true),
+        cchoice(math(String.raw`J_F(${ax},${ay})=\begin{bmatrix}${f1}&${f2}\end{bmatrix}.`)),
+        cchoice(math(String.raw`J_F(${ax},${ay})=\begin{bmatrix}${f1}\\${f2}\end{bmatrix}.`)),
+        cchoice(math(String.raw`J_F(${ax},${ay})=\begin{bmatrix}1&${ay}\\1&${ax}\end{bmatrix}.`))
+      ],
+      'Values and derivatives are different objects. The Jacobian records rates of change.');
+  }
+
+  function localExactGenerator(id) {
+    return makeGeneratedExpansionCase(id, 'local-linearization',
+      math(String.raw`F(\mathbf{a}+\mathbf{h})=F(\mathbf{a})+J_F(\mathbf{a})\mathbf{h}\quad\text{exactly for every differentiable }F.`),
+      'Differentiability gives a first-order approximation, not usually an exact identity.',
+      [
+        cchoice(String.raw`A first-order approximation is being treated as an exact formula.`, true),
+        cchoice(String.raw`The base output is missing.`),
+        cchoice(String.raw`The Jacobian should be evaluated at \(\mathbf{h}\).`),
+        cchoice(String.raw`The displacement should be \(\mathbf{a}+\mathbf{h}\).`)
+      ],
+      [
+        cchoice(math(String.raw`F(\mathbf{a}+\mathbf{h})\approx F(\mathbf{a})+J_F(\mathbf{a})\mathbf{h}\quad\text{for small }\mathbf{h}.`), true),
+        cchoice(math(String.raw`F(\mathbf{a}+\mathbf{h})=F(\mathbf{a})+J_F(\mathbf{a})\mathbf{h}\quad\text{for every differentiable }F.`)),
+        cchoice(math(String.raw`F(\mathbf{a}+\mathbf{h})=J_F(\mathbf{a})\mathbf{h}.`)),
+        cchoice(math(String.raw`F(\mathbf{a}+\mathbf{h})\approx F(\mathbf{h})+J_F(\mathbf{h})\mathbf{a}.`))
+      ],
+      'The local model is exact for affine maps, but a general nonlinear map has higher-order error.');
+  }
+
+  function chainSumGenerator(id) {
+    return makeGeneratedExpansionCase(id, 'chain-rule',
+      math(String.raw`J_{F\circ G}(\mathbf{a})=J_F(G(\mathbf{a}))+J_G(\mathbf{a}).`),
+      'Composition corresponds to matrix multiplication.',
+      [
+        cchoice(String.raw`A chain-rule product has been replaced by a sum.`, true),
+        cchoice(String.raw`Only the outer derivative has the wrong evaluation point.`),
+        cchoice(String.raw`The factors are reversed but should still be added.`),
+        cchoice(String.raw`The base output was omitted from a local approximation.`)
+      ],
+      [
+        cchoice(math(String.raw`J_{F\circ G}(\mathbf{a})=J_F(G(\mathbf{a}))J_G(\mathbf{a}).`), true),
+        cchoice(math(String.raw`J_{F\circ G}(\mathbf{a})=J_F(G(\mathbf{a}))+J_G(\mathbf{a}).`)),
+        cchoice(math(String.raw`J_{F\circ G}(\mathbf{a})=J_G(\mathbf{a})J_F(G(\mathbf{a})).`)),
+        cchoice(math(String.raw`J_{F\circ G}(\mathbf{a})=F(G(\mathbf{a}))+G(\mathbf{a}).`))
+      ],
+      'Pointwise sums of functions use sums of Jacobians. Compositions use products of Jacobians.');
+  }
+
+  function neuralLayerShapeGenerator(id) {
+    const m = rint(2,5);
+    let n = rint(2,5);
+    while (n === m) n = rint(2,5);
+    return makeGeneratedExpansionCase(id, 'jacobian',
+      math(String.raw`W\in\mathbb{R}^{${m}\times ${n}},\qquad H(\mathbf{x})=\sigma(W\mathbf{x}+\mathbf{b})\text{ maps }\mathbb{R}^{${m}}\to\mathbb{R}^{${n}}.`),
+      String.raw`An \(m\times n\) matrix multiplies vectors in \(\mathbb{R}^n\) and outputs vectors in \(\mathbb{R}^m\).`,
+      [
+        cchoice(String.raw`The input and output dimensions of the layer are reversed.`, true),
+        cchoice(String.raw`The activation changes the dimension from rows to columns.`),
+        cchoice(String.raw`The bias vector should have the input dimension.`),
+        cchoice(String.raw`The Jacobian must be square because this is a neural-network layer.`)
+      ],
+      [
+        cchoice(math(String.raw`W\in\mathbb{R}^{${m}\times ${n}}\quad\Longrightarrow\quad H:\mathbb{R}^{${n}}\to\mathbb{R}^{${m}}.`), true),
+        cchoice(math(String.raw`H:\mathbb{R}^{${m}}\to\mathbb{R}^{${n}}.`)),
+        cchoice(math(String.raw`H:\mathbb{R}^{${m}}\to\mathbb{R}^{${m}}.`)),
+        cchoice(math(String.raw`H:\mathbb{R}^{${n}}\to\mathbb{R}^{${n}}.`))
+      ],
+      'The number of columns of \\(W\\) is the input dimension; the number of rows is the output dimension.');
+  }
+
+  [domainSqrtDisk, domainLogHalfPlane, graphVsLevelSet, boundaryDiskGenerator, centeredBallGenerator,
+   onePathLimitGenerator, curvedPathLimitGenerator, pointValueContinuityGenerator, tangentPositionGenerator,
+   speedNormGenerator, valueInsteadOfJacobianGenerator, localExactGenerator, chainSumGenerator,
+   neuralLayerShapeGenerator].forEach(fn => push(fn, 4));
+  return out;
+}
+
+function makeHealthyExpansionCase(id, family, patientHtml, hint, wrongDiagnoses, _legacyWrongTreatments, discharge) {
+  // Challenge Mode resolves a correct discharge immediately. The legacy verification
+  // arrays in the healthy generators are retained only to avoid rewriting case content;
+  // they are intentionally ignored and are never rendered or sampled.
+  const diagnoses = [
+    cchoice({ html: 'No pathology — discharge.', why: 'This chart passes the check.' }, true),
+    ...wrongDiagnoses
+  ];
+  const c = makeCase(`H${String(id).padStart(3,'0')}`, patientHtml, hint, diagnoses, [], discharge);
+  c.healthy = true;
+  c.familyOverride = family;
+  return c;
+}
+
+function generateHealthyCases() {
+  const out = [];
+  let hid = 1;
+  const push = (fn, repeats = 3) => {
+    for (let k = 0; k < repeats; k++) {
+      const c = fn(hid++);
+      tagExpansionCase(c, fn.name || `healthy-${hid}`, 'healthy');
+      out.push(c);
+    }
+  };
+
+  function healthyDimensions(id) {
+    const m = rint(2,4);
+    let n = rint(2,4);
+    while (n === m) n = rint(2,4);
+    return makeHealthyExpansionCase(id, 'general',
+      math(String.raw`F:\mathbb{R}^{${n}}\to\mathbb{R}^{${m}},\qquad J_F(\mathbf{x})\text{ has shape }${m}\times ${n}.`),
+      'Rows correspond to output components; columns correspond to input variables.',
+      [
+        cchoice({ html: 'The Jacobian shape is transposed.', why: `For this map the Jacobian is already ${m} by ${n}.` }),
+        cchoice({ html: 'The Jacobian must be square.', why: 'Jacobians can be rectangular when input and output dimensions differ.' }),
+        cchoice({ html: 'The domain and codomain dimensions are reversed.', why: 'The stated domain and codomain match the displayed shape.' })
+      ],
+      [
+        cchoice({ html: math(String.raw`J_F(\mathbf{x})\text{ should be }${n}\times ${m}.`), why: 'That transposes the correct shape.' }),
+        cchoice({ html: math(String.raw`J_F(\mathbf{x})\text{ should be }${n}\times ${n}.`), why: 'A Jacobian need not be square.' }),
+        cchoice({ html: math(String.raw`F:\mathbb{R}^{${m}}\to\mathbb{R}^{${n}}.`), why: 'That changes a correct type statement.' })
+      ],
+      String.raw`This chart is consistent: for \(F:\mathbb{R}^n\to\mathbb{R}^m\), \(J_F\) has shape \(m\times n\).`);
+  }
+
+  function healthyGradient(id) {
+    const a = pickR([1,2,3,4]);
+    const b = pickR([1,2,3]);
+    return makeHealthyExpansionCase(id, 'gradient',
+      math(String.raw`f(x,y)=${a}x^2+${b}y^2,\qquad \nabla f(x,y)=\begin{bmatrix}${2*a}x\\${2*b}y\end{bmatrix}.`),
+      'Differentiate each squared term.',
+      [
+        cchoice({ html: 'A factor of 2 is missing in each entry.', why: 'The factors of 2 are already present.' }),
+        cchoice({ html: 'The gradient is written as a Hessian.', why: 'The displayed object is a two-entry vector, not a square matrix.' }),
+        cchoice({ html: 'The entries are in the wrong order.', why: 'The first entry is the x-partial and the second entry is the y-partial.' })
+      ],
+      [
+        cchoice({ html: math(String.raw`\nabla f=\begin{bmatrix}${a}x\\${b}y\end{bmatrix}.`), why: 'That removes the correct factors of 2.' }),
+        cchoice({ html: math(String.raw`H_f=\begin{bmatrix}${2*a}&0\\0&${2*b}\end{bmatrix}.`), why: 'That is the Hessian, not the gradient requested here.' }),
+        cchoice({ html: math(String.raw`\nabla f=\begin{bmatrix}${2*b}y\\${2*a}x\end{bmatrix}.`), why: 'That swaps the partial derivatives.' })
+      ],
+      'The displayed gradient is correct.');
+  }
+
+  function healthyLocalLinearization(id) {
+    return makeHealthyExpansionCase(id, 'local-linearization',
+      math(String.raw`L(\mathbf{x})=F(\mathbf{a})+J_F(\mathbf{a})(\mathbf{x}-\mathbf{a}).`),
+      String.raw`Run the anchor test: plug in \(\mathbf{x}=\mathbf{a}\).`,
+      [
+        cchoice({ html: String.raw`The base output \(F(\mathbf{a})\) is missing.`, why: 'The base output is present at the front of the formula.' }),
+        cchoice({ html: String.raw`The Jacobian is not frozen at the base point.`, why: 'The Jacobian is already evaluated at \\(\\mathbf{a}\\).' }),
+        cchoice({ html: String.raw`The displacement should be \(\mathbf{x}\), not \(\mathbf{x}-\mathbf{a}\).`, why: 'The displacement from the base point is exactly \\(\\mathbf{x}-\\mathbf{a}\\).' })
+      ],
+      [
+        cchoice({ html: math(String.raw`L(\mathbf{x})=J_F(\mathbf{a})(\mathbf{x}-\mathbf{a}).`), why: 'That removes the anchor output.' }),
+        cchoice({ html: math(String.raw`L(\mathbf{x})=F(\mathbf{a})+J_F(\mathbf{x})(\mathbf{x}-\mathbf{a}).`), why: 'That lets the matrix change with \\(\\mathbf{x}\\).' }),
+        cchoice({ html: math(String.raw`L(\mathbf{x})=F(\mathbf{a})+J_F(\mathbf{a})\mathbf{x}.`), why: 'That uses the point rather than the displacement.' })
+      ],
+      'This is the standard anchored first-order local model.');
+  }
+
+  function healthyChainRule(id) {
+    return makeHealthyExpansionCase(id, 'chain-rule',
+      math(String.raw`J_{F\circ G}(\mathbf{a})=J_F(G(\mathbf{a}))J_G(\mathbf{a}).`),
+      'The inner local map acts first; the outer derivative is evaluated at the inner output.',
+      [
+        cchoice({ html: 'The factors are in the wrong order.', why: 'The product already has the outer derivative on the left and inner derivative on the right.' }),
+        cchoice({ html: String.raw`The outer derivative should be evaluated at \(\mathbf{a}\).`, why: String.raw`The outer function receives \(G(\mathbf{a})\), not \(\mathbf{a}\).` }),
+        cchoice({ html: 'The composition should use a sum of Jacobians.', why: 'Compositions use products of local linear maps.' })
+      ],
+      [
+        cchoice({ html: math(String.raw`J_{F\circ G}(\mathbf{a})=J_G(\mathbf{a})J_F(G(\mathbf{a})).`), why: 'That reverses the acting order.' }),
+        cchoice({ html: math(String.raw`J_{F\circ G}(\mathbf{a})=J_F(\mathbf{a})J_G(\mathbf{a}).`), why: 'That evaluates the outer derivative at the wrong point.' }),
+        cchoice({ html: math(String.raw`J_{F\circ G}(\mathbf{a})=J_F(G(\mathbf{a}))+J_G(\mathbf{a}).`), why: 'That replaces composition by addition.' })
+      ],
+      'The chain-rule product is already correct.');
+  }
+
+  function healthySympy(id) {
+    const a = pickR([2,3,4]);
+    const code = `x, y = sp.symbols("x y")\nF = sp.Matrix([${a}*x*y, sp.sin(x + y)])\nJ = F.jacobian([x, y])`;
+    return makeHealthyExpansionCase(id, 'code-sympy-jacobian',
+      codePatient(code, String.raw`Compute the full Jacobian of \(F\) with columns ordered by \(x\), then \(y\).`),
+      'SymPy columns follow the variable list order.',
+      [
+        cchoice({ html: 'The code differentiates only with respect to x.', why: 'The `.jacobian([x, y])` call differentiates with respect to both variables.' }),
+        cchoice({ html: 'The variable order is reversed.', why: 'The variable list is already `[x, y]`.' }),
+        cchoice({ html: 'The vector should be entered as a row matrix.', why: 'A column vector is the expected convention here.' })
+      ],
+      [
+        cchoice({ html: '', code: 'J = sp.diff(F, x)', why: 'That computes only one column of the Jacobian.' }),
+        cchoice({ html: '', code: 'J = F.jacobian([y, x])', why: 'That reverses the desired column order.' }),
+        cchoice({ html: '', code: 'F = sp.Matrix([[x*y, sp.sin(x + y)]])\nJ = F.jacobian([x, y])', why: 'That changes the output into a row matrix.' })
+      ],
+      'This SymPy chart already computes the full Jacobian with the requested column order.');
+  }
+
+  function healthyActivation(id) {
+    const m = rint(2,4), n = rint(2,4);
+    return makeHealthyExpansionCase(id, 'jacobian',
+      math(String.raw`W\in\mathbb{R}^{${m}\times ${n}},\quad H(\mathbf{x})=\sigma(W\mathbf{x}+\mathbf{b}),\qquad J_H(\mathbf{x})=D_{\sigma'}(W\mathbf{x}+\mathbf{b})W.`),
+      'A componentwise activation has one derivative for each output component.',
+      [
+        cchoice({ html: String.raw`The derivative of \(\sigma\) is being treated as a scalar.`, why: "The chart already uses the diagonal matrix \\(D_{\\sigma'}\\)." }),
+        cchoice({ html: String.raw`The matrix \(W\) should be on the left.`, why: 'The affine map acts first, so \\(W\\) is the right factor.' }),
+        cchoice({ html: 'The bias should be added to the Jacobian.', why: 'The bias is a constant shift and does not contribute to the Jacobian.' })
+      ],
+      [
+        cchoice({ html: math(String.raw`J_H(\mathbf{x})=\sigma'(W\mathbf{x}+\mathbf{b})W.`), why: 'That collapses a componentwise derivative into a scalar.' }),
+        cchoice({ html: math(String.raw`J_H(\mathbf{x})=W D_{\sigma'}(W\mathbf{x}+\mathbf{b}).`), why: 'That reverses the local maps.' }),
+        cchoice({ html: math(String.raw`J_H(\mathbf{x})=D_{\sigma'}(\mathbf{x})W.`), why: 'That evaluates the activation derivative at the wrong input.' })
+      ],
+      'The displayed neural-layer Jacobian is correct.');
+  }
+
+
+  [healthyDimensions, healthyGradient, healthyLocalLinearization, healthyChainRule, healthySympy, healthyActivation].forEach(fn => push(fn, 4));
+  return out;
+}
 
 function shuffle(arr) {
   const a = arr.slice();
@@ -5529,53 +6601,433 @@ function shuffle(arr) {
   return a;
 }
 
+const STORAGE_KEY = 'math345-differential-diagnosis-loop-v3';
+const LEGACY_V2_STORAGE_KEY = 'math345-differential-diagnosis-loop-v2';
+const CODE_FAMILIES = new Set(['code-sympy-jacobian', 'code-local-linearization', 'code']);
+const MODES = {
+  standard: {
+    id:'standard', label:'Standard Rotation', shortLabel:'Standard',
+    description:'Every chart has an error — diagnose, then treat.',
+    diagnosis:true, discharge:false, hints:true
+  },
+  challenge: {
+    id:'challenge', label:'Challenge Rotation', shortLabel:'Challenge',
+    description:'Some charts are already correct — treat or discharge?',
+    diagnosis:true, discharge:true, hints:true
+  },
+  exam: {
+    id:'exam', label:'Board Exam', shortLabel:'Exam',
+    description:'No hints, no diagnosis. One try per chart.',
+    diagnosis:false, discharge:false, hints:false
+  }
+};
+const MODE_ORDER = ['standard', 'challenge', 'exam'];
+const WARDS = [
+  { id:'full', label:'Full Rotation', families:null },
+  { id:'foundations', label:'Foundations', families:['general', 'domain', 'limit-continuity'] },
+  { id:'partials', label:'Partials Ward', families:['partial-derivative', 'gradient', 'hessian'] },
+  { id:'jacobian', label:'Jacobian Ward', families:['jacobian'] },
+  { id:'chain', label:'Chain Rule Ward', families:['chain-rule', 'path-rate'] },
+  { id:'linear', label:'Linearization ICU', families:['local-linearization'] },
+  { id:'code', label:'Radiology', families:['code-sympy-jacobian', 'code-local-linearization', 'code'] }
+];
+const FAMILY_LABELS = {
+  general:'Foundations',
+  domain:'Domains',
+  'limit-continuity':'Limits',
+  'partial-derivative':'Partials',
+  gradient:'Gradients',
+  hessian:'Hessians',
+  jacobian:'Jacobians',
+  'local-linearization':'Linearization',
+  'chain-rule':'Chain rule',
+  'path-rate':'Path rates',
+  'code-sympy-jacobian':'SymPy',
+  'code-local-linearization':'Code models',
+  code:'Code'
+};
+const RESULT_PHRASES = {
+  3:['Flawless!', 'Clean diagnosis!', 'Textbook triage!', 'Perfect read!'],
+  2:['Nice recovery!', 'Good correction!', 'Strong finish!', 'Well recovered!'],
+  1:['Case closed!', 'You got there!', 'Patient resolved!', 'Good persistence!']
+};
+const HEALTHY_RESULT_PHRASES = [
+  ['Discharged!', 'Nothing was wrong — and you knew it.'],
+  ['Chart cleared!', 'You recognized a healthy chart and avoided an unnecessary treatment.'],
+  ['No pathology!', 'Good judgment: the chart was already correct.'],
+  ['Clean bill of health!', 'You committed to the correct no-pathology decision.']
+];
+
+function emptyModeWardScores() {
+  return { standard:{}, challenge:{}, exam:{} };
+}
+
+function defaultProgress() {
+  return {
+    version:3,
+    roundsPlayed:0,
+    lastWard:'full',
+    lastMode:'standard',
+    lastScore:0,
+    bestOverall:0,
+    bestByModeWard:emptyModeWardScores(),
+    mastery:{}
+  };
+}
+
+function normalizeProgress(saved) {
+  const base = defaultProgress();
+  const sourceScores = saved && saved.bestByModeWard || {};
+  return {
+    ...base,
+    ...(saved || {}),
+    version:3,
+    bestByModeWard:{
+      standard:{ ...(sourceScores.standard || {}) },
+      challenge:{ ...(sourceScores.challenge || {}) },
+      exam:{ ...(sourceScores.exam || {}) }
+    },
+    mastery:saved && saved.mastery || {}
+  };
+}
+
+function migrateV2(saved) {
+  const migrated = defaultProgress();
+  migrated.roundsPlayed = Number(saved.roundsPlayed || 0);
+  migrated.lastWard = WARDS.some(ward => ward.id === saved.lastWard) ? saved.lastWard : 'full';
+  migrated.lastMode = 'challenge';
+  migrated.lastScore = Number(saved.lastScore || 0);
+  migrated.bestOverall = Number(saved.bestOverall || 0);
+  migrated.bestByModeWard.challenge = { ...(saved.bestByWard || {}) };
+  migrated.mastery = saved.mastery || {};
+  return migrated;
+}
+
+function loadProgress() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
+    if (saved && saved.version === 3) return normalizeProgress(saved);
+    const legacy = JSON.parse(localStorage.getItem(LEGACY_V2_STORAGE_KEY) || 'null');
+    if (legacy && legacy.version === 2) {
+      const migrated = migrateV2(legacy);
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(migrated)); } catch (_) {}
+      return migrated;
+    }
+  } catch (_) {}
+  return defaultProgress();
+}
+
+function saveProgress() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(progress)); } catch (_) {}
+}
+
+function defaultState(ward = 'full', mode = 'standard', options = {}) {
+  return {
+    ward,
+    mode,
+    queue:[],
+    index:0,
+    roundLength:Number(options.roundLength || ROUND_LENGTH),
+    isRetry:!!options.isRetry,
+    score:0,
+    phase:mode === 'exam' ? 'exam' : 'diagnosis',
+    diagnosisOptions:[],
+    treatmentOptions:[],
+    diagnosisFirstTry:true,
+    treatmentFirstTry:true,
+    hintUsed:false,
+    caseWrongClicks:0,
+    resolved:false,
+    confirmedDiagnosisHtml:'',
+    casePoints:[],
+    caseLog:[],
+    finished:false
+  };
+}
+
+let progress = loadProgress();
+let state = defaultState('full', MODES[progress.lastMode] ? progress.lastMode : 'standard');
+
+const app = document.getElementById('app');
+const introScreen = document.getElementById('introScreen');
+const playScreen = document.getElementById('playScreen');
+const endScreen = document.getElementById('endScreen');
+const modeCards = [...document.querySelectorAll('.modeCard')];
+const modeBestElements = Object.fromEntries(MODE_ORDER.map(modeId => [modeId, document.getElementById(`${modeId}Best`)]));
+
+const progressDots = document.getElementById('progressDots');
+const modeChip = document.getElementById('modeChip');
+const patientCount = document.getElementById('patientCount');
+const scoreCount = document.getElementById('scoreCount');
+const newRoundBtn = document.getElementById('newRoundBtn');
+const chartMeta = document.getElementById('chartMeta');
+const chartGoal = document.getElementById('chartGoal');
+const patientBody = document.getElementById('patientBody');
+const hintBtn = document.getElementById('hintBtn');
+
+const decisionCard = document.getElementById('decisionCard');
+const decisionTitle = document.getElementById('decisionTitle');
+const phaseBadge = document.getElementById('phaseBadge');
+const confirmedStrip = document.getElementById('confirmedStrip');
+const confirmedText = document.getElementById('confirmedText');
+const choiceGrid = document.getElementById('choiceGrid');
+const dischargeChoice = document.getElementById('dischargeChoice');
+const feedback = document.getElementById('feedback');
+const inlineNextBtn = document.getElementById('inlineNextBtn');
+
+const endTitle = document.getElementById('endTitle');
+const endKicker = document.getElementById('endKicker');
+const newBestBadge = document.getElementById('newBestBadge');
+const perfectBadge = document.getElementById('perfectBadge');
+const endScoreLabel = document.getElementById('endScoreLabel');
+const endFlawlessLabel = document.getElementById('endFlawlessLabel');
+const endBestLabel = document.getElementById('endBestLabel');
+const endScore = document.getElementById('endScore');
+const endFlawless = document.getElementById('endFlawless');
+const endBest = document.getElementById('endBest');
+const endDots = document.getElementById('endDots');
+const examReview = document.getElementById('examReview');
+const examReviewList = document.getElementById('examReviewList');
+const playAgainBtn = document.getElementById('playAgainBtn');
+const retryMissesBtn = document.getElementById('retryMissesBtn');
+const changeWardBtn = document.getElementById('changeWardBtn');
+const confettiLayer = document.getElementById('confettiLayer');
+
+const helpBtn = document.getElementById('helpBtn');
+const aboutModal = document.getElementById('aboutModal');
+const closeAboutBtn = document.getElementById('closeAboutBtn');
+const hintModal = document.getElementById('hintModal');
+const hintModalText = document.getElementById('hintModalText');
+const closeHintBtn = document.getElementById('closeHintBtn');
+const resultModal = document.getElementById('resultModal');
+const resultBox = document.getElementById('resultBox');
+const resultScore = document.getElementById('resultScore');
+const resultTitle = document.getElementById('resultTitle');
+const resultDetail = document.getElementById('resultDetail');
+const resultDischarge = document.getElementById('resultDischarge');
+const resultNextBtn = document.getElementById('resultNextBtn');
+const newRoundConfirm = document.getElementById('newRoundConfirm');
+const cancelNewRoundBtn = document.getElementById('cancelNewRoundBtn');
+const confirmNewRoundBtn = document.getElementById('confirmNewRoundBtn');
+
+function wardDefinition(id) {
+  return WARDS.find(ward => ward.id === id) || WARDS[0];
+}
+
+function modeDefinition(id) {
+  return MODES[id] || MODES.standard;
+}
+
+function familyLabel(family) {
+  return FAMILY_LABELS[family] || 'General';
+}
+
+function wardForFamily(family) {
+  return WARDS.find(ward => ward.id !== 'full' && ward.families && ward.families.includes(family)) || WARDS[0];
+}
+
+function caseWard(c) {
+  return wardForFamily(caseFamily(c));
+}
+
+function ensureModeWardScores(modeId) {
+  if (!progress.bestByModeWard[modeId]) progress.bestByModeWard[modeId] = {};
+  return progress.bestByModeWard[modeId];
+}
+
+function bestFor(modeId, wardId) {
+  return Number(ensureModeWardScores(modeId)[wardId] || 0);
+}
+
+function escapeHtml(str) {
+  return String(str)
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#039;');
+}
+
+function stripCodeComments(html) {
+  return String(html || '').replace(/(<pre\s*><code>)([\s\S]*?)(<\/code><\/pre>)/gi, (full, open, code, close) => {
+    const lines = code.split('\n').filter(line => !/^\s*#/.test(line));
+    return `${open}${lines.join('\n').trimStart()}${close}`;
+  });
+}
+
+function protectMathHtml(html) {
+  const normalizeMathAliases = value => String(value)
+    .replace(/\bF0\b/g, 'F_0')
+    .replace(/\bJ0\b/g, 'J_0')
+    .replace(/\bx0\b/g, 'x_0');
+  const escapeComparators = value => String(value)
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;');
+  const prepareMathBody = value => escapeComparators(normalizeMathAliases(value));
+  return String(html || '')
+    .replace(/\\\[([\s\S]*?)\\\]/g, (_, body) => `\\[${prepareMathBody(body)}\\]`)
+    .replace(/\\\(([\s\S]*?)\\\)/g, (_, body) => `\\(${prepareMathBody(body)}\\)`);
+}
+
+function renderBlock(item, options = {}) {
+  let html = item && item.html ? item.html : '';
+  if (item && (item.type === 'code' || item.code)) {
+    html += `<pre><code>${escapeHtml(item.code || '')}</code></pre>`;
+  }
+  if (options.stripCodeComments) html = stripCodeComments(html);
+  return protectMathHtml(html);
+}
+
+function renderPatientBlock(item) {
+  const html = renderBlock(item, { stripCodeComments:true });
+  const match = html.match(/^<div class=['"]mathDisplay['"]>\\\[([\s\S]*?)\\\]<\/div>$/);
+  if (!match || match[1].length < 105) return html;
+
+  const body = match[1];
+  const candidates = [];
+  let depth = 0;
+  for (let index = 0; index < body.length; index += 1) {
+    if (body[index] === '{') depth += 1;
+    else if (body[index] === '}') depth = Math.max(0, depth - 1);
+    if (depth !== 0) continue;
+    for (const marker of ['\\qquad', '\\quad']) {
+      if (body.startsWith(marker, index)) candidates.push({ index, length:marker.length });
+    }
+  }
+
+  for (const marker of [
+    '\\text{ is claimed to be }',
+    '\\text{ it is claimed that }',
+    '\\text{ is claimed to satisfy }'
+  ]) {
+    const index = body.indexOf(marker);
+    if (index >= 0) candidates.push({ index:index + marker.length, length:0 });
+  }
+
+  if (!candidates.length) return html;
+  const midpoint = body.length / 2;
+  const split = candidates.sort((a, b) => Math.abs(a.index - midpoint) - Math.abs(b.index - midpoint))[0];
+  const first = body.slice(0, split.index).trim();
+  const second = body.slice(split.index + split.length).trim();
+  if (!first || !second) return html;
+  return `<div class="mathDisplay wrappedMath"><div class="mathLine">\\[${first}\\]</div><div class="mathLine">\\[${second}\\]</div></div>`;
+}
+
+function stripHtmlToText(html) {
+  const div = document.createElement('div');
+  div.innerHTML = String(html || '').replace(/<br\s*\/?\s*>/gi, ' ');
+  return (div.textContent || '').replace(/\s+/g, ' ').trim();
+}
+
+function choiceSummary(choice, maxLength = 140) {
+  const raw = choice && choice.code ? choice.code : (choice && choice.html ? choice.html : '');
+  let text = stripHtmlToText(raw)
+    .replace(/\\\[/g, '').replace(/\\\]/g, '')
+    .replace(/\\\(/g, '').replace(/\\\)/g, '')
+    .replace(/\\qquad/g, ' ')
+    .replace(/\\text\{/g, '').replace(/\}/g, '')
+    .replace(/\\/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+  if (!text) text = 'this option';
+  return text.length > maxLength ? `${text.slice(0, maxLength - 1)}…` : text;
+}
+
+function isNoPathologyChoice(choice) {
+  return /no pathology/i.test(String(choice && choice.html || ''));
+}
+
+function cleanWhyText(text) {
+  return String(text || '')
+    .replace(/^why this is off:\s*/i, '')
+    .replace(/^not quite\s*[—:–-]?\s*/i, '')
+    .trim();
+}
+
+function wrongFeedback(choice, stage, c) {
+  let why = choice && choice.why ? cleanWhyText(choice.why) : '';
+  if (!why && stage === 'diagnosis') {
+    why = `That diagnosis points to a different ${familyLabel(caseFamily(c)).toLowerCase()} issue. Recheck the exact mismatch in the chart.`;
+  }
+  if (!why && stage === 'treatment') {
+    why = 'That option does not fix exactly the diagnosed issue. Compare the changed term, evaluation point, or matrix shape.';
+  }
+  if (!why && stage === 'exam') {
+    why = 'Compare each option against the chart line by line; one of them repairs the exact mismatch without changing anything else.';
+  }
+  return protectMathHtml(`Not quite — ${why}`);
+}
+
 function caseFamily(c) {
+  if (c && c.familyOverride) return c.familyOverride;
   const html = String(c && c.patient ? c.patient.html || '' : '');
-  const lower = html.toLowerCase();
-  if (/<pre\s*><code>/i.test(html)) {
-    if (lower.includes('jacobian') || lower.includes('sp.diff') || lower.includes('sp.matrix') || lower.includes('sp.symbols')) {
-      return 'code-sympy-jacobian';
-    }
-    if (lower.includes('f0') || lower.includes('j0') || lower.includes('x0') || lower.includes('def l(')) {
-      return 'code-local-linearization';
-    }
+  const goal = String(c && c.patient ? c.patient.goal || '' : '');
+  const combined = `${html} ${goal}`;
+  const lower = combined.toLowerCase();
+
+  if (/<pre\s*><code>/i.test(combined) || (c && c.patient && c.patient.code)) {
+    if (lower.includes('f0') || lower.includes('j0') || lower.includes('x0') || lower.includes('pred') || lower.includes('local linear')) return 'code-local-linearization';
+    if (lower.includes('jacobian') || lower.includes('sp.diff') || lower.includes('sp.matrix') || lower.includes('sp.symbols')) return 'code-sympy-jacobian';
     return 'code';
   }
-  if (html.includes(String.raw`F(\mathbf{a}+\mathbf{h})`) || html.includes(String.raw`F(\mathbf{x})\approx`) || html.includes('L(')) {
-    return 'local-linearization';
-  }
-  if (html.includes(String.raw`F\circ G`) || html.includes(String.raw`G\circ F`) || html.includes(String.raw`H\circ F\circ G`) || html.includes('F(G(')) {
-    return 'chain-rule';
-  }
-  if (html.includes(String.raw`\frac{d}{dt}`) || html.includes(String.raw`\mathbf{r}`) || html.includes('r(t)')) {
-    return 'path-rate';
-  }
-  if (html.includes(String.raw`H_f`)) return 'hessian';
-  if (html.includes(String.raw`\nabla`) || html.includes('gradient')) return 'gradient';
-  if (html.includes(String.raw`J_F`) || html.includes(String.raw`J_f`) || html.includes('Jacobian')) return 'jacobian';
-  if (html.includes('f_x') || html.includes('f_y') || html.includes(String.raw`\partial f`)) return 'partial-derivative';
-  if (html.includes(String.raw`\operatorname{dom}`)) return 'domain';
-  if (html.includes(String.raw`\lim`) || lower.includes('continuous') || lower.includes('continuity')) return 'limit-continuity';
+  if (combined.includes(String.raw`F(\mathbf{a}+\mathbf{h})`) || combined.includes(String.raw`F(\mathbf{x})\approx`) || combined.includes('L(') || lower.includes('linearization') || lower.includes('tangent plane')) return 'local-linearization';
+  if (combined.includes(String.raw`F\circ G`) || combined.includes(String.raw`G\circ F`) || combined.includes(String.raw`H\circ F\circ G`) || combined.includes('F(G(') || lower.includes('composition')) return 'chain-rule';
+  if (combined.includes(String.raw`\frac{d}{dt}`) || combined.includes(String.raw`\mathbf{r}`) || combined.includes('r(t)') || lower.includes('speed') || lower.includes('tangent vector')) return 'path-rate';
+  if (combined.includes(String.raw`H_f`)) return 'hessian';
+  if (combined.includes(String.raw`\nabla`) || lower.includes('gradient')) return 'gradient';
+  if (/J_[A-Za-z]/.test(combined) || combined.includes(String.raw`J_F`) || combined.includes(String.raw`J_f`) || lower.includes('jacobian')) return 'jacobian';
+  if (combined.includes('f_x') || combined.includes('f_y') || combined.includes(String.raw`\partial f`)) return 'partial-derivative';
+  if (combined.includes(String.raw`\operatorname{dom}`) || lower.includes('domain')) return 'domain';
+  if (combined.includes(String.raw`\lim`) || lower.includes('continuous') || lower.includes('continuity')) return 'limit-continuity';
   return 'general';
 }
 
-function normalizeCaseText(s) {
-  return String(s || '').replace(/\s+/g, ' ').trim();
+function normalizeCaseText(value) {
+  return String(value || '').replace(/\s+/g, ' ').trim();
 }
 
 function caseSignature(c) {
-  const patientHtml = c && c.patient ? c.patient.html || '' : '';
-  const correctDiagnosis = (c && c.diagnoses ? c.diagnoses : []).find(choice => choice.correct);
+  const correctDiagnosis = (c.diagnoses || []).find(choice => choice.correct);
   return [
     caseFamily(c),
-    normalizeCaseText(stripCodeComments(patientHtml)),
-    normalizeCaseText(correctDiagnosis ? correctDiagnosis.html : '')
+    normalizeCaseText(stripCodeComments(c.patient && c.patient.html || '')),
+    normalizeCaseText(correctDiagnosis && correctDiagnosis.html || '')
   ].join('::');
 }
 
-function caseRoundKey(c) {
-  if (c && c.roundKey) return c.roundKey;
-  return caseSignature(c);
+function cloneCase(c) {
+  return JSON.parse(JSON.stringify(c));
+}
+
+function prepareCase(c) {
+  // Content authors can set case.examSafe = false (or option.examSafe = false)
+  // to keep a post-diagnosis-dependent item out of Board Exam without rewriting it.
+  c.family = caseFamily(c);
+  c.healthy = !!c.healthy;
+  c.examSafe = c.examSafe !== false;
+  return c;
+}
+
+function treatmentChoicesForMode(c, modeId) {
+  const all = c.treatments || [];
+  return modeId === 'exam' ? all.filter(choice => choice.examSafe !== false) : all;
+}
+
+function isPlayableCase(c) {
+  const diagnoses = (c.diagnoses || []).filter(choice => !isNoPathologyChoice(choice));
+  const diagnosisCorrect = diagnoses.filter(choice => choice.correct).length;
+  const diagnosisWrong = diagnoses.filter(choice => !choice.correct).length;
+  if (c.healthy) return diagnosisWrong >= 3;
+  const treatments = c.treatments || [];
+  const treatmentCorrect = treatments.filter(choice => choice.correct).length;
+  const treatmentWrong = treatments.filter(choice => !choice.correct).length;
+  return diagnosisCorrect === 1 && diagnosisWrong >= 2 && treatmentCorrect === 1 && treatmentWrong >= 2;
+}
+
+function isExamPlayableCase(c) {
+  if (!c || c.healthy || c.examSafe === false) return false;
+  const treatments = treatmentChoicesForMode(c, 'exam');
+  return treatments.filter(choice => choice.correct).length === 1 && treatments.filter(choice => !choice.correct).length >= 2;
 }
 
 function uniqueCasePool(pool) {
@@ -5588,99 +7040,198 @@ function uniqueCasePool(pool) {
   });
 }
 
-function buildRoundQueue(pool) {
-  const candidates = shuffle(uniqueCasePool(pool));
-  const queue = [];
-  const usedSignatures = new Set();
-  const usedRoundKeys = new Set();
-  const available = c => !usedSignatures.has(caseSignature(c)) && !usedRoundKeys.has(caseRoundKey(c));
-  while (queue.length < ROUND_LENGTH && candidates.length) {
-    const previousFamily = queue.length ? caseFamily(queue[queue.length - 1]) : '';
-    let nextIndex = candidates.findIndex(c => available(c) && caseFamily(c) !== previousFamily);
-    if (nextIndex < 0) nextIndex = candidates.findIndex(available);
-    if (nextIndex < 0) break;
-    const next = candidates.splice(nextIndex, 1)[0];
-    queue.push(next);
-    usedSignatures.add(caseSignature(next));
-    usedRoundKeys.add(caseRoundKey(next));
+function buildCasePool() {
+  const generated = generateRandomCases().concat(generateConvertedStaticCases(), generateHealthyCases());
+  const combined = generated.concat(CASES.map(cloneCase));
+  return uniqueCasePool(combined.map(cloneCase).map(prepareCase)).filter(isPlayableCase);
+}
+
+function matchesWard(c, wardId) {
+  const ward = wardDefinition(wardId);
+  return !ward.families || ward.families.includes(caseFamily(c));
+}
+
+function isCodeCase(c) {
+  return CODE_FAMILIES.has(caseFamily(c));
+}
+
+function chooseSpacedSlots(count, target) {
+  const selected = new Set();
+  while (selected.size < count) {
+    let candidates = [];
+    for (let i = 0; i < target; i++) {
+      if (selected.has(i) || selected.has(i - 1) || selected.has(i + 1)) continue;
+      candidates.push(i);
+    }
+    if (!candidates.length) candidates = Array.from({ length:target }, (_, i) => i).filter(i => !selected.has(i));
+    if (!candidates.length) break;
+    selected.add(pickR(candidates));
   }
-  return queue;
+  return selected;
 }
 
-function escapeHtml(str) {
-  return String(str)
-    .replaceAll('&', '&amp;')
-    .replaceAll('<', '&lt;')
-    .replaceAll('>', '&gt;')
-    .replaceAll('"', '&quot;')
-    .replaceAll("'", '&#039;');
-}
-
-function protectMathHtml(html) {
-  const normalizeMathAliases = (s) => String(s)
-    .replace(/\bF0\b/g, 'F_0')
-    .replace(/\bJ0\b/g, 'J_0')
-    .replace(/\bx0\b/g, 'x_0');
-  const escapeComparators = (s) => String(s)
-    .replaceAll('<', '&lt;')
-    .replaceAll('>', '&gt;');
-  const prepareMathBody = (s) => escapeComparators(normalizeMathAliases(s));
-  return String(html || '')
-    .replace(/\\\[([\s\S]*?)\\\]/g, (_, body) => `\\[${prepareMathBody(body)}\\]`)
-    .replace(/\\\(([\s\S]*?)\\\)/g, (_, body) => `\\(${prepareMathBody(body)}\\)`);
-}
-
-function formatSubscriptText(s) {
-  return String(s)
-    .replaceAll('F(x0)', String.raw`\(F(x_0)\)`)
-    .replaceAll('`F0`', String.raw`\(F_0\)`)
-    .replaceAll('`J0`', String.raw`\(J_0\)`)
-    .replaceAll('`x0`', String.raw`\(x_0\)`);
-}
-
-function chartMetaHtml(goal = '') {
-  const intent = goal ? `<span class="goalNote">Intended task: ${formatSubscriptText(goal)}</span>` : '';
-  return protectMathHtml(`<div class="chartMeta"><b>Chart</b>${intent}</div>`);
-}
-
-function stripCodeComments(html) {
-  return String(html || '').replace(/(<pre\s*><code>)([\s\S]*?)(<\/code><\/pre>)/gi, (full, open, code, close) => {
-    const lines = code.split('\n').filter(line => !/^\s*#/.test(line));
-    return `${open}${lines.join('\n').trimStart()}${close}`;
-  });
-}
-
-function renderBlock(item, options = {}) {
-  let html = item.html || '';
-  if (item.type === 'code' || item.code) {
-    html += `<pre><code>${escapeHtml(item.code || '')}</code></pre>`;
+function takeCandidate(candidates, selected, previousFamily, options = {}) {
+  if (!candidates.length) return null;
+  const used = new Set(selected.map(caseSignature));
+  const codeCapReached = !!options.codeCapReached;
+  const allowedCode = c => !codeCapReached || !isCodeCase(c);
+  const checks = [
+    c => !used.has(caseSignature(c)) && allowedCode(c) && caseFamily(c) !== previousFamily,
+    c => !used.has(caseSignature(c)) && allowedCode(c)
+  ];
+  let validIndices = [];
+  for (const check of checks) {
+    validIndices = candidates.map((c, i) => check(c) ? i : -1).filter(i => i >= 0);
+    if (validIndices.length) break;
   }
-  if (options.stripCodeComments) {
-    html = stripCodeComments(html);
-  }
-  return protectMathHtml(html);
+  if (!validIndices.length) return null;
+  const index = pickR(validIndices);
+  return candidates.splice(index, 1)[0];
 }
 
-function renderPatientBlock(c) {
-  const html = renderBlock(c.patient);
-  const goal = c && c.patient ? c.patient.goal || '' : '';
-  const isCode = /<pre\s*><code>/i.test(html) || (c && c.patient && c.patient.code);
-  return chartMetaHtml(isCode ? goal : '') + (isCode ? stripCodeComments(html) : html);
+function arrangeRoundCases(cases) {
+  const healthy = shuffle(cases.filter(c => c.healthy));
+  const pathology = shuffle(cases.filter(c => !c.healthy));
+  const healthySlots = chooseSpacedSlots(healthy.length, cases.length);
+  const arranged = [];
+  for (let position = 0; position < cases.length; position++) {
+    const previousFamily = arranged.length ? caseFamily(arranged[arranged.length - 1]) : '';
+    const source = healthySlots.has(position) ? healthy : pathology;
+    const next = takeCandidate(source, arranged, previousFamily);
+    if (!next) return shuffle(cases);
+    arranged.push(next);
+  }
+  return arranged;
+}
+
+function buildBalancedFullRound(filtered, modeId) {
+  const target = ROUND_LENGTH;
+  const selected = [];
+  let codeCount = 0;
+  const pathology = shuffle(filtered.filter(c => !c.healthy));
+  const healthy = modeId === 'challenge' ? shuffle(filtered.filter(c => c.healthy)) : [];
+
+  for (const ward of shuffle(WARDS.filter(ward => ward.id !== 'full'))) {
+    const bucket = shuffle(pathology.filter(c => matchesWard(c, ward.id)));
+    const previousFamily = selected.length ? caseFamily(selected[selected.length - 1]) : '';
+    const next = takeCandidate(bucket, selected, previousFamily, { codeCapReached:codeCount >= 2 });
+    if (!next) return [];
+    selected.push(next);
+    if (isCodeCase(next)) codeCount += 1;
+  }
+
+  const desiredHealthy = modeId === 'challenge' ? Math.min(healthy.length, rint(1, 3)) : 0;
+  while (selected.filter(c => c.healthy).length < desiredHealthy) {
+    const previousFamily = selected.length ? caseFamily(selected[selected.length - 1]) : '';
+    const next = takeCandidate(healthy, selected, previousFamily, { codeCapReached:codeCount >= 2 });
+    if (!next) break;
+    selected.push(next);
+    if (isCodeCase(next)) codeCount += 1;
+  }
+
+  while (selected.length < target) {
+    const previousFamily = selected.length ? caseFamily(selected[selected.length - 1]) : '';
+    const next = takeCandidate(pathology, selected, previousFamily, { codeCapReached:codeCount >= 2 });
+    if (!next) break;
+    selected.push(next);
+    if (isCodeCase(next)) codeCount += 1;
+  }
+  return selected.length === target ? arrangeRoundCases(selected) : [];
+}
+
+function buildRoundQueue(pool, wardId = 'full', modeId = 'standard') {
+  const target = ROUND_LENGTH;
+  const mode = modeDefinition(modeId);
+  let filtered = pool.filter(c => matchesWard(c, wardId));
+  if (modeId === 'exam') filtered = filtered.filter(isExamPlayableCase);
+  if (modeId !== 'challenge') filtered = filtered.filter(c => !c.healthy);
+  filtered = shuffle(filtered);
+
+  if (wardId === 'full') return buildBalancedFullRound(filtered, modeId);
+
+  const healthy = modeId === 'challenge' ? shuffle(filtered.filter(c => c.healthy)) : [];
+  const pathology = shuffle(filtered.filter(c => !c.healthy));
+  const desiredHealthy = modeId === 'challenge' ? Math.min(healthy.length, rint(1, 3)) : 0;
+  const healthySlots = chooseSpacedSlots(desiredHealthy, target);
+  const selected = [];
+  let codeCount = 0;
+
+  for (let position = 0; position < target; position++) {
+    const previousFamily = selected.length ? caseFamily(selected[selected.length - 1]) : '';
+    const codeCapReached = wardId === 'full' && codeCount >= 2;
+    const sources = healthySlots.has(position) ? [healthy, pathology] : [pathology, healthy];
+    let next = null;
+    for (const source of sources) {
+      next = takeCandidate(source, selected, previousFamily, { codeCapReached });
+      if (next) break;
+    }
+    if (!next) break;
+    selected.push(next);
+    if (isCodeCase(next)) codeCount += 1;
+  }
+
+  if (selected.length < target) {
+    const leftovers = shuffle(pathology.concat(healthy));
+    while (selected.length < target) {
+      const previousFamily = selected.length ? caseFamily(selected[selected.length - 1]) : '';
+      const codeCapReached = wardId === 'full' && codeCount >= 2;
+      const next = takeCandidate(leftovers, selected, previousFamily, { codeCapReached });
+      if (!next) break;
+      selected.push(next);
+      if (isCodeCase(next)) codeCount += 1;
+    }
+  }
+  return selected.slice(0, target);
+}
+
+function sampleDiagnosisOptions(c) {
+  const choices = (c.diagnoses || []).filter(choice => !isNoPathologyChoice(choice));
+  if (c.healthy) return shuffle(choices.filter(choice => !choice.correct)).slice(0, 3);
+  const correct = choices.find(choice => choice.correct);
+  const wrongs = shuffle(choices.filter(choice => !choice.correct)).slice(0, 2);
+  return shuffle([correct, ...wrongs]);
+}
+
+function sampleTreatmentOptions(c, modeId = state.mode) {
+  const choices = treatmentChoicesForMode(c, modeId);
+  const correct = choices.find(choice => choice.correct);
+  const wrongs = shuffle(choices.filter(choice => !choice.correct)).slice(0, 2);
+  return shuffle([correct, ...wrongs]);
+}
+
+function calculateCasePoints({ mode = 'standard', healthy = false, diagnosisFirstTry = true, treatmentFirstTry = true, hintUsed = false, caseWrongClicks = 0, firstClickCorrect = false }) {
+  if (mode === 'exam') return firstClickCorrect ? 3 : 0;
+  if (mode === 'challenge' && healthy) return hintUsed ? 1 : Math.max(3 - Number(caseWrongClicks || 0), 1);
+  const base = 1 + Number(!!diagnosisFirstTry) + Number(!!treatmentFirstTry);
+  return hintUsed ? 1 : base;
 }
 
 let typesetScheduled = false;
 let typesetRunning = false;
 let typesetAgain = false;
+let afterTypesetCallbacks = [];
+
+function equalizeChoiceHeights() {
+  const buttons = [...choiceGrid.querySelectorAll('.choice')];
+  buttons.forEach(button => { button.style.minHeight = ''; });
+  if (window.innerWidth < 430 || !buttons.length) return;
+  const maxHeight = Math.max(...buttons.map(button => button.offsetHeight));
+  buttons.forEach(button => { button.style.minHeight = `${maxHeight}px`; });
+}
+
+function runAfterTypesetCallbacks() {
+  const callbacks = afterTypesetCallbacks.splice(0);
+  callbacks.forEach(callback => { try { callback(); } catch (_) {} });
+}
 
 function runTypesetCycle() {
   typesetScheduled = false;
   typesetRunning = true;
-  const app = document.getElementById('app');
-  if (window.MathJax && MathJax.typesetClear) {
-    MathJax.typesetClear([app]);
-  }
+  if (window.MathJax && MathJax.typesetClear) MathJax.typesetClear([app]);
   MathJax.typesetPromise([app]).catch(() => {}).finally(() => {
     typesetRunning = false;
+    equalizeChoiceHeights();
+    runAfterTypesetCallbacks();
     if (typesetAgain) {
       typesetAgain = false;
       typeset();
@@ -5688,7 +7239,8 @@ function runTypesetCycle() {
   });
 }
 
-function typeset() {
+function typeset(callback) {
+  if (typeof callback === 'function') afterTypesetCallbacks.push(callback);
   if (window.MathJax && MathJax.typesetPromise) {
     if (typesetRunning || typesetScheduled) {
       typesetAgain = true;
@@ -5696,250 +7248,837 @@ function typeset() {
     }
     typesetScheduled = true;
     requestAnimationFrame(runTypesetCycle);
+  } else {
+    requestAnimationFrame(() => {
+      equalizeChoiceHeights();
+      runAfterTypesetCallbacks();
+    });
   }
 }
 
+function currentCase() {
+  return state.queue[state.index];
+}
 
-function currentCase() { return state.queue[state.index]; }
+function renderProgressDots() {
+  progressDots.innerHTML = '';
+  for (let i = 0; i < state.roundLength; i++) {
+    const dot = document.createElement('span');
+    const completed = i < state.casePoints.length;
+    const points = completed ? state.casePoints[i] : null;
+    dot.className = `progressDot${completed ? ` tier-${points}` : ''}${!completed && i === state.index ? ' current' : ''}`;
+    const label = completed ? `Patient ${i + 1}: ${points} point${points === 1 ? '' : 's'}` : `Patient ${i + 1}: not yet completed`;
+    dot.setAttribute('aria-label', label);
+    dot.title = label;
+    progressDots.appendChild(dot);
+  }
+}
 
 function updateHud() {
-  patientCount.textContent = `${Math.min(state.index + 1, ROUND_LENGTH)}/${ROUND_LENGTH}`;
-  treatedCount.textContent = String(state.treated);
-  missCount.textContent = String(state.misses);
+  const maxScore = state.roundLength * 3;
+  patientCount.textContent = `${Math.min(state.index + 1, state.roundLength)}/${state.roundLength}`;
+  scoreCount.textContent = `${state.score}/${maxScore}`;
+  modeChip.textContent = modeDefinition(state.mode).shortLabel;
+  renderProgressDots();
 }
 
-function setHintGateLabel() {
-  if (!allowHintsBtn) return;
-  const top = allowHintsBtn.querySelector('span');
-  const main = allowHintsBtn.querySelector('b');
-  if (top) top.textContent = state.hintsAllowed ? 'hints' : 'allow';
-  if (main) main.textContent = state.hintsAllowed ? 'on' : 'hints';
+function clearFeedback() {
+  feedback.innerHTML = '';
+  feedback.className = 'feedback';
+  feedback.scrollTop = 0;
 }
 
-function updateHintGate() {
-  if (!allowHintsBtn || !hintToggle || !hintPanel) return;
-  allowHintsBtn.classList.toggle('active', state.hintsAllowed);
-  setHintGateLabel();
-  hintToggle.classList.toggle('hidden', !state.hintsAllowed);
-  if (!state.hintsAllowed) {
-    hintPanel.classList.remove('show');
-    hintToggle.setAttribute('aria-expanded', 'false');
-    if (hintIcon) hintIcon.textContent = '+';
-  }
+function setFeedback(html, kind = 'bad', options = {}) {
+  feedback.innerHTML = html;
+  feedback.className = `feedback ${kind}${options.exam ? ' exam' : ''}`;
+  feedback.scrollTop = 0;
+  typeset();
 }
 
-function startRound() {
-  closeNewRoundConfirm();
-  if (introOverlay) introOverlay.classList.add('hidden');
-  const pool = buildCasePool();
-  state.queue = buildRoundQueue(pool);
-  state.index = 0;
-  state.treated = 0;
-  state.misses = 0;
-  gameScreen.classList.remove('hidden');
-  endPanel.classList.remove('show');
-  renderCase();
+function renderChoiceButtons(options, stage) {
+  choiceGrid.innerHTML = '';
+  options.forEach((choice, index) => {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'choice';
+    button.dataset.number = String(index + 1);
+    button.setAttribute('aria-label', `${stage === 'diagnosis' ? 'Diagnosis' : stage === 'exam' ? 'Correct chart' : 'Treatment'} choice ${index + 1}`);
+    button.innerHTML = `<span class="keyBadge" aria-hidden="true">${index + 1}</span><span class="choiceContent">${renderBlock(choice, { stripCodeComments:true })}</span>`;
+    button.addEventListener('click', () => {
+      if (stage === 'diagnosis') chooseDiagnosis(choice, button);
+      else if (stage === 'exam') chooseExamOption(choice, button);
+      else chooseTreatment(choice, button);
+    });
+    choiceGrid.appendChild(button);
+  });
 }
 
-function resetRoundState() {
-  state.queue = [];
-  state.index = 0;
-  state.treated = 0;
-  state.misses = 0;
-  state.diagnosisDone = false;
-  state.treatmentDone = false;
-  state.diagnosisChoices = [];
-  state.treatmentChoices = [];
-  updateHud();
+function focusFirstChoice() {
+  const first = choiceGrid.querySelector('.choice:not(:disabled)');
+  if (first) first.focus({ preventScroll:true });
 }
 
-function returnToIntro() {
-  closeNewRoundConfirm();
-  resetRoundState();
-  gameScreen.classList.add('hidden');
-  endPanel.classList.remove('show');
-  if (introOverlay) {
-    introOverlay.classList.remove('hidden');
-    introStartBtn.focus();
-  }
-  updateHintGate();
+function renderDiagnosisPhase() {
+  state.phase = 'diagnosis';
+  decisionCard.classList.remove('examMode');
+  decisionTitle.textContent = 'Diagnosis';
+  phaseBadge.textContent = 'Step 1 of 2';
+  confirmedStrip.classList.add('hidden');
+  confirmedText.innerHTML = '';
+  inlineNextBtn.classList.add('hidden');
+  dischargeChoice.className = 'dischargeChoice';
+  dischargeChoice.disabled = false;
+  dischargeChoice.classList.toggle('hidden', state.mode !== 'challenge');
+  renderChoiceButtons(state.diagnosisOptions, 'diagnosis');
+  clearFeedback();
+  typeset(focusFirstChoice);
+}
+
+function renderTreatmentPhase() {
+  state.phase = 'treatment';
+  decisionCard.classList.remove('examMode');
+  decisionTitle.textContent = 'Treatment';
+  phaseBadge.textContent = 'Step 2 of 2';
+  confirmedText.innerHTML = protectMathHtml(state.confirmedDiagnosisHtml);
+  confirmedStrip.classList.remove('hidden');
+  dischargeChoice.classList.add('hidden');
+  inlineNextBtn.classList.add('hidden');
+  renderChoiceButtons(state.treatmentOptions, 'treatment');
+  clearFeedback();
+  typeset(focusFirstChoice);
+}
+
+function renderExamPhase() {
+  state.phase = 'exam';
+  decisionCard.classList.add('examMode');
+  decisionTitle.textContent = 'Correct chart';
+  phaseBadge.textContent = 'One try';
+  confirmedStrip.classList.add('hidden');
+  confirmedText.innerHTML = '';
+  dischargeChoice.classList.add('hidden');
+  inlineNextBtn.classList.add('hidden');
+  renderChoiceButtons(state.treatmentOptions, 'exam');
+  clearFeedback();
+  typeset(focusFirstChoice);
 }
 
 function renderCase() {
   const c = currentCase();
-  state.diagnosisDone = false;
-  state.treatmentDone = false;
-  state.diagnosisChoices = shuffle(c.diagnoses);
-  state.treatmentChoices = shuffle(c.treatments);
-
-  patientTitle.textContent = `Patient ${state.index + 1}`;
-  patientBody.innerHTML = renderPatientBlock(c);
-  hintText.innerHTML = protectMathHtml(c.hint || '');
-  hintPanel.classList.remove('show');
-  hintToggle.setAttribute('aria-expanded', 'false');
-  hintIcon.textContent = '+';
-  updateHintGate();
-
-  diagnosisChoicesEl.innerHTML = '';
-  treatmentChoicesEl.innerHTML = '';
-  diagnosisFeedback.textContent = 'Choose a diagnosis';
-  diagnosisFeedback.className = 'feedback';
-  treatmentFeedback.textContent = 'Diagnosis required first.';
-  treatmentFeedback.className = 'feedback';
-  diagnosisDot.className = 'statusDot';
-  treatmentDot.className = 'statusDot';
-  treatmentCard.classList.remove('active');
-  discharge.classList.remove('show');
-  dischargeText.innerHTML = '';
-  nextRow.classList.remove('show');
-
-  state.diagnosisChoices.forEach((choice, i) => {
-    const btn = document.createElement('button');
-    btn.className = 'choice';
-    btn.type = 'button';
-    btn.innerHTML = protectMathHtml(choice.html);
-    btn.addEventListener('click', () => chooseDiagnosis(i, btn));
-    diagnosisChoicesEl.appendChild(btn);
-  });
-
-  updateHud();
-  typeset();
-}
-
-function toggleHint() {
-  if (!state.hintsAllowed) return;
-  const isOpen = hintPanel.classList.toggle('show');
-  hintToggle.setAttribute('aria-expanded', String(isOpen));
-  hintIcon.textContent = isOpen ? '-' : '+';
-  typeset();
-}
-
-function toggleHintGate() {
-  state.hintsAllowed = !state.hintsAllowed;
-  updateHintGate();
-  typeset();
-}
-
-function chooseDiagnosis(i, btn) {
-  if (state.diagnosisDone) return;
-  const choice = state.diagnosisChoices[i];
-  if (choice.correct) {
-    state.diagnosisDone = true;
-    btn.classList.add('correct');
-    diagnosisDot.className = 'statusDot good';
-    diagnosisFeedback.textContent = 'Diagnosis accepted. Choose a treatment.';
-    diagnosisFeedback.className = 'feedback good';
-    [...diagnosisChoicesEl.querySelectorAll('button')].forEach(b => b.disabled = true);
-    renderTreatments();
-  } else {
-    state.misses += 1;
-    btn.classList.add('wrong');
-    btn.disabled = true;
-    diagnosisDot.className = 'statusDot bad';
-    diagnosisFeedback.textContent = 'Not that diagnosis. Check the patient again.';
-    diagnosisFeedback.className = 'feedback bad';
-    updateHud();
-  }
-  typeset();
-}
-
-function renderTreatments() {
-  treatmentCard.classList.add('active');
-  treatmentChoicesEl.innerHTML = '';
-  treatmentFeedback.textContent = 'Choose the corrected expression, statement, or code.';
-  treatmentFeedback.className = 'feedback';
-  state.treatmentChoices.forEach((choice, i) => {
-    const btn = document.createElement('button');
-    btn.className = 'choice';
-    btn.type = 'button';
-    btn.innerHTML = renderBlock(choice, { stripCodeComments: true });
-    btn.addEventListener('click', () => chooseTreatment(i, btn));
-    treatmentChoicesEl.appendChild(btn);
-  });
-  typeset();
-}
-
-function chooseTreatment(i, btn) {
-  if (!state.diagnosisDone || state.treatmentDone) return;
-  const choice = state.treatmentChoices[i];
-  if (choice.correct) {
-    state.treatmentDone = true;
-    state.treated += 1;
-    btn.classList.add('correct');
-    treatmentDot.className = 'statusDot good';
-    treatmentFeedback.textContent = 'Treatment accepted.';
-    treatmentFeedback.className = 'feedback good';
-    [...treatmentChoicesEl.querySelectorAll('button')].forEach(b => b.disabled = true);
-    dischargeText.innerHTML = protectMathHtml(currentCase().discharge);
-    discharge.classList.add('show');
-    nextBtn.textContent = state.index + 1 >= ROUND_LENGTH ? 'Finish round' : 'Next patient';
-    nextRow.classList.add('show');
-  } else {
-    state.misses += 1;
-    btn.classList.add('wrong');
-    btn.disabled = true;
-    treatmentDot.className = 'statusDot bad';
-    treatmentFeedback.textContent = 'That treatment preserves a common mistake. Try another.';
-    treatmentFeedback.className = 'feedback bad';
-  }
-  updateHud();
-  typeset();
-}
-
-function nextPatient() {
-  if (!state.treatmentDone) return;
-  if (state.index + 1 >= ROUND_LENGTH) {
+  if (!c) {
     finishRound();
+    return;
+  }
+  state.phase = state.mode === 'exam' ? 'exam' : 'diagnosis';
+  state.diagnosisFirstTry = true;
+  state.treatmentFirstTry = true;
+  state.hintUsed = false;
+  state.caseWrongClicks = 0;
+  state.resolved = false;
+  state.confirmedDiagnosisHtml = '';
+  state.diagnosisOptions = state.mode === 'exam' ? [] : sampleDiagnosisOptions(c);
+  state.treatmentOptions = c.healthy ? [] : sampleTreatmentOptions(c, state.mode);
+
+  const family = caseFamily(c);
+  chartMeta.textContent = `${caseWard(c).label} · ${familyLabel(family)}`;
+  chartMeta.title = chartMeta.textContent;
+
+  chartGoal.innerHTML = '';
+  const goal = c.patient && c.patient.goal ? c.patient.goal : '';
+  if (goal) {
+    chartGoal.innerHTML = protectMathHtml(`Intended task: ${goal}`);
+    chartGoal.classList.remove('hidden');
   } else {
+    chartGoal.classList.add('hidden');
+  }
+
+  patientBody.innerHTML = renderPatientBlock(c.patient);
+  patientBody.scrollTop = 0;
+  const hintsAllowed = modeDefinition(state.mode).hints;
+  hintBtn.classList.toggle('hidden', !hintsAllowed);
+  hintBtn.disabled = !c.hint || !hintsAllowed;
+  hintBtn.className = `hintBtn${hintsAllowed ? '' : ' hidden'}`;
+  hintBtn.textContent = c.hint && hintsAllowed ? 'Hint · max 1 pt' : 'No hint';
+
+  if (state.mode === 'exam') renderExamPhase();
+  else renderDiagnosisPhase();
+  updateHud();
+  typeset();
+}
+
+function disableCurrentChoices() {
+  [...choiceGrid.querySelectorAll('.choice')].forEach(button => { button.disabled = true; });
+  dischargeChoice.disabled = true;
+}
+
+function transitionToTreatment(confirmedHtml) {
+  state.confirmedDiagnosisHtml = confirmedHtml;
+  disableCurrentChoices();
+  window.setTimeout(renderTreatmentPhase, 90);
+}
+
+function registerWrong(stage) {
+  state.caseWrongClicks += 1;
+  if (stage === 'diagnosis') state.diagnosisFirstTry = false;
+  if (stage === 'treatment' || stage === 'exam') state.treatmentFirstTry = false;
+}
+
+function chooseDiagnosis(choice, button) {
+  if (state.phase !== 'diagnosis' || state.resolved || button.disabled) return;
+  const c = currentCase();
+  if (choice.correct) {
+    button.classList.add('correct');
+    transitionToTreatment(choice.html || choiceSummary(choice));
+    return;
+  }
+  registerWrong('diagnosis');
+  button.classList.add('wrong');
+  button.disabled = true;
+  setFeedback(wrongFeedback(choice, 'diagnosis', c));
+}
+
+function chooseNoPathology() {
+  if (state.mode !== 'challenge' || state.phase !== 'diagnosis' || state.resolved || dischargeChoice.disabled) return;
+  const c = currentCase();
+  if (c.healthy) {
+    dischargeChoice.classList.add('correct');
+    disableCurrentChoices();
+    const noPathology = (c.diagnoses || []).find(isNoPathologyChoice);
+    state.confirmedDiagnosisHtml = noPathology ? noPathology.html : 'No pathology — discharge.';
+    resolveCase({ html:'Discharge — no pathology' }, { healthyDischarge:true });
+    return;
+  }
+  registerWrong('diagnosis');
+  dischargeChoice.classList.add('wrong');
+  dischargeChoice.disabled = true;
+  setFeedback('Not quite — this chart contains a specific mismatch. Choose the diagnosis that names it.');
+}
+
+function chooseTreatment(choice, button) {
+  if (state.phase !== 'treatment' || state.resolved || button.disabled) return;
+  const c = currentCase();
+  if (choice.correct) {
+    button.classList.add('correct');
+    disableCurrentChoices();
+    resolveCase(choice);
+    return;
+  }
+  registerWrong('treatment');
+  button.classList.add('wrong');
+  button.disabled = true;
+  setFeedback(wrongFeedback(choice, 'treatment', c));
+}
+
+function highlightCorrectExamChoice() {
+  const buttons = [...choiceGrid.querySelectorAll('.choice')];
+  state.treatmentOptions.forEach((choice, index) => {
+    if (choice && choice.correct && buttons[index]) buttons[index].classList.add('correct');
+  });
+}
+
+function buildExamReveal(choice, c) {
+  const why = wrongFeedback(choice, 'exam', c);
+  const takeaway = protectMathHtml(c.discharge || 'Compare the correction with the original chart.');
+  return `<div class="examReveal"><p>${why}</p><p class="examLesson"><strong>Why the highlighted chart works:</strong> ${takeaway}</p></div>`;
+}
+
+function chooseExamOption(choice, button) {
+  if (state.phase !== 'exam' || state.resolved || button.disabled) return;
+  const c = currentCase();
+  state.resolved = true;
+  const correct = !!choice.correct;
+  if (correct) {
+    button.classList.add('correct');
+    disableCurrentChoices();
+    recordCase(choice, 3, { examCorrect:true });
+    setFeedback('<strong>+3 — Correct.</strong>', 'good', { exam:true });
+  } else {
+    registerWrong('exam');
+    button.classList.add('wrong');
+    disableCurrentChoices();
+    highlightCorrectExamChoice();
+    recordCase(choice, 0, { examCorrect:false });
+    setFeedback(buildExamReveal(choice, c), 'bad', { exam:true });
+  }
+  inlineNextBtn.textContent = state.index + 1 >= state.roundLength ? 'See round results' : 'Next patient';
+  inlineNextBtn.classList.remove('hidden');
+  window.setTimeout(() => inlineNextBtn.focus({ preventScroll:true }), 0);
+}
+
+function recordCase(selectedTreatment, points, options = {}) {
+  const c = currentCase();
+  state.score += points;
+  state.casePoints.push(points);
+  const correctTreatment = (c.treatments || []).find(choice => choice.correct) || selectedTreatment || {};
+  state.caseLog.push({
+    id:c.id || '',
+    family:caseFamily(c),
+    generatorKey:c.generatedKey || '',
+    signature:caseSignature(c),
+    healthy:!!c.healthy,
+    healthyDischarge:!!options.healthyDischarge,
+    diagnosisFirstTry:state.mode === 'exam' ? null : state.diagnosisFirstTry,
+    treatmentFirstTry:state.mode === 'exam' ? !!options.examCorrect : (c.healthy ? null : state.treatmentFirstTry),
+    hintUsed:state.hintUsed,
+    wrongClicks:state.caseWrongClicks,
+    points,
+    examCorrect:state.mode === 'exam' ? !!options.examCorrect : null,
+    diagnosis:choiceSummary({ html:state.confirmedDiagnosisHtml }),
+    treatment:choiceSummary(selectedTreatment),
+    chartSummary:choiceSummary(c.patient || {}, 190),
+    correctTreatment:cloneCase(correctTreatment),
+    discharge:c.discharge || ''
+  });
+  updateHud();
+}
+
+function resolveCase(treatmentChoice, options = {}) {
+  if (state.resolved) return;
+  state.resolved = true;
+  const c = currentCase();
+  const points = calculateCasePoints({
+    mode:state.mode,
+    healthy:!!c.healthy,
+    diagnosisFirstTry:state.diagnosisFirstTry,
+    treatmentFirstTry:state.treatmentFirstTry,
+    hintUsed:state.hintUsed,
+    caseWrongClicks:state.caseWrongClicks
+  });
+  recordCase(treatmentChoice, points, options);
+  openResultModal(points, c, options);
+}
+
+function phraseForPoints(points) {
+  return pickR(RESULT_PHRASES[points] || RESULT_PHRASES[1]);
+}
+
+function detailForResult(points, c, options = {}) {
+  if (options.healthyDischarge) {
+    if (state.hintUsed) return 'The hint capped this discharge at 1 point.';
+    if (points === 3) return 'Nothing was wrong, and you recognized it on the first click.';
+    if (points === 2) return 'One false alarm, then the right discharge decision.';
+    return 'You kept checking and correctly discharged the healthy chart.';
+  }
+  if (state.hintUsed) return 'The hint capped this patient at 1 point.';
+  if (points === 3) return 'Both decisions were correct on the first try.';
+  if (points === 2) return 'One stage needed a second look.';
+  return 'You resolved the case with unlimited attempts.';
+}
+
+function showModal(overlay, focusTarget) {
+  overlay._returnFocus = document.activeElement;
+  overlay.classList.remove('hidden');
+  window.setTimeout(() => {
+    const target = focusTarget || overlay.querySelector('button, [href], select, input, [tabindex]:not([tabindex="-1"])');
+    if (target) target.focus({ preventScroll:true });
+  }, 0);
+}
+
+function hideModal(overlay, restoreFocus = true) {
+  overlay.classList.add('hidden');
+  if (restoreFocus && overlay._returnFocus && document.contains(overlay._returnFocus)) overlay._returnFocus.focus({ preventScroll:true });
+}
+
+function openAboutModal() {
+  showModal(aboutModal, closeAboutBtn);
+}
+
+function closeAboutModal() {
+  hideModal(aboutModal, true);
+}
+
+function openHintModal() {
+  const c = currentCase();
+  if (!c || !c.hint || state.resolved || !modeDefinition(state.mode).hints) return;
+  if (!state.hintUsed) {
+    state.hintUsed = true;
+    hintBtn.classList.add('used');
+    hintBtn.textContent = 'Hint used · max 1 pt';
+  }
+  hintModalText.innerHTML = protectMathHtml(c.hint);
+  showModal(hintModal, closeHintBtn);
+  typeset();
+}
+
+function closeHintModal() {
+  hideModal(hintModal, true);
+}
+
+function openResultModal(points, c, options = {}) {
+  resultBox.className = `modalBox resultBox tier-${points}`;
+  resultScore.textContent = `+${points}`;
+  if (options.healthyDischarge) {
+    const phrase = pickR(HEALTHY_RESULT_PHRASES);
+    resultTitle.textContent = phrase[0];
+    resultDetail.textContent = `${phrase[1]} ${detailForResult(points, c, options)}`;
+  } else {
+    resultTitle.textContent = phraseForPoints(points);
+    resultDetail.textContent = detailForResult(points, c, options);
+  }
+  resultDischarge.innerHTML = protectMathHtml(c.discharge || 'Case resolved.');
+  resultNextBtn.textContent = state.index + 1 >= state.roundLength ? 'See round results' : 'Next patient';
+  showModal(resultModal, resultNextBtn);
+  typeset();
+}
+
+function advanceCase() {
+  if (!state.resolved) return;
+  inlineNextBtn.classList.add('hidden');
+  if (state.index + 1 >= state.roundLength) finishRound();
+  else {
     state.index += 1;
     renderCase();
   }
 }
 
-function finishRound() {
-  gameScreen.classList.add('hidden');
-  endPanel.classList.add('show');
-  document.getElementById('endTreated').textContent = String(state.treated);
-  document.getElementById('endMisses').textContent = String(state.misses);
-  const attempts = state.treated + state.misses;
-  const accuracy = attempts ? Math.round(100 * state.treated / attempts) : 100;
-  document.getElementById('endAccuracy').textContent = `${accuracy}%`;
+function advanceFromResult() {
+  if (resultModal.classList.contains('hidden')) return;
+  hideModal(resultModal, false);
+  advanceCase();
 }
 
-function openNewRoundConfirm() {
-  newRoundConfirm.classList.remove('hidden');
-  confirmNewRoundBtn.focus();
+function updateMasteryFromLog(log) {
+  if (!progress.mastery[log.family]) {
+    progress.mastery[log.family] = { seen:0, diagnosisFirstTry:0, treatmentFirstTry:0, flawless:0, examSeen:0, examCorrect:0 };
+  }
+  const mastery = progress.mastery[log.family];
+  mastery.seen = Number(mastery.seen || 0) + 1;
+  if (log.diagnosisFirstTry === true) mastery.diagnosisFirstTry = Number(mastery.diagnosisFirstTry || 0) + 1;
+  if (log.treatmentFirstTry === true) mastery.treatmentFirstTry = Number(mastery.treatmentFirstTry || 0) + 1;
+  if (log.points === 3) mastery.flawless = Number(mastery.flawless || 0) + 1;
+  if (state.mode === 'exam') {
+    mastery.examSeen = Number(mastery.examSeen || 0) + 1;
+    if (log.examCorrect) mastery.examCorrect = Number(mastery.examCorrect || 0) + 1;
+  }
+}
+
+function updateProgressAfterRound() {
+  const scores = ensureModeWardScores(state.mode);
+  const previousBest = Number(scores.full || 0);
+  const eligibleForBest = !state.isRetry && state.roundLength === ROUND_LENGTH;
+  const isNewBest = eligibleForBest && state.score > previousBest;
+
+  if (!state.isRetry) {
+    progress.roundsPlayed = Number(progress.roundsPlayed || 0) + 1;
+    progress.lastWard = 'full';
+    progress.lastMode = state.mode;
+    progress.lastScore = state.score;
+  }
+  if (eligibleForBest) {
+    scores.full = Math.max(previousBest, state.score);
+    progress.bestOverall = Math.max(Number(progress.bestOverall || 0), state.score);
+  }
+  state.caseLog.forEach(updateMasteryFromLog);
+  saveProgress();
+  return isNewBest;
+}
+
+function gradeForScore(score, maxScore) {
+  const normalized = maxScore ? score * 30 / maxScore : 0;
+  if (normalized >= 27) return 'A';
+  if (normalized >= 21) return 'B';
+  if (normalized >= 15) return 'C';
+  if (normalized >= 9) return 'D';
+  return 'F';
+}
+
+function renderExamReview() {
+  const misses = state.caseLog.filter(log => log.points === 0);
+  examReview.classList.toggle('hidden', !misses.length);
+  retryMissesBtn.classList.toggle('hidden', !misses.length);
+  if (!misses.length) {
+    examReviewList.innerHTML = '';
+    return;
+  }
+  examReviewList.innerHTML = misses.map((log, index) => `
+    <article class="examReviewItem">
+      <h3>Miss ${index + 1} · ${familyLabel(log.family)}</h3>
+      <p><strong>Chart:</strong> ${escapeHtml(log.chartSummary)}</p>
+      <div class="reviewCorrect"><b>Correct chart</b>${renderBlock(log.correctTreatment, { stripCodeComments:true })}</div>
+      <p><strong>Takeaway:</strong> ${protectMathHtml(log.discharge)}</p>
+    </article>`).join('');
+}
+
+function launchConfetti() {
+  confettiLayer.innerHTML = '';
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const pieces = ['var(--blue-3)', 'var(--amber)', 'var(--red-soft)', 'var(--green)', '#ffffff'];
+  for (let i = 0; i < 34; i++) {
+    const piece = document.createElement('span');
+    piece.className = 'confettiPiece';
+    piece.style.setProperty('--x', `${Math.round(rng() * 100)}vw`);
+    piece.style.setProperty('--delay', `${(rng() * .28).toFixed(2)}s`);
+    piece.style.setProperty('--drift', `${Math.round((rng() - .5) * 180)}px`);
+    piece.style.setProperty('--r', `${Math.round(rng() * 180)}deg`);
+    piece.style.setProperty('--piece', pickR(pieces));
+    confettiLayer.appendChild(piece);
+  }
+  window.setTimeout(() => { confettiLayer.innerHTML = ''; }, 1800);
+}
+
+function finishRound() {
+  if (state.finished) return;
+  state.finished = true;
+  const isNewBest = updateProgressAfterRound();
+  const maxScore = state.roundLength * 3;
+  const perfect = state.score === maxScore;
+  const flawless = state.casePoints.filter(points => points === 3).length;
+  const recovered = state.casePoints.filter(points => points === 2).length;
+  const persistent = state.casePoints.filter(points => points === 1).length;
+
+  playScreen.classList.add('hidden');
+  introScreen.classList.add('hidden');
+  endScreen.classList.remove('hidden');
+  app.dataset.mode = state.mode;
+
+  endScoreLabel.textContent = 'score';
+  endBestLabel.textContent = 'mode best';
+  endScore.textContent = `${state.score}/${maxScore}`;
+  endBest.textContent = `${bestFor(state.mode, 'full')}/${ROUND_LENGTH * 3}`;
+  newBestBadge.classList.toggle('hidden', !isNewBest);
+  perfectBadge.classList.toggle('hidden', !perfect);
+
+  if (state.mode === 'exam') {
+    const correct = flawless;
+    endTitle.textContent = `Correct: ${correct}/${state.roundLength}`;
+    endKicker.textContent = `${modeDefinition(state.mode).label}${state.isRetry ? ' retry' : ''} · Score ${state.score}/${maxScore} · Grade ${gradeForScore(state.score, maxScore)}.`;
+    endFlawlessLabel.textContent = 'correct';
+    endFlawless.textContent = `${correct}/${state.roundLength}`;
+    renderExamReview();
+  } else {
+    endTitle.textContent = 'Round complete.';
+    endFlawlessLabel.textContent = 'flawless';
+    endFlawless.textContent = `${flawless}/${state.roundLength}`;
+    const parts = [`${flawless} flawless`];
+    if (recovered) parts.push(`${recovered} recovery${recovered === 1 ? '' : 'ies'}`);
+    if (persistent) parts.push(`${persistent} resolved with persistence`);
+    endKicker.textContent = `${modeDefinition(state.mode).label}: ${parts.join(' · ')}.`;
+    examReview.classList.add('hidden');
+    examReviewList.innerHTML = '';
+    retryMissesBtn.classList.add('hidden');
+  }
+
+  endDots.innerHTML = state.casePoints.map((points, index) => {
+    const label = `Patient ${index + 1}: ${points} point${points === 1 ? '' : 's'}`;
+    return `<span class="endDot tier-${points}" title="${label}" aria-label="${label}">${points}</span>`;
+  }).join('');
+
+  updateBestDisplay();
+  typeset(() => {
+    if (perfect) launchConfetti();
+    playAgainBtn.focus({ preventScroll:true });
+  });
+}
+
+function updateBestDisplay() {
+  MODE_ORDER.forEach(modeId => {
+    if (modeBestElements[modeId]) modeBestElements[modeId].textContent = `${bestFor(modeId, 'full')}/${ROUND_LENGTH * 3}`;
+  });
+}
+
+function closeAllModals() {
+  [hintModal, resultModal, newRoundConfirm].forEach(overlay => overlay.classList.add('hidden'));
+}
+
+function startRound(wardId = 'full', modeId = progress.lastMode || 'standard', options = {}) {
+  closeAllModals();
+  wardId = 'full';
+  if (!MODES[modeId]) modeId = 'standard';
+  let queue = options.queue ? options.queue.map(cloneCase) : buildRoundQueue(buildCasePool(), wardId, modeId);
+  const expectedLength = options.queue ? queue.length : ROUND_LENGTH;
+  if (!queue.length || queue.length < expectedLength) throw new Error(`Unable to build a ${expectedLength}-patient ${modeDefinition(modeId).label} round.`);
+
+  state = defaultState(wardId, modeId, { roundLength:queue.length, isRetry:!!options.isRetry });
+  state.queue = queue;
+  app.dataset.mode = modeId;
+  progress.lastWard = 'full';
+  progress.lastMode = modeId;
+  saveProgress();
+
+  introScreen.classList.add('hidden');
+  endScreen.classList.add('hidden');
+  playScreen.classList.remove('hidden');
+  renderCase();
+}
+
+function returnToIntro() {
+  closeAllModals();
+  state = defaultState('full', progress.lastMode || state.mode || 'standard');
+  playScreen.classList.add('hidden');
+  endScreen.classList.add('hidden');
+  introScreen.classList.remove('hidden');
+  app.dataset.mode = MODES[progress.lastMode] ? progress.lastMode : 'standard';
+  updateBestDisplay();
+  const lastModeCard = modeCards.find(card => card.dataset.mode === progress.lastMode) || modeCards[0];
+  if (lastModeCard) lastModeCard.focus({ preventScroll:true });
+}
+
+function requestNewRound() {
+  if (playScreen.classList.contains('hidden') || state.finished) {
+    returnToIntro();
+    return;
+  }
+  showModal(newRoundConfirm, cancelNewRoundBtn);
 }
 
 function closeNewRoundConfirm() {
-  newRoundConfirm.classList.add('hidden');
+  hideModal(newRoundConfirm, true);
 }
 
-function startIntroRound() {
-  startRound();
+function visibleModal() {
+  return [aboutModal, hintModal, resultModal, newRoundConfirm].find(overlay => !overlay.classList.contains('hidden')) || null;
 }
 
-nextBtn.addEventListener('click', nextPatient);
-hintToggle.addEventListener('click', toggleHint);
-allowHintsBtn.addEventListener('click', toggleHintGate);
-newRoundBtn.addEventListener('click', openNewRoundConfirm);
+function trapModalFocus(event, overlay) {
+  if (event.key !== 'Tab') return;
+  const focusable = [...overlay.querySelectorAll('button:not(:disabled), [href], select:not(:disabled), input:not(:disabled), [tabindex]:not([tabindex="-1"])')]
+    .filter(element => element.offsetParent !== null);
+  if (!focusable.length) return;
+  const first = focusable[0];
+  const last = focusable[focusable.length - 1];
+  if (event.shiftKey && document.activeElement === first) {
+    event.preventDefault();
+    last.focus();
+  } else if (!event.shiftKey && document.activeElement === last) {
+    event.preventDefault();
+    first.focus();
+  }
+}
+
+function buildExamRetryQueue(logs, wardId = state.ward) {
+  const missed = (logs || []).filter(log => log.points === 0);
+  if (!missed.length) return [];
+  const pool = shuffle(buildCasePool().filter(c => matchesWard(c, wardId) && isExamPlayableCase(c)));
+  const selected = [];
+  for (const log of missed) {
+    const unused = c => !selected.some(item => caseSignature(item) === caseSignature(c)) && caseSignature(c) !== log.signature;
+    let candidates = pool.filter(c => unused(c) && log.generatorKey && c.generatedKey === log.generatorKey);
+    if (!candidates.length) candidates = pool.filter(c => unused(c) && caseFamily(c) === log.family);
+    if (!candidates.length) candidates = pool.filter(unused);
+    if (!candidates.length) break;
+    const next = pickR(candidates);
+    selected.push(next);
+  }
+  return selected.slice(0, ROUND_LENGTH);
+}
+
+function startExamRetry() {
+  const queue = buildExamRetryQueue(state.caseLog, state.ward);
+  if (!queue.length) return;
+  startRound(state.ward, 'exam', { queue, isRetry:true });
+}
+
+modeCards.forEach(card => {
+  card.addEventListener('click', () => startRound('full', card.dataset.mode));
+});
+
+helpBtn.addEventListener('click', openAboutModal);
+closeAboutBtn.addEventListener('click', closeAboutModal);
+dischargeChoice.addEventListener('click', chooseNoPathology);
+hintBtn.addEventListener('click', openHintModal);
+closeHintBtn.addEventListener('click', closeHintModal);
+resultNextBtn.addEventListener('click', advanceFromResult);
+inlineNextBtn.addEventListener('click', advanceCase);
+newRoundBtn.addEventListener('click', requestNewRound);
 cancelNewRoundBtn.addEventListener('click', closeNewRoundConfirm);
 confirmNewRoundBtn.addEventListener('click', returnToIntro);
-introStartBtn.addEventListener('click', startIntroRound);
-newRoundConfirm.addEventListener('click', (event) => {
-  if (event.target === newRoundConfirm) closeNewRoundConfirm();
-});
-document.addEventListener('keydown', (event) => {
-  if (event.key === 'Escape' && !newRoundConfirm.classList.contains('hidden')) {
-    closeNewRoundConfirm();
-    newRoundBtn.focus();
+playAgainBtn.addEventListener('click', () => startRound(state.ward, state.mode));
+retryMissesBtn.addEventListener('click', startExamRetry);
+changeWardBtn.addEventListener('click', returnToIntro);
+window.addEventListener('resize', equalizeChoiceHeights);
+
+aboutModal.addEventListener('click', event => { if (event.target === aboutModal) closeAboutModal(); });
+hintModal.addEventListener('click', event => { if (event.target === hintModal) closeHintModal(); });
+newRoundConfirm.addEventListener('click', event => { if (event.target === newRoundConfirm) closeNewRoundConfirm(); });
+
+document.addEventListener('keydown', event => {
+  const modal = visibleModal();
+  if (modal) {
+    trapModalFocus(event, modal);
+    if (event.key === 'Enter' && modal === resultModal) {
+      event.preventDefault();
+      advanceFromResult();
+      return;
+    }
+    if (event.key === 'Escape' && modal === aboutModal) {
+      event.preventDefault();
+      closeAboutModal();
+      return;
+    }
+    if (event.key === 'Escape' && modal === hintModal) {
+      event.preventDefault();
+      closeHintModal();
+      return;
+    }
+    if (event.key === 'Escape' && modal === newRoundConfirm) {
+      event.preventDefault();
+      closeNewRoundConfirm();
+      return;
+    }
+    return;
+  }
+
+  const tag = document.activeElement && document.activeElement.tagName;
+  if (['INPUT', 'SELECT', 'TEXTAREA'].includes(tag)) return;
+  if (!playScreen.classList.contains('hidden') && ['1', '2', '3'].includes(event.key)) {
+    const button = choiceGrid.querySelector(`.choice[data-number="${event.key}"]:not(:disabled)`);
+    if (button) {
+      event.preventDefault();
+      button.click();
+      return;
+    }
+  }
+  if (event.key === 'Enter' && !playScreen.classList.contains('hidden') && state.mode === 'exam' && state.resolved && !inlineNextBtn.classList.contains('hidden')) {
+    event.preventDefault();
+    advanceCase();
   }
 });
-againBtn.addEventListener('click', returnToIntro);
 
+window.render_game_to_text = () => {
+  const screen = !introScreen.classList.contains('hidden') ? 'intro' : !playScreen.classList.contains('hidden') ? 'play' : 'results';
+  const payload = { screen, coordinateSystem:'DOM layout; no spatial controls', mode:state.mode };
+  if (screen === 'intro') {
+    payload.learningGoalsExpanded = !!document.querySelector('.learningCard[open]');
+    payload.aboutOpen = !aboutModal.classList.contains('hidden');
+    payload.modes = MODE_ORDER.map(modeId => ({
+      id:modeId,
+      label:modeDefinition(modeId).label,
+      best:bestFor(modeId, 'full'),
+      maxScore:ROUND_LENGTH * 3
+    }));
+  } else if (screen === 'play') {
+    const c = currentCase();
+    payload.patient = Math.min(state.index + 1, state.roundLength);
+    payload.roundLength = state.roundLength;
+    payload.score = state.score;
+    payload.maxScore = state.roundLength * 3;
+    payload.phase = state.phase;
+    payload.resolved = state.resolved;
+    payload.ward = c ? caseWard(c).label : null;
+    payload.category = c ? familyLabel(caseFamily(c)) : null;
+    payload.choices = [...choiceGrid.querySelectorAll('button:not(:disabled)')].map(button => button.textContent.trim());
+    payload.feedback = feedback.textContent.trim();
+  } else {
+    payload.score = state.score;
+    payload.maxScore = state.roundLength * 3;
+    payload.best = bestFor(state.mode, 'full');
+    payload.casePoints = state.casePoints.slice();
+  }
+  return JSON.stringify(payload);
+};
+
+window.advanceTime = ms => Number(ms) || 0;
+
+window.__DD_TEST__ = {
+  calculateCasePoints,
+  buildCasePool,
+  buildRoundQueue,
+  buildExamRetryQueue,
+  sampleDiagnosisOptions,
+  sampleTreatmentOptions,
+  isNoPathologyChoice,
+  isExamPlayableCase,
+  caseFamily,
+  caseWard,
+  MODES,
+  WARDS,
+  auditPool() {
+    const pool = buildCasePool();
+    const errors = [];
+    pool.forEach(c => {
+      const diagnoses = sampleDiagnosisOptions(c);
+      if (c.healthy) {
+        if (diagnoses.length !== 3 || diagnoses.some(choice => choice.correct)) errors.push(`${c.id}: healthy diagnosis sampling`);
+      } else {
+        const diagnosisCorrect = diagnoses.filter(choice => choice && choice.correct).length;
+        if (diagnoses.length !== 3 || diagnosisCorrect !== 1) errors.push(`${c.id}: diagnosis sampling`);
+        const treatments = sampleTreatmentOptions(c, 'standard');
+        if (treatments.length !== 3 || treatments.filter(choice => choice && choice.correct).length !== 1) errors.push(`${c.id}: treatment sampling`);
+        if (isExamPlayableCase(c)) {
+          const examTreatments = sampleTreatmentOptions(c, 'exam');
+          if (examTreatments.length !== 3 || examTreatments.filter(choice => choice && choice.correct).length !== 1) errors.push(`${c.id}: exam sampling`);
+        }
+      }
+    });
+    return { size:pool.length, healthy:pool.filter(c => c.healthy).length, examSafe:pool.filter(isExamPlayableCase).length, errors };
+  },
+  auditQueues(iterations = 300) {
+    const pool = buildCasePool();
+    const results = {};
+    for (const modeId of MODE_ORDER) {
+      results[modeId] = { lengths:[], healthyCounts:[], healthyPositions:Array(ROUND_LENGTH).fill(0), unsafe:0, codeMax:0 };
+      for (let i = 0; i < iterations; i++) {
+        const queue = buildRoundQueue(pool, 'full', modeId);
+        results[modeId].lengths.push(queue.length);
+        results[modeId].healthyCounts.push(queue.filter(c => c.healthy).length);
+        queue.forEach((c, index) => { if (c.healthy) results[modeId].healthyPositions[index] += 1; });
+        results[modeId].unsafe += queue.filter(c => modeId === 'exam' && !isExamPlayableCase(c)).length;
+        results[modeId].codeMax = Math.max(results[modeId].codeMax, queue.filter(isCodeCase).length);
+      }
+    }
+    return results;
+  },
+  auditBalancedRounds(iterations = 300) {
+    const pool = buildCasePool();
+    const errors = [];
+    for (const modeId of MODE_ORDER) {
+      for (let i = 0; i < iterations; i++) {
+        const queue = buildRoundQueue(pool, 'full', modeId);
+        const wardIds = new Set(queue.map(c => caseWard(c).id));
+        const signatures = new Set(queue.map(caseSignature));
+        const healthy = queue.filter(c => c.healthy).length;
+        const code = queue.filter(isCodeCase).length;
+        if (queue.length !== ROUND_LENGTH) errors.push(`${modeId}/${i}: length ${queue.length}`);
+        if (wardIds.size !== WARDS.length - 1) errors.push(`${modeId}/${i}: wards ${[...wardIds].join(',')}`);
+        if (signatures.size !== queue.length) errors.push(`${modeId}/${i}: duplicate case`);
+        if (code > 2) errors.push(`${modeId}/${i}: ${code} code cases`);
+        if (modeId === 'challenge' && (healthy < 1 || healthy > 3)) errors.push(`${modeId}/${i}: ${healthy} healthy`);
+        if (modeId !== 'challenge' && healthy) errors.push(`${modeId}/${i}: healthy leak`);
+        if (modeId === 'exam' && queue.some(c => !isExamPlayableCase(c))) errors.push(`${modeId}/${i}: unsafe case`);
+      }
+    }
+    return errors;
+  },
+  auditWardModes(iterations = 12) {
+    const pool = buildCasePool();
+    const errors = [];
+    for (const ward of WARDS) {
+      for (const modeId of MODE_ORDER) {
+        for (let i = 0; i < iterations; i++) {
+          const queue = buildRoundQueue(pool, ward.id, modeId);
+          if (queue.length !== ROUND_LENGTH) errors.push(`${ward.id}/${modeId}: ${queue.length}`);
+          if (modeId !== 'challenge' && queue.some(c => c.healthy)) errors.push(`${ward.id}/${modeId}: healthy leak`);
+          if (modeId === 'exam' && queue.some(c => !isExamPlayableCase(c))) errors.push(`${ward.id}/${modeId}: unsafe case`);
+        }
+      }
+    }
+    return errors;
+  },
+  getState() {
+    return {
+      ward:state.ward,
+      mode:state.mode,
+      index:state.index,
+      roundLength:state.roundLength,
+      isRetry:state.isRetry,
+      score:state.score,
+      phase:state.phase,
+      diagnosisFirstTry:state.diagnosisFirstTry,
+      treatmentFirstTry:state.treatmentFirstTry,
+      hintUsed:state.hintUsed,
+      caseWrongClicks:state.caseWrongClicks,
+      resolved:state.resolved,
+      casePoints:state.casePoints.slice(),
+      currentHealthy:!!(currentCase() && currentCase().healthy)
+    };
+  },
+  startRound,
+  startExamRetry
+};
+
+progress.lastWard = 'full';
+updateBestDisplay();
 updateHud();
-updateHintGate();
-introStartBtn.focus();
+
 </script>
 </body>
 </html>

@@ -7,313 +7,1156 @@
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
   gtag('config', 'G-060RZGCFFW');
 </script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Short, replayable games for practicing linear algebra, multivariable calculus, and optimization. MATH 345, University of Wisconsin–Madison.">
   <link rel="icon" href="data:,">
   <title>Linear Algebra &amp; Optimization Games</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+
   <style>
     :root {
       color-scheme: light;
-      --ink: #18202f;
-      --muted: #5c6676;
-      --line: #d8dde6;
-      --paper: #ffffff;
-      --wash: #f5f7fa;
-      --accent: #146b83;
-      --accent-strong: #0c4f63;
-      --focus: #b63f2f;
+      --paper: #f6f4ee;
+      --ink: #141311;
+      --muted: #67645a;
+      --card: #ffffff;
+
+      --blue: #2f45ff;   /* cobalt */
+      --red: #ff4419;    /* riso red-orange */
+      --lime: #dcf343;   /* acid lime */
+
+      --grid-line: rgba(20, 19, 17, 0.08);
+      --axis: rgba(20, 19, 17, 0.38);
+
+      --display: "Anton", "Arial Narrow", system-ui, sans-serif;
+      --body: "Space Grotesk", system-ui, sans-serif;
+      --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+      --border: 2px solid var(--ink);
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
       color: var(--ink);
-      background:
-        linear-gradient(180deg, #f8fafc 0%, #ffffff 32rem);
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      line-height: 1.5;
+      background: var(--paper);
+      font-family: var(--body);
+      line-height: 1.55;
     }
 
-    main {
-      width: min(76rem, calc(100% - 2rem));
-      margin: 0 auto;
-      padding: 2rem 0 3rem;
+    a { color: var(--ink); text-decoration-thickness: 2px; text-underline-offset: 3px; }
+    a:hover { color: var(--blue); }
+
+    .wrap { width: min(76rem, calc(100% - 2rem)); margin: 0 auto; }
+
+    ::selection { background: var(--lime); color: var(--ink); }
+
+    /* ================= HERO ================= */
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      touch-action: pan-y;
     }
 
-    .masthead {
+    .hero-grid {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      position: relative;
       display: grid;
-      gap: 0.65rem;
-      max-width: none;
-      margin-bottom: 1.75rem;
+      gap: 1.2rem;
+      justify-items: start;
+      padding: clamp(2.25rem, 6vh, 4.25rem) 0 clamp(2.75rem, 7vh, 4.5rem);
+      min-height: min(80vh, 46rem);
+      align-content: center;
+    }
+
+    @media (max-width: 50rem) {
+      .hero-inner {
+        gap: 1rem;
+        min-height: 0;
+        padding: clamp(1.5rem, 4vw, 2rem) 0 clamp(1.75rem, 5vw, 2.5rem);
+        align-content: start;
+      }
+    }
+
+    .eyebrow {
+      margin: 0;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
     }
 
     h1 {
       margin: 0;
-      font-size: clamp(2.15rem, 6vw, 4.4rem);
-      line-height: 0.98;
-      letter-spacing: 0;
+      font-family: var(--display);
+      font-weight: 400;
+      font-size: clamp(2.7rem, 9vw, 6.2rem);
+      line-height: 0.96;
+      letter-spacing: 0.005em;
+      text-transform: uppercase;
+    }
+
+    h1 .line { display: block; }
+
+    h1 .outline {
+      width: max-content;
+      color: transparent;
+      -webkit-text-stroke: 2px var(--ink);
+      paint-order: stroke fill;
+      transform: scaleX(1.02605);
+      transform-origin: left center;
+    }
+
+    @supports not (-webkit-text-stroke: 2px black) {
+      h1 .outline { color: var(--ink); }
+    }
+
+    h1 .pop { color: var(--red); }
+
+    h1 .pop::before {
+      content: "";
+      display: block;
+      width: 1.05em;
+      height: 0.055em;
+      margin: 0.13em 0 0.08em;
+      background: var(--ink);
     }
 
     .lede {
-      max-width: none;
       margin: 0;
+      max-width: 40rem;
       color: var(--muted);
-      font-size: clamp(1rem, 2vw, 1.15rem);
+      font-size: clamp(1rem, 2vw, 1.12rem);
+      font-weight: 500;
+    }
+
+    .byline { margin: 0; color: var(--muted); font-size: 0.92rem; }
+
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 0.7rem; margin-top: 0.3rem; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.62rem 1.15rem;
+      border: var(--border);
+      border-radius: 8px;
+      background: var(--card);
+      box-shadow: 4px 4px 0 var(--ink);
+      color: var(--ink);
+      font-size: 0.92rem;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      transition: transform 130ms ease, box-shadow 130ms ease;
+    }
+
+    .btn:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0 var(--ink);
+      color: var(--ink);
+    }
+
+    .btn-blue { background: var(--blue); color: var(--paper); }
+    .btn-blue:hover { color: var(--paper); }
+
+    /* live matrix readout */
+    .readout {
+      position: absolute;
+      right: 0;
+      bottom: 1.2rem;
+      display: grid;
+      gap: 0.35rem;
+      justify-items: end;
+      font-family: var(--mono);
+      font-size: clamp(0.72rem, 1.6vw, 0.85rem);
+      text-align: right;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .readout .mtx {
+      white-space: pre;
+      line-height: 1.35;
+      padding: 0.45rem 0.65rem;
+      border: var(--border);
+      border-radius: 8px;
+      background: var(--card);
+      box-shadow: 4px 4px 0 var(--ink);
+    }
+
+    .readout .sv {
+      padding: 0.2rem 0.55rem;
+      border-radius: 6px;
+      color: var(--muted);
+      transition: color 160ms ease, background 160ms ease;
+    }
+
+    .readout .sv.singular {
+      color: var(--paper);
+      background: var(--red);
+      font-weight: 700;
+    }
+
+    .hint {
+      position: absolute;
+      left: 0;
+      bottom: 1.35rem;
+      margin: 0;
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--muted);
+      pointer-events: none;
+    }
+
+    @media (max-width: 44rem) {
+      .readout { position: static; justify-items: start; text-align: left; margin-top: 0.6rem; }
+      .hint { display: none; }
+    }
+
+    /* ================= FORMULA TICKER ================= */
+
+    .ticker {
+      overflow: hidden;
+      border-top: var(--border);
+      border-bottom: var(--border);
+      background: var(--blue);
+      color: var(--paper);
+      user-select: none;
+    }
+
+    .ticker-track {
+      --fact-gap: max(2rem, calc((100vw + 0.6rem - 30.15rem) / 6));
+      display: flex;
+      align-items: center;
+      width: max-content;
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      white-space: nowrap;
+      animation: formula-marquee 44s linear infinite;
+      animation-play-state: paused;
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .ticker:hover .ticker-track { animation-play-state: running; }
+    }
+
+    .ticker-cycle {
+      display: flex;
+      align-items: stretch;
+      flex: none;
+    }
+
+    .ticker-panel {
+      display: flex;
+      align-items: center;
+      flex: none;
+      padding-block: 0.58rem;
+    }
+
+    .ticker-featured {
+      justify-content: space-between;
+      width: calc(100vw + 0.6rem);
+      margin-left: -0.3rem;
+    }
+
+    .ticker-row { display: contents; }
+
+    .ticker-more {
+      gap: var(--fact-gap);
+      padding-inline: var(--fact-gap);
+    }
+
+    .ticker-track i { font-style: normal; text-align: center; }
+    .ticker-sep { color: var(--lime); font-weight: 400; }
+
+    @keyframes formula-marquee {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    @media (max-width: 36rem) {
+      .ticker-track {
+        display: block;
+        width: 100%;
+        animation: none;
+        font-size: 0.72rem;
+      }
+
+      .ticker-cycle { display: none; }
+      .ticker-cycle:first-child { display: block; }
+      .ticker-more { display: none; }
+
+      .ticker-featured {
+        display: grid;
+        gap: 0.45rem;
+        width: 100%;
+        margin: 0;
+        padding-inline: 0.5rem;
+      }
+
+      .ticker-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        gap: 0.75rem;
+      }
+
+      .ticker-sep-row { display: none; }
+    }
+
+    /* ================= DAILY WARM-UP ================= */
+
+    .daily { margin-bottom: 2.5rem; }
+
+    .daily-card {
+      display: grid;
+      gap: 1.1rem;
+      padding: 1.1rem 1.2rem 1.2rem;
+      border: var(--border);
+      border-radius: 10px;
+      background: var(--card);
+      box-shadow: 5px 5px 0 var(--ink);
+    }
+
+    @media (min-width: 44rem) {
+      .daily-card { grid-template-columns: auto 1fr; align-items: center; gap: 2rem; }
+    }
+
+    .daily-head {
+      display: flex;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 0.7rem;
+      margin-bottom: 0.7rem;
+    }
+
+    .daily-title {
+      margin: 0;
+      font-family: var(--display);
+      font-weight: 400;
+      font-size: 1.15rem;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+
+    .daily-tag {
+      padding: 0.1rem 0.5rem;
+      border-radius: 6px;
+      background: var(--lime);
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .daily-date {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--muted);
+    }
+
+    .daily-q {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.6rem 1rem;
+    }
+
+    /* [a b; c d] — square brackets drawn with pseudo-elements */
+    .bmx {
+      position: relative;
+      display: grid;
+      grid-template-columns: auto auto;
+      gap: 0.28rem 1.15rem;
+      padding: 0.45rem 1rem;
+      font-family: var(--mono);
+      font-size: 1.35rem;
+      font-weight: 700;
+      line-height: 1.25;
+    }
+
+    .bmx span { text-align: right; min-width: 1.6ch; }
+
+    .bmx::before, .bmx::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 9px;
+      border: 3px solid var(--ink);
+    }
+
+    .bmx::before { left: 0; border-right: none; }
+    .bmx::after { right: 0; border-left: none; }
+
+    .qpre {
+      font-family: var(--mono);
+      font-size: 1.35rem;
+      font-weight: 700;
+    }
+
+    .qtext, .eqs {
+      font-family: var(--mono);
+      font-size: 1.02rem;
+      font-weight: 600;
+      line-height: 1.65;
+    }
+
+    .deq {
+      flex-basis: 100%;
+      font-family: var(--mono);
+      font-size: 1.02rem;
+      font-weight: 700;
+    }
+
+    .answers { display: flex; flex-wrap: wrap; gap: 0.55rem; }
+
+    .ans {
+      padding: 0.5rem 1rem;
+      border: var(--border);
+      border-radius: 8px;
+      background: var(--card);
+      box-shadow: 3px 3px 0 var(--ink);
+      font-family: var(--mono);
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--ink);
+      cursor: pointer;
+      transition: transform 120ms ease, box-shadow 120ms ease, background 120ms ease;
+    }
+
+    .ans:hover:not(:disabled) {
+      transform: translate(-2px, -2px);
+      box-shadow: 5px 5px 0 var(--ink);
+    }
+
+    .ans:disabled { cursor: default; }
+
+    .ans.correct { background: var(--lime); transform: none; }
+
+    .ans.wrong {
+      background: var(--red);
+      color: var(--paper);
+      box-shadow: none;
+      transform: none;
+      animation: shake 260ms ease;
+    }
+
+    @keyframes shake {
+      0%, 100% { translate: 0 0; }
+      25% { translate: -4px 0; }
+      75% { translate: 4px 0; }
+    }
+
+    .daily-msg {
+      margin: 0.6rem 0 0;
+      min-height: 1.3em;
+      font-size: 0.88rem;
+      color: var(--muted);
+    }
+
+    .daily-msg strong { color: var(--ink); }
+
+    .streak-chip {
+      display: inline-block;
+      padding: 0.05rem 0.5rem;
+      border-radius: 6px;
+      background: var(--lime);
+      color: var(--ink);
+      font-family: var(--mono);
+      font-weight: 700;
+    }
+
+    /* ================= GAME GRID ================= */
+
+    main { padding: 2.5rem 0 3.25rem; }
+
+    .grid-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .grid-title {
+      margin: 0;
+      font-family: var(--display);
+      font-weight: 400;
+      font-size: clamp(1.4rem, 3.2vw, 2rem);
+      text-transform: uppercase;
+      letter-spacing: 0.01em;
+    }
+
+    .grid-count {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      color: var(--muted);
     }
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(13.75rem, 1fr));
-      gap: 0.9rem;
+      grid-template-columns: repeat(auto-fill, minmax(min(14rem, 100%), 1fr));
+      gap: 1.25rem 1.1rem;
       padding: 0;
       margin: 0;
       list-style: none;
     }
 
+    @media (min-width: 30.01rem) and (max-width: 50rem) {
+      .grid {
+        grid-template-columns: repeat(auto-fill, minmax(10.75rem, 1fr));
+        gap: 0.9rem 0.75rem;
+      }
+    }
+
+    @media (max-width: 30rem) {
+      .grid { grid-template-columns: 1fr 1fr; gap: 1rem 0.7rem; }
+    }
+
+    /* ---------- cards ---------- */
+
     .game-link {
+      position: relative;
       display: grid;
       grid-template-rows: auto 1fr;
       min-height: 100%;
       color: inherit;
       text-decoration: none;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: var(--paper);
+      border: var(--border);
+      border-radius: 10px;
+      background: var(--card);
       overflow: hidden;
-      box-shadow: 0 10px 28px rgba(24, 32, 47, 0.07);
-      transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+      box-shadow: 4px 4px 0 var(--ink);
+      transition: transform 150ms ease, box-shadow 150ms ease;
+    }
+
+    /* per-card accent, cycling cobalt → lime → red */
+    .grid li:nth-child(3n + 1) .game-link { --accent: var(--blue); }
+    .grid li:nth-child(3n + 2) .game-link { --accent: var(--lime); }
+    .grid li:nth-child(3n)     .game-link { --accent: var(--red); }
+
+    .game-link:hover,
+    .game-link:focus-visible {
+      transform: translate(-3px, -3px);
+      box-shadow: 8px 8px 0 var(--accent, var(--blue));
+      color: inherit;
     }
 
     .game-link:focus-visible {
-      border-color: var(--focus);
-      outline: 3px solid color-mix(in srgb, var(--focus) 36%, transparent);
+      outline: 3px solid var(--ink);
       outline-offset: 3px;
     }
 
-    .game-link:hover {
-      border-color: var(--accent);
-      box-shadow: 0 14px 34px rgba(24, 32, 47, 0.12);
-      transform: translateY(-2px);
+    .thumb-wrap {
+      position: relative;
+      border-bottom: var(--border);
+      background: var(--accent, var(--blue));
     }
 
     .thumb {
       aspect-ratio: 1 / 1;
       width: 100%;
       height: auto;
-      background: var(--wash);
       object-fit: cover;
       display: block;
+      transition: transform 300ms ease;
     }
+
+    .game-link:hover .thumb,
+    .game-link:focus-visible .thumb { transform: scale(1.035); }
 
     .game-body {
       display: grid;
       align-content: start;
-      gap: 0.35rem;
-      min-height: 7.25rem;
-      padding: 0.9rem 1rem 1rem;
-    }
-
-    .game-title {
-      font-size: 1.05rem;
-      font-weight: 800;
-      line-height: 1.2;
+      gap: 0.45rem;
+      padding: 0.85rem 0.95rem 1rem;
     }
 
     .game-title-row {
       display: flex;
-      align-items: flex-start;
+      align-items: baseline;
       justify-content: space-between;
-      gap: 0.65rem;
+      gap: 0.6rem;
     }
+
+    .game-title { font-size: 1.04rem; font-weight: 700; line-height: 1.25; }
 
     .game-version {
       flex: 0 0 auto;
-      padding: 0.18rem 0.42rem;
-      border: 1px solid #b9c6ee;
-      border-radius: 999px;
-      background: #eef2ff;
-      color: #34458a;
-      font-size: 0.68rem;
-      font-weight: 800;
-      line-height: 1.2;
-      white-space: nowrap;
-    }
-
-    .game-topic {
+      font-family: var(--mono);
+      font-size: 0.66rem;
       color: var(--muted);
-      font-size: 0.93rem;
     }
 
-    .section-line {
-      width: 100%;
-      height: 1px;
-      margin: 1.35rem 0 1.5rem;
-      border: 0;
-      background: var(--line);
+    .chips { display: flex; flex-wrap: wrap; gap: 0.3rem; }
+
+    .chip {
+      padding: 0.13rem 0.48rem;
+      border-radius: 5px;
+      background: color-mix(in srgb, var(--accent, var(--blue)) 22%, white);
+      font-size: 0.7rem;
+      font-weight: 600;
+      line-height: 1.5;
     }
 
-    .footer-line {
-      margin: 1.5rem 0 0;
+    @media (min-width: 30.01rem) and (max-width: 50rem) {
+      .game-body { padding: 0.7rem 0.75rem 0.85rem; }
+      .game-title { font-size: 0.94rem; }
+      .game-version { font-size: 0.61rem; }
+      .chip { font-size: 0.64rem; padding: 0.1rem 0.4rem; }
     }
 
-    .license,
-    .updated {
-      margin: 1.5rem 0 0;
+    @media (max-width: 30rem) {
+      .game-body { padding: 0.6rem 0.65rem 0.75rem; }
+      .game-title { font-size: 0.92rem; }
+      .game-version { display: none; }
+      .chip { font-size: 0.64rem; padding: 0.1rem 0.4rem; }
+    }
+
+    /* ================= FOOTER ================= */
+
+    footer {
+      border-top: var(--border);
+      background: var(--card);
+      padding: 1.5rem 0 2rem;
       color: var(--muted);
       font-size: 0.85rem;
     }
 
-    .updated {
-      margin-top: 0.35rem;
-    }
+    footer p { margin: 0 0 0.6rem; }
 
-    @media (min-width: 54rem) {
-      main {
-        padding-top: 2.75rem;
-      }
+    details.colophon { margin: 0 0 0.8rem; }
+    details.colophon summary { cursor: pointer; font-weight: 700; color: var(--ink); }
+    details.colophon p { margin-top: 0.5rem; }
 
-      .grid {
-        grid-template-columns: repeat(3, 1fr);
-      }
-    }
-
-    @media (min-width: 64rem) {
-      .grid {
-        grid-template-columns: repeat(4, 1fr);
-      }
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; }
+      .ticker-track { animation: none !important; }
+      .game-link:hover { transform: none; }
+      .game-link:hover .thumb { transform: none; }
     }
   </style>
 </head>
 <body>
-  <main>
-    <header class="masthead">
-      <h1>Linear Algebra &amp;<br>Optimization Games</h1>
-      <p class="lede">Pedagogical games for practicing selected content and skills from linear algebra, multivariable calculus, and optimization. Read the <a href="https://math345-textbook.github.io/">lecture notes</a>. Visit the <a href="https://people.math.wisc.edu/~roch/linopt/">course website</a>.</p>
-      <p class="lede"><em>Author:</em> <a href="https://people.math.wisc.edu/~roch/">Sébastien Roch</a>, Department of Mathematics, University of Wisconsin-Madison</p>
-      <p class="lede"><em>AI use</em>: ChatGPT Pro assisted with brainstorming/refining/tailoring; Codex handled prototyping/tweaking/playtesting/deploying; Claude Fable critiqued. I take full responsibility for the final product.</p>
-      <p class="lede"><em>Note:</em> Some of these games are not mobile-friendly. A wide enough screen is recommended.</p>
-    </header>
-    <hr class="section-line">
 
-    <ul class="grid" aria-label="Puzzle games">
-      <li>
-        <a class="game-link" href="MatriXMatch/" aria-label="Open MatriX Match">
-          <img class="thumb" src="MatriXMatch/matrix-match-small.jpg" alt="Illustrated card for MatriX Match" width="1254" height="1254">
-          <span class="game-body">
-            <span class="game-title-row">
-              <span class="game-title">MatriX Match</span>
-              <span class="game-version">v0.2(beta)</span>
-            </span>
-            <span class="game-topic">matrix products, matrix shapes, transposes</span>
-          </span>
-        </a>
-      </li>
-      <li>
-        <a class="game-link" href="OrderMatters/" aria-label="Open Order Matters">
-          <img class="thumb" src="OrderMatters/order-matters-small.jpg" alt="Illustrated card for Order Matters" width="1254" height="1254">
-          <span class="game-body">
-            <span class="game-title-row">
-              <span class="game-title">Order Matters!</span>
-              <span class="game-version">v0.1(beta)</span>
-            </span>
-            <span class="game-topic">geometric transformation, composition, non-commutativity</span>
-          </span>
-        </a>
-      </li>
-      <li>
-        <a class="game-link" href="TheEliminationGame/" aria-label="Open The Elimination Game">
-          <img class="thumb" src="TheEliminationGame/the-elimination-game-small.jpg" alt="Illustrated card for The Elimination Game" width="1254" height="1254">
-          <span class="game-body">
-            <span class="game-title-row">
-              <span class="game-title">The Elimination Game</span>
-              <span class="game-version">v0.2(beta)</span>
-            </span>
-            <span class="game-topic">row operations, REF, linear system, counting solutions</span>
-          </span>
-        </a>
-      </li>
-      <li>
-        <a class="game-link" href="NullAndOrder/" aria-label="Open Null and Order">
-          <img class="thumb" src="NullAndOrder/null-and-order-small.jpg" alt="Illustrated card for Null and Order" width="1254" height="1254">
-          <span class="game-body">
-            <span class="game-title-row">
-              <span class="game-title">Null &amp; Order</span>
-              <span class="game-version">v0.1(beta)</span>
-            </span>
-            <span class="game-topic">null space, column space, linear independence, rank, nullity</span>
-          </span>
-        </a>
-      </li>
-      <li>
-        <a class="game-link" href="DifferentialDiagnosis/" aria-label="Open Differential Diagnosis">
-          <img class="thumb" src="DifferentialDiagnosis/differential-diagnosis-small.jpg" alt="Illustrated card for Differential Diagnosis" width="1254" height="1254">
-          <span class="game-body">
-            <span class="game-title-row">
-              <span class="game-title">Differential Diagnosis</span>
-              <span class="game-version">v0.1(beta)</span>
-            </span>
-            <span class="game-topic">partial derivatives, gradients, Jacobian matrices, linear approximations</span>
-          </span>
-        </a>
-      </li>
-      <li>
-        <a class="game-link" href="OptimalRecall/" aria-label="Open Optimal Recall">
-          <img class="thumb" src="OptimalRecall/optimal-recall-small.jpg" alt="Illustrated card for Optimal Recall" width="1254" height="1254">
-          <span class="game-body">
-            <span class="game-title-row">
-              <span class="game-title">Optimal Recall</span>
-              <span class="game-version">v0.1(beta)</span>
-            </span>
-            <span class="game-topic">derivatives, gradients, optimization, Lagrange multipliers</span>
-          </span>
-        </a>
-      </li>
-      <li>
-        <a class="game-link" href="PerfectlyNormal/" aria-label="Open Perfectly Normal">
-          <img class="thumb" src="PerfectlyNormal/perfectly-normal-small.jpg?v=20260716-212659" alt="Illustrated card for Perfectly Normal" width="1254" height="1254">
-          <span class="game-body">
-            <span class="game-title-row">
-              <span class="game-title">Perfectly Normal</span>
-              <span class="game-version">v0.2(beta)</span>
-            </span>
-            <span class="game-topic">inner product, orthogonality, projection, Gram-Schmidt, QR</span>
-          </span>
-        </a>
-      </li>
-      <li>
-        <a class="game-link" href="ResidualSquares/" aria-label="Open Residual Squares">
-          <img class="thumb" src="ResidualSquares/residual-squares-small.jpg" alt="Illustrated card for Residual Squares" width="1254" height="1254">
-          <span class="game-body">
-            <span class="game-title-row">
-              <span class="game-title">Residual Squares</span>
-              <span class="game-version">v0.2(beta)</span>
-            </span>
-            <span class="game-topic">least squares, residuals, linear regression, orthogonal projection</span>
-          </span>
-        </a>
-      </li>
-      <li>
-        <a class="game-link" href="ExtremeQuest/" aria-label="Open Extreme Quest">
-          <img class="thumb" src="ExtremeQuest/extreme-quest-small.jpg" alt="Illustrated card for Extreme Quest" width="1254" height="1254">
-          <span class="game-body">
-            <span class="game-title-row">
-              <span class="game-title">Extreme Quest</span>
-              <span class="game-version">v0.2(beta)</span>
-            </span>
-            <span class="game-topic">critical points, global minimum/maximum</span>
-          </span>
-        </a>
-      </li>
+  <header class="hero" id="hero">
+    <svg class="hero-grid" id="grid-svg" aria-hidden="true" focusable="false"
+         viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid slice">
+      <g id="warp"><!-- gridlines, unit square, and basis vectors injected by JS --></g>
+    </svg>
+
+    <div class="wrap hero-inner">
+      <h1>
+        <span class="line">Linear Algebra</span>
+        <span class="line outline">&amp; Optimization</span>
+        <span class="line pop" id="games-word">Games</span>
+      </h1>
+      <p class="lede">Short, replayable games for practicing concepts and skills from linear algebra, multivariable calculus, and optimization.</p>
+      <p class="byline">By <a href="https://people.math.wisc.edu/~roch/">Sébastien Roch</a>, Department of Mathematics, University of Wisconsin-Madison</p>
+      <div class="hero-actions">
+        <a class="btn btn-blue" href="https://math345-textbook.github.io/">Lecture notes ↗</a>
+        <a class="btn" href="https://people.math.wisc.edu/~roch/linopt/">Course website ↗</a>
+      </div>
+
+    </div>
+  </header>
+
+  <div class="ticker" aria-label="Selected formulas">
+    <div class="ticker-track" id="ticker-track"></div>
+  </div>
+
+  <main class="wrap">
+    <div class="grid-head">
+      <h2 class="grid-title">The games</h2>
+      <span class="grid-count" id="grid-count"></span>
+    </div>
+
+    <ul class="grid" id="grid">
+      <noscript>
+        <li><p>Games: <a href="MatriXMatch/">MatriX Match</a> · <a href="ShearMadness/">Shear Madness</a> · <a href="TheEliminationGame/">The Elimination Game</a> · <a href="NullAndOrder/">Null &amp; Order</a> · <a href="DifferentialDiagnosis/">Differential Diagnosis</a> · <a href="OptimalRecall/">Optimal Recall</a> · <a href="PerfectlyNormal/">Perfectly Normal</a> · <a href="ResidualSquares/">Residual Squares</a> · <a href="ExtremeQuest/">Extreme Quest</a></p></li>
+      </noscript>
     </ul>
-    <hr class="section-line footer-line">
-    <p class="license">Copyright and License: Except where otherwise noted, these games and accompanying materials are &copy; 2026 Sébastien Roch and licensed under a <a href="https://creativecommons.org/licenses/by-nc/4.0/">Creative Commons Attribution-NonCommercial 4.0 International License</a>. Game source code is licensed under the <a href="https://opensource.org/license/mit">MIT License</a>.</p>
-    <p class="updated">Updated: July 16, 2026</p>
   </main>
+
+  <footer>
+    <div class="wrap">
+      <details class="colophon">
+        <summary>About these games &amp; AI use</summary>
+        <p>ChatGPT Pro assisted with brainstorming/refining/tailoring; Codex handled prototyping/tweaking/playtesting/deploying; Claude Fable critiqued. I take full responsibility for the final product.</p>
+      </details>
+      <p>Copyright and License: Except where otherwise noted, these games and accompanying materials are &copy; 2026 Sébastien Roch and licensed under a <a href="https://creativecommons.org/licenses/by-nc/4.0/">Creative Commons Attribution-NonCommercial 4.0 International License</a>. Game source code is licensed under the <a href="https://opensource.org/license/mit">MIT License</a>.</p>
+      <p>Updated: July 22, 2026</p>
+    </div>
+  </footer>
+
+  <script>
+  /* =============================================================
+     1. GAME CATALOG — edit this, not the markup. Order preserved.
+     ============================================================= */
+  const GAMES = [
+    { dir: "MatriXMatch", img: "matrix-match-small.jpg?v=20260717-103609",
+      title: "MatriX Match", ver: "v0.2β",
+      topics: ["matrix products", "matrix shapes", "transposes"] },
+    { dir: "ShearMadness", img: "shear-madness-small.jpg",
+      title: "Shear Madness", ver: "v0.2β",
+      topics: ["matrix transformations", "matrix multiplication", "non-commutativity"] },
+    { dir: "TheEliminationGame", img: "the-elimination-game-small.jpg",
+      title: "The Elimination Game", ver: "v0.2β",
+      topics: ["row operations", "REF", "linear systems", "counting solutions"] },
+    { dir: "NullAndOrder", img: "null-and-order-small.jpg",
+      title: "Null & Order", ver: "v0.2β",
+      topics: ["null space", "column space", "independence", "rank", "nullity"] },
+    { dir: "DifferentialDiagnosis", img: "differential-diagnosis-small.jpg",
+      title: "Differential Diagnosis", ver: "v0.2β",
+      topics: ["partial derivatives", "gradients", "Jacobians", "linear approximation"] },
+    { dir: "OptimalRecall", img: "optimal-recall-small.jpg",
+      title: "Optimal Recall", ver: "v0.2β",
+      topics: ["derivatives", "gradients", "optimization", "Lagrange multipliers"] },
+    { dir: "PerfectlyNormal", img: "perfectly-normal-small.jpg?v=20260716-212659",
+      title: "Perfectly Normal", ver: "v0.2β",
+      topics: ["inner products", "orthogonality", "projection", "Gram–Schmidt", "QR"] },
+    { dir: "ResidualSquares", img: "residual-squares-small.jpg",
+      title: "Residual Squares", ver: "v0.2β",
+      topics: ["least squares", "residuals", "regression", "projection"] },
+    { dir: "ExtremeQuest", img: "extreme-quest-small.jpg?v=20260717-093350",
+      title: "Extreme Quest", ver: "v0.2β",
+      topics: ["critical points", "global min & max"] },
+  ];
+
+  document.getElementById('grid').insertAdjacentHTML('beforeend', GAMES.map((g, i) => `
+    <li>
+      <a class="game-link" href="${g.dir}/" aria-label="Play ${g.title.replace(/&/g, 'and')}">
+        <span class="thumb-wrap">
+          <img class="thumb" src="${g.dir}/${g.img}" alt="" width="1254" height="1254"
+               ${i > 2 ? 'loading="lazy"' : ''} decoding="async">
+        </span>
+        <span class="game-body">
+          <span class="game-title-row">
+            <span class="game-title">${g.title}</span>
+            <span class="game-version">${g.ver}</span>
+          </span>
+          <span class="chips">${g.topics.map(t => `<span class="chip">${t}</span>`).join('')}</span>
+        </span>
+      </a>
+    </li>`).join(''));
+
+  document.getElementById('grid-count').textContent =
+    `${String(GAMES.length).padStart(2, '0')} games`;
+
+  /* ---------- formula ticker ---------- */
+  const FEATURED_FORMULAS = [
+    "(AB)ᵀ = BᵀAᵀ",
+    "AᵀA x̂ = Aᵀb",
+    "f(x+h) ≈ f(x) + ∇f(x)·h",
+    "∇f(x*) = 0",
+  ];
+  const MORE_FORMULAS = [
+    "AB ≠ BA",
+    "rank A + nullity A = n",
+    "det(AB) = det(A)·det(B)",
+    "⟨u, v⟩ = 0",
+    "QᵀQ = I",
+    "P² = P",
+    "∇f = λ∇g",
+    "Ax = b",
+  ];
+  const formula = (text) => `<i>${text}</i>`;
+  const separator = (extraClass = '') =>
+    `<b class="ticker-sep ${extraClass}" aria-hidden="true">✦</b>`;
+  const featuredPanel = `
+    <span class="ticker-panel ticker-featured">
+      <span class="ticker-row">${formula(FEATURED_FORMULAS[0])}${separator()}${formula(FEATURED_FORMULAS[1])}</span>
+      ${separator('ticker-sep-row')}
+      <span class="ticker-row">${formula(FEATURED_FORMULAS[2])}${separator()}${formula(FEATURED_FORMULAS[3])}</span>
+    </span>`;
+  const morePanel = `
+    <span class="ticker-panel ticker-more">
+      ${separator()}${MORE_FORMULAS.map(formula).join(separator())}${separator()}
+    </span>`;
+  const tickerCycle = `<span class="ticker-cycle">${featuredPanel}${morePanel}</span>`;
+  const track = document.getElementById('ticker-track');
+  track.innerHTML = tickerCycle + tickerCycle.replace(
+    'class="ticker-cycle"', 'class="ticker-cycle" aria-hidden="true"');
+
+  /* =============================================================
+     DAILY WARM-UP
+     One question a day, same for everyone (seeded by the date).
+     The topic cycles through the spine of the course — linear
+     systems, rank & SVD, projection, least squares, gradients,
+     gradient descent — and every wrong answer is a classic
+     mistake with its own targeted feedback. Solving it links to
+     the game that trains that skill. Streak kept in localStorage.
+     ============================================================= */
+  (function () {
+    if (!document.getElementById('daily-date')) return;
+    const KEY = 'm345-daily';
+    const now = new Date();
+    const dstr = (dt) => `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, '0')}-${String(dt.getDate()).padStart(2, '0')}`;
+    const today = dstr(now);
+    const yest = (() => { const y = new Date(now); y.setDate(y.getDate() - 1); return dstr(y); })();
+    const dayNum = Math.floor(new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime() / 86400000);
+
+    // deterministic RNG seeded by the date — the whole class sees the same question
+    let seed = 0;
+    for (const ch of today) seed = (seed * 31 + ch.charCodeAt(0)) | 0;
+    function rnd() {
+      seed = seed + 0x6D2B79F5 | 0;
+      let t = Math.imul(seed ^ seed >>> 15, 1 | seed);
+      t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+      return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    }
+    const ri = (lo, hi) => lo + Math.floor(rnd() * (hi - lo + 1));
+    const pick = (arr) => arr[ri(0, arr.length - 1)];
+    const sgn = () => (rnd() < 0.5 ? -1 : 1);
+    const num = (x) => Number.isInteger(x) ? String(x) : String(Math.round(x * 100) / 100);
+    const V = (x, y) => `(${num(x)}, ${num(y)})`;
+
+    // "x + 3y = 5" with clean signs and 1-coefficients
+    function eqn(c1, c2, rhs) {
+      const mnum = (v) => v < 0 ? '\u2212' + Math.abs(v) : String(v);
+      const t1 = c1 === 0 ? '' : (c1 === 1 ? 'x' : (c1 === -1 ? '\u2212x' : mnum(c1) + 'x'));
+      let t2 = '';
+      if (c2 !== 0) {
+        const mag = Math.abs(c2) === 1 ? 'y' : Math.abs(c2) + 'y';
+        t2 = t1 === '' ? (c2 < 0 ? '\u2212' + mag : mag) : (c2 < 0 ? ' \u2212 ' + mag : ' + ' + mag);
+      }
+      return ((t1 + t2) || '0') + ' = ' + mnum(rhs);
+    }
+
+    // option-list builder: dedupes, caps at 4, pads if distractors collide
+    function makeOpts(correct, distractors) {
+      const opts = [{ v: String(correct), ok: true }];
+      for (const d of distractors) {
+        if (opts.length >= 4) break;
+        const s = String(d.v);
+        if (!opts.some(o => o.v === s)) opts.push({ v: s, m: d.m });
+      }
+      let bump = 1;
+      while (opts.length < 4 && typeof correct === 'number') {
+        const v = String(correct + (opts.length % 2 ? bump : -bump)); bump++;
+        if (!opts.some(o => o.v === v)) opts.push({ v, m: 'Not quite \u2014 recompute.' });
+      }
+      for (let i = opts.length - 1; i > 0; i--) {
+        const j = Math.floor(rnd() * (i + 1)); [opts[i], opts[j]] = [opts[j], opts[i]];
+      }
+      return opts;
+    }
+
+    /* ---- the six question types, in course order ---- */
+
+    function genSystem() {
+      const kind = ri(0, 2);                      // 0 unique, 1 none, 2 infinitely many
+      const a = ri(-3, 3) || 2, b = ri(-4, 4);
+      let r2, correct;
+      if (kind === 0) {
+        const m = ri(-2, 2) || 1;
+        let n; do { n = ri(-3, 3); } while (n === m * a);
+        r2 = [m, n, ri(-4, 4)];
+        correct = 'exactly one';
+      } else {
+        const k = ri(2, 3) * sgn();
+        r2 = [k, k * a, kind === 2 ? k * b : k * b + ri(1, 3)];
+        correct = kind === 2 ? 'infinitely many' : 'none';
+      }
+      const M = { 'exactly two': 'Never \u2014 a linear system has 0, 1, or infinitely many solutions.' };
+      if (kind === 0) {
+        M['none'] = 'The coefficient rows aren\u2019t proportional \u2014 the lines cross at one point.';
+        M['infinitely many'] = 'The rows aren\u2019t multiples of each other, so they\u2019re not the same line.';
+      } else if (kind === 1) {
+        M['exactly one'] = 'The left sides are proportional but the right sides aren\u2019t: parallel lines.';
+        M['infinitely many'] = 'The right-hand side breaks the proportionality \u2014 the lines never meet.';
+      } else {
+        M['exactly one'] = 'Row 2 is a multiple of row 1, right side included \u2014 same line.';
+        M['none'] = 'Same line in disguise: every solution of row 1 solves row 2.';
+      }
+      return {
+        html: `<div class="eqs">${eqn(1, a, b)}<br>${eqn(r2[0], r2[1], r2[2])}</div><span class="deq">how many solutions?</span>`,
+        opts: ['exactly one', 'none', 'infinitely many', 'exactly two']
+          .map(L => L === correct ? { v: L, ok: true } : { v: L, m: M[L] }),
+      };
+    }
+
+    function genRank() {
+      const rank1 = rnd() < 0.5;
+      let a, b, c, d, k = 0;
+      if (rank1) {
+        a = ri(1, 3) * sgn(); c = ri(1, 3);
+        k = ri(2, 3) * sgn();
+        b = k * a; d = k * c;
+      } else {
+        do { a = ri(-3, 3); b = ri(-3, 3); c = ri(-3, 3); d = ri(-3, 3); }
+        while (a * d - b * c === 0 || [a, b, c, d].filter(x => x === 0).length > 1);
+      }
+      const correct = rank1 ? '1' : '2';
+      const M = {
+        '0': 'Only the zero matrix has no nonzero singular values.',
+        '3': 'A 2\u00d72 matrix has at most 2 singular values.',
+      };
+      if (rank1) M['2'] = `Column 2 is ${k}\u00d7 column 1 \u2014 the columns are dependent, so rank\u00a0=\u00a01.`;
+      else M['1'] = 'The columns aren\u2019t multiples of each other \u2014 they\u2019re independent.';
+      return {
+        html: `<span class="qpre">A =</span><span class="bmx">${[a, b, c, d].map(v => `<span>${v}</span>`).join('')}</span><span class="deq">how many nonzero singular values does A have? (= rank A)</span>`,
+        opts: ['0', '1', '2', '3'].map(L => L === correct ? { v: L, ok: true } : { v: L, m: M[L] }),
+      };
+    }
+
+    function genProj() {
+      const [a1, a2] = pick([[1, 2], [2, 1], [1, 3], [3, 1], [1, 1], [2, 3]]);
+      const c = pick([-1, 1, 2]);
+      const t = pick([-1, 1]);
+      // b = c\u00b7a + t\u00b7a\u22a5, so a\u1d40b = c\u00b7a\u1d40a exactly \u2014 the answer is the clean integer c
+      const b1 = c * a1 - t * a2, b2 = c * a2 + t * a1;
+      const aa = a1 * a1 + a2 * a2, ab = a1 * b1 + a2 * b2;
+      return {
+        html: `<div class="qtext">a = ${V(a1, a2)}, &nbsp;b = ${V(b1, b2)}<br>proj of b onto a &nbsp;=&nbsp; c\u00b7a</div><span class="deq">c = ?</span>`,
+        opts: makeOpts(c, [
+          { v: ab, m: 'That\u2019s a\u1d40b \u2014 divide by a\u1d40a = \u2016a\u2016\u00b2.' },
+          { v: -c, m: 'Check the signs when computing a\u1d40b.' },
+          { v: aa, m: 'That\u2019s a\u1d40a \u2014 the denominator, not the answer.' },
+        ]),
+      };
+    }
+
+    function genLSQ() {
+      let y1, y2, y3, mean;
+      do {
+        y1 = ri(0, 5); y2 = y1 + ri(1, 3); y3 = y2 + ri(1, 4);
+        mean = (y1 + y2 + y3) / 3;
+      } while (!Number.isInteger(mean) || mean === y2);
+      return {
+        html: `<div class="qtext">best constant fit c to y = ${y1}, ${y2}, ${y3}<br>minimizing \u03a3 (y\u1d62 \u2212 c)\u00b2</div><span class="deq">c = ?</span>`,
+        opts: makeOpts(mean, [
+          { v: y2, m: 'That\u2019s the median \u2014 squared error is minimized by the mean.' },
+          { v: (y1 + y3) / 2, m: 'That\u2019s the midpoint of min and max, not the least-squares fit.' },
+          { v: y1 + y2 + y3, m: 'Divide by the number of data points.' },
+        ]),
+      };
+    }
+
+    function genGrad() {
+      const k = ri(2, 3), p = ri(1, 2), q = p + ri(1, 2);   // q ≠ p keeps all options distinct
+      // f = x\u00b2 + kxy \u2192 \u2207f = (2x + ky, kx)
+      const gx = 2 * p + k * q, gy = k * p;
+      return {
+        html: `<div class="qtext">f(x, y) = x\u00b2 + ${k}xy</div><span class="deq">\u2207f${V(p, q)} = ?</span>`,
+        opts: makeOpts(V(gx, gy), [
+          { v: V(gy, gx), m: 'Partials swapped: first \u2202f/\u2202x, then \u2202f/\u2202y.' },
+          { v: V(2 * p, gy), m: `The ${k}xy term also depends on x \u2014 its x-partial is ${k}y.` },
+          { v: V(gx, k * q), m: `For \u2202f/\u2202y, treat x as the constant: \u2202(${k}xy)/\u2202y = ${k}x.` },
+        ]),
+      };
+    }
+
+    function genGD() {
+      const x0 = pick([2, 4, -2, -4]);
+      const half = rnd() < 0.5;
+      const eta = half ? 0.5 : 0.25;
+      const etaTxt = half ? '1/2' : '1/4';
+      const x1 = x0 * (1 - 2 * eta);           // \u03b7 = 1/2 lands exactly on the minimum
+      return {
+        html: `<div class="qtext">f(x) = x\u00b2, &nbsp;x\u2080 = ${x0}, &nbsp;step \u03b7 = ${etaTxt}<br>one gradient-descent step: x\u2081 = x\u2080 \u2212 \u03b7 f\u2032(x\u2080)</div><span class="deq">x\u2081 = ?</span>`,
+        opts: makeOpts(x1, [
+          { v: x0 + 2 * eta * x0, m: 'Wrong direction \u2014 descent moves against the gradient.' },
+          { v: x0 - eta * x0, m: 'f\u2032(x) = 2x, not x.' },
+          { v: x0 - eta * x0 * x0, m: 'Step with the derivative f\u2032(x\u2080), not the value f(x\u2080).' },
+        ]),
+      };
+    }
+
+    /* ---- pick today\u2019s topic (cycles in course order) ---- */
+    const QTYPES = [
+      { tag: 'linear systems', dir: 'TheEliminationGame', name: 'The Elimination Game', gen: genSystem },
+      { tag: 'rank & SVD', dir: 'NullAndOrder', name: 'Null & Order', gen: genRank },
+      { tag: 'projection', dir: 'PerfectlyNormal', name: 'Perfectly Normal', gen: genProj },
+      { tag: 'least squares', dir: 'ResidualSquares', name: 'Residual Squares', gen: genLSQ },
+      { tag: 'gradients', dir: 'DifferentialDiagnosis', name: 'Differential Diagnosis', gen: genGrad },
+      { tag: 'gradient descent', dir: 'OptimalRecall', name: 'Optimal Recall', gen: genGD },
+    ];
+    const qt = QTYPES[((dayNum % QTYPES.length) + QTYPES.length) % QTYPES.length];
+    const q = qt.gen();
+
+    /* ---- render ---- */
+    document.getElementById('daily-date').textContent = today;
+    document.getElementById('daily-tag').textContent = qt.tag;
+    document.getElementById('daily-q').innerHTML = q.html;
+    const box = document.getElementById('daily-answers');
+    const msg = document.getElementById('daily-msg');
+    box.innerHTML = q.opts.map((o, i) =>
+      `<button class="ans" type="button" data-i="${i}">${o.v}</button>`).join('');
+    const btns = Array.from(box.children);
+
+    let st = {};
+    try { st = JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) {}
+
+    function finish(streak) {
+      btns.forEach((btn, i) => { btn.disabled = true; if (q.opts[i].ok) btn.classList.add('correct'); });
+      msg.innerHTML = `<strong>Solved.</strong> New topic tomorrow. ` +
+        `<span class="streak-chip">streak ${streak}</span> ` +
+        `&nbsp;Keep going \u2192 <a href="${qt.dir}/">${qt.name}</a>`;
+    }
+
+    if (st.last === today) { finish(st.streak || 1); return; }
+
+    box.addEventListener('click', (e) => {
+      const btn = e.target.closest('.ans');
+      if (!btn || btn.disabled) return;
+      const o = q.opts[+btn.dataset.i];
+      if (o.ok) {
+        const streak = st.last === yest ? (st.streak || 0) + 1 : 1;
+        try { localStorage.setItem(KEY, JSON.stringify({ last: today, streak })); } catch (e2) {}
+        st = { last: today, streak };
+        finish(streak);
+      } else {
+        btn.disabled = true;
+        btn.classList.add('wrong');
+        msg.textContent = o.m;
+      }
+    });
+  })();
+
+  /* =============================================================
+     2. THE INTERACTIVE PLANE
+        The hero background is graph paper being carried by a live
+        2×2 matrix A. Pointer position sets A; the readout shows
+        A and det A. On touch devices, A drifts on its own.
+     ============================================================= */
+  (function () {
+    const warp = document.getElementById('warp');
+    const CX = 600, CY = 350, STEP = 50, UNIT = 100;
+
+    // gridlines drawn well past the viewBox so shears never expose an edge
+    let d = '';
+    for (let x = -600; x <= 1800; x += STEP) d += `M${x} -600V1300`;
+    for (let y = -600; y <= 1300; y += STEP) d += `M-600 ${y}H1800`;
+    warp.innerHTML = `
+      <path d="${d}" stroke="var(--grid-line)" stroke-width="1" fill="none"/>
+      <path d="M-600 ${CY}H1800 M${CX} -600V1300" stroke="var(--axis)" stroke-width="1.4" fill="none"/>
+      <rect x="${CX}" y="${CY - UNIT}" width="${UNIT}" height="${UNIT}" fill="var(--lime)" opacity="0.55"/>
+      <circle cx="${CX}" cy="${CY}" r="${UNIT}" fill="none" stroke="var(--ink)" stroke-width="1.6" stroke-dasharray="7 7" opacity="0.5"/>
+      <g stroke="var(--red)" stroke-width="4" stroke-linecap="round" fill="none">
+        <path d="M${CX} ${CY}H${CX + UNIT}"/>
+        <path d="M${CX + UNIT} ${CY}l-11 -7 M${CX + UNIT} ${CY}l-11 7"/>
+      </g>
+      <g stroke="var(--blue)" stroke-width="4" stroke-linecap="round" fill="none">
+        <path d="M${CX} ${CY}V${CY - UNIT}"/>
+        <path d="M${CX} ${CY - UNIT}l-7 11 M${CX} ${CY - UNIT}l7 11"/>
+      </g>`;
+
+    // A = [a c; b d] in SVG's matrix(a b c d) convention
+    const cur = { a: 1, b: 0, c: 0, d: 1 };
+    const tgt = { a: 1, b: 0, c: 0, d: 1 };
+    const IDENT = { a: 1, b: 0, c: 0, d: 1 };
+
+    const hero = document.getElementById('hero');
+    const mtxEl = document.getElementById('mtx');
+    const svEl = document.getElementById('sv');
+    const hint = document.getElementById('hint');
+    const gamesWord = document.getElementById('games-word');
+    if (gamesWord) {
+      gamesWord.style.transformOrigin = '0 85%';
+      gamesWord.style.willChange = 'transform';
+    }
+
+    const finePointer = matchMedia('(pointer: fine)').matches;
+    const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (!finePointer && hint) hint.remove();
+
+    function apply() {
+      warp.setAttribute('transform',
+        `translate(${CX},${CY}) matrix(${cur.a},${cur.b},${cur.c},${cur.d},0,0) translate(${-CX},${-CY})`);
+    }
+
+    function fmt(x) { return (x < 0 ? '−' : ' ') + Math.abs(x).toFixed(2); }
+
+    function readout() {
+      if (!mtxEl || !svEl) return;
+      // singular values: sqrt of the eigenvalues of AᵀA (closed form for 2×2)
+      const e = cur.a * cur.a + cur.b * cur.b;
+      const g = cur.c * cur.c + cur.d * cur.d;
+      const f = cur.a * cur.c + cur.b * cur.d;
+      const disc = Math.sqrt((e - g) * (e - g) + 4 * f * f);
+      const s1 = Math.sqrt(Math.max((e + g + disc) / 2, 0));
+      const s2 = Math.sqrt(Math.max((e + g - disc) / 2, 0));
+      mtxEl.textContent =
+        `A = ⌈ ${fmt(cur.a)}  ${fmt(cur.c)} ⌉\n    ⌊ ${fmt(cur.b)}  ${fmt(cur.d)} ⌋`;
+      svEl.textContent = `σ₁ = ${s1.toFixed(2)} · σ₂ = ${s2.toFixed(2)}` +
+        (s2 < 0.3 ? ' — nearly rank 1' : '');
+      svEl.classList.toggle('singular', s2 < 0.3);
+    }
+
+    if (reduceMotion) {
+      // static, gently sheared frame — no animation at all
+      if (hint) hint.remove();
+      Object.assign(cur, { a: 1, b: 0.18, c: 0.35, d: 1 });
+      apply();
+      readout();
+      return;
+    }
+
+    if (finePointer) {
+      hero.addEventListener('pointermove', (e) => {
+        const r = hero.getBoundingClientRect();
+        const nx = ((e.clientX - r.left) / r.width) * 2 - 1;   // −1 … 1
+        const ny = ((e.clientY - r.top) / r.height) * 2 - 1;
+        tgt.a = 1;
+        tgt.d = 1;
+        tgt.c = 0.95 * nx;   // horizontal position → x-shear
+        tgt.b = 0.95 * ny;   // vertical position   → y-shear
+        // sweep toward a corner and σ₂ → 0: the map collapses toward rank 1
+      });
+      hero.addEventListener('pointerleave', () => Object.assign(tgt, IDENT));
+    }
+
+    let last = 0;
+    function frame(t) {
+      if (!finePointer) {
+        // ambient drift on touch devices
+        tgt.c = 0.55 * Math.sin(t / 1900);
+        tgt.b = 0.4 * Math.sin(t / 1400 + 2);
+      }
+      const k = 0.09;
+      cur.a += (tgt.a - cur.a) * k;
+      cur.b += (tgt.b - cur.b) * k;
+      cur.c += (tgt.c - cur.c) * k;
+      cur.d += (tgt.d - cur.d) * k;
+
+      if (t - last > 80) { last = t; readout(); }
+      apply();
+      if (gamesWord) {
+        // the headline word rides the same map, damped so it stays legible
+        const s = 0.45;
+        gamesWord.style.transform =
+          `matrix(${1 + (cur.a - 1) * s}, ${cur.b * s}, ${cur.c * s}, ${1 + (cur.d - 1) * s}, 0, 0)`;
+      }
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+
+    readout();
+    apply();
+  })();
+  </script>
 </body>
 </html>

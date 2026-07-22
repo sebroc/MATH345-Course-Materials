@@ -8,11 +8,11 @@
       "version": "v0.2(beta)"
     },
     {
-      "title": "Order Matters!",
-      "slug": "OrderMatters",
-      "href": "OrderMatters/",
-      "image": "order-matters-small.jpg",
-      "version": "v0.1(beta)"
+      "title": "Shear Madness",
+      "slug": "ShearMadness",
+      "href": "ShearMadness/",
+      "image": "shear-madness-small.jpg",
+      "version": "v0.2(beta)"
     },
     {
       "title": "The Elimination Game",
@@ -26,21 +26,21 @@
       "slug": "NullAndOrder",
       "href": "NullAndOrder/",
       "image": "null-and-order-small.jpg",
-      "version": "v0.1(beta)"
+      "version": "v0.2(beta)"
     },
     {
       "title": "Differential Diagnosis",
       "slug": "DifferentialDiagnosis",
       "href": "DifferentialDiagnosis/",
       "image": "differential-diagnosis-small.jpg",
-      "version": "v0.1(beta)"
+      "version": "v0.2(beta)"
     },
     {
       "title": "Optimal Recall",
       "slug": "OptimalRecall",
       "href": "OptimalRecall/",
       "image": "optimal-recall-small.jpg",
-      "version": "v0.1(beta)"
+      "version": "v0.2(beta)"
     },
     {
       "title": "Perfectly Normal",

@@ -11,8 +11,8 @@
   gtag('config', 'G-060RZGCFFW');
 </script>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Optimal Recall</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Optimal Recall v6</title>
 <link rel="icon" href="data:," />
 <script>
 window.MathJax = {
@@ -26,957 +26,507 @@ window.MathJax = {
 </script>
 <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 <style>
-
 :root{
   --paper:#fffdf8;
-  --paper-2:#fffaf2;
+  --paper-2:#fff8ec;
   --ink:#24324d;
-  --muted:#5f6f8b;
+  --muted:#62708a;
   --blue:#3d6cf4;
-  --blue-soft:#e8efff;
-  --pink:#f27ea5;
-  --pink-soft:#fff0f5;
-  --mint:#59c5af;
-  --mint-soft:#ecfaf5;
-  --orange:#f5a24d;
-  --gold:#f2d86c;
-  --line:#dbe5fb;
-  --warm-border:rgba(108,86,58,.15);
-  --warm-shadow:rgba(82,58,28,.16);
-  --shadow:0 18px 42px rgba(80,60,28,.18);
-  --shadow-sm:0 10px 22px rgba(80,60,28,.10);
-  --radius:26px;
-  --card-radius:2px;
+  --blue-dark:#2d54c9;
+  --pink:#e96f9c;
+  --mint:#4dbba3;
+  --yellow:#ffe66f;
+  --red:#c95272;
+  --warm-border:rgba(105,82,52,.17);
+  --shadow:0 18px 42px rgba(80,60,28,.16);
+  --shadow-sm:0 9px 22px rgba(80,60,28,.10);
+  --radius:24px;
 }
 *{box-sizing:border-box}
-html,body{min-height:100%}
+html{min-height:100%;scrollbar-gutter:stable}
 body{
+  min-height:100%;
   margin:0;
-  font-family:Inter,ui-rounded,"SF Pro Rounded","Segoe UI",system-ui,sans-serif;
+  padding:18px max(10px,env(safe-area-inset-right)) max(24px,env(safe-area-inset-bottom)) max(10px,env(safe-area-inset-left));
   color:var(--ink);
-  background-color:#b97a43;
+  font-family:Inter,ui-rounded,"SF Pro Rounded","Segoe UI",system-ui,sans-serif;
+  background-color:#c58a54;
   background-image:
-    radial-gradient(circle at 18% 22%, rgba(82,45,20,.20) 0 1px, transparent 1.8px),
-    radial-gradient(circle at 75% 64%, rgba(255,222,158,.18) 0 1px, transparent 1.7px),
-    radial-gradient(circle at 42% 78%, rgba(96,54,25,.15) 0 1.2px, transparent 2px),
-    radial-gradient(circle at 64% 18%, rgba(246,198,127,.16) 0 .9px, transparent 1.7px),
-    linear-gradient(22deg, rgba(78,43,20,.12) 0 1px, transparent 1px),
-    linear-gradient(112deg, rgba(255,226,170,.08) 0 1px, transparent 1px),
-    linear-gradient(135deg,#c9925a 0%, #ad6f3d 58%, #8e542f 100%);
-  background-size:13px 15px,17px 19px,23px 21px,29px 27px,34px 34px,42px 42px,auto;
-  background-position:0 0,7px 3px,13px 9px,5px 14px,0 0,11px 8px,0 0;
+    radial-gradient(circle at 18% 22%,rgba(82,45,20,.20) 0 1px,transparent 1.8px),
+    radial-gradient(circle at 75% 64%,rgba(255,222,158,.18) 0 1px,transparent 1.7px),
+    linear-gradient(135deg,#d19c65 0%,#b97948 58%,#9d6239 100%);
+  background-size:13px 15px,17px 19px,auto;
   display:grid;
   place-items:start center;
-  padding:18px 12px 28px;
 }
 body::before{
   content:"";
   position:fixed;
   inset:0;
   pointer-events:none;
-  background:
-    repeating-linear-gradient(11deg, rgba(255,236,190,.04) 0 3px, rgba(80,46,22,.045) 3px 10px),
-    repeating-linear-gradient(101deg, rgba(255,255,255,.018) 0 24px, rgba(66,39,20,.04) 24px 26px);
+  background:repeating-linear-gradient(11deg,rgba(255,236,190,.04) 0 3px,rgba(80,46,22,.045) 3px 10px);
   mix-blend-mode:multiply;
-  opacity:.72;
 }
 button,input{font:inherit}
-button{cursor:pointer}
+button{cursor:pointer;touch-action:manipulation}
+button:focus-visible,input:focus-visible{outline:3px solid rgba(61,108,244,.45);outline-offset:3px}
 [hidden]{display:none!important}
-
 .app{
   position:relative;
-  width:min(1180px,100%);
-  background:linear-gradient(180deg, rgba(249,245,236,.96), rgba(244,239,229,.97));
-  border:1px solid rgba(105,82,52,.16);
-  border-radius:34px;
-  box-shadow:0 34px 70px rgba(75,52,25,.22);
+  width:min(980px,100%);
   overflow:hidden;
+  border:1px solid rgba(105,82,52,.16);
+  border-radius:32px;
+  background:linear-gradient(180deg,rgba(249,245,236,.97),rgba(244,239,229,.98));
+  box-shadow:0 32px 68px rgba(75,52,25,.23);
 }
 .app::before{
   content:"";
   position:absolute;
   inset:0;
   pointer-events:none;
-  background:
-    radial-gradient(circle at top left, rgba(255,255,255,.72), transparent 26%),
-    radial-gradient(circle at bottom right, rgba(255,255,255,.18), transparent 22%);
+  background:radial-gradient(circle at top left,rgba(255,255,255,.75),transparent 28%);
 }
 .appInner{position:relative;z-index:1}
-
-.hero{
-  padding:34px 32px 18px 36px;
-  border-bottom:1px dashed rgba(109,86,57,.18);
-}
-.eyebrow{
-  margin:0 0 6px;
-  font-size:12px;
-  font-weight:800;
-  text-transform:uppercase;
-  letter-spacing:.18em;
-  color:#9c7b48;
-}
+.hero{padding:26px 30px 7px 34px}
 .hero h1{
   margin:0;
+  color:#ff1493;
   font-family:"Marker Felt","Comic Sans MS","Bradley Hand","Segoe Print",cursive;
-  color:var(--blue);
-  font-size:78px;
-  line-height:.95;
-  letter-spacing:0;
+  font-size:56px;
+  line-height:.96;
   font-weight:900;
   text-shadow:.6px 0 0 currentColor,0 .6px 0 currentColor,0 2px 0 rgba(36,50,77,.08);
 }
-.tagline{
-  margin:12px 0 0;
-  font-size:28px;
-  line-height:1.15;
-  font-weight:500;
-  letter-spacing:-.03em;
-  color:#6f6f6f;
-}
-.subtag{
-  margin:10px 0 0;
-  font-size:17px;
-  line-height:1.45;
-  color:var(--muted);
-  max-width:760px;
-}
-.screen{padding:22px 24px 28px 36px}
-
-.setupShell{
-  display:grid;
-  grid-template-columns:1fr;
-  align-items:start;
-  gap:18px;
-}
-.setupCard,
-.modal,
-.summaryPanel{
+.screen{padding:18px 26px 26px 34px}
+#introScreen{padding-top:8px}
+.setupShell{display:grid;gap:15px}
+.setupCard,.modal,.summaryPanel,.setReviewPanel{
   position:relative;
-  background:rgba(255,250,244,.92);
   border:1px solid var(--warm-border);
   border-radius:var(--radius);
+  background:rgba(255,250,244,.95);
   box-shadow:var(--shadow-sm);
 }
-.setupCard::before,
-.modal::before,
-.summaryPanel::before{
+.setupCard::before,.modal::before,.summaryPanel::before,.setReviewPanel::before{
   content:"";
   position:absolute;
-  top:-8px;
+  top:-7px;
   left:24px;
-  width:54px;
-  height:18px;
-  background:rgba(255,255,255,.45);
+  width:52px;
+  height:16px;
   border-radius:5px;
+  background:rgba(255,255,255,.48);
   transform:rotate(-3deg);
 }
-.setupCard{
-  padding:18px 18px 20px;
-}
-.howCard{
-  padding:0;
-  min-height:0;
-  border:none;
-  border-radius:0;
-  background:transparent;
-  box-shadow:none;
-}
+.howCard{padding:0;border:0;border-radius:0;background:transparent;box-shadow:none}
 .howCard::before{display:none}
-.howCard h2{
-  display:flex;
-  align-items:center;
-  margin:0;
-  min-height:34px;
-  padding:0 2px;
-  border-bottom:none;
-  color:#101010;
-  font-size:28px;
-  line-height:1;
-  letter-spacing:-.04em;
-}
 .instructionStack{
-  display:grid;
-  gap:0;
-  min-height:232px;
-  margin-top:0;
-  padding:22px 18px 58px 58px;
+  min-height:166px;
+  padding:18px 18px 25px 55px;
   border:1px solid rgba(113,92,67,.20);
   border-radius:8px;
   background:
-    linear-gradient(to right, transparent 0 38px, rgba(214,52,52,.78) 38px 42px, transparent 42px),
-    repeating-linear-gradient(to bottom, #fffef9 0 33px, rgba(61,108,244,.20) 33px 34px);
+    linear-gradient(to right,transparent 0 36px,rgba(214,52,52,.72) 36px 39px,transparent 39px),
+    repeating-linear-gradient(to bottom,#fffef9 0 31px,rgba(61,108,244,.18) 31px 32px);
   box-shadow:var(--shadow-sm);
 }
-.instructionCard{
-  display:flex;
-  align-items:center;
-  min-height:34px;
-  margin:0;
-  padding:0 2px;
-  border-radius:0;
-  background:transparent;
-  border:none;
-  color:#101010;
-  font-size:15px;
-  line-height:1.2;
-  font-weight:800;
-}
-.instructionCard strong{font-weight:800}
-.helperStrip{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  margin-top:16px;
-  padding:10px 12px;
-  border-radius:16px;
-  background:rgba(89,197,175,.1);
-  color:#2e6f62;
-  font-size:14px;
-  font-weight:700;
-}
-.sectionLabel{
-  display:inline-flex;
-  align-items:center;
-  gap:10px;
-  margin:0 0 8px;
-  font-size:15px;
-  font-weight:800;
-  color:#3a4760;
-}
-.deckChoiceCard .sectionLabel.needs-choice{
-  color:#d94d6f;
-}
-.deckChoiceCard .sectionLabel.is-alerting{
-  animation:deckInstructionJiggle .38s ease;
-}
-@keyframes deckInstructionJiggle{
-  0%,100%{transform:translateX(0)}
-  20%{transform:translateX(-5px)}
-  40%{transform:translateX(5px)}
-  60%{transform:translateX(-3px)}
-  80%{transform:translateX(3px)}
-}
-.optionGrid{
-  display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:10px;
-  align-items:stretch;
-}
-.optionGrid .optionLabel{height:100%}
-.optionGrid .optionFace{height:100%;min-height:96px}
+.instructionStack h2{margin:0 0 6px;color:#111;font-size:25px;line-height:1.1;letter-spacing:-.04em}
+.instructionCard{min-height:31px;margin:0;display:block;padding:6px 0 2px;color:#151515;font-size:14px;line-height:1.28;font-weight:760}
+.deckChoiceCard{padding:17px}
+.deckChoiceHead{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px}
+.sectionLabel{margin:0;color:#3a4760;font-size:15px;font-weight:850}
+.sectionLabel.needs-choice{color:#d34f71}
+.sectionLabel.is-alerting{animation:deckJiggle .38s ease}
+.resetProgressBtn{appearance:none;flex:0 0 auto;padding:5px 9px;border:1px solid rgba(112,92,67,.20);border-radius:9px;color:#6b5870;background:#fffaf3;font-size:10px;line-height:1.1;font-weight:850;box-shadow:0 3px 8px rgba(82,58,28,.06)}
+.resetProgressBtn:hover{border-color:rgba(211,79,113,.38);color:#a13f60;background:#fff5f8}
+@keyframes deckJiggle{0%,100%{transform:translateX(0)}20%{transform:translateX(-5px)}40%{transform:translateX(5px)}60%{transform:translateX(-3px)}80%{transform:translateX(3px)}}
+.optionGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
 .optionLabel{display:block;cursor:pointer}
 .optionLabel input{position:absolute;opacity:0;pointer-events:none}
 .optionFace{
   position:relative;
+  min-height:104px;
+  height:100%;
   display:grid;
+  align-content:start;
   gap:5px;
-  padding:12px 12px 12px 42px;
-  min-height:78px;
+  padding:12px 10px 11px 40px;
   border:1px solid rgba(113,92,67,.15);
-  border-radius:18px;
-  background:rgba(255,255,255,.86);
-  transition:transform .12s ease, box-shadow .12s ease, border-color .12s ease, background .12s ease;
+  border-radius:17px;
+  background:rgba(255,255,255,.88);
+  transition:transform .12s ease,box-shadow .12s ease,border-color .12s ease;
 }
 .optionLabel:hover .optionFace{transform:translateY(-1px)}
-.optionLabel input:checked + .optionFace{
-  border-color:rgba(61,108,244,.32);
-  background:linear-gradient(180deg,rgba(255,255,255,.98),rgba(250,248,243,.96));
-  box-shadow:0 0 0 3px rgba(61,108,244,.10), var(--shadow-sm);
-}
-.optionCheck{
-  position:absolute;
-  left:12px;top:12px;
-  width:22px;height:22px;
-  border-radius:999px;
-  border:2px solid rgba(61,108,244,.45);
-  background:#fff;
-  display:grid;place-items:center;
-}
-.optionCheck::after{
-  content:"";
-  width:9px;height:9px;
-  border-radius:999px;
-  background:transparent;
-}
+.optionLabel input:checked + .optionFace{border-color:rgba(61,108,244,.35);box-shadow:0 0 0 3px rgba(61,108,244,.10),var(--shadow-sm)}
+.optionCheck{position:absolute;left:11px;top:12px;width:21px;height:21px;display:grid;place-items:center;border:2px solid rgba(104,111,124,.52);border-radius:999px;background:#fff}
+.optionCheck::after{content:"";width:9px;height:9px;border-radius:50%;background:transparent}
 .optionLabel input:checked + .optionFace .optionCheck::after{background:var(--blue)}
-.optionTitle{
-  font-size:17px;
-  line-height:1.05;
-  font-weight:850;
-  letter-spacing:0;
-}
-.optionCopy{
-  font-size:12px;
-  line-height:1.25;
-  color:var(--muted);
-  font-weight:650;
-}
-.deckChoiceCard .optionTitle{color:#111}
-.deckChoiceCard .optionCheck{border-color:rgba(104,111,124,.52)}
-.deckChoiceCard .optionLabel input:checked + .optionFace .optionCheck::after{background:#697281}
-.jointChoiceGrid{
-  display:grid;
-  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
-  gap:14px;
-  align-items:start;
-}
-.choiceGroup{min-width:0}
-.choiceGroup .sectionLabel{margin-bottom:8px}
-.choiceGroup .modeGrid,
-.choiceGroup .pairGrid{margin-bottom:0}
-.modeGrid{
-  display:grid;
-  grid-template-columns:1fr;
-  gap:10px;
-  margin:0 0 14px;
-}
-.modeOption .optionTitle{color:#836034}
-.modeOption .optionFace{min-height:68px}
-.pairGrid{
-  display:grid;
-  grid-template-columns:1fr;
-  gap:10px;
-}
-.pairOption .optionFace{
-  min-height:58px;
-  padding-left:42px;
-}
-.pairOption .optionTitle{font-size:17px;color:var(--blue)}
-.actionsRow{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  margin-top:18px;
-  flex-wrap:wrap;
-}
-.startActions{
-  justify-content:center;
-  margin-top:0;
-}
-.modeLaunchGrid{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(128px,220px));
-  gap:12px;
-}
-.startActions .errorMsg{
-  grid-column:1 / -1;
-  margin:0;
-  text-align:center;
-}
-.startActions .errorMsg:empty{display:none}
-.errorMsg{
-  color:#c55d7d;
-  font-size:14px;
-  font-weight:700;
-  min-height:20px;
-  margin-right:auto;
-}
-.primaryBtn,
-.ghostBtn,
-.secondaryBtn{
+.optionTitle{padding-right:54px;color:#111;font-size:16px;line-height:1.08;font-weight:850}
+.optionTotal{position:absolute;top:12px;right:10px;color:#52617b;font-size:10px;line-height:1.1;font-weight:850}
+.optionCopy{color:var(--muted);font-size:11px;line-height:1.3;font-weight:650}
+.optionProgress{display:grid;gap:4px;margin-top:4px}
+.optionProgressText{color:#52617b;font-size:10px;line-height:1.1;font-weight:850}
+.optionProgressTrack{height:7px;overflow:hidden;border-radius:999px;background:#e6eaf2;box-shadow:inset 0 1px 2px rgba(52,69,103,.10)}
+.optionProgressFill{display:block;width:0;height:100%;border-radius:inherit;background:linear-gradient(90deg,#6f8eff,var(--blue));transition:width .2s ease}
+.actionsRow{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.modeLaunchGrid{display:grid;grid-template-columns:repeat(2,minmax(170px,250px));justify-content:center;gap:12px}
+.errorMsg{grid-column:1/-1;min-height:18px;margin:0;text-align:center;color:#c55d7d;font-size:14px;font-weight:750}
+.errorMsg:empty{display:none}
+.primaryBtn,.ghostBtn,.secondaryBtn{
   appearance:none;
-  border:none;
-  border-radius:18px;
-  padding:0 18px;
-  min-height:50px;
-  font-weight:800;
+  border:0;
+  border-radius:16px;
+  min-height:46px;
+  padding:0 17px;
+  font-weight:850;
   letter-spacing:-.01em;
 }
-.primaryBtn{
-  background:linear-gradient(180deg,var(--blue),#2956d6);
-  color:#fff;
-  box-shadow:0 10px 22px rgba(61,108,244,.26);
-}
-.ghostBtn{
-  background:linear-gradient(180deg,#fffefb,#fffaf2);
-  color:var(--ink);
-  border:1px solid rgba(112,92,67,.18);
-  box-shadow:0 10px 18px rgba(82,58,28,.10);
-}
-.secondaryBtn{
-  background:#f4f7ff;
-  color:var(--ink);
-}
-.primaryBtn:active,.ghostBtn:active,.secondaryBtn:active{transform:translateY(1px)}
-.startBtn{
-  min-width:172px;
-  min-height:58px;
-  font-size:22px;
-}
-.modeLaunchBtn{
-  min-height:60px;
-  display:grid;
-  align-content:center;
-  justify-items:center;
-  gap:3px;
-  padding:8px 14px;
-  font-size:20px;
-}
-.modeLaunchBtn small{
-  font-size:11px;
-  line-height:1.25;
-  font-weight:750;
-  opacity:.9;
-}
-.modeLaunchBtn[data-mode="prelim"]{
-  background:linear-gradient(180deg,#fff2a8,#f5de73);
-  color:#3556c4;
-  border:1px solid rgba(128,104,43,.18);
-  box-shadow:0 14px 24px rgba(82,58,28,.16);
-}
-.recallLaunchBtn{
-  background:linear-gradient(180deg,#d6f7e0,#aee9c4);
-  color:#3556c4;
-  border:1px solid rgba(46,111,98,.18);
-  box-shadow:0 14px 24px rgba(82,58,28,.16);
-}
+.primaryBtn{color:#fff;background:linear-gradient(180deg,var(--blue),var(--blue-dark));box-shadow:0 10px 20px rgba(61,108,244,.24)}
+.secondaryBtn{color:var(--ink);background:#edf2ff;border:1px solid rgba(61,108,244,.12)}
+.ghostBtn{color:var(--ink);background:linear-gradient(180deg,#fffefb,#fff8ef);border:1px solid rgba(112,92,67,.17);box-shadow:0 7px 15px rgba(82,58,28,.08)}
+.primaryBtn:active,.secondaryBtn:active,.ghostBtn:active{transform:translateY(1px)}
+.modeLaunchBtn{min-height:67px;display:grid;align-content:center;gap:3px;padding:9px 16px;font-size:20px}
+.modeLaunchBtn small{font-size:11px;line-height:1.25;font-weight:740;opacity:.92}
+.modeLaunchBtn[data-level="match"]{background:linear-gradient(180deg,#58c8aa,#349b7f);box-shadow:0 12px 22px rgba(52,155,127,.24)}
+.modeLaunchBtn[data-level="challenge"]{color:#111;background:linear-gradient(180deg,#fff2a8,#f4da64);border:1px solid rgba(128,104,43,.18);box-shadow:0 12px 22px rgba(82,58,28,.14)}
+.infoBtn{appearance:none;position:static;justify-self:end;width:44px;height:44px;margin:10px 8px 0 0;border:1px solid rgba(105,82,52,.17);border-radius:50%;display:grid;place-items:center;padding:0;color:var(--blue);background:linear-gradient(180deg,#fffefb,#fff8ef);font-size:23px;line-height:1;font-weight:900;box-shadow:0 8px 17px rgba(82,58,28,.13);transition:transform .12s ease,box-shadow .12s ease}
+.infoBtn:hover{transform:translateY(-1px);box-shadow:0 10px 19px rgba(82,58,28,.16)}
 
-#gameScreen{
-  display:grid;
-  gap:8px;
-  padding-top:18px;
-}
-.topbar{
-  --stat-note-w:152px;
-  position:relative;
-  z-index:3;
-  display:grid;
-  grid-template-columns:minmax(0,1fr) var(--stat-note-w) var(--stat-note-w);
-  justify-content:stretch;
-  align-items:flex-start;
-  gap:12px 14px;
-  padding:0;
+#gameScreen{display:grid;gap:11px;padding-top:17px}
+.topbar{display:grid;grid-template-columns:minmax(0,1fr) 76px 76px auto;gap:10px;align-items:start}
+.topCopy{min-width:0;display:grid;gap:5px}
+.gameHint{
+  height:64px;
   margin:0;
+  display:flex;
+  align-items:center;
+  padding:11px 15px;
+  overflow:hidden;
+  color:#344567;
+  background:linear-gradient(180deg,#fffdf8,#fbf3e8);
+  border:1px solid rgba(112,92,67,.16);
+  box-shadow:0 8px 16px rgba(82,58,28,.08);
+  font-size:15px;
+  line-height:1.25;
+  font-weight:850;
+  white-space:normal;
+  text-overflow:clip;
+  transform:rotate(-.25deg);
 }
-.topbar .statChip:nth-child(1){grid-column:2}
-.topbar .statChip:nth-child(2){grid-column:3}
+.feedback{height:27px;display:flex;align-items:center;padding:1px 4px 0;overflow:hidden;color:#496075;font-size:17px;line-height:22px;font-weight:800;white-space:nowrap;text-overflow:ellipsis}
+.feedback.good{color:#24705e}.feedback.bad{color:#a94364}.feedback.done{color:#2c5acb}
 .statChip{
   position:relative;
-  width:100%;
-  min-width:0;
-  min-height:82px;
-  border-radius:0;
-  background:linear-gradient(180deg,#fff2a8,#f5de73);
-  border:1px solid rgba(128,104,43,.18);
+  width:76px;
+  height:76px;
   display:grid;
   place-items:center;
-  padding:14px 16px;
+  align-content:center;
+  padding:9px 6px 11px;
   text-align:center;
-  box-shadow:0 14px 24px rgba(82,58,28,.16);
-  transform:rotate(-1.2deg);
+  border:1px solid rgba(128,104,43,.14);
+  border-top-color:rgba(126,98,33,.26);
+  border-radius:2px;
+  background:#fbeaa2;
+  box-shadow:1px 10px 13px rgba(82,58,28,.17),0 2px 4px rgba(82,58,28,.08);
+  transform:rotate(-.5deg);
 }
-.statChip:nth-child(2){
-  background:linear-gradient(180deg,#d6f7e0,#aee9c4);
-  border-color:rgba(46,111,98,.18);
-  transform:rotate(.9deg);
-}
+.statChip.reward{background:#c9efd4;border-color:rgba(46,111,98,.14);border-top-color:rgba(46,111,98,.25);transform:rotate(.7deg)}
 .statChip::after{
   content:"";
   position:absolute;
-  top:0;right:0;
-  width:0;height:0;
-  border-style:solid;
-  border-width:0 18px 18px 0;
-  border-color:transparent rgba(90,67,34,.10) transparent transparent;
+  right:-1px;
+  bottom:-1px;
+  width:20px;
+  height:20px;
+  background:linear-gradient(315deg,rgba(0,0,0,.12),transparent 57%);
+  filter:drop-shadow(2px 3px 2px rgba(58,43,24,.10));
+  pointer-events:none;
 }
-.statChip::before{
-  content:"";
-  position:absolute;
-  top:8px;
-  left:50%;
-  transform:translateX(-50%);
-  width:36px;
-  height:10px;
-  border-radius:999px;
-  background:rgba(255,255,255,.46);
-}
-.statChip span{
-  display:block;
-  font-size:11px;
-  line-height:1;
-  text-transform:uppercase;
-  letter-spacing:.12em;
-  color:#726247;
-  font-weight:800;
-}
-.statChip strong{
-  display:block;
-  margin-top:9px;
-  font-size:33px;
-  line-height:1;
-  color:#3556c4;
-  font-variant-numeric:tabular-nums;
-}
-.topActions{
-  grid-column:1;
-  grid-row:1;
-  display:grid;
-  justify-items:center;
-  align-content:start;
-  gap:12px;
-  justify-self:start;
-  align-self:start;
-  width:min(470px,100%);
-  min-width:0;
-  max-width:100%;
-  margin:0;
-  padding:0;
-}
-.gameHint{
-  position:relative;
-  justify-self:stretch;
-  margin:0;
-  min-height:58px;
-  padding:17px 20px 15px;
-  background:linear-gradient(180deg,#fffdf8,#fbf3e8);
-  border:1px solid rgba(112,92,67,.16);
-  box-shadow:0 12px 24px rgba(82,58,28,.10);
-  color:#344567;
-  font-size:18px;
-  line-height:1.25;
-  font-weight:850;
-  transform:rotate(-.4deg);
-}
-.gameHint::after{
-  content:"";
-  position:absolute;
-  top:0;
-  right:0;
-  width:0;
-  height:0;
-  border-style:solid;
-  border-width:0 18px 18px 0;
-  border-color:transparent rgba(90,67,34,.08) transparent transparent;
-}
-#newBtn{
-  justify-self:center;
-  background:linear-gradient(180deg,#f27ea5,#de5d96);
-  color:#fff;
-  border-color:rgba(181,65,122,.24);
-  box-shadow:0 10px 18px rgba(222,93,150,.18);
-}
-.boardActions{
-  display:flex;
-  justify-content:flex-end;
-  margin-top:16px;
-}
-.deckTags{display:none}
-.deckTag{
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  min-height:34px;
-  padding:0 14px;
-  border-radius:999px;
-  background:rgba(255,250,243,.84);
-  border:1px solid rgba(111,91,64,.14);
-  color:#5f684f;
-  font-size:13px;
-  font-weight:800;
-  box-shadow:0 6px 14px rgba(82,58,28,.06);
-}
-.deckTag::before{content:"";width:8px;height:8px;border-radius:999px;background:var(--mint)}
-.feedback{
-  min-height:0;
-  display:none;
-  text-align:center;
-  padding:0 4px;
-  color:#2f6c60;
-  background:transparent;
-  border:none;
-  box-shadow:none;
-  border-radius:0;
-  font-size:13px;
-  line-height:1.2;
-  font-weight:800;
-  white-space:nowrap;
-}
-.feedback.good{background:transparent;color:#216f5d}
-.feedback.bad{background:transparent;color:#b14d74;border-color:transparent}
-.feedback.done{background:transparent;color:#2c5acb}
-.board{
-  display:grid;
-  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
-  gap:18px;
-  margin-top:4px;
-  position:relative;
-}
-.board::before{
-  content:"";
-  position:absolute;
-  top:34px;
-  bottom:0;
-  left:50%;
-  border-left:2px dashed rgba(76,58,36,.42);
-  transform:translateX(-50%);
-}
-.sidePanel{
-  min-width:0;
-  padding:4px 0 0;
-  background:transparent;
-  border:none;
-  box-shadow:none;
-}
-.meaningPanel{
-  border-left:none;
-  padding-left:0;
-}
-.sideHead{
-  display:flex;
-  align-items:flex-end;
-  justify-content:flex-end;
-  gap:12px;
-  margin-bottom:8px;
-}
-.sidePanel:first-child .sideHead{
-  justify-content:flex-start;
-}
-.sideHead h2{
-  margin:0;
-  font-size:24px;
-  line-height:1;
-  letter-spacing:-.05em;
-}
-.sideHead span{
-  font-size:11px;
-  text-transform:uppercase;
-  letter-spacing:.12em;
-  color:var(--muted);
-  font-weight:800;
-}
-.sidePanel:first-child .sideHead span{color:var(--blue)}
-.meaningPanel .sideHead span{color:var(--pink)}
-.sidePanel:first-child .sideHead h2{color:var(--blue)}
-.meaningPanel .sideHead h2{color:var(--pink)}
+.statChip span{display:block;color:#726247;font-size:9px;line-height:1;text-transform:uppercase;letter-spacing:.1em;font-weight:850}
+.statChip strong{display:block;margin-top:7px;color:#3556c4;font-size:25px;line-height:1;font-variant-numeric:tabular-nums}
+.gameControls{display:flex;align-items:center;justify-content:flex-end;gap:7px;flex-wrap:wrap}
+.gameControls .ghostBtn{min-height:40px;padding:0 11px;font-size:12px;box-shadow:none}
+#newBtn{color:#fff;background:linear-gradient(180deg,#ef80a8,#d95b8d);border-color:transparent}
 
-.cardGrid{
-  display:grid;
-  gap:10px;
-  grid-template-columns:1fr;
+.boardShell{position:relative}
+.boardShell::after{
+  content:"";
+  position:absolute;
+  z-index:6;
+  inset:0;
+  border-radius:18px;
+  background:rgba(101,204,178,.22);
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .18s ease;
 }
-.cardGrid.count3,
-.cardGrid.count4,
-.cardGrid.count5{grid-template-columns:1fr}
-.memoryCard{
+.boardShell.is-set-cleared::after{opacity:1}
+.board{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px}
+.board::before{content:"";position:absolute;top:31px;bottom:3px;left:50%;border-left:2px dashed rgba(76,58,36,.38);transform:translateX(-50%)}
+.sidePanel{position:relative;min-width:0;padding-top:2px}
+.termPanel{display:grid;grid-template-rows:auto minmax(0,1fr)}
+.sideHead{height:28px;display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.termPanel .sideHead{justify-content:flex-start}
+.meaningPanel .sideHead{justify-content:flex-end}
+.sideHeadLabel{color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.11em;font-weight:850;white-space:nowrap}
+.stripGrid{--strip-h:48px;display:grid;align-content:start;gap:7px;min-width:0;grid-auto-rows:var(--strip-h)}
+.termPanel .stripGrid{align-content:center}
+.strip{
+  --tilt:0deg;
+  --shift:0px;
   position:relative;
-  padding:0;
-  border:none;
-  background:transparent;
-  perspective:1200px;
-  width:100%;
-  aspect-ratio:2.15 / 1;
-  transition:transform .12s ease;
-}
-.memoryCard:hover{transform:translateY(-1px)}
-.cardInner{
-  position:absolute;
-  inset:0;
-  transform-style:preserve-3d;
-  transition:transform .36s cubic-bezier(.2,.8,.2,1);
-}
-.memoryCard.is-flipped .cardInner,
-.memoryCard.is-matched .cardInner{transform:rotateY(180deg)}
-.face{
-  position:absolute;
-  inset:0;
-  backface-visibility:hidden;
-  border-radius:var(--card-radius);
-  overflow:hidden;
-  border:1px solid rgba(113,92,67,.20);
-  box-shadow:0 10px 18px rgba(84,62,32,.11);
-}
-.back{
-  display:grid;
-  place-items:center;
-}
-.memoryCard[data-side="term"] .back,
-.memoryCard[data-side="term"] .front{
-  background:
-    linear-gradient(to right, transparent 0 22px, rgba(61,108,244,.18) 22px 23px, transparent 23px),
-    repeating-linear-gradient(to bottom, #fffef9 0 25px, rgba(61,108,244,.15) 25px 26px);
-}
-.memoryCard[data-side="meaning"] .back,
-.memoryCard[data-side="meaning"] .front{
-  background:
-    linear-gradient(to right, transparent 0 22px, rgba(242,126,165,.18) 22px 23px, transparent 23px),
-    repeating-linear-gradient(to bottom, #fffef9 0 25px, rgba(242,126,165,.15) 25px 26px);
-}
-.backEmblem{
-  width:48px;height:48px;
-  display:grid;place-items:center;
-  border-radius:10px;
-  background:rgba(255,255,255,.84);
-  border:1px solid rgba(36,50,77,.08);
-  box-shadow:0 6px 12px rgba(82,58,28,.08);
-}
-.memoryCard[data-side="term"] .backEmblem{color:var(--blue)}
-.memoryCard[data-side="meaning"] .backEmblem{color:var(--pink)}
-.backEmblem svg{width:24px;height:24px}
-.front{
-  transform:rotateY(180deg);
-  position:absolute;
-  inset:0;
+  isolation:isolate;
+  width:calc(100% - 4px);
+  height:var(--strip-h);
   display:flex;
   align-items:center;
   justify-content:center;
-  padding:12px 14px 12px 24px;
+  margin-left:2px;
+  padding:7px 13px 7px 27px;
+  overflow:visible;
+  border:1px solid rgba(113,92,67,.21);
+  color:var(--ink);
+  box-shadow:0 6px 13px rgba(84,62,32,.10);
+  transform:translateX(var(--shift)) rotate(var(--tilt));
+  transition:transform .16s ease,opacity .22s ease,box-shadow .16s ease;
+  clip-path:polygon(8px 0,100% 0,100% 100%,8px 100%,4px 93%,9px 83%,5px 72%,10px 61%,4px 49%,9px 37%,5px 25%,10px 13%);
 }
-.front::before{
+.strip[data-side="left"]{
+  background:
+    radial-gradient(circle at 9px 13px,#f0ede4 0 2.2px,rgba(95,91,83,.18) 2.5px 3.2px,transparent 3.5px),
+    radial-gradient(circle at 9px calc(100% - 12px),#f0ede4 0 2.2px,rgba(95,91,83,.18) 2.5px 3.2px,transparent 3.5px),
+    linear-gradient(to right,transparent 0 21px,rgba(216,74,80,.55) 21px 22px,transparent 22px),
+    repeating-linear-gradient(to bottom,#fffef9 0 22px,rgba(61,108,244,.15) 22px 23px);
+}
+.strip[data-side="right"]{
+  background:
+    radial-gradient(circle at 9px 13px,#f0ede4 0 2.2px,rgba(95,91,83,.18) 2.5px 3.2px,transparent 3.5px),
+    radial-gradient(circle at 9px calc(100% - 12px),#f0ede4 0 2.2px,rgba(95,91,83,.18) 2.5px 3.2px,transparent 3.5px),
+    linear-gradient(to right,transparent 0 21px,rgba(216,74,80,.55) 21px 22px,transparent 22px),
+    repeating-linear-gradient(to bottom,#fffef9 0 22px,rgba(233,111,156,.14) 22px 23px);
+}
+.strip:nth-child(4n+1){--shift:-2px;--tilt:-.22deg}
+.strip:nth-child(4n+2){--shift:2px;--tilt:.18deg;clip-path:polygon(9px 0,100% 0,100% 100%,6px 100%,10px 90%,4px 78%,9px 66%,5px 55%,10px 42%,4px 31%,9px 17%,5px 8%)}
+.strip:nth-child(4n+3){--shift:-1px;--tilt:.27deg;clip-path:polygon(6px 0,100% 0,100% 100%,10px 100%,5px 91%,9px 80%,4px 68%,10px 58%,5px 45%,9px 34%,4px 22%,8px 10%)}
+.strip:nth-child(4n){--shift:1px;--tilt:-.12deg;clip-path:polygon(10px 0,100% 0,100% 100%,7px 100%,4px 88%,10px 76%,5px 65%,9px 53%,4px 41%,10px 29%,5px 16%,9px 7%)}
+.strip::before{
   content:"";
   position:absolute;
-  top:0;left:0;
-  width:0;height:0;
-  border-top:18px solid transparent;
-  border-right:18px solid transparent;
+  z-index:-1;
+  left:22px;
+  right:8px;
+  top:48%;
+  height:58%;
+  border-radius:12px 4px 9px 3px;
+  background:linear-gradient(96deg,rgba(255,230,111,.28),rgba(255,230,111,.90) 15%,rgba(255,230,111,.76) 86%,rgba(255,230,111,.18));
+  opacity:0;
+  transform:translateY(-50%) rotate(-.7deg) scaleX(.92);
+  transition:opacity .13s ease,transform .13s ease;
 }
-.memoryCard[data-side="term"] .front::before{border-top-color:rgba(61,108,244,.90)}
-.memoryCard[data-side="meaning"] .front::before{border-top-color:rgba(242,126,165,.90)}
-.cardText{
-  width:100%;
+.strip:hover{transform:translateX(var(--shift)) rotate(var(--tilt));box-shadow:0 8px 16px rgba(84,62,32,.14)}
+.strip.is-selected::before{opacity:1;transform:translateY(-50%) rotate(-.7deg) scaleX(1)}
+.strip[data-side="right"].is-selected::before{background:linear-gradient(96deg,rgba(255,224,83,.32),rgba(255,224,83,.96) 15%,rgba(255,224,83,.84) 86%,rgba(255,224,83,.22))}
+.strip.is-selected{box-shadow:0 7px 16px rgba(84,62,32,.13),0 0 0 2px rgba(239,186,40,.28)}
+.strip.is-wrong{box-shadow:0 0 0 3px rgba(201,82,114,.28),0 7px 16px rgba(84,62,32,.13);animation:stripShake .26s ease}
+.strip.is-correct{box-shadow:0 0 0 3px rgba(77,187,163,.32),0 7px 16px rgba(84,62,32,.13)}
+.strip.is-matched{opacity:.28;pointer-events:none}
+.matchStamp{position:absolute;z-index:3;top:3px;right:5px;width:19px;height:19px;display:grid;place-items:center;border:1.5px solid currentColor;border-radius:50%;color:#253a66;background:rgba(255,255,255,.94);font-size:11px;line-height:1;font-weight:950;box-shadow:0 1px 3px rgba(40,48,67,.18)}
+.stripText{
+  position:relative;
+  z-index:1;
+  min-width:0;
+  max-width:100%;
   display:block;
-  text-align:center;
-  padding:10px 16px 10px 22px;
-  font-size:clamp(15px,.92rem + .18vw,19px);
-  line-height:1.32;
-  font-weight:760;
   color:var(--ink);
-  text-wrap:balance;
-  overflow-wrap:normal;
-  word-break:normal;
-  hyphens:none;
-}
-.memoryCard[data-side="term"] .cardText{
-  font-size:clamp(16px,.96rem + .2vw,20px);
-  font-weight:700;
-}
-.cardText mjx-container,
-.feedback mjx-container,
-.summaryDecks mjx-container{
-  max-width:100%;
-  overflow:visible!important;
-  white-space:normal!important;
-}
-.cardText mjx-container{margin:0 .14em}
-.cardText mjx-container svg,
-.feedback mjx-container svg,
-.summaryDecks mjx-container svg{
-  max-width:100%;
-  height:auto!important;
-}
-.memoryCard.is-selected .face.front{
-  box-shadow:0 0 0 4px rgba(89,197,175,.42), 0 0 22px rgba(89,197,175,.48), 0 14px 28px rgba(84,62,32,.18);
-}
-.memoryCard.is-matched .face.front{
-  opacity:.56;
-  box-shadow:0 6px 10px rgba(84,62,32,.06);
-}
-.memoryCard.wrong .face.front{animation:shake .28s ease}
-@keyframes shake{
-  20%{transform:rotateY(180deg) translateX(-4px)}
-  40%{transform:rotateY(180deg) translateX(4px)}
-  60%{transform:rotateY(180deg) translateX(-3px)}
-  80%{transform:rotateY(180deg) translateX(2px)}
-}
-@keyframes matchPulse{
-  0%{box-shadow:0 0 0 0 rgba(89,197,175,.75),0 12px 24px rgba(84,62,32,.14)}
-  35%{box-shadow:0 0 0 10px rgba(89,197,175,0),0 0 30px rgba(89,197,175,.60),0 16px 28px rgba(84,62,32,.18)}
-  100%{box-shadow:0 0 0 4px rgba(89,197,175,.40),0 0 26px rgba(89,197,175,.60),0 14px 26px rgba(84,62,32,.18)}
-}
-@keyframes haloFade{
-  0%{opacity:.95;transform:scale(.96)}
-  100%{opacity:0;transform:scale(1.08)}
-}
-.overlay{
-  position:fixed;
-  inset:0;
-  z-index:70;
-  background:rgba(45,34,21,.28);
-  display:grid;
-  place-items:center;
-  padding:20px;
-  backdrop-filter:blur(4px);
-}
-.summaryOverlay{z-index:80}
-.modal,
-.summaryPanel{
-  width:min(480px,100%);
-  padding:22px;
-}
-.modal h2,
-.summaryPanel h2{
-  margin:0;
-  font-size:32px;
-  line-height:.95;
-  letter-spacing:-.06em;
-}
-.modal p,
-.summaryPanel p{
-  margin:12px 0 0;
-  color:#4b5873;
-  font-size:15px;
-  line-height:1.45;
-}
-.summaryBadge{
-  width:58px;height:58px;
-  display:grid;place-items:center;
-  border-radius:18px;
-  background:rgba(89,197,175,.12);
-  color:var(--mint);
-  margin-bottom:14px;
-}
-.summaryBadge svg{width:30px;height:30px}
-.modalActions{
-  display:flex;
-  justify-content:flex-end;
-  gap:10px;
-  flex-wrap:wrap;
-  margin-top:18px;
-}
-.summaryStats{
-  display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:12px;
-  margin-top:16px;
-}
-.summaryStat{
-  padding:14px 12px;
-  border-radius:18px;
-  background:#fffaf2;
-  border:1px solid rgba(111,91,64,.14);
-  text-align:center;
-}
-.summaryStat span{
-  display:block;
-  font-size:11px;
-  line-height:1;
-  text-transform:uppercase;
-  letter-spacing:.12em;
-  color:var(--muted);
-  font-weight:800;
-}
-.summaryStat strong{
-  display:block;
-  margin-top:8px;
-  font-size:26px;
-  line-height:1;
-  color:var(--blue);
-}
-.summaryDecks{
-  margin-top:14px;
-  padding:12px 14px;
-  border-radius:18px;
-  background:#fff8ee;
-  color:#7a5928;
   font-size:14px;
-  line-height:1.45;
+  line-height:1.12;
+  font-weight:760;
+  text-align:center;
+  white-space:nowrap;
 }
-.summaryActions{
-  display:flex;
-  justify-content:flex-end;
-  gap:10px;
-  flex-wrap:wrap;
-  margin-top:18px;
-}
-.mjx-container{max-width:100%;overflow:visible}
-.cardText mjx-container{font-size:100%!important}
-.feedback mjx-container,.summaryDecks mjx-container{font-size:100%!important}
-.memoryCard.prelim-card .cardInner{transform:rotateY(180deg)}
+.strip[data-side="left"] .stripText{font-weight:790}
+.strip.tight .stripText{font-size:13px}
+.strip.tighter .stripText{font-size:12px;letter-spacing:-.01em}
+.strip.static{cursor:default;transform:none!important;box-shadow:0 4px 10px rgba(84,62,32,.08)}
+.strip.static:hover{transform:none;box-shadow:0 4px 10px rgba(84,62,32,.08)}
+.strip mjx-container,.summaryPanel mjx-container,.recapFeedback mjx-container,.recapChoice mjx-container{margin:0 .08em!important;max-width:100%;overflow:visible!important}
+.strip mjx-container svg,.summaryPanel mjx-container svg,.recapFeedback mjx-container svg,.recapChoice mjx-container svg{height:auto!important;max-width:100%}
+@keyframes stripShake{20%{transform:translateX(-4px) rotate(var(--tilt))}40%{transform:translateX(4px) rotate(var(--tilt))}60%{transform:translateX(-3px) rotate(var(--tilt))}80%{transform:translateX(2px) rotate(var(--tilt))}}
 
-@media (max-width: 1040px){
-  .screen,.hero{padding-left:24px;padding-right:20px}
-  .setupShell{grid-template-columns:1fr}
-  .summaryStats{grid-template-columns:1fr}
+.recapPhase{
+  height:470px;
+  padding:17px 18px 18px;
+  border:1px solid rgba(111,91,64,.15);
+  border-radius:20px;
+  background:rgba(255,250,244,.95);
+  box-shadow:var(--shadow-sm);
 }
-@media (max-width: 720px){
-  body{padding:10px 8px 18px}
-  .hero h1{font-size:56px}
-  .tagline{font-size:22px}
-  .screen{padding-top:18px}
-  .optionGrid,
-  .pairGrid,
-  .modeGrid,
-  .jointChoiceGrid{grid-template-columns:1fr}
-  .topbar{
-    --stat-note-w:168px;
-    position:static;
-    grid-template-columns:minmax(0,1fr) var(--stat-note-w) var(--stat-note-w);
-    justify-content:stretch;
-    gap:10px;
-    align-items:start;
-    margin-bottom:12px;
-  }
-  #gameScreen{padding-top:18px}
-  .topbar .statChip:nth-child(1){grid-column:2}
-  .topbar .statChip:nth-child(2){grid-column:3}
-  .topActions{grid-column:1;grid-row:1}
-  .gameHint{
-    min-height:52px;
-    padding:13px 14px 12px;
-    font-size:15px;
-  }
-  .statChip{
-    min-width:0;
-    min-height:80px;
-    padding:12px 8px;
-  }
-  .statChip span{
-    font-size:8px;
-    letter-spacing:.08em;
-  }
-  .statChip strong{
-    margin-top:7px;
-    font-size:28px;
-  }
-  #newBtn{
-    min-height:52px;
-    padding:0 14px;
-  }
-  .cardGrid.count3,
-  .cardGrid.count4,
-  .cardGrid.count5{grid-template-columns:1fr}
-  .memoryCard{aspect-ratio:2 / 1}
-  .cardText{font-size:16px;padding:10px 14px 10px 20px}
-  .memoryCard[data-side="term"] .cardText{font-size:18px}
-  .modal,
-  .summaryPanel{padding:20px 18px}
+.recapHeader{margin-bottom:12px}
+.recapHeader h2{margin:0;font-size:31px;line-height:1;letter-spacing:-.05em}
+.recapHeader>p{margin:6px 0 0;color:var(--muted);font-size:13px;line-height:1.35;font-weight:650}
+.recapProgressRow{display:grid;grid-template-columns:auto minmax(150px,1fr);gap:12px;align-items:center;margin-top:10px}
+.recapProgressText{display:flex;gap:10px;color:#42516d;font-size:11px;font-weight:850;white-space:nowrap}
+.recapTrack{height:9px;overflow:hidden;border-radius:999px;background:#e7e0d5}
+.recapFill{height:100%;width:0;border-radius:inherit;background:linear-gradient(90deg,var(--mint),var(--blue));transition:width .2s ease}
+.recapQuestion{width:min(690px,100%);margin:0 auto;padding:1px 0 0}
+.recapDirection{display:block;margin:0 0 6px;color:#596780;font-size:11px;text-transform:uppercase;letter-spacing:.09em;font-weight:900}
+.recapPrompt{height:60px;width:100%;margin:0 0 10px;padding-top:9px;padding-bottom:9px}
+.recapPrompt .stripText{font-size:17px}
+.recapPrompt.tight .stripText{font-size:16px}.recapPrompt.tighter .stripText{font-size:15px}
+.recapChoices{display:grid;gap:7px;margin-left:24px}
+.recapChoice{
+  width:calc(100% - 2px);
+  height:44px;
+  display:grid;
+  grid-template-columns:28px minmax(0,1fr);
+  align-items:center;
+  gap:8px;
+  padding:0 12px 0 9px;
+  border:1px solid rgba(80,96,122,.20);
+  border-radius:10px;
+  color:var(--ink);
+  background:#fff;
+  box-shadow:0 4px 10px rgba(84,62,32,.07);
+  text-align:left;
 }
-@media (max-width: 560px){
-  .topbar{
-    grid-template-columns:minmax(0,1fr) minmax(0,1fr);
-  }
-  .topbar .statChip:nth-child(1){grid-column:1;grid-row:2}
-  .topbar .statChip:nth-child(2){grid-column:2;grid-row:2}
-  .topActions{
-    grid-column:1 / -1;
-    grid-row:1;
-    width:min(470px,100%);
-  }
-}
-@media (max-width: 460px){
-  .hero,.screen{padding-left:18px;padding-right:14px}
-  .topbar{
-    --stat-note-w:108px;
-    gap:8px;
-  }
-  .topActions{max-width:100%;gap:10px}
-  .gameHint{font-size:13px;padding:11px 12px 10px}
-  .feedback{white-space:normal}
-  #newBtn{
-    min-height:48px;
-    padding:0 10px;
-  }
-  .statChip strong{font-size:24px}
-  .statChip span{font-size:7px}
-  .cardGrid.count3,
-  .cardGrid.count4,
-  .cardGrid.count5{grid-template-columns:1fr}
-  .memoryCard{aspect-ratio:1.75 / 1}
-  .sideHead{align-items:flex-start;flex-direction:column}
-  .cardText{font-size:15px;padding:10px 12px 10px 18px}
-  .memoryCard[data-side="term"] .cardText{font-size:17px}
-}
+.recapChoice:hover{border-color:rgba(61,108,244,.32);box-shadow:0 5px 12px rgba(84,62,32,.10)}
+.recapChoiceTag{width:23px;height:23px;display:grid;place-items:center;border:1.5px solid #8090aa;border-radius:50%;color:#52617b;font-size:11px;line-height:1;font-weight:900}
+.recapChoiceText{min-width:0;font-size:14px;line-height:1.12;font-weight:760;text-align:left;white-space:nowrap}
+.recapChoice.tight .recapChoiceText{font-size:13px}.recapChoice.tighter .recapChoiceText{font-size:12px;letter-spacing:-.01em}
+.recapChoice.is-answer{border-color:rgba(77,187,163,.68);box-shadow:0 0 0 3px rgba(77,187,163,.30),0 7px 15px rgba(84,62,32,.10);background:#f4fcf9}
+.recapChoice.is-wrong-answer{border-color:rgba(201,82,114,.60);box-shadow:0 0 0 3px rgba(201,82,114,.26),0 7px 15px rgba(84,62,32,.10);background:#fff7f9}
+.recapFeedback{height:64px;margin-top:9px;padding:9px 12px;overflow:auto;border-radius:14px;color:#42516d;background:rgba(255,255,255,.80);border:1px solid rgba(111,91,64,.12);font-size:13px;line-height:1.35;font-weight:760}
+.recapFeedback.good{color:#216f5d;background:#edfaf6}.recapFeedback.bad{color:#9d3e5d;background:#fff0f5}
+.recapContinueRow{height:43px;display:flex;align-items:end;justify-content:flex-end;margin-top:5px}
+.recapComplete{height:370px;display:grid;place-items:center;text-align:center;padding:24px}
+.recapCompleteCard{width:min(520px,100%);padding:28px;border-radius:20px;background:rgba(255,255,255,.86);border:1px solid rgba(111,91,64,.14);box-shadow:var(--shadow-sm)}
+.recapCompleteBadge{font-size:52px;line-height:1}
+.recapComplete h2{margin:10px 0 0;font-size:31px;line-height:1;letter-spacing:-.04em}
+.recapComplete p{margin:10px 0 18px;color:#4f5f78;line-height:1.4;font-weight:680}
 
+.overlay{position:fixed;inset:0;z-index:70;display:grid;place-items:safe center;padding:18px;background:rgba(45,34,21,.30);backdrop-filter:blur(4px)}
+.confirmOverlay,.resetProgressOverlay{z-index:80}.setReviewOverlay{z-index:85}.summaryOverlay{z-index:90}
+.modal,.setReviewPanel,.summaryPanel{width:min(560px,100%);max-height:calc(100dvh - 36px);overflow-y:auto;padding:21px}
+.modal h2,.setReviewPanel h2,.summaryPanel h2{margin:0;font-size:30px;line-height:1;letter-spacing:-.05em}
+.modal p,.setReviewPanel p,.summaryPanel p{margin:10px 0 0;color:#4b5873;font-size:14px;line-height:1.45}
+.modalActions{display:flex;justify-content:flex-end;gap:9px;flex-wrap:wrap;margin-top:17px}
+.infoDialog{width:min(560px,100%)}
+.infoList{display:grid;gap:11px;margin-top:15px}
+.infoList p{margin:0}
+.infoList strong{color:var(--ink)}
+.infoList a{color:var(--blue);text-decoration-thickness:1.5px;text-underline-offset:2px}
+.infoList a:hover{text-decoration-thickness:2px}
+.resetDeckList{display:grid;gap:8px;margin-top:15px}
+.resetDeckChoice{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid rgba(111,91,64,.14);border-radius:13px;color:var(--ink);background:#fffdf8;font-size:13px;font-weight:800;cursor:pointer}
+.resetDeckChoice input{width:18px;height:18px;margin:0;accent-color:var(--blue)}
+.resetWarning{padding:10px 12px;border-radius:13px;color:#8f3b59!important;background:#fff1f5;border:1px solid rgba(201,82,114,.18);font-weight:750}
+.dangerBtn{background:linear-gradient(180deg,#e96489,#c94f72);box-shadow:0 10px 20px rgba(201,79,114,.22)}
+.dangerBtn:disabled{cursor:not-allowed;opacity:.42;box-shadow:none}
+.setReviewActions{position:sticky;bottom:0;z-index:2;display:flex;justify-content:flex-end;gap:9px;flex-wrap:wrap;margin:15px -21px -21px;padding:11px 21px 21px;border-top:1px solid rgba(111,91,64,.13);background:rgba(255,250,244,.97);backdrop-filter:blur(5px)}
+.setReviewPanel{width:min(760px,100%)}
+.setReviewTop{display:flex;align-items:flex-start;gap:13px}
+.setReviewBadge{flex:0 0 auto;width:48px;height:48px;display:grid;place-items:center;border-radius:16px;background:#eaf9f4;color:#2e7a68;font-size:27px}
+.setReviewTopic{margin-top:6px;color:#7b6034;font-size:12px;font-weight:850}
+.setPairGrid{display:grid;gap:9px;margin-top:15px}
+.reviewPair{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:7px 10px;padding:9px;border-radius:15px;background:#fffdf8;border:1px solid rgba(111,91,64,.12)}
+.reviewPair .strip{--strip-h:40px;height:var(--strip-h);padding-top:5px;padding-bottom:5px}
+.reviewPair .stripText{font-size:12px}
+.decoyReveal{margin-top:14px;padding:12px;border-radius:15px;background:#fff6e6;border:1px solid rgba(191,137,56,.20)}
+.decoyReveal h3{margin:0 0 8px;color:#76551f;font-size:15px}
+.decoyItem{display:grid;grid-template-columns:minmax(150px,auto) 1fr;gap:9px;align-items:center;padding:7px 0;border-top:1px dashed rgba(133,94,36,.18)}
+.decoyItem:first-of-type{border-top:0}
+.decoyItem .strip{--strip-h:38px;height:var(--strip-h)}
+.decoyExplain{color:#6f5b39;font-size:11px;line-height:1.35;font-weight:760}
+.decoyCommon{display:block;margin-top:3px;color:#86516a;font-weight:850}
+.decoyCelebration{margin-top:11px;padding:9px 11px;border-radius:13px;color:#216f5d;background:#eaf9f4;font-size:12px;font-weight:850}
+
+.summaryPanel{width:min(820px,100%);padding-bottom:0}
+.summaryBadge{width:46px;height:46px;display:grid;place-items:center;margin-bottom:8px;border-radius:17px;background:#eaf9f4;color:#2e7a68;font-size:27px}
+.summaryStats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin-top:10px}
+.summaryStat{padding:10px 9px;border-radius:15px;text-align:center;background:#fffaf2;border:1px solid rgba(111,91,64,.13)}
+.summaryStat span{display:block;color:var(--muted);font-size:9px;text-transform:uppercase;letter-spacing:.11em;font-weight:850}
+.summaryStat strong{display:block;margin-top:6px;color:var(--blue);font-size:23px;line-height:1}
+.roundCards{margin-top:10px;padding:11px;border-radius:17px;background:#fffdf8;border:1px solid rgba(111,91,64,.13)}
+.summarySub{margin-top:5px!important;color:#758198!important;font-size:12px!important;line-height:1.3!important;font-weight:720}
+.roundCards>h3{margin:0 0 9px;font-size:17px;line-height:1.1;letter-spacing:-.025em}
+.roundCardGrid{display:grid;grid-template-columns:1fr;gap:6px 9px}
+.roundCardItem{position:relative;min-width:0;display:flex;align-items:baseline;gap:5px;padding:8px 10px;border-radius:10px;background:#f7faff;border:1px solid rgba(61,108,244,.08);color:#34425e;font-size:13px;line-height:1.28;white-space:nowrap}
+.roundCardItem.wide{grid-column:1/-1}
+.roundCardItem strong{color:#24324d;font-size:13.8px;font-weight:850}.roundCardItem .pairArrow{color:#8b98ad;font-weight:900}.roundCardItem .pairMeaning{min-width:0}
+.revisitChip{flex:0 0 auto;padding:2px 5px;border-radius:999px;color:#98506a;background:#fff0f5;font-size:8px;line-height:1.2;text-transform:uppercase;letter-spacing:.05em;font-weight:900}
+.summaryActions{position:sticky;bottom:0;z-index:2;display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap;margin:12px -21px 0;padding:10px 21px max(10px,env(safe-area-inset-bottom));border-top:1px solid rgba(111,91,64,.13);background:rgba(255,250,244,.97);backdrop-filter:blur(5px)}
+
+@media (max-width:800px){
+  .optionGrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .topbar{grid-template-columns:minmax(0,1fr) 76px 76px auto}
+  .feedback{height:45px;white-space:normal;text-overflow:clip}
+  .gameControls{justify-content:flex-end}
+}
+@media (max-width:560px){
+  body{padding:8px 6px 16px}
+  .app{border-radius:23px}
+  .hero{padding:19px 18px 7px 21px}
+  .hero h1{font-size:43px}
+  .screen{padding:13px 12px 18px 16px}
+  #introScreen{padding-top:6px}
+  .infoBtn{margin-right:2px}
+  .instructionStack{min-height:0;padding:14px 10px 16px 46px;background:linear-gradient(to right,transparent 0 31px,rgba(214,52,52,.72) 31px 34px,transparent 34px),repeating-linear-gradient(to bottom,#fffef9 0 29px,rgba(61,108,244,.18) 29px 30px)}
+  .instructionStack h2{font-size:22px}.instructionCard{min-height:0;padding:4px 0;font-size:12px;line-height:1.25}
+  .optionGrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .modeLaunchGrid{grid-template-columns:1fr}
+  .optionFace{min-height:106px;padding:10px 7px 9px 36px;gap:3px}
+  .optionCheck{left:9px;top:10px;width:20px;height:20px}
+  .optionTotal{top:10px;right:7px}
+  .optionTitle{font-size:14px;line-height:1.05}
+  .optionCopy{font-size:10px;line-height:1.2}
+  #gameScreen{gap:8px;padding-top:11px}
+  .topbar{grid-template-columns:76px 76px minmax(0,1fr);gap:7px}
+  .topCopy{grid-column:1/-1}
+  .gameHint{height:56px;padding:9px 11px;font-size:13px}
+  .feedback{height:40px;font-size:15px;line-height:19px;white-space:normal;text-overflow:clip}
+  .statChip{width:76px;height:76px;padding:7px}
+  .statChip strong{margin-top:5px;font-size:21px}
+  .gameControls{grid-column:3;grid-row:2;justify-content:stretch;display:grid;grid-template-columns:1fr;gap:6px}
+  .gameControls .ghostBtn{width:100%;min-width:0;padding:0 7px;font-size:11px}
+  .board{gap:11px}
+  .board::before{top:27px}
+  .sideHead{height:24px;margin-bottom:5px}
+  .sideHeadLabel{font-size:8px}
+  .stripGrid{--strip-h:56px;gap:5px}
+  .strip{width:100%;height:var(--strip-h);padding:5px 7px 5px 22px;margin-left:0;clip-path:polygon(6px 0,100% 0,100% 100%,7px 100%,3px 89%,8px 76%,4px 63%,8px 49%,3px 37%,8px 23%,4px 10%)}
+  .stripText{font-size:12px;line-height:1.12;white-space:normal;display:block;overflow:visible}
+  .strip.tight .stripText{font-size:11px}.strip.tighter .stripText{font-size:10px}
+  .recapPhase{height:470px;padding:13px 10px 14px}
+  .recapHeader{margin-bottom:9px}.recapHeader h2{font-size:27px}
+  .recapProgressRow{grid-template-columns:1fr;gap:5px;margin-top:7px}
+  .recapProgressText{justify-content:space-between}
+  .recapPrompt{height:60px}.recapPrompt .stripText{font-size:14px}.recapPrompt.tight .stripText{font-size:13.5px}.recapPrompt.tighter .stripText{font-size:12.5px}
+  .recapChoices{margin-left:12px;gap:6px}
+  .recapChoice{height:44px;padding-right:8px}.recapChoiceText{font-size:13px;white-space:normal}.recapChoice.tight .recapChoiceText{font-size:12px}.recapChoice.tighter .recapChoiceText{font-size:11px}
+  .recapFeedback{height:64px;font-size:12px}
+  .overlay{padding:8px}
+  .modal,.setReviewPanel,.summaryPanel{max-height:calc(100dvh - 16px);padding:17px 14px}
+  .setReviewActions{margin-left:-14px;margin-right:-14px;margin-bottom:-17px;padding-left:14px;padding-right:14px;padding-bottom:17px}
+  .reviewPair{grid-template-columns:1fr;gap:5px}
+  .decoyItem{grid-template-columns:1fr}.decoyExplain{padding-left:5px}
+  .summaryStats{gap:6px}.summaryStat{padding:9px 4px}.summaryStat strong{font-size:20px}
+  .roundCardGrid{grid-template-columns:1fr}.roundCardItem.wide{grid-column:auto}.roundCardItem{white-space:normal;font-size:12px;flex-wrap:wrap}.roundCardItem strong{font-size:12.5px}
+  .summaryActions{margin-left:-14px;margin-right:-14px;padding-left:14px;padding-right:14px;justify-content:stretch}.summaryActions button{flex:1 1 130px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+}
+@media print{
+  body{display:block;padding:0;background:#fff!important;color:#111}
+  body::before,.app,.confirmOverlay,.resetProgressOverlay,.setReviewOverlay{display:none!important}
+  .summaryOverlay{position:static!important;display:block!important;padding:0;background:#fff!important;backdrop-filter:none!important}
+  .summaryPanel{width:100%!important;max-height:none!important;overflow:visible!important;padding:0!important;border:0!important;box-shadow:none!important;background:#fff!important}
+  .summaryPanel::before,.summaryActions{display:none!important}
+  .summarySub,.roundCards,.summaryStat{break-inside:avoid;background:#fff!important}
+  .roundCardItem{border-color:#bbb!important;background:#fff!important}
+}
 </style>
 </head>
 <body>
@@ -984,118 +534,164 @@ button{cursor:pointer}
   <div class="appInner">
     <header class="hero" id="introHero">
       <h1>Optimal Recall</h1>
-      <p class="tagline">Identify all matching pairs from memory.</p>
     </header>
 
     <section class="screen" id="introScreen">
       <div class="setupShell">
         <section class="setupCard howCard">
           <div class="instructionStack">
-            <h2>How it works</h2>
-            <p class="instructionCard">Match one card from each side.</p>
-            <p class="instructionCard">Clear three pairs to get a fresh set.</p>
-            <p class="instructionCard">You have 2 minutes to match as many as you can.</p>
+            <h2>How To Play</h2>
+            <p class="instructionCard">Every concept is written two ways — one item on each side.</p>
+            <p class="instructionCard">Match the two that express the same idea.</p>
+            <p class="instructionCard"><strong>Every round ends with a lightning recap</strong> — misses come back as quick questions.</p>
+            <p class="instructionCard">Three short sets per round.</p>
           </div>
         </section>
 
         <section class="setupCard deckChoiceCard">
-          <div class="sectionLabel"><span>Choose one or more deck(s) of cards</span></div>
+          <div class="deckChoiceHead"><p class="sectionLabel" id="deckInstruction">Choose one deck of cards</p><button class="resetProgressBtn" id="resetProgressBtn" type="button" aria-haspopup="dialog" aria-controls="resetProgressOverlay">Reset progress</button></div>
           <div class="optionGrid">
-            <label class="optionLabel deckLocal">
-              <input type="checkbox" name="deck" value="local" checked />
-              <span class="optionFace">
-                <span class="optionCheck" aria-hidden="true"></span>
-                <span class="optionTitle">Beyond linear functions</span>
-                <span class="optionCopy">Derivatives, gradients, Hessians, Jacobians.</span>
-              </span>
+            <label class="optionLabel">
+              <input type="radio" name="deck" value="local" checked />
+              <span class="optionFace"><span class="optionCheck" aria-hidden="true"></span><span class="optionTitle">Beyond linear functions</span><span class="optionTotal">27 pairs</span><span class="optionCopy">Derivatives, gradients, Hessians, Jacobians.</span><span class="optionProgress" data-deck-progress="local" role="progressbar" aria-label="Beyond linear functions completion" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span class="optionProgressText">0% complete</span><span class="optionProgressTrack" aria-hidden="true"><span class="optionProgressFill"></span></span></span></span>
             </label>
-            <label class="optionLabel deckOpt">
-              <input type="checkbox" name="deck" value="opt" />
-              <span class="optionFace">
-                <span class="optionCheck" aria-hidden="true"></span>
-                <span class="optionTitle">Optimization &amp; training</span>
-                <span class="optionCopy">Critical points, gradient descent, Hessian tests.</span>
-              </span>
+            <label class="optionLabel">
+              <input type="radio" name="deck" value="optDirections" />
+              <span class="optionFace"><span class="optionCheck" aria-hidden="true"></span><span class="optionTitle">Directions &amp; descent</span><span class="optionTotal">16 pairs</span><span class="optionCopy">Directional derivatives, steepest change, gradient descent.</span><span class="optionProgress" data-deck-progress="optDirections" role="progressbar" aria-label="Directions and descent completion" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span class="optionProgressText">0% complete</span><span class="optionProgressTrack" aria-hidden="true"><span class="optionProgressFill"></span></span></span></span>
             </label>
-            <label class="optionLabel deckConstraint">
-              <input type="checkbox" name="deck" value="unit6" />
-              <span class="optionFace">
-                <span class="optionCheck" aria-hidden="true"></span>
-                <span class="optionTitle">Constrained optimization</span>
-                <span class="optionCopy">Constraints, Lagrange multipliers.</span>
-              </span>
+            <label class="optionLabel">
+              <input type="radio" name="deck" value="optSecond" />
+              <span class="optionFace"><span class="optionCheck" aria-hidden="true"></span><span class="optionTitle">Extrema &amp; tests</span><span class="optionTotal">30 pairs</span><span class="optionCopy">Critical points, Hessian tests, D-tests, least squares.</span><span class="optionProgress" data-deck-progress="optSecond" role="progressbar" aria-label="Extrema and tests completion" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span class="optionProgressText">0% complete</span><span class="optionProgressTrack" aria-hidden="true"><span class="optionProgressFill"></span></span></span></span>
+            </label>
+            <label class="optionLabel">
+              <input type="radio" name="deck" value="unit6" />
+              <span class="optionFace"><span class="optionCheck" aria-hidden="true"></span><span class="optionTitle">Constrained optimization</span><span class="optionTotal">30 pairs</span><span class="optionCopy">Constraints, boundaries, Lagrange multipliers.</span><span class="optionProgress" data-deck-progress="unit6" role="progressbar" aria-label="Constrained optimization completion" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span class="optionProgressText">0% complete</span><span class="optionProgressTrack" aria-hidden="true"><span class="optionProgressFill"></span></span></span></span>
             </label>
           </div>
         </section>
 
-        <div class="actionsRow startActions modeLaunchGrid">
+        <div class="actionsRow modeLaunchGrid">
           <span class="errorMsg" id="startMsg" role="status"></span>
-          <button class="primaryBtn modeLaunchBtn" data-mode="prelim" type="button">
-            <span>Practice Mode</span>
-            <small>Cards face up.</small>
-          </button>
-          <button class="primaryBtn modeLaunchBtn recallLaunchBtn" data-mode="recall" type="button">
-            <span>Recall Mode</span>
-            <small>Cards face down.</small>
-          </button>
+          <button class="primaryBtn modeLaunchBtn" data-level="match" type="button"><span>Match</span><small>Pair each item with its partner.</small></button>
+          <button class="primaryBtn modeLaunchBtn" data-level="challenge" type="button"><span>Challenge</span><small>Two strips on the right have no partner.</small></button>
         </div>
       </div>
     </section>
 
     <section class="screen" id="gameScreen" hidden>
       <div class="topbar">
-        <div class="statChip"><span>Time</span><strong id="timer">0:00</strong></div>
-        <div class="statChip"><span>Pairs matched</span><strong id="found">0</strong></div>
-        <div class="topActions">
-          <p class="gameHint">Matching all pairs reveals a new set. Find as many pairs as you can in 2 minutes.</p>
-          <div class="feedback" id="feedback">Match all pairs.</div>
+        <div class="topCopy">
+          <p class="gameHint" id="gameHint">Pick one strip from each side that expresses the same concept.</p>
+          <div class="feedback" id="feedback" role="status" aria-live="polite">Match all five pairs.</div>
+        </div>
+        <div class="statChip"><span>Set</span><strong id="setValue">1 / 3</strong></div>
+        <div class="statChip reward"><span>Misses</span><strong id="missValue">0</strong></div>
+        <div class="gameControls">
+          <button class="ghostBtn" id="newBtn" type="button">New game</button>
         </div>
       </div>
-      <div class="deckTags" id="gameInfo"></div>
 
-      <div class="board" aria-label="Memory board">
-        <section class="sidePanel">
-          <div class="sideHead"><span>pick one</span></div>
-          <div class="cardGrid" id="termGrid"></div>
-        </section>
-        <section class="sidePanel meaningPanel">
-          <div class="sideHead"><span>pick one</span></div>
-          <div class="cardGrid" id="meaningGrid"></div>
-        </section>
-      </div>
-      <div class="boardActions">
-        <button class="ghostBtn" id="newBtn" type="button">New game</button>
-      </div>
+      <section id="matchingPhase">
+        <div class="boardShell" id="boardShell">
+          <div class="board" aria-label="Matching board">
+            <section class="sidePanel termPanel">
+              <div class="sideHead"><span class="sideHeadLabel">pick one</span></div>
+              <div class="stripGrid" id="leftGrid"></div>
+            </section>
+            <section class="sidePanel meaningPanel">
+              <div class="sideHead"><span class="sideHeadLabel">pick one</span></div>
+              <div class="stripGrid" id="rightGrid"></div>
+            </section>
+          </div>
+        </div>
+      </section>
+
+      <section class="recapPhase" id="recapPhase" hidden aria-labelledby="recapTitle">
+        <div class="recapHeader">
+          <h2 id="recapTitle">Lightning recap</h2>
+          <p>Lock them in — one more look at the pairs that got away.</p>
+          <div class="recapProgressRow"><div class="recapProgressText"><span id="recapProgressText">0 of 0 cleared</span><span id="recapQuestionCount"></span></div><div class="recapTrack" aria-hidden="true"><div class="recapFill" id="recapFill"></div></div></div>
+        </div>
+        <div class="recapQuestion" id="recapQuestion">
+          <span class="recapDirection" id="recapDirection">Match this concept:</span>
+          <div class="strip static recapPrompt" id="recapPrompt" data-side="left"><span class="stripText"></span></div>
+          <div class="recapChoices" id="recapChoices"></div>
+          <div class="recapFeedback" id="recapFeedback" role="status" aria-live="polite">Choose the best match.</div>
+          <div class="recapContinueRow"><button class="primaryBtn" id="recapContinueBtn" type="button" hidden>Next question</button></div>
+        </div>
+        <div class="recapComplete" id="recapComplete" hidden>
+          <div class="recapCompleteCard"><div class="recapCompleteBadge" aria-hidden="true">✓</div><h2>All cleared</h2><p>Every missed concept was answered correctly.</p><button class="primaryBtn" id="recapSummaryBtn" type="button">See round review</button></div>
+        </div>
+      </section>
     </section>
   </div>
 </main>
 
-<div class="overlay" id="confirmOverlay" hidden>
-  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
-    <h2 id="confirmTitle">Start a new game?</h2>
-    <p>This will end the current round.</p>
-    <div class="modalActions">
-      <button class="secondaryBtn" id="cancelNewBtn" type="button">Cancel</button>
-      <button class="primaryBtn" id="confirmNewBtn" type="button">Start over</button>
+<button class="infoBtn" id="infoBtn" type="button" aria-label="About Optimal Recall" aria-haspopup="dialog" aria-controls="infoOverlay">?</button>
+
+<div class="overlay infoOverlay" id="infoOverlay" hidden>
+  <div class="modal infoDialog" role="dialog" aria-modal="true" aria-labelledby="infoTitle">
+    <h2 id="infoTitle">About Optimal Recall</h2>
+    <div class="infoList">
+      <p><strong>Version:</strong> Optimal Recall [v0.2(beta)]</p>
+      <p><strong>Copyright:</strong> © 2026 <a href="https://people.math.wisc.edu/~roch/" target="_blank" rel="noopener noreferrer">Sébastien Roch</a></p>
+      <p><strong>License:</strong> <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener noreferrer">Creative Commons Attribution-NonCommercial 4.0 International License</a></p>
+      <p><strong>Textbook:</strong> <a href="https://math345-textbook.github.io/" target="_blank" rel="noopener noreferrer">math345-textbook.github.io</a></p>
+      <p><strong>Privacy:</strong> Your completed-pair progress is saved in this browser on this device. It is not uploaded anywhere. If you use a private window, clear site data, switch browsers, or block browser storage, your completion may reset.</p>
+      <p><strong>Acknowledgments:</strong> Thanks to Betsy Stovall for helpful feedback.</p>
     </div>
+    <div class="modalActions"><button class="primaryBtn" id="closeInfoBtn" type="button">Close</button></div>
+  </div>
+</div>
+
+<div class="overlay resetProgressOverlay" id="resetProgressOverlay" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="resetProgressTitle" aria-describedby="resetProgressWarning">
+    <h2 id="resetProgressTitle">Reset progress?</h2>
+    <p>Select the decks whose completion you want to erase.</p>
+    <div class="resetDeckList">
+      <label class="resetDeckChoice"><input type="checkbox" name="resetDeck" value="local" />Beyond linear functions</label>
+      <label class="resetDeckChoice"><input type="checkbox" name="resetDeck" value="optDirections" />Directions &amp; descent</label>
+      <label class="resetDeckChoice"><input type="checkbox" name="resetDeck" value="optSecond" />Extrema &amp; tests</label>
+      <label class="resetDeckChoice"><input type="checkbox" name="resetDeck" value="unit6" />Constrained optimization</label>
+    </div>
+    <p class="resetWarning" id="resetProgressWarning">The selected decks' completed-pair progress will be permanently erased. This cannot be undone.</p>
+    <div class="modalActions"><button class="secondaryBtn" id="cancelResetProgressBtn" type="button">Cancel</button><button class="primaryBtn dangerBtn" id="confirmResetProgressBtn" type="button" disabled>Reset selected</button></div>
+  </div>
+</div>
+
+<div class="overlay confirmOverlay" id="confirmOverlay" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+    <h2 id="confirmTitle">End this round early?</h2>
+    <p id="confirmMessage">Leaving before the round is complete will not update your deck completion, and no card summary will be shown.</p>
+    <div class="modalActions"><button class="secondaryBtn" id="cancelNewBtn" type="button">Keep playing</button><button class="primaryBtn" id="confirmNewBtn" type="button">Exit without saving</button></div>
+  </div>
+</div>
+
+<div class="overlay setReviewOverlay" id="setReviewOverlay" hidden>
+  <div class="setReviewPanel" role="dialog" aria-modal="true" aria-labelledby="setReviewTitle">
+    <div class="setReviewTop"><div class="setReviewBadge" aria-hidden="true">✓</div><div><h2 id="setReviewTitle" tabindex="-1">Set cleared!</h2><div class="setReviewTopic" id="setReviewTopic"></div><p id="setReviewMessage">Read the pairs once more before moving on.</p><div class="decoyCelebration" id="decoyCelebration" hidden>Sharp eye — you dodged every decoy in this set.</div></div></div>
+    <div class="setPairGrid" id="setPairGrid"></div>
+    <div class="decoyReveal" id="decoyReveal" hidden><h3>Strips with no partner</h3><div id="decoyItems"></div></div>
+    <div class="setReviewActions"><button class="primaryBtn" id="nextSetBtn" type="button">Next set</button></div>
   </div>
 </div>
 
 <div class="overlay summaryOverlay" id="summaryOverlay" hidden>
   <div class="summaryPanel" role="dialog" aria-modal="true" aria-labelledby="summaryTitle">
-    <div class="summaryBadge" aria-hidden="true">
-      <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M14 34l11 11 25-25"/><circle cx="32" cy="32" r="22"/></svg>
-    </div>
-    <h2 id="summaryTitle">Time's up!</h2>
-    <p id="summaryMessage">Congratulations — you matched pairs.</p>
+    <div class="summaryBadge" id="summaryBadge" aria-hidden="true">✓</div>
+    <h2 id="summaryTitle">Round complete!</h2>
+    <p id="summaryMessage">You worked through the round and cleared every revisit.</p>
+    <p class="summarySub" id="summarySub"></p>
     <div class="summaryStats">
-      <div class="summaryStat"><span>Time</span><strong id="summaryTime">0:00</strong></div>
-      <div class="summaryStat"><span>Pairs matched</span><strong id="summaryPairs">0</strong></div>
-      <div class="summaryStat"><span>Sets</span><strong id="summaryTurns">0</strong></div>
+      <div class="summaryStat"><span>Sets</span><strong id="summarySets">3 / 3</strong></div>
+      <div class="summaryStat"><span>Pairs</span><strong id="summaryPairs">15</strong></div>
+      <div class="summaryStat"><span>Misses</span><strong id="summaryMisses">0</strong></div>
     </div>
-    <div class="summaryDecks" id="summaryDecks"></div>
+    <div class="roundCards"><h3>This round’s cards</h3><div class="roundCardGrid" id="roundCardItems"></div></div>
     <div class="summaryActions">
-      <button class="secondaryBtn" id="summaryIntroBtn" type="button">Back to intro</button>
+      <button class="secondaryBtn" id="summaryIntroBtn" type="button">Main menu</button>
+      <button class="secondaryBtn" id="summaryPrintBtn" type="button">Print review</button>
+      <button class="secondaryBtn" id="summaryReviewBtn" type="button" hidden>Play these again</button>
       <button class="primaryBtn" id="summaryReplayBtn" type="button">Play again</button>
     </div>
   </div>
@@ -1200,19 +796,19 @@ const DECKS = {
       {
         "id": "u3-gradient",
         "left": "\\(\\nabla f(a)\\)",
-        "right": "vector of first partials",
+        "right": "vector of first partial derivatives",
         "note": "Gradient."
       },
       {
         "id": "u3-hessian",
-        "left": "\\(Hf(a)\\)",
-        "right": "matrix of second partials",
+        "left": "\\(H_f(a)\\)",
+        "right": "matrix of second partial derivatives",
         "note": "Hessian."
       },
       {
         "id": "u3-jacobian",
         "left": "\\(J_F(a)\\)",
-        "right": "matrix of component partials",
+        "right": "matrix of component partial derivatives",
         "note": "Jacobian matrix."
       },
       {
@@ -1741,358 +1337,530 @@ const DECKS = {
   }
 };
 
-const ROUND_MS = 120000;
-const BATCH_SIZE = 3;
-const ALL_DECK_IDS = Object.keys(DECKS);
+const CLUSTER_BY_ID = {
+  'u3-scalar':'function-types','u3-vector':'function-types','u3-component':'function-types','u3-domain':'function-types','u3-range':'function-types',
+  'u3-graph':'graphs-levels','u3-level':'graphs-levels','u3-limit':'limits-continuity','u3-continuous':'limits-continuity','u3-partial-limit':'derivative-definitions',
+  'u3-ball':'sets-topology','u3-interior':'sets-topology','u3-boundary':'sets-topology','u3-closed':'sets-topology','u3-bounded':'sets-topology',
+  'u3-gradient':'derivative-objects','u3-hessian':'derivative-objects','u3-jacobian':'derivative-objects','u3-jshape':'derivative-objects',
+  'u3-scalar-local':'linearization','u3-vector-local':'linearization','u3-h':'linearization','u3-tangent':'linearization','u3-differentiability':'linearization','u3-chain':'linearization','u3-curve':'linearization','u3-forgotten':'linearization',
 
-let state = {
-  pairCount: BATCH_SIZE,
-  deckIds: [...ALL_DECK_IDS],
-  mode: 'prelim',
-  cards: {terms: [], meanings: []},
-  activePairs: [],
-  selected: {term:null, meaning:null},
-  score: 0,
-  batchMatches: 0,
-  attempts: 0,
-  setsCleared: 0,
-  startTime: null,
-  endTime: null,
-  timerId: null,
-  locked: false,
-  finished: false,
-  usedPairIds: new Set()
+  'u5-optproblem':'extrema-scope','u5-feasible':'extrema-scope','u5-localmin':'extrema-scope','u5-localmax':'extrema-scope','u5-globalmin':'extrema-scope','u5-globalmax':'extrema-scope','u5-localextremum':'extrema-scope','u5-critical':'extrema-scope','u5-extreme-thm':'extrema-scope','u5-candidate':'extrema-scope',
+  'u5-directional':'directional-derivatives','u5-directional-limit':'directional-derivatives','u5-dot':'directional-derivatives','u5-unitv':'directional-derivatives','u5-partialdir':'directional-derivatives','u5-zerograd':'directional-derivatives',
+  'u5-steepestup':'gradient-directions','u5-steepestdown':'gradient-directions','u5-maxdir':'gradient-directions','u5-mindir':'gradient-directions','u5-maxval':'gradient-directions','u5-minval':'gradient-directions',
+  'u5-gd':'gradient-descent','u5-update':'gradient-descent','u5-alpha':'gradient-descent','u5-loss':'gradient-descent','u5-fixedfeatures':'least-squares',
+  'u5-eigenvector':'quadratic-forms','u5-eigenvalue':'quadratic-forms','u5-qform':'quadratic-forms','u5-posdef':'quadratic-forms','u5-negdef':'quadratic-forms','u5-indef':'quadratic-forms',
+  'u5-saddle':'hessian-test','u5-hmin':'hessian-test','u5-hmax':'hessian-test','u5-hsaddle':'hessian-test','u5-inconclusive':'hessian-test',
+  'u5-discriminant':'d-test','u5-dmin':'d-test','u5-dmax':'d-test','u5-dsaddle':'d-test','u5-dzero':'d-test',
+  'u5-lsgrad':'least-squares','u5-normal':'least-squares','u5-residual':'least-squares',
+
+  'u6-closedbounded':'closed-bounded-search','u6-globalextrema':'closed-bounded-search','u6-existence':'closed-bounded-search','u6-interiorcand':'closed-bounded-search','u6-boundarycand':'closed-bounded-search','u6-boundaryrestrict':'closed-bounded-search','u6-corner':'closed-bounded-search','u6-candtable':'closed-bounded-search','u6-largest':'closed-bounded-search','u6-smallest':'closed-bounded-search','u6-compare':'closed-bounded-search',
+  'u6-surface':'constraint-basics','u6-constraint':'constraint-basics','u6-regconstraint':'constraint-basics','u6-constrcrit':'constraint-basics',
+  'u6-lagrangecondition':'lagrange','u6-lambda':'lagrange','u6-lagrangian':'lagrange','u6-stationary':'lagrange','u6-lambdaderiv':'lagrange','u6-parallel':'lagrange','u6-mistake':'lagrange','u6-finalwarning':'lagrange',
+  'u6-tangent':'constraint-tangent','u6-tangentcond':'constraint-tangent','u6-nochange':'constraint-tangent',
+  'u6-unitsphere':'sphere-quadratic','u6-qfsphere':'sphere-quadratic','u6-eigencands':'sphere-quadratic','u6-maxeig':'sphere-quadratic'
 };
 
-const termBackIcon = `<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M26 10h12"/><path d="M30 10v12L18 47a8 8 0 0 0 7 11h14a8 8 0 0 0 7-11L34 22V10"/><path d="M23 37h18"/></svg>`;
-const meaningBackIcon = `<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M26 10h12"/><path d="M30 10v12L18 47a8 8 0 0 0 7 11h14a8 8 0 0 0 7-11L34 22V10"/><path d="M23 37h18"/></svg>`;
+const OPT_DIRECTIONS_IDS = new Set([
+  'u5-directional','u5-directional-limit','u5-dot','u5-unitv','u5-partialdir','u5-zerograd',
+  'u5-steepestup','u5-steepestdown','u5-maxdir','u5-mindir','u5-maxval','u5-minval',
+  'u5-gd','u5-update','u5-alpha','u5-loss'
+]);
 
-const introHero = document.getElementById('introHero');
-const introScreen = document.getElementById('introScreen');
-const gameScreen = document.getElementById('gameScreen');
-const timerEl = document.getElementById('timer');
-const foundEl = document.getElementById('found');
-const termGrid = document.getElementById('termGrid');
-const meaningGrid = document.getElementById('meaningGrid');
-const feedback = document.getElementById('feedback');
-const gameInfo = document.getElementById('gameInfo');
-const startMsg = document.getElementById('startMsg');
-const deckInstruction = document.querySelector('.deckChoiceCard .sectionLabel');
-const confirmOverlay = document.getElementById('confirmOverlay');
-const summaryOverlay = document.getElementById('summaryOverlay');
+const PAIRS_PER_SET = 5;
+const SETS_PER_ROUND = 3;
+const MAX_RECAP_PAIRS = 10;
+const MAX_RECAP_REASKS = 2;
+const CHALLENGE_DECOY_COUNT = 2;
+const MATCH_STAMPS = ['①','②','③','④','⑤'];
+const MOBILE_QUERY = '(max-width: 560px)';
 
-function shuffle(arr){
-  const a = [...arr];
-  for(let i=a.length-1;i>0;i--){
-    const j = Math.floor(Math.random()*(i+1));
-    [a[i], a[j]] = [a[j], a[i]];
+const CLUSTER_LABELS = Object.freeze({
+  'function-types':'Function types','graphs-levels':'Graphs and level sets','limits-continuity':'Limits and continuity','derivative-definitions':'Derivative definitions','sets-topology':'Sets and topology','derivative-objects':'Gradients, Hessians, and Jacobians','linearization':'Local linearization','extrema-scope':'Extrema and critical points','directional-derivatives':'Directional derivatives','gradient-directions':'Gradient directions','gradient-descent':'Gradient descent','quadratic-forms':'Quadratic forms','hessian-test':'Hessian test','d-test':'Two-variable D-test','least-squares':'Least squares','closed-bounded-search':'Closed bounded search','constraint-basics':'Constraint basics','lagrange':'Lagrange multipliers','constraint-tangent':'Tangent directions','sphere-quadratic':'Quadratic forms on the sphere','mixed-review':'Mixed review'
+});
+
+const CLUSTER_NEIGHBORS = Object.freeze({
+  'function-types':['graphs-levels','derivative-objects'],
+  'graphs-levels':['function-types','limits-continuity'],
+  'limits-continuity':['derivative-definitions','graphs-levels'],
+  'derivative-definitions':['limits-continuity','derivative-objects','directional-derivatives'],
+  'sets-topology':['closed-bounded-search','graphs-levels'],
+  'derivative-objects':['linearization','derivative-definitions','function-types'],
+  'linearization':['derivative-objects','limits-continuity'],
+  'extrema-scope':['hessian-test','d-test'],
+  'directional-derivatives':['gradient-directions','gradient-descent'],
+  'gradient-directions':['directional-derivatives','gradient-descent'],
+  'gradient-descent':['directional-derivatives','least-squares'],
+  'quadratic-forms':['hessian-test','sphere-quadratic'],
+  'hessian-test':['d-test','quadratic-forms','extrema-scope'],
+  'd-test':['hessian-test','extrema-scope'],
+  'least-squares':['gradient-descent','quadratic-forms'],
+  'closed-bounded-search':['constraint-basics','sets-topology'],
+  'constraint-basics':['lagrange','closed-bounded-search'],
+  'lagrange':['constraint-tangent','constraint-basics','sphere-quadratic'],
+  'constraint-tangent':['lagrange','constraint-basics'],
+  'sphere-quadratic':['quadratic-forms','lagrange']
+});
+
+const LONG_STRIP_IDS = new Set(['u3-partial-limit','u5-directional-limit','u3-scalar-local','u3-vector-local','u5-lsgrad','u3-ball','u3-graph','u6-constrcrit','u6-lagrangian']);
+
+function prepareData(){
+  const all=[];
+  Object.values(DECKS).forEach(deck=>deck.pairs.forEach(pair=>all.push(pair)));
+  const byId=new Map(all.map(pair=>[pair.id,pair]));
+  const patch=(id,updates)=>{if(byId.has(id))Object.assign(byId.get(id),updates);};
+
+  patch('u3-domain',{right:'allowed inputs to a function',note:'Input set for a function.'});
+  patch('u5-feasible',{right:'allowed inputs to an optimization problem',note:'Where the search is allowed.'});
+  patch('u6-constraint',{right:'points satisfying \\(g(x)=k\\)',note:'Feasible points for this constraint.'});
+  patch('u3-partial-limit',{left:'\\(\\textstyle\\frac{\\partial f}{\\partial x_i}(a)\\)',right:'\\(\\textstyle\\lim_{h\\to0}\\frac{f(a+h e_i)-f(a)}{h}\\)'});
+  patch('u5-directional-limit',{right:'\\(\\textstyle\\lim_{h\\to0}\\frac{f(a+h v)-f(a)}{h}\\)'});
+  patch('u3-scalar-local',{left:'scalar linearization'});
+  patch('u3-vector-local',{left:'vector linearization'});
+  patch('u6-constrcrit',{right:'\\(a\\in S,\\;\\nabla f(a)=\\lambda\\nabla g(a)\\)'});
+  patch('u5-dot',{left:'directional derivative gradient formula',right:'\\(D_v f(a)=\\nabla f(a)\\cdot v\\)',note:'Differentiable \\(f\\), unit \\(v\\).'});
+  patch('u5-update',{left:'gradient descent update',right:'\\(x_{k+1}=x_k-\\alpha\\nabla f(x_k)\\)',note:'Minus sign matters.'});
+  patch('u5-discriminant',{left:'two-variable discriminant',right:'\\(D=f_{xx}f_{yy}-f_{xy}^2\\)',note:'At a critical point.'});
+  patch('u5-lsgrad',{left:'least-squares gradient formula',right:'\\(\\nabla\\lVert Ax-b\\rVert^2=2A^T(Ax-b)\\)',note:'Set to zero.'});
+  patch('u5-residual',{left:'residual orthogonality',right:'\\(A^T r=0\\)',note:'Residual orthogonal to columns.'});
+  patch('u6-lagrangian',{left:'Lagrangian',right:'\\(\\mathcal L(x,\\lambda)=f(x)-\\lambda(g(x)-k)\\)',note:'Combines objective and constraint.'});
+  patch('u6-stationary',{left:'stationarity equations',right:'\\(\\nabla_x\\mathcal L(a,\\lambda)=0\\)',note:'Differentiate in input variables.'});
+  patch('u6-lambdaderiv',{left:'constraint equation',right:'\\(\\partial\\mathcal L/\\partial\\lambda=0\\)',note:'Recovers \\(g(a)=k\\).'});
+  patch('u5-hmin',{right:'local minimum by Hessian test',note:'Positive definite Hessian at a critical point.'});
+  patch('u5-hmax',{right:'local maximum by Hessian test',note:'Negative definite Hessian at a critical point.'});
+  patch('u5-hsaddle',{right:'saddle point by Hessian test',note:'Indefinite Hessian at a critical point.'});
+  patch('u5-dmin',{right:'local minimum by two-variable test',note:'Use \\(D>0\\) and \\(f_{xx}>0\\).'});
+  patch('u5-dmax',{right:'local maximum by two-variable test',note:'Use \\(D>0\\) and \\(f_{xx}<0\\).'});
+  patch('u5-dsaddle',{right:'saddle point by two-variable test',note:'Use \\(D<0\\).'});
+  patch('u5-dzero',{right:'inconclusive two-variable test',note:'No conclusion when \\(D=0\\).'});
+
+  all.forEach(pair=>pair.cluster=CLUSTER_BY_ID[pair.id]||'mixed-review');
+  const opt=DECKS.opt;
+  if(opt){
+    DECKS.optDirections={label:'Directions & descent',badge:'directional derivatives · gradient descent',pairs:opt.pairs.filter(pair=>OPT_DIRECTIONS_IDS.has(pair.id))};
+    DECKS.optSecond={label:'Extrema & tests',badge:'critical points · Hessians · least squares',pairs:opt.pairs.filter(pair=>!OPT_DIRECTIONS_IDS.has(pair.id))};
+    delete DECKS.opt;
   }
-  return a;
 }
-function sample(arr, n){ return shuffle(arr).slice(0, n); }
-function formatTime(ms){
-  const sec = Math.max(0, Math.ceil(ms / 1000));
-  const m = Math.floor(sec / 60);
-  const s = String(sec % 60).padStart(2, '0');
-  return `${m}:${s}`;
+prepareData();
+
+const ALL_DECK_IDS=['local','optDirections','optSecond','unit6'];
+const PAIR_INDEX=new Map();
+ALL_DECK_IDS.forEach(deckId=>DECKS[deckId].pairs.forEach(pair=>PAIR_INDEX.set(pair.id,{...pair,deckId})));
+const COMPLETED_STORAGE_KEY='optimalRecallCompletedPairs:v1';
+const LEGACY_VIEWED_STORAGE_KEY='optimalRecallViewedCards:v1';
+let completedStorageAvailable=true;
+function emptyCompletedPairs(){return Object.fromEntries(ALL_DECK_IDS.map(deckId=>[deckId,new Set()]));}
+function loadCompletedPairs(){
+  const completed=emptyCompletedPairs();
+  let raw='';
+  try{localStorage.removeItem(LEGACY_VIEWED_STORAGE_KEY);raw=localStorage.getItem(COMPLETED_STORAGE_KEY)||'';}catch(error){completedStorageAvailable=false;return completed;}
+  if(!raw)return completed;
+  let saved;
+  try{saved=JSON.parse(raw);}catch(error){return completed;}
+  if(saved?.version!==1||!saved.decks||typeof saved.decks!=='object')return completed;
+  ALL_DECK_IDS.forEach(deckId=>{
+    const validIds=new Set(DECKS[deckId].pairs.map(pair=>pair.id));
+    const storedIds=Array.isArray(saved.decks[deckId])?saved.decks[deckId]:[];
+    storedIds.forEach(id=>{if(typeof id==='string'&&validIds.has(id))completed[deckId].add(id);});
+  });
+  return completed;
 }
-function updateTimer(){
-  if(!state.endTime || state.finished) return;
-  const remaining = state.endTime - Date.now();
-  timerEl.textContent = formatTime(remaining);
-  if(remaining <= 0) endTimedRound();
+const completedPairsByDeck=loadCompletedPairs();
+const mobileMedia=window.matchMedia(MOBILE_QUERY);
+const pairStats={};
+let state=freshState();
+
+const els={
+  introHero:document.getElementById('introHero'),introScreen:document.getElementById('introScreen'),gameScreen:document.getElementById('gameScreen'),
+  matchingPhase:document.getElementById('matchingPhase'),boardShell:document.getElementById('boardShell'),recapPhase:document.getElementById('recapPhase'),leftGrid:document.getElementById('leftGrid'),rightGrid:document.getElementById('rightGrid'),
+  feedback:document.getElementById('feedback'),gameHint:document.getElementById('gameHint'),setValue:document.getElementById('setValue'),missValue:document.getElementById('missValue'),
+  startMsg:document.getElementById('startMsg'),deckInstruction:document.getElementById('deckInstruction'),resetProgressBtn:document.getElementById('resetProgressBtn'),resetProgressOverlay:document.getElementById('resetProgressOverlay'),confirmResetProgressBtn:document.getElementById('confirmResetProgressBtn'),
+  infoBtn:document.getElementById('infoBtn'),infoOverlay:document.getElementById('infoOverlay'),closeInfoBtn:document.getElementById('closeInfoBtn'),confirmOverlay:document.getElementById('confirmOverlay'),setReviewOverlay:document.getElementById('setReviewOverlay'),summaryOverlay:document.getElementById('summaryOverlay'),
+  recapProgressText:document.getElementById('recapProgressText'),recapQuestionCount:document.getElementById('recapQuestionCount'),recapFill:document.getElementById('recapFill'),recapDirection:document.getElementById('recapDirection'),recapPrompt:document.getElementById('recapPrompt'),recapChoices:document.getElementById('recapChoices'),recapFeedback:document.getElementById('recapFeedback'),recapContinueBtn:document.getElementById('recapContinueBtn'),recapQuestion:document.getElementById('recapQuestion'),recapComplete:document.getElementById('recapComplete')
+};
+
+function freshState(){
+  return {
+    level:'match',deckIds:['local'],reviewPairIds:null,reviewQueue:[],isReviewRound:false,targetSets:SETS_PER_ROUND,
+    activePairs:[],decoys:[],cards:{left:[],right:[]},selected:{left:null,right:null},matchedPairIds:new Set(),matchIndexByPair:{},
+    usedPairIds:new Set(),roundPairIds:[],roundPairSet:new Set(),correctPairIds:new Set(),completionCommitted:false,setsCleared:0,pairsMatched:0,totalMisses:0,setMisses:0,setDecoyMistakes:0,
+    missedPairIds:new Set(),missCountByPair:{},setResults:[],locked:false,finished:false,currentTopic:'',roundEndReason:'complete',setDecoyPairings:{},
+    phase:'matching',recapQueue:[],recapCurrent:null,recapInitialCount:0,recapOmittedCount:0,recapClearedIds:new Set(),recapGuided:false,recapStatus:'not-started'
+  };
 }
-function startTimer(){
-  stopTimer();
-  state.startTime = Date.now();
-  state.endTime = state.startTime + ROUND_MS;
-  updateTimer();
-  state.timerId = setInterval(updateTimer, 250);
+function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function delay(ms){return new Promise(resolve=>setTimeout(resolve,ms));}
+function unique(arr){return [...new Set(arr)];}
+function safeInlineMath(html){return String(html??'').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function plainForAria(html){return String(html??'').replace(/\\\(|\\\)/g,'').replace(/\\/g,'').replace(/[{}]/g,'').replace(/\s+/g,' ').trim();}
+function normalizedText(html){return plainForAria(html).toLowerCase().replace(/\s+/g,' ').trim();}
+function clusterLabel(cluster){return CLUSTER_LABELS[cluster]||cluster||'Mixed review';}
+function saveCompletedPairs(){
+  if(!completedStorageAvailable)return;
+  const decks=Object.fromEntries(ALL_DECK_IDS.map(deckId=>[deckId,[...completedPairsByDeck[deckId]]]));
+  try{localStorage.setItem(COMPLETED_STORAGE_KEY,JSON.stringify({version:1,decks}));}catch(error){completedStorageAvailable=false;}
 }
-function stopTimer(){
-  if(state.timerId) clearInterval(state.timerId);
-  state.timerId = null;
+function renderDeckProgress(){
+  document.querySelectorAll('[data-deck-progress]').forEach(progress=>{
+    const deckId=progress.dataset.deckProgress;
+    if(!DECKS[deckId]||!completedPairsByDeck[deckId])return;
+    const total=DECKS[deckId].pairs.length,count=completedPairsByDeck[deckId].size,percent=total?Math.round(count/total*100):0;
+    const totalLabel=progress.closest('.optionFace')?.querySelector('.optionTotal');if(totalLabel)totalLabel.textContent=`${total} pairs`;
+    progress.setAttribute('aria-valuenow',String(percent));progress.setAttribute('aria-valuetext',`${count} of ${total} pairs completed in full rounds`);
+    const text=progress.querySelector('.optionProgressText'),fill=progress.querySelector('.optionProgressFill');
+    if(text)text.textContent=`${percent}% complete`;if(fill)fill.style.width=`${percent}%`;
+  });
 }
-function typeset(node, tries=0){
-  if(window.MathJax && MathJax.typesetPromise){
-    MathJax.typesetPromise([node]).catch(()=>{});
-  }else if(tries < 40){
-    setTimeout(()=>typeset(node, tries + 1), 150);
+function commitCompletedRound(){
+  if(state.completionCommitted||state.isReviewRound||state.roundEndReason!=='complete'||state.setsCleared<SETS_PER_ROUND||!['cleared','skipped-clean','skipped-decoys'].includes(state.recapStatus))return;
+  let changed=false;
+  state.correctPairIds.forEach(pairId=>{
+    const canonical=PAIR_INDEX.get(pairId),deckId=canonical?.deckId;
+    if(!canonical||!state.deckIds.includes(deckId)||!completedPairsByDeck[deckId]||completedPairsByDeck[deckId].has(pairId))return;
+    completedPairsByDeck[deckId].add(pairId);changed=true;
+  });
+  state.completionCommitted=true;
+  if(changed)saveCompletedPairs();
+  renderDeckProgress();
+}
+function resetSelectedProgress(){
+  const selected=[...els.resetProgressOverlay.querySelectorAll('input[name="resetDeck"]:checked')].map(input=>input.value).filter(deckId=>completedPairsByDeck[deckId]);
+  if(!selected.length)return;
+  selected.forEach(deckId=>completedPairsByDeck[deckId].clear());saveCompletedPairs();renderDeckProgress();closeResetProgressDialog();
+}
+function statsFor(id){if(!pairStats[id])pairStats[id]={misses:0,correct:0,recapBoost:0};return pairStats[id];}
+function allDeckPairs(deckIds=state.deckIds){return deckIds.flatMap(deckId=>(DECKS[deckId]?.pairs||[]).map(pair=>({...pair,deckId})));}
+function selectedDeckIds(){return [...document.querySelectorAll('input[name="deck"]:checked')].map(input=>input.value).filter(id=>DECKS[id]).slice(0,1);}
+function isMobile(){return mobileMedia.matches;}
+function typeset(node,tries=0){
+  if(window.MathJax?.typesetPromise)return MathJax.typesetPromise([node]).catch(()=>{});
+  if(tries<40)return delay(120).then(()=>typeset(node,tries+1));
+  return Promise.resolve();
+}
+function setFeedback(html,cls=''){els.feedback.className=`feedback ${cls}`.trim();els.feedback.innerHTML=html;typeset(els.feedback);}
+function showDeckChoicePrompt(){els.startMsg.textContent='';els.deckInstruction.classList.add('needs-choice');els.deckInstruction.classList.remove('is-alerting');void els.deckInstruction.offsetWidth;els.deckInstruction.classList.add('is-alerting');}
+function clearDeckChoicePrompt(){els.startMsg.textContent='';els.deckInstruction.classList.remove('needs-choice','is-alerting');}
+function hideAllOverlays(){els.infoOverlay.hidden=true;els.resetProgressOverlay.hidden=true;els.confirmOverlay.hidden=true;els.setReviewOverlay.hidden=true;els.summaryOverlay.hidden=true;}
+function openInfoDialog(){els.infoOverlay.hidden=false;els.closeInfoBtn.focus();}
+function closeInfoDialog(){els.infoOverlay.hidden=true;els.infoBtn.focus();}
+function updateResetProgressButton(){els.confirmResetProgressBtn.disabled=!els.resetProgressOverlay.querySelector('input[name="resetDeck"]:checked');}
+function openResetProgressDialog(){els.resetProgressOverlay.querySelectorAll('input[name="resetDeck"]').forEach(input=>input.checked=false);updateResetProgressButton();els.resetProgressOverlay.hidden=false;els.resetProgressOverlay.querySelector('input[name="resetDeck"]')?.focus();}
+function closeResetProgressDialog(){els.resetProgressOverlay.hidden=true;els.resetProgressBtn.focus();}
+function trapDialogFocus(event,overlay){
+  const focusable=[...overlay.querySelectorAll('button:not(:disabled),input:not(:disabled),[href],[tabindex]:not([tabindex="-1"])')].filter(item=>item.offsetParent!==null);
+  if(!focusable.length)return;const first=focusable[0],last=focusable.at(-1);
+  if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus();}else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus();}
+}
+function pairWeight(pair){const st=statsFor(pair.id);return Math.max(.35,1+Math.min(7,st.misses*1.35)+Math.min(8,st.recapBoost*2)-Math.min(.55,st.correct*.035));}
+function weightedChoice(items,weightFn=()=>1){if(!items.length)return null;const weighted=items.map(item=>({item,weight:Math.max(.01,weightFn(item))}));const total=weighted.reduce((sum,entry)=>sum+entry.weight,0);let r=Math.random()*total;for(const entry of weighted){r-=entry.weight;if(r<=0)return entry.item;}return weighted.at(-1).item;}
+function weightedSample(items,count,weightFn=()=>1){const pool=[...items],out=[];while(pool.length&&out.length<count){const pick=weightedChoice(pool,weightFn);if(!pick)break;out.push(pick);pool.splice(pool.findIndex(item=>item.id===pick.id),1);}return out;}
+function candidatePairs(){return allDeckPairs(state.deckIds);}
+function chooseNormalPairs(){
+  let unused=candidatePairs().filter(pair=>!state.usedPairIds.has(pair.id));
+  if(unused.length<PAIRS_PER_SET){state.usedPairIds.clear();unused=candidatePairs();}
+  const seed=weightedChoice(unused,pairWeight);
+  if(!seed)return [];
+  const related=new Set([seed.cluster,...(CLUSTER_NEIGHBORS[seed.cluster]||[])]);
+  const orderedPools=[
+    unused.filter(pair=>pair.deckId===seed.deckId&&related.has(pair.cluster)),
+    unused.filter(pair=>pair.deckId===seed.deckId),
+    unused.filter(pair=>related.has(pair.cluster)),
+    unused
+  ];
+  const selected=[seed];
+  const selectedIds=new Set([seed.id]);
+  for(const pool of orderedPools){
+    const available=pool.filter(pair=>!selectedIds.has(pair.id));
+    const picks=weightedSample(available,PAIRS_PER_SET-selected.length,pairWeight);
+    picks.forEach(pair=>{selected.push(pair);selectedIds.add(pair.id);});
+    if(selected.length>=PAIRS_PER_SET)break;
   }
-}
-function selectedDeckIds(){
-  return [...document.querySelectorAll('input[name="deck"]:checked')].map(input => input.value);
-}
-function showDeckChoicePrompt(){
-  startMsg.textContent = '';
-  if(!deckInstruction) return;
-  deckInstruction.classList.add('needs-choice');
-  deckInstruction.classList.remove('is-alerting');
-  void deckInstruction.offsetWidth;
-  deckInstruction.classList.add('is-alerting');
-}
-function clearDeckChoicePrompt(){
-  startMsg.textContent = '';
-  if(deckInstruction) deckInstruction.classList.remove('needs-choice', 'is-alerting');
-}
-function activeDeckPairs(){
-  return state.deckIds.flatMap(id => DECKS[id].pairs);
-}
-function unusedPairs(){
-  return activeDeckPairs().filter(pair => !state.usedPairIds.has(pair.id));
-}
-function chooseBatch(){
-  let pool = unusedPairs();
-  if(pool.length < BATCH_SIZE){
-    state.usedPairIds.clear();
-    pool = unusedPairs();
-  }
-  const selected = sample(pool, BATCH_SIZE);
-  selected.forEach(pair => state.usedPairIds.add(pair.id));
+  selected.forEach(pair=>{state.usedPairIds.add(pair.id);const st=statsFor(pair.id);if(st.recapBoost>0)st.recapBoost=Math.max(0,st.recapBoost-.25);});
   return selected;
 }
-function buildCards(pairs){
-  const terms = pairs.map((p, idx) => ({ key:`t-${idx}-${p.id}`, id:p.id, side:'term', html:p.left, note:p.note }));
-  const meanings = pairs.map((p, idx) => ({ key:`m-${idx}-${p.id}`, id:p.id, side:'meaning', html:p.right, note:p.note }));
-  return { terms: shuffle(terms), meanings: shuffle(meanings) };
+function chooseReviewPairs(){
+  const ids=state.reviewQueue.splice(0,PAIRS_PER_SET);
+  return ids.map(id=>PAIR_INDEX.get(id)).filter(Boolean);
 }
-function safeInlineMath(html){
-  return String(html).replace(/</g, '&lt;').replace(/>/g, '&gt;');
+function challengeDecoyCount(){return state.level==='challenge'&&!state.isReviewRound?CHALLENGE_DECOY_COUNT:0;}
+function chooseDecoys(activePairs){
+  const count=challengeDecoyCount();
+  if(!count)return [];
+  const activeIds=new Set(activePairs.map(pair=>pair.id));
+  const activeClusters=new Set(activePairs.map(pair=>pair.cluster));
+  const neighborClusters=new Set([...activeClusters].flatMap(cluster=>CLUSTER_NEIGHBORS[cluster]||[]));
+  const activeRightText=new Set(activePairs.map(pair=>normalizedText(pair.right)));
+  const all=allDeckPairs(state.deckIds).filter(pair=>!activeIds.has(pair.id)&&!activeRightText.has(normalizedText(pair.right)));
+  const pools=[all.filter(pair=>activeClusters.has(pair.cluster)),all.filter(pair=>neighborClusters.has(pair.cluster))];
+  const chosen=[];
+  const usedIds=new Set();
+  const usedRightText=new Set(activeRightText);
+  for(const pool of pools){
+    const candidates=pool.filter(pair=>!usedIds.has(pair.id)&&!usedRightText.has(normalizedText(pair.right)));
+    for(const pair of weightedSample(candidates,count-chosen.length,pairWeight)){
+      usedIds.add(pair.id);usedRightText.add(normalizedText(pair.right));chosen.push({...pair,side:'right'});
+    }
+    if(chosen.length>=count)break;
+  }
+  return chosen.slice(0,count);
 }
-function createCard(card){
-  const btn = document.createElement('button');
-  btn.className = 'memoryCard';
-  if(state.mode === 'prelim') btn.classList.add('prelim-card', 'is-flipped');
-  btn.type = 'button';
-  btn.dataset.id = card.id;
-  btn.dataset.key = card.key;
-  btn.dataset.side = card.side;
-  btn.setAttribute('aria-label', card.side === 'term' ? 'notation or concept card' : 'definition card');
-  btn.innerHTML = `
-    <span class="cardInner">
-      <span class="face back"></span>
-      <span class="face front">
-        <span class="cardText">${safeInlineMath(card.html)}</span>
-      </span>
-    </span>`;
-  btn.addEventListener('click', () => selectCard(btn, card));
+function buildCards(pairs,decoys){
+  const stamp=Date.now()+Math.random();
+  const left=pairs.map((pair,index)=>({key:`l-${stamp}-${index}-${pair.id}`,pairId:pair.id,side:'left',html:pair.left,note:pair.note,cluster:pair.cluster,deckId:pair.deckId,decoy:false}));
+  const right=pairs.map((pair,index)=>({key:`r-${stamp}-${index}-${pair.id}`,pairId:pair.id,side:'right',html:pair.right,note:pair.note,cluster:pair.cluster,deckId:pair.deckId,decoy:false}));
+  decoys.forEach((pair,index)=>right.push({key:`d-${stamp}-${index}-${pair.id}-right`,pairId:null,sourcePairId:pair.id,side:'right',html:pair.right,note:pair.note,cluster:pair.cluster,deckId:pair.deckId,decoy:true}));
+  return {left:shuffle(left),right:shuffle(right)};
+}
+function topicForPairs(pairs){const clusters=unique(pairs.map(pair=>pair.cluster));if(clusters.length===1)return clusterLabel(clusters[0]);if(clusters.length===2)return clusters.map(clusterLabel).join(' + ');return `${clusterLabel(pairs[0]?.cluster)} + mixed review`;}
+function addRoundPairs(pairs){pairs.forEach(pair=>{if(!state.roundPairSet.has(pair.id)){state.roundPairSet.add(pair.id);state.roundPairIds.push(pair.id);}});}
+function updateHud(){
+  els.missValue.textContent=String(state.totalMisses);
+  if(state.phase==='recap')els.setValue.textContent='Recap';
+  else els.setValue.textContent=`${Math.min(state.setsCleared+1,state.targetSets)} / ${state.targetSets}`;
+}
+function updateHint(){
+  if(state.phase==='recap'){els.gameHint.textContent='Lightning recap — lock in the last few.';return;}
+  const review=state.isReviewRound?'Focused replay. ':'';
+  els.gameHint.textContent=`${review}Topic: ${state.currentTopic}.`;
+}
+function createStrip(card){
+  const btn=document.createElement('button');
+  btn.type='button';btn.className='strip';btn.dataset.key=card.key;btn.dataset.side=card.side;btn.dataset.decoy=card.decoy?'true':'false';btn.dataset.pairId=card.pairId||card.sourcePairId||'';btn.setAttribute('aria-label',`${card.side} strip: ${plainForAria(card.html)}`);
+  btn.innerHTML=`<span class="stripText">${safeInlineMath(card.html)}</span>`;
+  btn.setAttribute('aria-pressed','false');
+  if(!card.decoy&&state.matchedPairIds.has(card.pairId)){
+    const index=state.matchIndexByPair[card.pairId]||state.matchedPairIds.size;
+    btn.classList.add('is-matched');btn.setAttribute('aria-disabled','true');btn.tabIndex=-1;addMatchStamp(btn,index);
+  }
+  btn.addEventListener('click',()=>selectStrip(btn,card));
   return btn;
 }
-function renderBoard(){
-  termGrid.innerHTML = '';
-  meaningGrid.innerHTML = '';
-  termGrid.className = `cardGrid count${state.pairCount}`;
-  meaningGrid.className = `cardGrid count${state.pairCount}`;
-  state.cards.terms.forEach(card => termGrid.appendChild(createCard(card)));
-  state.cards.meanings.forEach(card => meaningGrid.appendChild(createCard(card)));
-  typeset(termGrid);
-  typeset(meaningGrid);
+function cardFromButton(btn){const list=btn.dataset.side==='left'?state.cards.left:state.cards.right;return list.find(card=>card.key===btn.dataset.key)||null;}
+function resetStrip(btn){if(btn&&!btn.classList.contains('is-matched')){btn.classList.remove('is-selected','is-wrong','is-correct');btn.setAttribute('aria-pressed','false');}}
+function clearSelection(){resetStrip(state.selected.left);resetStrip(state.selected.right);state.selected={left:null,right:null};}
+function unselectSide(side){resetStrip(state.selected[side]);state.selected[side]=null;}
+function fitStrips(root=document){
+  root.querySelectorAll('.strip').forEach(strip=>{strip.classList.remove('tight','tighter');if(isMobile())return;const text=strip.querySelector('.stripText');if(!text)return;const available=strip.clientWidth-40;if(LONG_STRIP_IDS.has(strip.dataset.pairId))strip.classList.add('tight');if(text.scrollWidth>available+1)strip.classList.add('tight');if(text.scrollWidth>available+1)strip.classList.add('tighter');});
 }
-function updateHud(){
-  foundEl.textContent = `${state.score}`;
+function fitRecapChoices(root=document){
+  root.querySelectorAll('.recapChoice').forEach(choice=>{choice.classList.remove('tight','tighter');const text=choice.querySelector('.recapChoiceText');if(!text)return;const available=choice.clientWidth-58;if(text.scrollWidth>available+1)choice.classList.add('tight');if(text.scrollWidth>available+1)choice.classList.add('tighter');});
 }
-function setFeedback(text, cls=''){
-  feedback.className = `feedback ${cls}`.trim();
-  feedback.innerHTML = text;
-  typeset(feedback);
+function addMatchStamp(btn,index){
+  let stamp=btn.querySelector('.matchStamp');
+  if(!stamp){stamp=document.createElement('span');stamp.className='matchStamp';stamp.setAttribute('aria-hidden','true');btn.appendChild(stamp);}
+  stamp.textContent=MATCH_STAMPS[Math.max(0,Math.min(MATCH_STAMPS.length-1,index-1))]||String(index);
 }
-function setDeckTags(){
-  gameInfo.innerHTML = '';
-  const modeTag = document.createElement('span');
-  modeTag.className = 'deckTag';
-  modeTag.textContent = state.mode === 'prelim' ? 'Practice' : 'Recall';
-  gameInfo.appendChild(modeTag);
-  state.deckIds.forEach(id => {
-    const deckTag = document.createElement('span');
-    deckTag.className = 'deckTag';
-    deckTag.textContent = DECKS[id].label;
-    gameInfo.appendChild(deckTag);
-  });
+async function renderBoard(){
+  els.leftGrid.innerHTML='';els.rightGrid.innerHTML='';
+  els.leftGrid.style.gridTemplateRows=`repeat(${state.cards.left.length},var(--strip-h))`;
+  els.rightGrid.style.gridTemplateRows=`repeat(${state.cards.right.length},var(--strip-h))`;
+  state.cards.left.forEach(card=>els.leftGrid.appendChild(createStrip(card)));
+  state.cards.right.forEach(card=>els.rightGrid.appendChild(createStrip(card)));
+  await Promise.all([typeset(els.leftGrid),typeset(els.rightGrid)]);
+  fitStrips(els.matchingPhase);
 }
-function dealNextBatch(message='Match all pairs.'){
-  if(state.finished) return;
-  state.activePairs = chooseBatch();
-  state.cards = buildCards(state.activePairs);
-  state.batchMatches = 0;
-  state.selected = {term:null, meaning:null};
-  state.locked = false;
-  renderBoard();
-  setFeedback(message);
+function matchingPrompt(){return state.level==='challenge'?'Match five pairs and leave two right strips unmatched.':'Match all five pairs.';}
+async function dealNextSet(){
+  if(state.finished)return;
+  state.phase='matching';state.locked=true;state.selected={left:null,right:null};state.matchedPairIds=new Set();state.matchIndexByPair={};state.setMisses=0;state.setDecoyMistakes=0;state.setDecoyPairings={};
+  els.matchingPhase.hidden=false;els.recapPhase.hidden=true;
+  const pairs=state.isReviewRound?chooseReviewPairs():chooseNormalPairs();
+  state.activePairs=pairs;state.decoys=chooseDecoys(pairs);state.cards=buildCards(pairs,state.decoys);state.currentTopic=topicForPairs(pairs);addRoundPairs(pairs);updateHud();updateHint();
+  await renderBoard();
+  state.locked=false;setFeedback(matchingPrompt());
 }
-function launchGame(mode=state.mode, deckIds=state.deckIds){
-  state.deckIds = [...deckIds];
-  state.pairCount = BATCH_SIZE;
-  state.mode = mode;
-  state.cards = {terms: [], meanings: []};
-  state.activePairs = [];
-  state.selected = {term:null, meaning:null};
-  state.score = 0;
-  state.batchMatches = 0;
-  state.attempts = 0;
-  state.setsCleared = 0;
-  state.locked = false;
-  state.finished = false;
-  state.usedPairIds = new Set();
-  hideConfirm();
-  hideSummary();
-  introHero.hidden = true;
-  introScreen.hidden = true;
-  gameScreen.hidden = false;
-  window.scrollTo(0, 0);
-  timerEl.textContent = formatTime(ROUND_MS);
+function implicatedPairIds(termCard,meaningCard){return unique([termCard,meaningCard].filter(card=>card&&!card.decoy&&card.pairId).map(card=>card.pairId));}
+function recordMiss(termCard,meaningCard){
+  state.totalMisses+=1;state.setMisses+=1;if(termCard.decoy||meaningCard.decoy)state.setDecoyMistakes+=1;
+  implicatedPairIds(termCard,meaningCard).forEach(id=>{state.missedPairIds.add(id);state.missCountByPair[id]=(state.missCountByPair[id]||0)+1;statsFor(id).misses+=1;});
+  if(meaningCard?.decoy&&termCard&&!termCard.decoy&&termCard.pairId){
+    const decoyId=meaningCard.sourcePairId;
+    const counts=state.setDecoyPairings[decoyId]||(state.setDecoyPairings[decoyId]={});
+    counts[termCard.pairId]=(counts[termCard.pairId]||0)+1;
+  }
   updateHud();
-  setDeckTags();
-  dealNextBatch('Match all pairs.');
-  startTimer();
 }
-function startGame(mode){
-  const deckIds = selectedDeckIds();
-  if(deckIds.length === 0){
-    showDeckChoicePrompt();
-    return;
-  }
-  clearDeckChoicePrompt();
-  launchGame(mode, deckIds);
+async function animateMatch(leftBtn,rightBtn,pairId){
+  leftBtn.classList.remove('is-selected');rightBtn.classList.remove('is-selected');leftBtn.setAttribute('aria-pressed','false');rightBtn.setAttribute('aria-pressed','false');
+  leftBtn.classList.add('is-correct');rightBtn.classList.add('is-correct');
+  await delay(120);
+  const matchIndex=state.matchIndexByPair[pairId]||state.matchedPairIds.size;
+  addMatchStamp(leftBtn,matchIndex);addMatchStamp(rightBtn,matchIndex);
+  leftBtn.classList.remove('is-correct');rightBtn.classList.remove('is-correct');leftBtn.classList.add('is-matched');rightBtn.classList.add('is-matched');
+  leftBtn.setAttribute('aria-disabled','true');rightBtn.setAttribute('aria-disabled','true');leftBtn.tabIndex=-1;rightBtn.tabIndex=-1;
 }
-function cardFromButton(btn){
-  const sideKey = btn.dataset.side === 'term' ? 'terms' : 'meanings';
-  return state.cards[sideKey].find(card => card.key === btn.dataset.key);
+async function selectStrip(btn,card){
+  if(state.locked||state.finished||state.phase!=='matching'||btn.classList.contains('is-matched')||!els.confirmOverlay.hidden||!els.setReviewOverlay.hidden||!els.summaryOverlay.hidden)return;
+  const side=card.side;
+  if(state.selected[side]===btn){resetStrip(btn);state.selected[side]=null;setFeedback(matchingPrompt());return;}
+  unselectSide(side);btn.classList.add('is-selected');btn.setAttribute('aria-pressed','true');state.selected[side]=btn;
+  setFeedback(side==='left'?'Now choose a strip on the right.':'Now choose a strip on the left.');
+  if(state.selected.left&&state.selected.right)await checkSelected();
 }
-function resetCardVisual(btn){
-  btn.classList.remove('is-selected', 'wrong');
-  if(state.mode !== 'prelim') btn.classList.remove('is-flipped');
-}
-function unselectSameSide(side){
-  const current = state.selected[side];
-  if(current && !current.classList.contains('is-matched')) resetCardVisual(current);
-  state.selected[side] = null;
-}
-function selectCard(btn, card){
-  if(state.locked || state.finished || btn.classList.contains('is-matched')) return;
-  const side = card.side;
-  if(btn === state.selected[side]){
-    resetCardVisual(btn);
-    state.selected[side] = null;
-    setFeedback('Match all pairs.');
-    return;
-  }
-  unselectSameSide(side);
-  btn.classList.add('is-flipped', 'is-selected');
-  state.selected[side] = btn;
-  setFeedback(side === 'term' ? 'Now choose a definition.' : 'Now choose a notation card.');
-  if(state.selected.term && state.selected.meaning) checkSelected();
-}
-function checkSelected(){
-  state.locked = true;
-  const termBtn = state.selected.term;
-  const meaningBtn = state.selected.meaning;
-  const termCard = cardFromButton(termBtn);
-  const meaningCard = cardFromButton(meaningBtn);
-  state.attempts += 1;
-  if(termCard.id === meaningCard.id){
-    termBtn.classList.remove('is-selected');
-    meaningBtn.classList.remove('is-selected');
-    termBtn.classList.add('is-matched');
-    meaningBtn.classList.add('is-matched');
-    state.score += 1;
-    state.batchMatches += 1;
-    updateHud();
-    setFeedback('Nice match', 'good');
-    state.selected = {term:null, meaning:null};
-    if(state.batchMatches === BATCH_SIZE){
-      state.setsCleared += 1;
-      setFeedback('Set cleared. New cards coming.', 'good');
-      setTimeout(() => dealNextBatch('New cards. Keep matching.'), 650);
-    }else{
-      state.locked = false;
-    }
-  } else {
-    termBtn.classList.add('wrong');
-    meaningBtn.classList.add('wrong');
-    setFeedback(state.mode === 'prelim' ? 'Not a match.' : 'Not a match — read both cards before they flip back.', 'bad');
-    setTimeout(() => {
-      if(state.finished) return;
-      resetCardVisual(termBtn);
-      resetCardVisual(meaningBtn);
-      state.selected = {term:null, meaning:null};
-      state.locked = false;
-      setFeedback('Match all pairs.');
-    }, state.mode === 'prelim' ? 900 : 3500);
+async function checkSelected(){
+  state.locked=true;
+  const leftBtn=state.selected.left,rightBtn=state.selected.right,leftCard=cardFromButton(leftBtn),rightCard=cardFromButton(rightBtn);
+  if(!leftCard||!rightCard){clearSelection();state.locked=false;return;}
+  const isMatch=!rightCard.decoy&&leftCard.pairId===rightCard.pairId;
+  if(isMatch){
+    const pair=PAIR_INDEX.get(leftCard.pairId);state.pairsMatched+=1;state.matchedPairIds.add(pair.id);state.correctPairIds.add(pair.id);state.matchIndexByPair[pair.id]=state.matchedPairIds.size;statsFor(pair.id).correct+=1;statsFor(pair.id).recapBoost=Math.max(0,statsFor(pair.id).recapBoost-1);
+    state.selected={left:null,right:null};setFeedback('Nice match.','good');await animateMatch(leftBtn,rightBtn,pair.id);
+    if(state.matchedPairIds.size>=state.activePairs.length){await completeSet();}else{state.locked=false;setFeedback(matchingPrompt());}
+  }else{
+    recordMiss(leftCard,rightCard);leftBtn.classList.add('is-wrong');rightBtn.classList.add('is-wrong');
+    await delay(450);resetStrip(leftBtn);resetStrip(rightBtn);state.selected={left:null,right:null};state.locked=false;setFeedback(matchingPrompt());
   }
 }
-function buildCongratulation(){
-  if(state.score === 0) return 'Time is up. Start another round and get the first match.';
-  if(state.score === 1) return 'Congratulations — you matched 1 pair.';
-  return `Congratulations — you matched ${state.score} pairs.`;
+async function completeSet(){
+  state.locked=true;state.setsCleared+=1;setFeedback('Set cleared!','good');els.boardShell.classList.add('is-set-cleared');
+  await delay(500);els.boardShell.classList.remove('is-set-cleared');
+  const result={index:state.setsCleared,pairIds:state.activePairs.map(pair=>pair.id),decoys:state.decoys.map(decoy=>({...decoy})),misses:state.setMisses,decoyMistakes:state.setDecoyMistakes,decoyPairings:JSON.parse(JSON.stringify(state.setDecoyPairings)),topic:state.currentTopic};
+  state.setResults.push(result);await renderSetReview(result);els.setReviewOverlay.hidden=false;const panel=els.setReviewOverlay.querySelector('.setReviewPanel');panel.scrollTop=0;document.getElementById('setReviewTitle').focus({preventScroll:true});
 }
-function fillSummary(){
-  document.getElementById('summaryTime').textContent = formatTime(ROUND_MS);
-  document.getElementById('summaryPairs').textContent = `${state.score}`;
-  document.getElementById('summaryTurns').textContent = `${state.setsCleared}`;
-  document.getElementById('summaryMessage').textContent = buildCongratulation();
-  const modeName = state.mode === 'prelim' ? 'Practice' : 'Recall';
-  const deckNames = state.deckIds.map(id => DECKS[id].label).join(' · ');
-  document.getElementById('summaryDecks').innerHTML = `<strong>Mode:</strong> ${modeName}<br><strong>Decks:</strong> ${deckNames}<br><strong>Pairs matched:</strong> ${state.score}`;
+async function renderSetReview(result){
+  document.getElementById('setReviewTitle').textContent=`Set ${result.index} cleared!`;document.getElementById('setReviewTopic').textContent=`Topic: ${result.topic}`;
+  document.getElementById('setReviewMessage').textContent='Read the pairs once more before moving on.';
+  const pairGrid=document.getElementById('setPairGrid');pairGrid.innerHTML='';
+  result.pairIds.forEach(id=>{const pair=PAIR_INDEX.get(id),row=document.createElement('div');row.className='reviewPair';row.innerHTML=`<div class="strip static" data-side="left"><span class="stripText">${safeInlineMath(pair.left)}</span></div><div class="strip static" data-side="right"><span class="stripText">${safeInlineMath(pair.right)}</span></div>`;pairGrid.appendChild(row);});
+  const decoyReveal=document.getElementById('decoyReveal'),decoyItems=document.getElementById('decoyItems'),celebration=document.getElementById('decoyCelebration');decoyItems.innerHTML='';
+  if(result.decoys.length){decoyReveal.hidden=false;result.decoys.forEach(decoy=>{const item=document.createElement('div');item.className='decoyItem';const counts=result.decoyPairings?.[decoy.id]||{};const mostCommon=Object.entries(counts).sort((a,b)=>b[1]-a[1])[0];const commonPair=mostCommon?PAIR_INDEX.get(mostCommon[0]):null;const commonLine=commonPair?`<span class="decoyCommon">Most often paired with ${safeInlineMath(commonPair.left)}.</span>`:'';item.innerHTML=`<div class="strip static" data-side="right"><span class="stripText">${safeInlineMath(decoy.right)}</span></div><div class="decoyExplain"><strong>No partner in this set.</strong> This describes ${clusterLabel(decoy.cluster)}.${commonLine}</div>`;decoyItems.appendChild(item);});celebration.hidden=result.decoyMistakes!==0;}else{decoyReveal.hidden=true;celebration.hidden=true;}
+  const last=state.setsCleared>=state.targetSets;document.getElementById('nextSetBtn').textContent=last?(state.missedPairIds.size?'Start lightning recap':'See round review'):'Next set';
+  await typeset(document.getElementById('setReviewOverlay'));fitStrips(document.getElementById('setReviewOverlay'));
 }
-function endTimedRound(){
-  if(state.finished) return;
-  state.finished = true;
-  state.locked = true;
-  stopTimer();
-  timerEl.textContent = '0:00';
-  setFeedback('Time is up.', 'done');
-  fillSummary();
-  showSummary();
+async function continueAfterSet(){
+  els.setReviewOverlay.hidden=true;
+  if(state.setsCleared>=state.targetSets){await startRecapOrSummary('complete');}else{await dealNextSet();}
 }
+function buildRecapEntries(){
+  return Object.entries(state.missCountByPair).filter(([id,count])=>count>0&&PAIR_INDEX.has(id)).sort((a,b)=>b[1]-a[1]).slice(0,MAX_RECAP_PAIRS).map(([pairId,initialMisses])=>({pairId,initialMisses,wrongAttempts:0,reasks:0,reverse:false}));
+}
+async function startRecapOrSummary(reason){
+  state.roundEndReason=reason;state.locked=true;clearSelection();
+  const entries=buildRecapEntries();
+  state.recapOmittedCount=Math.max(0,Object.keys(state.missCountByPair).filter(id=>state.missCountByPair[id]>0&&PAIR_INDEX.has(id)).length-entries.length);
+  if(!entries.length){state.recapStatus=state.totalMisses===0?'skipped-clean':'skipped-decoys';commitCompletedRound();await showSummary(reason);return;}
+  state.phase='recap';state.recapQueue=entries;state.recapInitialCount=entries.length;state.recapClearedIds=new Set();state.recapStatus='in-progress';els.matchingPhase.hidden=true;els.recapPhase.hidden=false;els.recapQuestion.hidden=false;els.recapComplete.hidden=true;updateHud();updateHint();setFeedback('Recap answers do not add misses.','done');renderNextRecapQuestion();
+}
+function recapDistractors(pair,direction){
+  const answerField=direction==='reverse'?'left':'right',correctKey=normalizedText(pair[answerField]);
+  const all=allDeckPairs(state.deckIds).filter(candidate=>candidate.id!==pair.id&&normalizedText(candidate[answerField])!==correctKey);
+  const neighbors=new Set(CLUSTER_NEIGHBORS[pair.cluster]||[]);
+  const pools=[all.filter(candidate=>candidate.cluster===pair.cluster),all.filter(candidate=>neighbors.has(candidate.cluster)),all.filter(candidate=>candidate.deckId===pair.deckId),all];
+  const out=[],seen=new Set([correctKey]);
+  for(const pool of pools){for(const candidate of shuffle(pool)){const key=normalizedText(candidate[answerField]);if(seen.has(key))continue;seen.add(key);out.push(candidate);if(out.length===2)return out;}}
+  return out;
+}
+function updateRecapProgress(){
+  const cleared=state.recapClearedIds.size,total=state.recapInitialCount;els.recapProgressText.textContent=`${cleared} of ${total} cleared`;els.recapQuestionCount.textContent=state.recapCurrent?`Question ${Math.min(cleared+1,total)} of ${total}`:'';els.recapFill.style.width=`${total?Math.round(cleared/total*100):0}%`;
+}
+async function renderNextRecapQuestion(){
+  state.recapGuided=false;els.recapContinueBtn.hidden=true;
+  if(!state.recapQueue.length){finishRecap();return;}
+  const entry=state.recapQueue.shift();state.recapCurrent=entry;
+  const pair=PAIR_INDEX.get(entry.pairId),direction=entry.reverse?'reverse':'normal',promptField=entry.reverse?'right':'left',answerField=entry.reverse?'left':'right',promptSide=entry.reverse?'right':'left',answerSide=entry.reverse?'left':'right';
+  els.recapDirection.textContent=entry.reverse?'Match this meaning:':'Match this concept:';els.recapPrompt.dataset.side=promptSide;els.recapPrompt.dataset.pairId=pair.id;els.recapPrompt.querySelector('.stripText').innerHTML=safeInlineMath(pair[promptField]);
+  const options=shuffle([pair,...recapDistractors(pair,direction)]).slice(0,3);els.recapChoices.innerHTML='';
+  options.forEach((option,index)=>{const btn=document.createElement('button');btn.type='button';btn.className='recapChoice';btn.dataset.side=answerSide;btn.dataset.pairId=option.id;btn.innerHTML=`<span class="recapChoiceTag" aria-hidden="true">${String.fromCharCode(65+index)}</span><span class="recapChoiceText">${safeInlineMath(option[answerField])}</span>`;btn.setAttribute('aria-label',`${String.fromCharCode(65+index)}: ${plainForAria(option[answerField])}`);btn.addEventListener('click',()=>answerRecap(btn,option.id));els.recapChoices.appendChild(btn);});
+  els.recapFeedback.className='recapFeedback';els.recapFeedback.textContent='Choose the best match.';updateRecapProgress();await typeset(els.recapQuestion);fitStrips(els.recapQuestion);fitRecapChoices(els.recapQuestion);
+  state.locked=false;
+}
+async function answerRecap(btn,optionPairId){
+  if(state.locked||!state.recapCurrent)return;
+  const entry=state.recapCurrent,pair=PAIR_INDEX.get(entry.pairId),correct=optionPairId===entry.pairId;
+  if(correct){
+    state.locked=true;btn.classList.add('is-answer');els.recapChoices.querySelectorAll('button').forEach(choice=>choice.disabled=true);state.recapClearedIds.add(entry.pairId);const st=statsFor(entry.pairId);st.recapBoost=Math.max(st.recapBoost,3);
+    els.recapFeedback.className='recapFeedback good';els.recapFeedback.innerHTML='<strong>Cleared ✓</strong>';updateRecapProgress();els.recapContinueBtn.textContent=state.recapQueue.length?'Next question':'Finish recap';els.recapContinueBtn.hidden=false;els.recapContinueBtn.focus();return;
+  }
+  if(state.recapGuided)return;
+  entry.wrongAttempts+=1;btn.classList.add('is-wrong-answer');const correctBtn=els.recapChoices.querySelector(`[data-pair-id="${CSS.escape(entry.pairId)}"]`);correctBtn?.classList.add('is-answer');
+  els.recapFeedback.className='recapFeedback bad';els.recapFeedback.innerHTML=`<strong>Here is the match.</strong> ${safeInlineMath(pair.note)}`;
+  if(entry.reasks<MAX_RECAP_REASKS){
+    entry.reasks+=1;entry.reverse=entry.initialMisses>=2&&entry.reasks>=1;state.recapQueue.push(entry);state.locked=true;els.recapChoices.querySelectorAll('button').forEach(choice=>choice.disabled=true);els.recapContinueBtn.textContent='Try the next question';els.recapContinueBtn.hidden=false;els.recapContinueBtn.focus();
+  }else{
+    state.recapGuided=true;els.recapFeedback.innerHTML+=` <strong>Tap the highlighted answer to clear this one.</strong>`;els.recapChoices.querySelectorAll('button').forEach(choice=>{choice.disabled=choice.dataset.pairId!==entry.pairId;});correctBtn?.focus();
+  }
+}
+function finishRecap(){state.recapStatus='cleared';state.recapCurrent=null;state.locked=true;commitCompletedRound();els.recapQuestion.hidden=true;els.recapComplete.hidden=false;const text=els.recapComplete.querySelector('p');text.textContent=state.recapOmittedCount?`The ${state.recapInitialCount} highest-priority revisits are cleared. ${state.recapOmittedCount} more ${state.recapOmittedCount===1?'item is':'items are'} marked in the round review.`:'Every missed concept was answered correctly.';updateRecapProgress();document.getElementById('recapSummaryBtn').focus();}
+function orderedRoundPairs(){
+  const pairs=state.roundPairIds.map(id=>PAIR_INDEX.get(id)).filter(Boolean),clusterOrder=unique(pairs.map(pair=>pair.cluster));
+  return clusterOrder.flatMap(cluster=>pairs.filter(pair=>pair.cluster===cluster));
+}
+async function renderRoundCards(){
+  const wrap=document.getElementById('roundCardItems');wrap.innerHTML='';
+  orderedRoundPairs().forEach(pair=>{const item=document.createElement('div');item.className='roundCardItem';const revisit=state.missedPairIds.has(pair.id)?'<b class="revisitChip">revisit</b>':'';item.innerHTML=`${revisit}<strong>${safeInlineMath(pair.left)}</strong><span class="pairArrow">↔</span><span class="pairMeaning">${safeInlineMath(pair.right)}</span>`;wrap.appendChild(item);});
+  await typeset(wrap);
+  requestAnimationFrame(()=>wrap.querySelectorAll('.roundCardItem').forEach(item=>{if(!isMobile()&&item.scrollWidth>item.clientWidth+2)item.classList.add('wide');}));
+}
+async function showSummary(reason=state.roundEndReason){
+  state.finished=true;state.phase='summary';state.locked=true;hideAllOverlays();
+  const complete=reason==='complete'&&state.setsCleared>=state.targetSets,badge=document.getElementById('summaryBadge'),title=document.getElementById('summaryTitle'),message=document.getElementById('summaryMessage');
+  document.getElementById('summarySets').textContent=`${state.setsCleared} / ${state.targetSets}`;document.getElementById('summaryPairs').textContent=String(state.pairsMatched);document.getElementById('summaryMisses').textContent=String(state.totalMisses);
+  if(state.totalMisses===0&&complete){badge.textContent='⚡';title.textContent='Clean round — no recap needed';message.textContent='Every pair landed without a miss.';}
+  else if(state.recapStatus==='cleared'){badge.textContent='✓';title.textContent='All cleared!';message.textContent='You finished the round and answered every revisit correctly.';}
+  else if(complete){badge.textContent='✓';title.textContent='Round complete!';message.textContent='You completed all sets and reviewed the cards.';}
+  else{badge.textContent='↩';title.textContent='Good work today';message.textContent='You stopped early, and the cards you encountered are reviewed below.';}
+  const levelName=state.isReviewRound?'Focused replay':state.level==='challenge'?'Challenge':'Match';const deckNames=state.deckIds.map(id=>DECKS[id].label).join(' · ');
+  const recapShort=state.recapStatus==='cleared'?'recap cleared ✓':state.recapStatus==='skipped-clean'?'clean round · no recap needed ✓':state.recapStatus==='skipped-decoys'?'no concept recap needed':'recap not completed';document.getElementById('summarySub').textContent=`${levelName} · ${deckNames} · ${recapShort}`;
+  await renderRoundCards();document.getElementById('summaryReviewBtn').hidden=state.missedPairIds.size===0;els.summaryOverlay.hidden=false;document.getElementById('summaryReplayBtn').focus();
+}
+async function launchGame(level,deckIds,options={}){
+  const reviewIds=unique((options.reviewPairIds||[]).filter(id=>PAIR_INDEX.has(id)));
+  state=freshState();state.level=reviewIds.length?'match':level;state.deckIds=[...deckIds];state.reviewPairIds=reviewIds.length?reviewIds:null;state.reviewQueue=reviewIds.length?shuffle(reviewIds):[];state.isReviewRound=reviewIds.length>0;state.targetSets=reviewIds.length?Math.max(1,Math.ceil(reviewIds.length/PAIRS_PER_SET)):SETS_PER_ROUND;
+  hideAllOverlays();els.infoBtn.hidden=true;els.introHero.hidden=true;els.introScreen.hidden=true;els.gameScreen.hidden=false;window.scrollTo(0,0);updateHud();await dealNextSet();
+}
+function startGame(level){const deckIds=selectedDeckIds();if(!deckIds.length){showDeckChoicePrompt();return;}clearDeckChoicePrompt();launchGame(level,deckIds);}
 function showConfirm(){
-  if(summaryOverlay.hidden === false) return;
-  confirmOverlay.hidden = false;
-  document.getElementById('cancelNewBtn').focus();
+  if(state.finished)return;
+  const replayComplete=state.isReviewRound&&state.setsCleared>=state.targetSets&&['cleared','skipped-clean','skipped-decoys'].includes(state.recapStatus),completed=state.completionCommitted;
+  document.getElementById('confirmTitle').textContent=completed?'Leave this completed round?':replayComplete?'Leave this focused replay?':state.phase==='recap'?'Leave the lightning recap?':'End this round early?';
+  document.getElementById('confirmMessage').textContent=completed?'Your deck completion has already been updated. You can leave without opening the round review.':replayComplete?'Focused replay does not change deck completion. You can leave without opening the round review.':'Leaving before the round is complete will not update your deck completion, and no card summary will be shown.';
+  document.getElementById('confirmNewBtn').textContent=completed||replayComplete?'Return to menu':'Exit without saving';els.confirmOverlay.hidden=false;document.getElementById('cancelNewBtn').focus();
 }
-function hideConfirm(){ confirmOverlay.hidden = true; }
-function showSummary(){
-  summaryOverlay.hidden = false;
-  document.getElementById('summaryReplayBtn').focus();
-}
-function hideSummary(){ summaryOverlay.hidden = true; }
-function returnIntro(){
-  hideConfirm();
-  hideSummary();
-  stopTimer();
-  state.finished = true;
-  gameScreen.hidden = true;
-  introHero.hidden = false;
-  introScreen.hidden = false;
-  setTimeout(() => typeset(introScreen), 20);
-}
-function replayCurrent(){
-  hideSummary();
-  launchGame(state.mode, state.deckIds);
-}
-
-document.querySelectorAll('.modeLaunchBtn').forEach(btn => {
-  btn.addEventListener('click', () => startGame(btn.dataset.mode));
-});
-document.querySelectorAll('input[name="deck"]').forEach(input => {
-  input.addEventListener('change', () => {
-    if(selectedDeckIds().length > 0) clearDeckChoicePrompt();
-  });
-});
-if(deckInstruction){
-  deckInstruction.addEventListener('animationend', () => deckInstruction.classList.remove('is-alerting'));
-}
-document.getElementById('newBtn').addEventListener('click', showConfirm);
-document.getElementById('cancelNewBtn').addEventListener('click', hideConfirm);
-document.getElementById('confirmNewBtn').addEventListener('click', returnIntro);
-document.getElementById('summaryIntroBtn').addEventListener('click', returnIntro);
-document.getElementById('summaryReplayBtn').addEventListener('click', replayCurrent);
-confirmOverlay.addEventListener('click', e => { if(e.target === confirmOverlay) hideConfirm(); });
-document.addEventListener('keydown', e => {
-  if(e.key === 'Escape'){
-    if(!confirmOverlay.hidden) hideConfirm();
+function returnIntro(){hideAllOverlays();state.finished=true;els.gameScreen.hidden=true;els.infoBtn.hidden=false;els.introHero.hidden=false;els.introScreen.hidden=false;renderDeckProgress();typeset(els.introScreen);}
+function replayCurrent(){const level=state.level,decks=[...state.deckIds],review=state.isReviewRound?[...(state.reviewPairIds||[])]:null;els.summaryOverlay.hidden=true;launchGame(level,decks,review?{reviewPairIds:review}:{});}
+function reviewMisses(){const ids=[...state.missedPairIds];if(!ids.length)return;const decks=[...state.deckIds];els.summaryOverlay.hidden=true;launchGame('match',decks,{reviewPairIds:ids});}
+function handleKeyboard(event){
+  if(!els.resetProgressOverlay.hidden){if(event.key==='Escape'){closeResetProgressDialog();return;}if(event.key==='Tab')trapDialogFocus(event,els.resetProgressOverlay);return;}
+  if(event.key==='Escape'){
+    if(!els.infoOverlay.hidden){closeInfoDialog();return;}
+    if(state.phase==='matching'&&(state.selected.left||state.selected.right)){clearSelection();setFeedback(matchingPrompt());return;}
+    if(!els.confirmOverlay.hidden){els.confirmOverlay.hidden=true;return;}
+    if(!els.summaryOverlay.hidden){returnIntro();return;}
+    return;
   }
-});
+  if(state.phase==='recap'&&!els.recapPhase.hidden){const index=['1','2','3'].indexOf(event.key);if(index>=0){const choice=els.recapChoices.querySelectorAll('button')[index];if(choice&&!choice.disabled){event.preventDefault();choice.click();}}return;}
+  if(els.gameScreen.hidden||state.locked||state.finished||state.phase!=='matching'||!els.confirmOverlay.hidden||!els.setReviewOverlay.hidden||!els.summaryOverlay.hidden)return;
+  const key=event.key.toLowerCase(),leftKeys=['1','2','3','4','5','6','7','8','9'],rightKeys=['q','w','e','r','t','y','u','i','o'];let btn=null;
+  const li=leftKeys.indexOf(key),ri=rightKeys.indexOf(key);if(li>=0)btn=els.leftGrid.querySelectorAll('.strip')[li];if(ri>=0)btn=els.rightGrid.querySelectorAll('.strip')[ri];if(btn){event.preventDefault();btn.click();}
+}
 
+document.querySelectorAll('.modeLaunchBtn').forEach(btn=>btn.addEventListener('click',()=>startGame(btn.dataset.level)));
+document.querySelectorAll('input[name="deck"]').forEach(input=>input.addEventListener('change',()=>{if(selectedDeckIds().length)clearDeckChoicePrompt();}));
+els.resetProgressBtn.addEventListener('click',openResetProgressDialog);
+els.resetProgressOverlay.querySelectorAll('input[name="resetDeck"]').forEach(input=>input.addEventListener('change',updateResetProgressButton));
+document.getElementById('cancelResetProgressBtn').addEventListener('click',closeResetProgressDialog);
+els.confirmResetProgressBtn.addEventListener('click',resetSelectedProgress);
+els.infoBtn.addEventListener('click',openInfoDialog);
+els.closeInfoBtn.addEventListener('click',closeInfoDialog);
+els.deckInstruction.addEventListener('animationend',()=>els.deckInstruction.classList.remove('is-alerting'));
+document.getElementById('newBtn').addEventListener('click',showConfirm);
+document.getElementById('cancelNewBtn').addEventListener('click',()=>{els.confirmOverlay.hidden=true;});
+document.getElementById('confirmNewBtn').addEventListener('click',()=>{els.confirmOverlay.hidden=true;returnIntro();});
+document.getElementById('nextSetBtn').addEventListener('click',continueAfterSet);
+els.recapContinueBtn.addEventListener('click',()=>{state.locked=true;renderNextRecapQuestion();});
+document.getElementById('recapSummaryBtn').addEventListener('click',()=>showSummary(state.roundEndReason));
+document.getElementById('summaryIntroBtn').addEventListener('click',returnIntro);
+document.getElementById('summaryReplayBtn').addEventListener('click',replayCurrent);
+document.getElementById('summaryReviewBtn').addEventListener('click',reviewMisses);
+document.getElementById('summaryPrintBtn').addEventListener('click',()=>window.print());
+els.confirmOverlay.addEventListener('click',event=>{if(event.target===els.confirmOverlay)els.confirmOverlay.hidden=true;});
+els.resetProgressOverlay.addEventListener('click',event=>{if(event.target===els.resetProgressOverlay)closeResetProgressDialog();});
+els.infoOverlay.addEventListener('click',event=>{if(event.target===els.infoOverlay)closeInfoDialog();});
+document.addEventListener('keydown',handleKeyboard);
+const handleMediaChange=()=>{if(!els.gameScreen.hidden&&state.phase==='matching'){clearSelection();renderBoard();}};
+if(mobileMedia.addEventListener)mobileMedia.addEventListener('change',handleMediaChange);else mobileMedia.addListener?.(handleMediaChange);
+
+renderDeckProgress();
 typeset(document.body);
 </script>
 </body>
