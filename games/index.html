@@ -491,21 +491,22 @@
 
     main { padding: 2.5rem 0 3.25rem; }
 
+    .grid-notes {
+      max-width: 54rem;
+      margin-bottom: 1.5rem;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .grid-notes p { margin: 0 0 0.55rem; }
+    .grid-notes strong { color: var(--ink); }
+
     .grid-head {
       display: flex;
       align-items: baseline;
-      justify-content: space-between;
+      justify-content: flex-end;
       gap: 1rem;
       margin-bottom: 1.5rem;
-    }
-
-    .grid-title {
-      margin: 0;
-      font-family: var(--display);
-      font-weight: 400;
-      font-size: clamp(1.4rem, 3.2vw, 2rem);
-      text-transform: uppercase;
-      letter-spacing: 0.01em;
     }
 
     .grid-count {
@@ -646,10 +647,6 @@
 
     footer p { margin: 0 0 0.6rem; }
 
-    details.colophon { margin: 0 0 0.8rem; }
-    details.colophon summary { cursor: pointer; font-weight: 700; color: var(--ink); }
-    details.colophon p { margin-top: 0.5rem; }
-
     @media (prefers-reduced-motion: reduce) {
       * { animation: none !important; transition: none !important; }
       .ticker-track { animation: none !important; }
@@ -670,7 +667,7 @@
       <h1>
         <span class="line">Linear Algebra</span>
         <span class="line outline">&amp; Optimization</span>
-        <span class="line pop" id="games-word">Games</span>
+        <span class="line pop" id="games-word">Mini-games</span>
       </h1>
       <p class="lede">Short, replayable games for practicing concepts and skills from linear algebra, multivariable calculus, and optimization.</p>
       <p class="byline">By <a href="https://people.math.wisc.edu/~roch/">Sébastien Roch</a>, Department of Mathematics, University of Wisconsin-Madison</p>
@@ -687,8 +684,12 @@
   </div>
 
   <main class="wrap">
+    <div class="grid-notes">
+      <p><strong>AI Use:</strong> ChatGPT Pro assisted with brainstorming/refining/tailoring; Codex handled prototyping/tweaking/playtesting/deploying; Claude Fable critiqued. I take full responsibility for the final product.</p>
+      <p><strong>Devices:</strong> Some of these mini-games are not quite mobile-friendly. A wide enough screen is recommended.</p>
+    </div>
+
     <div class="grid-head">
-      <h2 class="grid-title">The games</h2>
       <span class="grid-count" id="grid-count"></span>
     </div>
 
@@ -701,12 +702,8 @@
 
   <footer>
     <div class="wrap">
-      <details class="colophon">
-        <summary>About these games &amp; AI use</summary>
-        <p>ChatGPT Pro assisted with brainstorming/refining/tailoring; Codex handled prototyping/tweaking/playtesting/deploying; Claude Fable critiqued. I take full responsibility for the final product.</p>
-      </details>
       <p>Copyright and License: Except where otherwise noted, these games and accompanying materials are &copy; 2026 Sébastien Roch and licensed under a <a href="https://creativecommons.org/licenses/by-nc/4.0/">Creative Commons Attribution-NonCommercial 4.0 International License</a>. Game source code is licensed under the <a href="https://opensource.org/license/mit">MIT License</a>.</p>
-      <p>Updated: July 22, 2026</p>
+      <p>Updated: July 30, 2026</p>
     </div>
   </footer>
 
