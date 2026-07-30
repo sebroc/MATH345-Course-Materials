@@ -491,15 +491,15 @@
 
     main { padding: 2.5rem 0 3.25rem; }
 
-    .grid-notes {
+    .hero-notes {
       max-width: 54rem;
-      margin-bottom: 1.5rem;
       color: var(--muted);
       font-size: 0.92rem;
     }
 
-    .grid-notes p { margin: 0 0 0.55rem; }
-    .grid-notes strong { color: var(--ink); }
+    .hero-notes p { margin: 0 0 0.55rem; }
+    .hero-notes p:last-child { margin-bottom: 0; }
+    .hero-notes strong { color: var(--ink); }
 
     .grid-head {
       display: flex;
@@ -671,6 +671,10 @@
       </h1>
       <p class="lede">Short, replayable games for practicing concepts and skills from linear algebra, multivariable calculus, and optimization.</p>
       <p class="byline">By <a href="https://people.math.wisc.edu/~roch/">Sébastien Roch</a>, Department of Mathematics, University of Wisconsin-Madison</p>
+      <div class="hero-notes">
+        <p><strong>AI Use:</strong> ChatGPT Pro assisted with brainstorming/refining/tailoring; Codex handled prototyping/tweaking/playtesting/deploying; Claude Fable critiqued. I take full responsibility for the final product.</p>
+        <p><strong>Devices:</strong> Some of these mini-games are not quite mobile-friendly. A wide enough screen is recommended.</p>
+      </div>
       <div class="hero-actions">
         <a class="btn btn-blue" href="https://math345-textbook.github.io/">Lecture notes ↗</a>
         <a class="btn" href="https://people.math.wisc.edu/~roch/linopt/">Course website ↗</a>
@@ -684,11 +688,6 @@
   </div>
 
   <main class="wrap">
-    <div class="grid-notes">
-      <p><strong>AI Use:</strong> ChatGPT Pro assisted with brainstorming/refining/tailoring; Codex handled prototyping/tweaking/playtesting/deploying; Claude Fable critiqued. I take full responsibility for the final product.</p>
-      <p><strong>Devices:</strong> Some of these mini-games are not quite mobile-friendly. A wide enough screen is recommended.</p>
-    </div>
-
     <div class="grid-head">
       <span class="grid-count" id="grid-count"></span>
     </div>
