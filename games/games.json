@@ -62,6 +62,13 @@
       "href": "ExtremeQuest/",
       "image": "extreme-quest-small.jpg",
       "version": "v0.2(beta)"
+    },
+    {
+      "title": "Lagrange National Park",
+      "slug": "LagrangeNationalPark",
+      "href": "LagrangeNationalPark/",
+      "image": "lagrange-national-park-small.jpg",
+      "version": "v0.2(beta)"
     }
   ]
 }

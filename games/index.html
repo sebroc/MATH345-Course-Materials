@@ -80,7 +80,7 @@
       display: grid;
       gap: 1.2rem;
       justify-items: start;
-      padding: clamp(2.25rem, 6vh, 4.25rem) 0 clamp(2.75rem, 7vh, 4.5rem);
+      padding: clamp(2.25rem, 6vh, 4.25rem) 0 clamp(1.75rem, 4vh, 2.5rem);
       min-height: min(80vh, 46rem);
       align-content: center;
     }
@@ -89,7 +89,7 @@
       .hero-inner {
         gap: 1rem;
         min-height: 0;
-        padding: clamp(1.5rem, 4vw, 2rem) 0 clamp(1.75rem, 5vw, 2.5rem);
+        padding: clamp(1.5rem, 4vw, 2rem) 0 clamp(1.25rem, 3vw, 1.75rem);
         align-content: start;
       }
     }
@@ -144,7 +144,7 @@
       margin: 0;
       max-width: 40rem;
       color: var(--muted);
-      font-size: clamp(1rem, 2vw, 1.12rem);
+      font-size: clamp(1.08rem, 2.1vw, 1.22rem);
       font-weight: 500;
     }
 
@@ -493,8 +493,9 @@
 
     .hero-notes {
       max-width: 54rem;
+      margin-top: 0.4rem;
       color: var(--muted);
-      font-size: 0.92rem;
+      font-size: 0.84rem;
     }
 
     .hero-notes p { margin: 0 0 0.55rem; }
@@ -671,13 +672,13 @@
       </h1>
       <p class="lede">Short, replayable games for practicing concepts and skills from linear algebra, multivariable calculus, and optimization.</p>
       <p class="byline">By <a href="https://people.math.wisc.edu/~roch/">Sébastien Roch</a>, Department of Mathematics, University of Wisconsin-Madison</p>
-      <div class="hero-notes">
-        <p><strong>AI Use:</strong> ChatGPT Pro assisted with brainstorming/refining/tailoring; Codex handled prototyping/tweaking/playtesting/deploying; Claude Fable critiqued. I take full responsibility for the final product.</p>
-        <p><strong>Devices:</strong> Some of these mini-games are not quite mobile-friendly. A wide enough screen is recommended.</p>
-      </div>
       <div class="hero-actions">
         <a class="btn btn-blue" href="https://math345-textbook.github.io/">Lecture notes ↗</a>
         <a class="btn" href="https://people.math.wisc.edu/~roch/linopt/">Course website ↗</a>
+      </div>
+      <div class="hero-notes">
+        <p><strong>AI Use:</strong> ChatGPT Pro assisted with brainstorming/refining/tailoring; Codex handled prototyping/tweaking/playtesting/deploying; Claude Fable critiqued. I take full responsibility for the final product.</p>
+        <p><strong>Devices:</strong> Some of these mini-games are not entirely mobile-friendly. A wide enough screen is recommended.</p>
       </div>
 
     </div>
@@ -694,7 +695,7 @@
 
     <ul class="grid" id="grid">
       <noscript>
-        <li><p>Games: <a href="MatriXMatch/">MatriX Match</a> · <a href="ShearMadness/">Shear Madness</a> · <a href="TheEliminationGame/">The Elimination Game</a> · <a href="NullAndOrder/">Null &amp; Order</a> · <a href="DifferentialDiagnosis/">Differential Diagnosis</a> · <a href="OptimalRecall/">Optimal Recall</a> · <a href="PerfectlyNormal/">Perfectly Normal</a> · <a href="ResidualSquares/">Residual Squares</a> · <a href="ExtremeQuest/">Extreme Quest</a></p></li>
+        <li><p>Games: <a href="MatriXMatch/">MatriX Match</a> · <a href="ShearMadness/">Shear Madness</a> · <a href="TheEliminationGame/">The Elimination Game</a> · <a href="NullAndOrder/">Null &amp; Order</a> · <a href="DifferentialDiagnosis/">Differential Diagnosis</a> · <a href="OptimalRecall/">Optimal Recall</a> · <a href="PerfectlyNormal/">Perfectly Normal</a> · <a href="ResidualSquares/">Residual Squares</a> · <a href="ExtremeQuest/">Extreme Quest</a> · <a href="LagrangeNationalPark/">Lagrange National Park</a></p></li>
       </noscript>
     </ul>
   </main>
@@ -738,6 +739,9 @@
     { dir: "ExtremeQuest", img: "extreme-quest-small.jpg?v=20260717-093350",
       title: "Extreme Quest", ver: "v0.2β",
       topics: ["critical points", "global min & max"] },
+    { dir: "LagrangeNationalPark", img: "lagrange-national-park-small.jpg",
+      title: "Lagrange National Park", ver: "v0.2β",
+      topics: ["constrained optimization", "Lagrange multipliers", "level curves", "gradients"] },
   ];
 
   document.getElementById('grid').insertAdjacentHTML('beforeend', GAMES.map((g, i) => `
