@@ -20,6 +20,7 @@
 
 /* latest requested UI cleanup */
 .tracker{flex-wrap:wrap;overflow-x:visible}
+.validChoicesNote{margin:5px 0 0;color:var(--muted);font-size:11.5px;font-weight:650;line-height:1.3}
 .choiceText{white-space:pre-line}
 .choiceText[data-tex]{white-space:normal;font-size:18px}
 .choiceText mjx-container,.choice .MathJax,.choice .mjx-chtml{font-size:1.06em!important;margin:0!important}
@@ -37,10 +38,12 @@
 
 /* landing page and view routing */
 body.introActive{place-items:start center}
+.gameShell{width:min(100%,720px);display:grid;gap:10px;justify-items:end}
+.gameShell>.game{width:100%}
 .titleHome{all:unset;display:flex;align-items:center;gap:10px;min-width:0;border-radius:13px;cursor:pointer}
 .titleHome span:last-child{min-width:0}
 .titleHome:focus-visible{outline:3px solid rgba(91,101,242,.35);outline-offset:3px}
-#introView{position:relative;padding:16px 18px 72px;display:grid;gap:12px}
+#introView{position:relative;padding:16px 18px;display:grid;gap:12px}
 .introCard{border:1px solid var(--line);border-radius:20px;background:var(--card-2);padding:15px 16px}
 .introEyebrow{display:block;margin-bottom:4px;color:var(--accent);font-size:11px;font-weight:850;letter-spacing:.075em;text-transform:uppercase}
 .introCard h2,.introModes h2{margin:0;font-size:clamp(20px,3.8vw,25px);line-height:1.1;letter-spacing:-.03em}
@@ -96,12 +99,14 @@ body.introActive{place-items:start center}
 .modeCard h3{margin:0;font-size:17px;line-height:1.15;letter-spacing:-.02em}
 .modeCard p{margin:0;color:var(--muted);font-size:13px;font-weight:650;line-height:1.4}
 .modeBest{position:absolute;right:14px;top:15px;color:var(--muted);font-size:11px;font-weight:850;font-variant-numeric:tabular-nums;letter-spacing:.02em}
-.aboutBtn{appearance:none;position:absolute;right:18px;bottom:16px;width:42px;height:42px;border:1px solid #bec6ff;border-radius:50%;display:grid;place-items:center;background:var(--card);color:var(--accent);font-size:22px;line-height:1;font-weight:900;cursor:pointer;box-shadow:0 3px 10px rgba(91,101,242,.12);transition:transform .12s ease,border-color .12s ease,box-shadow .12s ease}
+.aboutBtn{appearance:none;position:static;margin-right:18px;width:42px;height:42px;border:1px solid #bec6ff;border-radius:50%;display:grid;place-items:center;background:var(--card);color:var(--accent);font-size:22px;line-height:1;font-weight:900;cursor:pointer;box-shadow:0 3px 10px rgba(91,101,242,.12);transition:transform .12s ease,border-color .12s ease,box-shadow .12s ease}
+.gameShell>.aboutBtn{justify-self:end}
+body:not(.introActive) .gameShell>.aboutBtn{display:none}
 .aboutBtn:hover{transform:translateY(-1px);border-color:var(--accent);box-shadow:0 5px 14px rgba(91,101,242,.16)}
 .aboutBtn:focus-visible{outline:3px solid rgba(91,101,242,.3);outline-offset:3px}
 .introFootnote{margin:1px 0 0;color:var(--muted);font-size:12px;font-weight:650;line-height:1.35;text-align:center}
 .introFootnote a{color:var(--accent);font-weight:800;text-underline-offset:2px}
-@media(max-width:560px){#introView{padding:10px 10px 14px}.introCard{padding:13px 12px}.introCard.introDisclosure{padding:0}.introDisclosureHeader{padding:12px}.introDisclosureContent{padding:0 12px 12px}.introDisclosureHeader .cheatActions{width:100%;justify-content:flex-end}.outcomeList{grid-template-columns:1fr}.cheatGrid{grid-template-columns:1fr;gap:12px}.cheatActions{justify-content:center}.modeCards{grid-template-columns:1fr}.introModesHead{text-align:center}.introMatrixFigure{width:100%}.titleHome{gap:8px}}
+@media(max-width:560px){#introView{padding:10px}.introCard{padding:13px 12px}.introCard.introDisclosure{padding:0}.introDisclosureHeader{padding:12px}.introDisclosureContent{padding:0 12px 12px}.introDisclosureHeader .cheatActions{width:100%;justify-content:flex-end}.outcomeList{grid-template-columns:1fr}.cheatGrid{grid-template-columns:1fr;gap:12px}.cheatActions{justify-content:center}.modeCards{grid-template-columns:1fr}.introModesHead{text-align:center}.introMatrixFigure{width:100%}.titleHome{gap:8px}.aboutBtn{margin-right:12px}}
 @media(max-width:350px){#introView{padding-inline:7px}.introCard{padding-inline:9px}.introMatrixScroller{margin-inline:-4px}.buttonNote{width:100%;text-align:center}}
 @media(prefers-color-scheme:dark){.top{background:linear-gradient(180deg,rgba(21,27,42,.98),rgba(16,24,39,.96))}}
 
@@ -190,6 +195,7 @@ window.MathJax = {
 <script defer id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
 </head>
 <body>
+<div class="gameShell">
 <main class="game" id="game">
   <header class="top">
     <div class="titleRow">
@@ -287,7 +293,6 @@ window.MathJax = {
         </article>
       </div>
     </section>
-    <button class="aboutBtn" id="aboutBtn" type="button" aria-label="About The Elimination Game" aria-haspopup="dialog">?</button>
   </section>
 
 
@@ -367,6 +372,7 @@ window.MathJax = {
       <section class="taskPanel" id="taskPanel" aria-labelledby="promptText" tabindex="-1">
         <div class="taskLabel" id="taskLabel">Start</div>
         <h2 class="promptText" id="promptText">Pick the next valid row operation.</h2>
+        <p class="validChoicesNote" id="validChoicesNote">Several choices may be valid.</p>
       </section>
 
       <section class="matrixCard" aria-label="Current augmented matrix">
@@ -427,9 +433,10 @@ window.MathJax = {
     <div class="confirmCard aboutCard">
       <h2 id="aboutTitle">About The Elimination Game</h2>
       <div class="aboutList">
-        <p><strong>Version:</strong> The Elimination Game [v0.2(beta)]</p>
+        <p><strong>Version:</strong> The Elimination Game [v0.3(beta)]</p>
         <p><strong>Copyright:</strong> © 2026 <a href="https://people.math.wisc.edu/~roch/" target="_blank" rel="noopener noreferrer">Sébastien Roch</a></p>
-        <p><strong>License:</strong> <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener noreferrer">Creative Commons Attribution-NonCommercial 4.0 International License</a></p>
+        <p><strong>Code license:</strong> The software source code—including the functional HTML, CSS, and JavaScript—is available under the <a href="https://opensource.org/license/mit" target="_blank" rel="noopener noreferrer">MIT License</a>.</p>
+        <p><strong>Content license:</strong> Except where otherwise noted, the original instructional text, questions, feedback, and visual assets are licensed under the <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener noreferrer">Creative Commons Attribution-NonCommercial 4.0 International License</a>.</p>
         <p><strong>Textbook:</strong> <a href="https://math345-textbook.github.io/" target="_blank" rel="noopener noreferrer">math345-textbook.github.io</a></p>
         <p><strong>Privacy:</strong> Your best scores are saved in this browser on this device. They are not uploaded anywhere. If you use a private window, clear site data, switch browsers, or block site storage, your best scores may reset.</p>
         <p><strong>Acknowledgments:</strong> Thanks to Betsy Stovall for helpful feedback.</p>
@@ -440,6 +447,8 @@ window.MathJax = {
     </div>
   </div>
 </main>
+<button class="aboutBtn" id="aboutBtn" type="button" aria-label="About The Elimination Game" aria-haspopup="dialog">?</button>
+</div>
 <script>
 
 class Frac{
@@ -828,7 +837,7 @@ function setPlayChrome(show){
   updateIntroModeButtons();
 }
 function setBaseContentInert(on){
-  for(const el of [document.querySelector('.top'),document.getElementById('introView'),document.getElementById('playWrap')])if(el)el.inert=on;
+  for(const el of [document.querySelector('.top'),document.getElementById('introView'),document.getElementById('playWrap'),document.getElementById('aboutBtn')])if(el)el.inert=on;
 }
 function anyModalOpen(){return !document.getElementById('warmupPanel').hidden||!document.getElementById('menuConfirmPanel').hidden||!document.getElementById('aboutPanel').hidden||document.getElementById('endPanel').classList.contains('show');}
 function syncModalState(){document.body.classList.toggle('modalOpen',anyModalOpen());setBaseContentInert(anyModalOpen());}

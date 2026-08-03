@@ -71,7 +71,7 @@ button{font:inherit}
   box-shadow:var(--shadow);
   overflow:hidden;
 }
-.app.introMode{position:relative;padding:24px 26px 84px}
+.app.introMode{position:relative;padding:18px 26px}
 .top{
   padding:16px 18px 12px;
   display:grid;
@@ -79,7 +79,7 @@ button{font:inherit}
   gap:10px 12px;
   align-items:start;
 }
-.introMode .top{padding:0;margin-bottom:22px;grid-template-columns:1fr}
+.introMode .top{padding:0;margin-bottom:14px;grid-template-columns:minmax(0,1fr) auto}
 h1{
   margin:0;
   color:#1478d4;
@@ -89,8 +89,9 @@ h1{
 }
 .xmark{display:inline-block;color:#ff1493;font-weight:1000;transform:translateY(-.01em) rotate(-4deg)}
 .subtitle{margin:6px 0 0;color:#6f655c;font-size:13px;font-weight:1000;letter-spacing:.02em;text-transform:lowercase}
-.infoBtn{appearance:none;position:absolute;right:26px;bottom:24px;width:42px;height:42px;border:0;border-radius:50%;display:grid;place-items:center;background:#fff;color:#1478d4;font-size:23px;line-height:1;font-weight:1000;cursor:pointer;box-shadow:inset 0 0 0 1px var(--line),0 3px 0 rgba(0,0,0,.05);transition:transform .12s ease,box-shadow .12s ease}
+.infoBtn{appearance:none;position:static;width:42px;height:42px;border:0;border-radius:50%;display:grid;place-items:center;justify-self:end;align-self:start;background:#fff;color:#1478d4;font-size:23px;line-height:1;font-weight:1000;cursor:pointer;box-shadow:inset 0 0 0 1px var(--line),0 3px 0 rgba(0,0,0,.05);transition:transform .12s ease,box-shadow .12s ease}
 .infoBtn:hover{transform:translateY(-1px)}.infoBtn:focus-visible{outline:3px solid rgba(20,120,212,.3);outline-offset:3px}
+.app:not(.introMode) .infoBtn{display:none!important}
 .modeLine{margin:8px 0 0;font-size:14px;color:#45484e;font-weight:850;max-width:520px}
 .hud{display:flex;gap:8px;align-items:center;justify-content:flex-end;flex-wrap:wrap}
 .pill{
@@ -119,6 +120,7 @@ h1{
 }
 .menuBtn:hover,.variantPill:hover,.continueBtn:hover,.modalBtn:hover,.repairSubmitBtn:hover{transform:translateY(-1px)}
 .menuBtn{width:64px;height:48px;background:#202124;color:#fff;align-self:start;white-space:nowrap}
+.menuBtn svg{display:block;width:22px;height:22px;margin:auto;fill:currentColor}
 .progressDots{
   grid-column:1/-1;
   display:flex;
@@ -146,23 +148,47 @@ h1{
 .introTitle{margin:0 0 10px;font-size:22px;line-height:1;font-weight:1000;letter-spacing:-.03em}
 .introCopy{margin:0 0 22px;color:#5b554e;font-size:15px;font-weight:900;line-height:1.25}
 .cheatsheet{
-  margin:0 0 22px;
+  margin:0 0 14px;
   border-radius:0;
   background:rgba(255,255,255,.76);
   border:1px solid rgba(234,223,205,.9);
   box-shadow:0 2px 0 rgba(0,0,0,.035);
-  padding:13px 16px 12px;
+  padding:10px 16px;
   color:#4e463e;
 }
 .cheatsheetTop{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center}.cheatsheetTop:has(.cheatsheetDetails[open]){align-items:start}
 .cheatsheetDetails{min-width:0}.cheatsheetDetails summary{color:#202124;font-size:16px;line-height:1.2;font-weight:1000;cursor:pointer}.cheatsheetDetails summary::marker{color:#1478d4}.cheatsheetDetails[open] summary{margin-bottom:10px}
 .cheatsheet ul{margin:0;padding-left:18px;display:grid;gap:4px}
 .cheatsheet li{font-size:14px;line-height:1.18;font-weight:950}
-.levelChooserTitle{margin:18px 2px 9px;font-size:12px;line-height:1;font-weight:1000;letter-spacing:.12em;color:#6a625a}.versionGrid{display:grid;grid-template-columns:1fr;gap:13px}
+.learningGoalsDetails{
+  margin:0 0 10px;
+  padding:0 0 12px;
+  border-bottom:1px solid rgba(234,223,205,.9);
+}
+.learningGoalsDetails:not([open]){
+  height:53px;
+  padding-bottom:10px;
+}
+.learningGoalsDetails > summary{
+  height:42px;
+  padding-top:calc((42px - 1.2em)/2 + .6px);
+  padding-bottom:calc((42px - 1.2em)/2 - .6px);
+}
+.cheatsheet .learningGoalsList li{
+  color:#5b554e;
+  font-size:13px;
+  line-height:1.28;
+  font-weight:850;
+}
+.cheatsheet .learningGoalsList b{
+  color:#202124;
+  font-weight:1000;
+}
+.levelChooserTitle{margin:14px 2px 7px;font-size:12px;line-height:1;font-weight:1000;letter-spacing:.12em;color:#6a625a}.versionGrid{display:grid;grid-template-columns:1fr;gap:10px}
 .versionChoice{
-  min-height:166px;
+  min-height:150px;
   border-radius:20px;
-  padding:16px;
+  padding:14px;
   display:grid;
   grid-template-columns:minmax(190px,1fr) minmax(260px,40%);
   grid-template-areas:"title snapshot" "copy snapshot" "pills snapshot";
@@ -225,7 +251,7 @@ h1{
 [hidden]{display:none!important}
 @media(max-width:600px){
   :root{--colW:67px;--opW:14px;--gap:7px;--cardH:82px;--cardGap:8px;--labelH:28px;--dot-size:5.5px;--dot-gap:3px;--linkTile:clamp(52px, calc((100vw - 76px)/5), 68px);--linkGap:5px}
-  body{padding:8px}.app{border-radius:24px}.app.introMode{padding:20px 16px 72px}.infoBtn{right:16px;bottom:16px}.introMode .top{margin-bottom:18px}.top{padding:10px 13px 6px;grid-template-columns:minmax(0,1fr) auto;gap:8px}.top>div:first-child{grid-column:1;grid-row:1}.top h1{font-size:clamp(25px,7vw,30px)}.hud{grid-column:1/-1;grid-row:2;justify-content:flex-start}.menuBtn{grid-column:2;grid-row:1;justify-self:end;align-self:start}.progressDots{grid-row:3}.versionGrid{gap:10px}.versionChoice{min-height:0;grid-template-columns:1fr;grid-template-areas:"title" "copy" "pills" "snapshot";gap:9px;padding:15px}.versionChoice h3{font-size:19px}.versionChoice p{max-width:none;font-size:12px}.introSnapshot{height:98px}.variantPill{min-width:84px;padding:8px}.groupTitle{font-size:22px;height:var(--labelH);margin-bottom:5px;letter-spacing:-.06em}.opColumn{grid-template-rows:calc(var(--labelH) + 5px) auto}.opSymbol{font-size:18px}.card{border-radius:16px}.bracket{height:44px;width:6px;border-top-width:2.5px;border-bottom-width:2.5px}.bracket.left{border-left-width:2.5px}.bracket.right{border-right-width:2.5px}.sizeLabel{font-size:10px;bottom:4px;padding:2px 6px}.repairProductRow{--cardH:102px}.repairProductRow.size5{--colW:52px;--opW:9px;--gap:4px;--cardH:96px;--dot-size:4.7px;--dot-gap:2.55px}.repairProductRow.size5 .groupTitle{font-size:18px}.repairProductRow.size5 .transposeBadge{width:18px;height:18px;font-size:10px;top:5px;right:5px}.linkGrid{padding:7px}.linkTile{border-radius:16px;--dot-size:4px;--dot-gap:2px}.linkTile .shapeStack{padding:6px 3px 17px}.linkTile .bracket{height:34px;width:5px;border-top-width:2px;border-bottom-width:2px}.linkTile .bracket.left{border-left-width:2px}.linkTile .bracket.right{border-right-width:2px}.linkTile .sizeLabel{font-size:9px;bottom:3px;padding:2px 5px}.feedback{min-height:80px}.msg{height:116px;min-height:116px}.introLinkBoard{--intro-link-tile:25px;--intro-link-gap:3.5px;--intro-link-pad:7px}
+  body{padding:8px}.app{border-radius:24px}.app.introMode{padding:16px}.introMode .top{margin-bottom:14px}.top{padding:10px 13px 6px;grid-template-columns:minmax(0,1fr) auto;gap:8px}.top>div:first-child{grid-column:1;grid-row:1}.top h1{font-size:clamp(25px,7vw,30px)}.hud{grid-column:1/-1;grid-row:2;justify-content:flex-start}.menuBtn{grid-column:2;grid-row:1;justify-self:end;align-self:start}.progressDots{grid-row:3}.versionGrid{gap:8px}.versionChoice{min-height:0;grid-template-columns:1fr;grid-template-areas:"title" "copy" "pills" "snapshot";gap:7px;padding:13px}.versionChoice h3{font-size:19px}.versionChoice p{max-width:none;font-size:12px}.introSnapshot{height:92px}.variantPill{min-width:84px;padding:8px}.groupTitle{font-size:22px;height:var(--labelH);margin-bottom:5px;letter-spacing:-.06em}.opColumn{grid-template-rows:calc(var(--labelH) + 5px) auto}.opSymbol{font-size:18px}.card{border-radius:16px}.bracket{height:44px;width:6px;border-top-width:2.5px;border-bottom-width:2.5px}.bracket.left{border-left-width:2.5px}.bracket.right{border-right-width:2.5px}.sizeLabel{font-size:10px;bottom:4px;padding:2px 6px}.repairProductRow{--cardH:102px}.repairProductRow.size5{--colW:52px;--opW:9px;--gap:4px;--cardH:96px;--dot-size:4.7px;--dot-gap:2.55px}.repairProductRow.size5 .groupTitle{font-size:18px}.repairProductRow.size5 .transposeBadge{width:18px;height:18px;font-size:10px;top:5px;right:5px}.linkGrid{padding:7px}.linkTile{border-radius:16px;--dot-size:4px;--dot-gap:2px}.linkTile .shapeStack{padding:6px 3px 17px}.linkTile .bracket{height:34px;width:5px;border-top-width:2px;border-bottom-width:2px}.linkTile .bracket.left{border-left-width:2px}.linkTile .bracket.right{border-right-width:2px}.linkTile .sizeLabel{font-size:9px;bottom:3px;padding:2px 5px}.feedback{min-height:80px}.msg{height:116px;min-height:116px}.introLinkBoard{--intro-link-tile:25px;--intro-link-gap:3.5px;--intro-link-pad:7px}
 }
 @media(max-width:370px){
   :root{--colW:60px;--opW:12px;--gap:5px;--cardH:78px;--cardGap:6px;--labelH:25px;--dot-size:5px;--dot-gap:2.75px;--linkTile:clamp(49px, calc((100vw - 64px)/5), 58px);--linkGap:4px}
@@ -261,17 +287,29 @@ h1{
         <h1>Matri<span class="xmark">X</span> Match</h1>
         <p class="modeLine gameOnly" id="modeLine">AB</p>
       </div>
-      <button id="infoBtn" class="infoBtn introOnly" type="button" aria-label="About MatriX Match" aria-haspopup="dialog">?</button>
+      <button id="infoBtn" class="infoBtn" type="button" aria-label="About MatriX Match" aria-haspopup="dialog">?</button>
       <div class="hud gameOnly" aria-label="best score and current case">
         <div class="pill"><span>best</span><b id="bestPill">—</b></div>
         <div class="pill"><span>case</span><b id="casePill">1/10</b></div>
       </div>
-      <button id="menuBtn" class="menuBtn gameOnly" type="button">menu</button>
+      <button id="menuBtn" class="menuBtn gameOnly" type="button" aria-label="Home">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3 2.75 10.4a1 1 0 0 0 1.25 1.56l1-.8V20a1 1 0 0 0 1 1h4.25v-5.5h3.5V21H18a1 1 0 0 0 1-1v-8.84l1 .8a1 1 0 1 0 1.25-1.56L12 3Z"/></svg>
+      </button>
       <div id="progressDots" class="progressDots gameOnly" aria-label="case progress"></div>
     </section>
 
     <section class="intro" id="intro">
       <div class="cheatsheet">
+        <details class="cheatsheetDetails learningGoalsDetails">
+          <summary>Learning goals</summary>
+          <ul class="learningGoalsList">
+            <li><b>Read dimensions</b> as rows × columns.</li>
+            <li><b>Check products</b> by matching adjacent inner dimensions.</li>
+            <li><b>Predict product shape</b> from the first rows and last columns.</li>
+            <li><b>Track transposes</b>: swap dimensions; reverse factor order.</li>
+            <li><b>Respect order</b>: AB and BA may differ in definedness and shape.</li>
+          </ul>
+        </details>
         <div class="cheatsheetTop">
           <details class="cheatsheetDetails">
             <summary>Matrix product cheatsheet</summary>
@@ -369,9 +407,10 @@ h1{
     <div class="confirmDialog infoDialog" role="dialog" aria-modal="true" aria-labelledby="infoTitle">
       <h2 id="infoTitle">About MatriX Match</h2>
       <div class="infoList">
-        <p><strong>Version:</strong> MatriX Match [v0.2(beta)]</p>
+        <p><strong>Version:</strong> MatriX Match [v0.3(beta)]</p>
         <p><strong>Copyright:</strong> © 2026 <a href="https://people.math.wisc.edu/~roch/" target="_blank" rel="noopener noreferrer">Sébastien Roch</a></p>
-        <p><strong>License:</strong> <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener noreferrer">Creative Commons Attribution-NonCommercial 4.0 International License</a></p>
+        <p><strong>Code license:</strong> The software source code—including the functional HTML, CSS, and JavaScript—is available under the <a href="https://opensource.org/license/mit" target="_blank" rel="noopener noreferrer">MIT License</a>.</p>
+        <p><strong>Content license:</strong> Except where otherwise noted, the original instructional text, questions, feedback, and visual assets are licensed under the <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener noreferrer">Creative Commons Attribution-NonCommercial 4.0 International License</a>.</p>
         <p><strong>Textbook:</strong> <a href="https://math345-textbook.github.io/" target="_blank" rel="noopener noreferrer">math345-textbook.github.io</a></p>
         <p><strong>Privacy:</strong> Your best scores are saved in this browser on this device. They are not uploaded anywhere. If you use a private window, clear site data, switch browsers, or block site storage, your best scores may reset.</p>
         <p><strong>Acknowledgments:</strong> Thanks to Betsy Stovall for helpful feedback.</p>
