@@ -324,7 +324,7 @@
       align-items: center;
       justify-content: space-between;
       gap: 10px;
-      padding: 0 4px;
+      padding: 0;
       min-width: 0;
       color: rgba(30,44,36,.62);
       font-size: 9px;
@@ -336,14 +336,27 @@
     }
     #keyHint {
       display: none;
-      letter-spacing: .05em;
+      align-items: center;
+      justify-content: center;
+      width: min(100%, 320px);
+      gap: 5px;
+      letter-spacing: .01em;
       text-transform: none;
-      color: rgba(30,44,36,.50);
-      font-size: 10px;
-      font-weight: 850;
+      color: rgba(30,44,36,.70);
+      font-size: 11.5px;
+      font-weight: 900;
     }
+    #keyHint kbd, .missionControlsFootnote kbd {
+      min-width: 19px; height: 18px; padding: 0 5px;
+      display: inline-grid; place-items: center;
+      border: 1px solid rgba(30,44,36,.24); border-bottom-width: 2px;
+      border-radius: 5px; background: rgba(255,255,255,.76); color: var(--ranger2);
+      font: 900 10.5px/1 system-ui, -apple-system, sans-serif;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.8);
+    }
+    #keyHint .keyHintDot { color: rgba(30,44,36,.34); }
     @media (hover:hover) and (pointer:fine) {
-      #keyHint { display: inline; }
+      #keyHint { display: inline-flex; }
     }
 
     #controlsRow {
@@ -362,6 +375,7 @@
     }
 
     #walkPad {
+      position: relative;
       pointer-events: auto;
       height: 44px;
       width: min(100%, 320px);
@@ -414,6 +428,62 @@
       transition: opacity .25s ease;
     }
     #walkPad.hint-faded #walkHint { opacity: .26; }
+    #walkPad.movement-coach {
+      outline: 3px solid rgba(229,182,59,.82); outline-offset: 2px;
+      animation: entryCoachPulse 1.15s ease-in-out infinite;
+    }
+    #walkPad.movement-coach #walkHint { opacity:0; }
+    #walkCoachMessage {
+      position:absolute;
+      top:calc(100% + 8px);
+      left:50%;
+      z-index:6;
+      display:none;
+      width:max-content;
+      max-width:min(360px,calc(100vw - 28px));
+      transform:translateX(-50%);
+      padding:8px 12px;
+      border:1px solid rgba(255,255,255,.34);
+      border-radius:12px;
+      background:rgba(23,53,35,.94);
+      color:#fffbee;
+      box-shadow:0 12px 28px rgba(0,0,0,.28);
+      font-size:12px;
+      line-height:1.2;
+      font-weight:850;
+      white-space:nowrap;
+      pointer-events:none;
+    }
+    #walkCoachMessage::before {
+      content:"";
+      position:absolute;
+      left:50%;
+      top:-7px;
+      width:12px;
+      height:12px;
+      background:rgba(23,53,35,.94);
+      border-left:1px solid rgba(255,255,255,.34);
+      border-top:1px solid rgba(255,255,255,.34);
+      transform:translateX(-50%) rotate(45deg);
+    }
+    #walkCoachMessage kbd {
+      display:inline-grid;
+      place-items:center;
+      min-width:20px;
+      height:19px;
+      padding:0 4px;
+      margin:0 1px;
+      border:1px solid rgba(255,255,255,.5);
+      border-bottom-width:2px;
+      border-radius:5px;
+      background:#fffbee;
+      color:#173523;
+      font:900 10.5px/1 system-ui,-apple-system,sans-serif;
+      vertical-align:1px;
+    }
+    #walkPad.movement-coach #walkCoachMessage { display:block; }
+    #controlsBox.movement-coach #keyHint { color:#173523; }
+    #controlsBox.movement-coach #keyHint kbd { border-color:rgba(135,102,8,.46); background:#fff3aa; }
     .walkNudge {
       position: absolute;
       top: 50%;
@@ -545,29 +615,53 @@
     }
     #compassRibbon strong { color: #fff8c7; font-size: 12px; }
 
-    #viewModeBtn, #splitRestoreBtn {
+    #viewModeBtn {
       position: absolute;
       z-index: 7;
       pointer-events: auto;
-      height: 30px;
-      min-width: 82px;
+      height: 42px;
+      min-width: 96px;
       border: 0;
       border-radius: 999px;
-      padding: 0 10px;
+      padding: 4px 11px;
       background: rgba(255,252,236,.88);
       border: 1px solid rgba(255,255,255,.62);
       box-shadow: 0 10px 26px rgba(0,0,0,.20);
       color: var(--ranger2);
-      font-size: 12px;
       font-weight: 950;
       backdrop-filter: blur(8px);
       cursor: pointer;
       touch-action: manipulation;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       transition: left .18s ease, top .18s ease, opacity .15s ease, transform .12s ease, background .15s ease;
     }
+    #viewModeBtn .viewModeLead { font-size: 9px; line-height: 1.05; letter-spacing: .035em; }
+    #viewModeBtn .viewModeTarget { font-size: 11.5px; line-height: 1.08; }
     #viewModeBtn[aria-pressed="true"] { background: rgba(35,83,62,.78); color: #fffbea; }
-    #viewModeBtn:active, #splitRestoreBtn:active { transform: translateY(1px); }
-    #splitRestoreBtn[hidden] { display:none !important; }
+    #viewModeBtn:active { transform: translateY(1px); }
+    #viewModeBtn.entry-coach {
+      outline: 3px solid rgba(229,182,59,.92); outline-offset: 3px;
+      animation: entryCoachPulse 1.15s ease-in-out infinite;
+    }
+    @keyframes entryCoachPulse {
+      0%,100% { outline-color:rgba(229,182,59,.52); outline-offset:2px; }
+      50% { outline-color:rgba(229,182,59,1); outline-offset:5px; }
+    }
+    #viewCoach {
+      position:absolute; z-index:8; pointer-events:none; padding:9px 11px;
+      border:1px solid rgba(255,255,255,.34); border-radius:13px;
+      background:rgba(23,53,35,.94); color:#fffbea;
+      box-shadow:0 12px 28px rgba(0,0,0,.28);
+      font-size:12px; line-height:1.3; font-weight:850; text-align:left;
+    }
+    #viewCoach::after {
+      content:""; position:absolute; right:25px; bottom:-7px; width:12px; height:12px;
+      background:rgba(23,53,35,.94); transform:rotate(45deg);
+    }
+    #viewCoach[hidden] { display:none !important; }
     #loopRing { position:absolute;z-index:6;width:56px;height:56px;pointer-events:none;filter:drop-shadow(0 4px 9px rgba(0,0,0,.28)); }
     #loopRing[hidden] { display:none !important; }
     #loopRing svg { width:100%;height:100%;overflow:visible; }
@@ -700,7 +794,7 @@
       cursor: pointer;
     }
     .miniBtn.primary { background: linear-gradient(180deg, #e4f4df, #9fca8d); color: #173523; }
-    .miniBtn.danger { background: #ffe1d8; color: #812b20; }
+    .miniBtn.danger { background: linear-gradient(180deg, #fff1ec, #eab0a1); color: #812b20; }
     #modalCard.aboutParkDialog { width:min(620px,96vw); }
     .parkAboutList { display:grid; gap:10px; margin-top:14px; }
     .parkAboutList p {
@@ -709,6 +803,15 @@
     }
     .parkAboutList strong { color:var(--ranger2); }
     .parkAboutList a { color:#23533e; font-weight:850; text-underline-offset:2px; }
+    @media (min-width:700px) and (max-height:900px) {
+      #modalCard.aboutParkDialog { padding:22px 24px; }
+      #modalCard.aboutParkDialog #modalTitle { margin-bottom:6px; font-size:36px; }
+      #modalCard.aboutParkDialog #modalBody { font-size:15px; line-height:1.42; }
+      #modalCard.aboutParkDialog .parkAboutList { gap:8px; margin-top:10px; }
+      #modalCard.aboutParkDialog .parkAboutList p { padding:8px 11px; }
+      #modalCard.aboutParkDialog #modalActions { margin-top:12px; }
+      #modalCard.aboutParkDialog #modalActions .miniBtn { min-height:42px; padding:8px 13px; }
+    }
 
     /* Polish pass: tools, numbered stakes, report cards, views, and park map. */
     #topBar { grid-template-columns: auto minmax(0, 1fr); }
@@ -919,12 +1022,15 @@
     @media (prefers-reduced-motion:reduce) {
 
       canvas.view { transition:none; }
-      .toolkit-pulse, .zoom-hint-pulse, #controlsBox #reportBanner.ready { animation:none !important; }
+      .toolkit-pulse, .zoom-hint-pulse, #controlsBox #reportBanner.ready,
+      #walkPad.movement-coach, #viewModeBtn.entry-coach { animation:none !important; }
     }
     #app.motion-reduced canvas.view { transition:none; }
     #app.motion-reduced .toolkit-pulse,
     #app.motion-reduced .zoom-hint-pulse,
-    #app.motion-reduced #controlsBox #reportBanner.ready { animation:none !important; }
+    #app.motion-reduced #controlsBox #reportBanner.ready,
+    #app.motion-reduced #walkPad.movement-coach,
+    #app.motion-reduced #viewModeBtn.entry-coach { animation:none !important; }
 
 
 
@@ -1049,10 +1155,16 @@
       opacity:.38; filter:grayscale(1); cursor:not-allowed; box-shadow:none;
     }
     .ledgerMarkBtn.armed { outline:3px solid rgba(35,83,62,.28); outline-offset:1px; }
-    .globalLedgerFooter {
-      margin:12px 0 0; color:var(--ink); font-size:16px; line-height:1.42; font-weight:800;
+    .globalLedgerInstructions { margin:0 0 12px; }
+    .globalLedgerPrompt {
+      margin:0 0 4px; color:var(--ranger2); font-size:16px; line-height:1.35; font-weight:950;
     }
+    .globalLedgerFooter {
+      margin:0; color:var(--ink); font-size:16px; line-height:1.42; font-weight:800;
+    }
+    .globalLedgerFooter.storyRankingCopy { font-weight:400; }
     .globalLedgerActions { display:flex; justify-content:flex-end; margin-top:10px; }
+    .globalLedgerActions[hidden] { display:none !important; }
 
     .toolkitScopeHeader {
       margin:0 0 10px; color:rgba(30,44,36,.68); font-size:12px; line-height:1.2;
@@ -1078,6 +1190,26 @@
     }
     .patrolBriefLine + .patrolBriefLine { margin-top:15px; }
     #modalCard.patrolBrief #modalTitle { margin-bottom:16px; }
+    #modalCard.missionBrief {
+      height:min(92vh,820px);
+      max-height:min(92vh,820px);
+      display:grid;
+      grid-template-rows:auto minmax(0,1fr) auto;
+      overflow:hidden;
+    }
+    #modalCard.missionBrief #modalBody {
+      min-height:0;
+      overflow-y:auto;
+      overscroll-behavior:contain;
+    }
+    #modalCard.missionBrief #modalActions { margin-top:14px; padding-bottom:12px; }
+    .missionControlsFootnote {
+      max-width:none !important; margin:18px 0 0 !important; padding-top:12px;
+      border-top:1px solid rgba(35,83,62,.16); color:rgba(30,44,36,.72);
+      font-size:13px !important; line-height:1.45 !important;
+    }
+    .missionControlsFootnote strong { color:var(--ranger2); }
+    .missionControlsFootnote kbd { margin:0 2px; vertical-align:1px; }
 
     /* The dusk illustration is only a backdrop; interaction lives in cards. */
     #levelGrid.parkMap {
@@ -1504,13 +1636,16 @@
     .globalLedgerRow.withReadings { grid-template-columns:auto auto minmax(0,1fr) auto auto; }
 
     /* Keep the trail actions visually paired while leaving the other utilities neutral. */
-    #controlsBox #stakeBtn,
-    #controlsBox #reportBanner {
+#controlsBox #stakeBtn,
+#controlsBox #reportBanner {
       height:44px;
       min-height:44px;
       color:#3a2c08;
       background:linear-gradient(180deg,#fff7b8,#f1cf4e);
       border:1px solid rgba(125,100,4,.20);
+    }
+    #controlsBox #stakeBtn {
+      border-color:rgba(125,100,4,.36);
     }
     #controlsBox #stakeBtn:disabled {
       opacity:.70;
@@ -1813,10 +1948,9 @@
       position:relative; grid-column:1; grid-row:1; width:100%; min-height:80px; padding:10px; border:0;
       display:grid; grid-template-columns:32px auto minmax(0,1fr); grid-template-rows:auto auto;
       gap:5px 8px; align-items:start; text-align:left; color:#203128; background:linear-gradient(110deg,rgba(255,255,255,.94),rgba(242,236,217,.78));
-      cursor:pointer;
+      cursor:default;
     }
-    #parkMenu .levelTilePrimary:disabled { cursor:not-allowed; }
-    #parkMenu .levelTilePrimary:focus-visible, #parkMenu .levelTileActions button:focus-visible,
+    #parkMenu .levelTileActions button:focus-visible,
     #introReference summary:focus-visible { outline:3px solid #e5b63b; outline-offset:-3px; }
     #parkMenu .levelNumberBadge {
       position:static; grid-column:1; grid-row:1 / 3; align-self:start; width:29px; height:29px; border-radius:50%;
@@ -1843,16 +1977,21 @@
     #parkMenu .levelTile.replay-active .levelTileDescription { grid-row:2; }
     #parkMenu .biomeSwatch { display:none; }
     #parkMenu .levelTileActions {
-      grid-column:2; grid-row:1; width:96px; min-height:80px; display:grid;
-      grid-template-columns:minmax(0,1fr); align-items:start; gap:6px;
+      grid-column:2; grid-row:1; width:200px; min-height:80px; display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr)); align-items:start; gap:6px;
       padding:7px; border:0; background:rgba(242,236,217,.62);
     }
     #parkMenu .levelTileActions button {
       min-height:36px; height:36px; width:100%; min-width:0; padding:0 7px; border:1px solid rgba(35,83,62,.25);
       border-radius:10px; color:#23533e; background:#fffbee; font-size:12px; font-weight:900; cursor:pointer;
     }
-    #parkMenu .levelTileActions .levelTileRestart { color:#7d372c; border-color:rgba(125,55,44,.28); }
     #parkMenu .levelTileActions .levelTileEnter { color:#fffbee; background:#23533e; }
+    #parkMenu .levelTileActions .levelTilePlay {
+      color:#fff8df; border-color:rgba(112,43,27,.46);
+      background:linear-gradient(180deg,#b4472e,#853522);
+      box-shadow:0 3px 7px rgba(133,53,34,.20);
+    }
+    #parkMenu .levelTileActions .levelTilePlay:disabled { cursor:not-allowed; opacity:.58; }
     @media (hover:hover) {
       #parkMenu .levelTile:not(.locked):hover,
       #parkMenu .levelTile:not(.locked):focus-within {
@@ -1864,6 +2003,10 @@
         border-color:#e5b63b;
         background:#fff7cf;
         box-shadow:0 0 0 3px rgba(229,182,59,.26),0 0 18px rgba(229,182,59,.40);
+      }
+      #parkMenu .levelTilePlay:not(:disabled):hover {
+        filter:brightness(1.10) saturate(1.06);
+        box-shadow:0 0 0 3px rgba(229,182,59,.25),0 5px 14px rgba(133,53,34,.32);
       }
       #parkMenu .patrolStartBtn:hover {
         transform:translateY(-2px) scale(1.025);
@@ -2175,7 +2318,7 @@
       #parkMenu .levelTileState { position:absolute; top:auto; right:9px; bottom:8px; }
       #parkMenu .levelTileActions {
         grid-column:1; grid-row:2; width:100%; min-height:48px; padding:6px 8px; border:0;
-        display:grid; grid-template-columns:minmax(0,1fr);
+        display:grid; grid-template-columns:repeat(2,minmax(0,1fr));
       }
       #parkMenu .levelTileActions button { min-width:0; min-height:44px; height:44px; }
       #parkMenu .levelTileProgress { grid-column:1; grid-row:3; }
@@ -2237,6 +2380,9 @@
       width:100px; min-width:100px; height:44px; min-height:44px;
       padding-left:10px; padding-right:10px;
       box-shadow:0 4px 7px rgba(43,35,19,.24), inset 0 -1px 0 rgba(0,0,0,.05);
+    }
+    #controlsBox #stakeBtn {
+      box-shadow:0 4px 7px rgba(43,35,19,.24), inset 0 -1px 0 rgba(96,72,0,.22);
     }
     #controlsBox { padding-top:3px; padding-bottom:7px; }
 
@@ -2324,7 +2470,7 @@
 <body>
 <div id="app" aria-label="Lagrange National Park game">
   <canvas id="mapCanvas" class="view main" aria-label="Topographic contour map"></canvas>
-  <canvas id="sceneCanvas" class="view inset" aria-label="3D hiking inset" title="Tap to swap views"></canvas>
+  <canvas id="sceneCanvas" class="view inset" aria-label="3D hiking inset"></canvas>
   <div id="yawVeil" aria-hidden="true"></div>
   <div id="cameraDebugHud" aria-hidden="true" hidden></div>
   <div id="mapZoomControls" aria-label="Map zoom controls" hidden>
@@ -2335,8 +2481,8 @@
   </div>
   <div id="wildlifeTag" role="status" aria-live="polite" hidden></div>
   <div id="compassRibbon" aria-hidden="true"><div class="compassBox"><span>W</span><strong id="compassHeading">N</strong><span>E</span></div></div>
-  <button id="viewModeBtn" type="button" aria-pressed="false" title="Zoom out to a side view of the hiker">Side view</button>
-  <button id="splitRestoreBtn" type="button" hidden>◧ Split</button>
+  <button id="viewModeBtn" type="button" aria-pressed="false" title="Zoom out to a side view of the hiker"><span class="viewModeLead">Switch to</span><span class="viewModeTarget">Side View</span></button>
+  <div id="viewCoach" role="status" aria-live="polite" hidden></div>
   <div id="loopRing" aria-hidden="true" hidden><svg viewBox="0 0 56 56"><circle class="loopBase" cx="28" cy="28" r="22"></circle><path id="loopVisited"></path><g id="loopStakeTicks"></g><circle id="loopHiker" cx="28" cy="6" r="3.4"></circle></svg></div>
 
   <div id="topBar">
@@ -2369,7 +2515,7 @@
 
   <div id="controlsBox" class="chrome" aria-label="Trail controls">
     <div id="controlsHeader">
-      <span id="keyHint" aria-hidden="true">← → step · Shift ⇄ jump · drag the trail to scrub</span>
+      <span id="keyHint" aria-hidden="true"><span>Hike</span><kbd>←</kbd><span>/</span><kbd>→</kbd><span class="keyHintDot">·</span><span>Jump</span><kbd>Shift</kbd><span>+</span><kbd>←</kbd><span>/</span><kbd>→</kbd></span>
     </div>
     <div id="controlsRow">
       <div id="walkPad" aria-label="Walk scrubber: drag left or right">
@@ -2383,6 +2529,7 @@
           </button>
           <div id="walkThumb"></div>
         </div>
+        <div id="walkCoachMessage">Drag the slider to hike, or press <kbd>←</kbd> / <kbd>→</kbd>.</div>
       </div>
       <span class="controlDivider" aria-hidden="true"></span>
       <button id="objectiveBtn" type="button" aria-label="Mission">📋 Mission</button>
@@ -2394,9 +2541,12 @@
 
   <section id="globalLedgerSheet" class="chrome" role="dialog" aria-labelledby="globalLedgerTitle" hidden>
     <h2 id="globalLedgerTitle">Trail ledger</h2>
+    <div id="globalLedgerInstructions" class="globalLedgerInstructions" hidden>
+      <p id="globalLedgerPrompt" class="globalLedgerPrompt" hidden></p>
+      <p id="globalLedgerFooter" class="globalLedgerFooter" hidden></p>
+    </div>
     <div id="globalLedgerRows" class="globalLedgerRows"></div>
-    <p id="globalLedgerFooter" class="globalLedgerFooter">Highest reading gets ⛰. Lowest gets ⛺. Tap again to clear.</p>
-    <div class="globalLedgerActions"><button id="ledgerCloseBtn" class="miniBtn primary" type="button">Continue</button></div>
+    <div id="globalLedgerActions" class="globalLedgerActions"><button id="ledgerCloseBtn" class="miniBtn primary" type="button">Dismiss</button></div>
   </section>
 
   <div id="toast" role="status" aria-live="polite" aria-atomic="true">
@@ -2546,8 +2696,8 @@
 
             <g class="posterMasthead" aria-hidden="true">
               <rect class="posterMastheadPlate" x="0" y="0" width="100%" fill="#f3dfae"/>
-              <text class="posterTitlePrimary" x="50%" y="0" textLength="88%" lengthAdjust="spacingAndGlyphs">LAGRANGE</text>
-              <text class="posterTitleSecondary" x="50%" y="0" textLength="88%" lengthAdjust="spacingAndGlyphs">NATIONAL PARK</text>
+              <text class="posterTitlePrimary" x="50%" y="0" textLength="198" lengthAdjust="spacingAndGlyphs">LAGRANGE</text>
+              <text class="posterTitleSecondary" x="50%" y="0" textLength="198" lengthAdjust="spacingAndGlyphs">NATIONAL PARK</text>
             </g>
           </svg>
           <button id="parkInfoBtn" type="button" aria-label="About Lagrange National Park" aria-haspopup="dialog" aria-expanded="false">?</button>
@@ -2561,7 +2711,7 @@
             </div>
           </div>
           <div id="introReference" aria-label="Learning reference"></div>
-          <div id="levelGrid" class="parkMap" aria-label="GUIDED TRAILS"><div id="patrolStation"></div></div>
+          <div id="levelGrid" class="parkMap" aria-label="GUIDED TRAILS · START HERE"><div id="patrolStation"></div></div>
         </section>
       </div>
     </div>
@@ -2575,6 +2725,29 @@
     </div>
   </div>
 </div>
+
+<script>
+(() => {
+  const poster = document.getElementById('titlePoster');
+  const titleLines = poster?.querySelectorAll('.posterTitlePrimary, .posterTitleSecondary');
+  if (!poster || !titleLines?.length) return;
+
+  const fitPosterTitle = () => {
+    const targetLength = poster.getBoundingClientRect().width * .88;
+    if (!(targetLength > 0)) return;
+    const svgLength = targetLength.toFixed(2);
+    titleLines.forEach(line => line.setAttribute('textLength', svgLength));
+  };
+
+  fitPosterTitle();
+  if ('ResizeObserver' in window) {
+    const posterTitleObserver = new ResizeObserver(fitPosterTitle);
+    posterTitleObserver.observe(poster);
+  } else {
+    window.addEventListener('resize', fitPosterTitle, { passive:true });
+  }
+})();
+</script>
 
 <script type="module">
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.185.1/build/three.module.js';
@@ -2594,9 +2767,10 @@ const YAW_POLICY = ['canonical','cut','autoside'].includes(QUERY.get('yaw')) ? Q
 const YAW_SOFTEN = QUERY.get('yawsoften') === '1';
 const COMMIT_TIME = .80;
 const COMMIT_ARC = .020;
-const CAMERA_TEST_TRAIL = ['folds','cinder'].includes(QUERY.get('camtrail')) ? QUERY.get('camtrail') : null;
+const CAMERA_TEST_TRAIL = ['folds','dome','cinder','mojave'].includes(QUERY.get('camtrail')) ? QUERY.get('camtrail') : null;
 const PATROL_FUZZ = Math.max(0, Number(QUERY.get('patrolfuzz') || 0));
 const TEST_MODE = QUERY.has('testmode');
+const CAMERA_TEST_SIDE = TEST_MODE&&QUERY.get('sideview')==='1';
 const CAPTURE_MODE = QUERY.get('capture')==='1';
 const GFX_OVERRIDE = ['low','high'].includes(QUERY.get('gfx'))?QUERY.get('gfx'):null;
 const FLAT_OVERRIDE = ['0','1'].includes(QUERY.get('flat'))?QUERY.get('flat')==='1':null;
@@ -2642,7 +2816,7 @@ wildlifeTag: document.getElementById('wildlifeTag'),
 compassRibbon: document.getElementById('compassRibbon'),
 compassHeading: document.getElementById('compassHeading'),
 viewModeBtn: document.getElementById('viewModeBtn'),
-splitRestoreBtn: document.getElementById('splitRestoreBtn'),
+viewCoach: document.getElementById('viewCoach'),
 loopRing: document.getElementById('loopRing'),
 loopVisited: document.getElementById('loopVisited'),
 loopHiker: document.getElementById('loopHiker'),
@@ -2673,7 +2847,10 @@ reportBanner: document.getElementById('reportBanner'),
 hintBtn: document.getElementById('hintBtn'),
 globalLedgerSheet: document.getElementById('globalLedgerSheet'),
 globalLedgerRows: document.getElementById('globalLedgerRows'),
+globalLedgerInstructions: document.getElementById('globalLedgerInstructions'),
+globalLedgerPrompt: document.getElementById('globalLedgerPrompt'),
 globalLedgerFooter: document.getElementById('globalLedgerFooter'),
+globalLedgerActions: document.getElementById('globalLedgerActions'),
 ledgerCloseBtn: document.getElementById('ledgerCloseBtn'),
 returnParkBtn: document.getElementById('returnParkBtn'),
 titleScreen: document.getElementById('titleScreen'),
@@ -2720,6 +2897,8 @@ scrubPointer: null,
 lastInputTime: performance.now(),
 walkInputSeconds: Number(localStorage.getItem('lnp-walkhint-seconds') || 0),
 walkHintFaded: localStorage.getItem('lnp-walkhint') === '1',
+movementCoachActive: false,
+viewCoachActive: false,
 coachStep: 3,
 lastDir: 1,
 phase: 'locate',
@@ -2849,6 +3028,9 @@ autoSideSuppressed: false,
 trailCentroid: null,
 slopeLiftSmooth: 0,
 eyeLift: 0,
+sideShotActive: false,
+sideShotMode: null,
+sideShotDecision: null,
 shadowMapSize: 0,
 cameraTransition: null,
 cameraSequence: null,
@@ -3095,6 +3277,40 @@ for (let index=0;index<size;index++) visited[index]=!!(binary.charCodeAt(index>>
 return visited;
 }
 
+function guidedSnapshotVisitedCount(snapshot) {
+if(typeof snapshot?.visitedBits!=='string')return 0;
+try{
+const binary=atob(snapshot.visitedBits);
+let count=0;
+for(let index=0;index<binary.length;index++){
+let byte=binary.charCodeAt(index);
+while(byte){count+=byte&1;byte>>=1;}
+}
+return count;
+}catch{return 0;}
+}
+
+function guidedSnapshotHasProgress(snapshot) {
+if(!snapshot||typeof snapshot!=='object')return false;
+if(snapshot.started===true)return true;
+if(snapshot.started===false)return false;
+const initialPos=Math.round(Math.max(1,state.samples?.length||1600)*.08);
+return Math.round(Number(snapshot.pos)||0)!==initialPos
+||guidedSnapshotVisitedCount(snapshot)>29
+||(Array.isArray(snapshot.stakes)&&snapshot.stakes.length>0)
+||snapshot.pendingCandidateKey!=null
+||snapshot.selectedMark!=null
+||(Array.isArray(snapshot.evaluatedMarkPairs)&&snapshot.evaluatedMarkPairs.length>0)
+||snapshot.phase==='rank'
+||!!snapshot.marksCorrect
+||Number(snapshot.missCount)>0
+||Number(snapshot.typeMissCount)>0
+||Number(snapshot.reportCount)>0
+||Number(snapshot.hintStage)>0
+||!!snapshot.hintUsed
+||snapshot.hintShadeCandidateKey!=null;
+}
+
 function guidedLevelById(levelId) {
 return storyLevels.find(level=>level.id===levelId)||null;
 }
@@ -3127,6 +3343,7 @@ levelId:level.id,
 progressRevision:Number(level.progressRevision)||1,
 candidateSignature:level.candidateSignature||state.candidateSignature||'',
 savedAt:Date.now(),
+started:!!state.started,
 pos:mod(Math.round(Number(state.pos)||0),Math.max(1,state.samples.length)),
 lastDir:Number(state.lastDir)<0?-1:1,
 phase:state.phase||'locate',
@@ -3281,7 +3498,7 @@ initializeLevel(level,{runType:'story',levelIndex,levelKey:`story-${level.id}`})
 state.restoredState=false;
 state.restoreInvalidLevelId=null;
 grantTrailTools(level);
-state.progress.guidedRuns[level.id]=createGuidedSnapshot(level);
+state.progress.guidedRuns[level.id]=null;
 saveProgress();
 return {level,replay:!!replay};
 }
@@ -3305,13 +3522,12 @@ return false;
 }
 grantTrailTools(level);
 saveProgress();
-if (notify) showToast(COPY.resume_restored,4200);
 if(state.pendingCandidateKey){
 setTimeout(()=>{
 if(state.level?.id===levelId&&state.pendingCandidateKey&&!state.titleOpen&&!state.done&&!state.modalOpen){
 openPendingClassification();
 }
-},notify?4200:0);
+},0);
 }
 return true;
 }
@@ -3573,16 +3789,16 @@ formula: String.raw`f(x,y)=A e^{-(r-r_0)^2/s^2}-D e^{-r^2/c^2}+\text{tilt}`,
 f(x, y) {
 const dx = x + 0.1, dy = y - 0.05;
 const r = Math.hypot(dx, dy) + 1e-9;
-const ring = 72 * Math.exp(-((r - 1.35) ** 2) / (0.28 ** 2));
+const ring = 72 * Math.exp(-((r - 1.35) ** 2) / (0.60 ** 2));
 const bowl = -28 * Math.exp(-(r*r) / (0.72 ** 2));
 return ring + bowl + 2.4*x + 0.8*y + 18;
 },
 grad(x, y) {
 const dx = x + 0.1, dy = y - 0.05;
 const r = Math.hypot(dx, dy) + 1e-9;
-const ring = 72 * Math.exp(-((r - 1.35) ** 2) / (0.28 ** 2));
+const ring = 72 * Math.exp(-((r - 1.35) ** 2) / (0.60 ** 2));
 const bowl = -28 * Math.exp(-(r*r) / (0.72 ** 2));
-const dr = ring * (-2*(r-1.35)/(0.28**2)) + bowl * (-2*r/(0.72**2));
+const dr = ring * (-2*(r-1.35)/(0.60**2)) + bowl * (-2*r/(0.72**2));
 return {x: dr * dx / r + 2.4, y: dr * dy / r + 0.8};
 }
 };
@@ -3814,23 +4030,17 @@ card_ready:"Ready to report",
 card_completed:"Completed",
 card_complete_percent:"100%",
 card_replay_in_progress:"{percent}%",
-card_start:"Start",
-card_continue:"Continue",
-card_replay:"Start",
-card_continue_replay:"Resume",
-card_restart:"Start over",
 card_lesson:"Review",
 lesson_btn_aria:"Open the review for {name}",
+card_play:"Play",
+play_btn_aria:"Play {name}",
+card_restart:"Start over",
+card_resume:"Resume",
 card_run_choice_title:"Continue {name}?",
-card_run_choice_body:"<p>This trail has saved progress. Resume where you left off, or start over to clear this run’s saved hiker position and stakes. Earlier completion credit and unlocked trails will stay.</p>",
-restart_title:"Start this trail over?",
-restart_body:"<p>Your saved hiker position and stakes for this run will be cleared. Earlier completion credit, unlocked trails, and earned tools will stay.</p>",
-restart_confirm:"Start over",
-restart_cancel:"Keep my progress",
-resume_restored:"Saved trail restored — your hiker and confirmed stakes are back.",
+card_run_choice_body:"<p>This trail has saved progress. Resume where you left off, or start over to clear this run’s saved hiker position and stakes.</p>",
 resume_invalid:"This saved trail no longer matches the current map, so it cannot be restored. Start a fresh run; earlier completion credit is safe.",
 report_ready:"Everything required is complete — file your Report with the ranger.",
-stake_locked:"Confirmed stakes stay planted for this run. Use Start over to clear the trail.",
+stake_locked:"Confirmed stakes stay planted for this run.",
 stake_duplicate:"That constrained critical point already has a stake. The next one is elsewhere.",
 stake_near:"✗ Close — the target point is just beside your stake. Take a few steps and try again.",
 stake_wrong_climb:"✗ Not here — \\(f\\) is still increasing along the trail. The stake comes back to your pack.",
@@ -3885,12 +4095,13 @@ t1_brief:`
 <p>Throughout the park, \\(f(x,y)\\) is the <strong>height</strong> of the terrain. The red loop is the constraint \\(S\\).</p>
 <ol class="steps">
   <li><strong>Find</strong> all {nMax} constrained local maxima and all {nMin} constrained local minima of \\(f\\) on \\(S\\).</li>
-  <li><strong>Use</strong> the Elevation Meter and the gradient norm \\(\\|\\nabla f\\|\\).</li>
+  <li><strong>Use</strong> the Elevation Meter to track where the trail changes from rising to falling or from falling to rising.</li>
   <li><strong>Stake</strong> 🚩 each point and classify it.</li>
   <li><strong>Report</strong> 📻 when the goal counter is full.</li>
 </ol>
 ${TRAIL_PROFILE_DIAGRAM}
-<p class="missionNote toolkitNote"><strong>Tools:</strong> the <strong>Elevation Meter</strong> reads \\(f\\) at your position. The <strong>Gradient Norm Meter</strong> shows \\(\\|\\nabla f\\|\\), the norm of the gradient of \\(f\\).</p>`,
+<p class="missionNote toolkitNote"><strong>Tool:</strong> the <strong>Elevation Meter</strong> reads \\(f\\) at your position.</p>
+<p class="missionNote"><strong>Stake placement:</strong> Near the extremum is enough; your stake does not need to be in the exact position to be accepted.</p>`,
 t1_ask_title:"Constrained critical point found!",
 t1_ask_body:"<p><strong>Stake {slot}</strong> marks a constrained critical point. What type is it for \\(f\\) restricted to the trail \\(S\\)?</p>",
 t1_ask_max:"Constrained local maximum of \\(f\\) on \\(S\\)",
@@ -3962,7 +4173,7 @@ t4_brief:`
   <li><strong>Report</strong> 📻 when both stages are complete.</li>
 </ol>
 <p class="missionNote">Two candidate heights are deliberately close. Use the numerical \\(f\\)-values rather than visual guesswork.</p>`,
-t4_confirm:"✓ Constrained critical point confirmed. {found}/{total}.",
+t4_confirm:"✓ Constrained critical point confirmed at elevation f = {elevation} m. {found}/{total}. After all {total} critical points are found, compare their elevations to identify the global extrema: the absolute maximum and minimum.",
 t4_phase2_toast:"All {total} constrained critical points are confirmed. Open the 📒 Ledger and compare their \\(f\\)-values.",
 t4_marks_right:"✓ The Ledger agrees: those are the absolute maximum and absolute minimum of \\(f\\) on \\(S\\).",
 t4_marks_wrong:"✗ At least one mark disagrees with the \\(f\\)-values. Compare every candidate again.",
@@ -4017,8 +4228,8 @@ chrome_stake:"🚩 Stake",
 chrome_ledger:"📒 Ledger",
 chrome_report:"📻 Report",
 chrome_hint:"Hint",
-guided_heading:"GUIDED TRAILS",
-practice_heading:"PRACTICE",
+guided_heading:"GUIDED TRAILS · START HERE",
+practice_heading:"PRACTICE TRAILS",
 patrol_title:"Ranger Patrol",
 patrol_start:"New Patrol",
 patrol_leave_title:"Leave this Patrol?",
@@ -4030,12 +4241,15 @@ patrol_another_action:"Another patrol",
 patrol_stats:"Gold patrols: {gold} · Rank: {rank}",
 patrol_station_stats:"Patrols: {runs} · Gold: {gold} · Rank: {rank}",
 continue_label:"Continue",
+lesson_return_park:"Return to Park Map",
+close_label:"Close",
 dismiss_label:"Dismiss",
 park_title:"Lagrange National Park",
 ledger_title:"Trail ledger",
-ledger_footer:"Absolute constrained maximum gets ⛰. Absolute constrained minimum gets ⛺. Tap again to clear.",
-ledger_footer_max:"Absolute constrained maximum gets ⛰. Tap again to clear.",
-ledger_footer_min:"Absolute constrained minimum gets ⛺. Tap again to clear.",
+ledger_rank_prompt:"Identify the absolute constrained maximum and minimum.",
+ledger_footer:"The absolute constrained maximum gets a peak ⛰. The absolute constrained minimum gets a base camp ⛺. Tap a mark again to clear it.",
+ledger_footer_max:"The absolute constrained maximum gets a peak ⛰. Tap the mark again to clear it.",
+ledger_footer_min:"The absolute constrained minimum gets a base camp ⛺. Tap the mark again to clear it.",
 stake_packed:"Stake packed up.",
 ranger_report_title:"Ranger's report",
 outcome_heading:"OUTCOME",
@@ -4051,7 +4265,7 @@ angle:{icon:'∠',name:'Angle Gauge',body:`Reads the full angle between \\(\\nab
 };
 
 const HINT_TIPS = {
-folds:"💡 Watch where the Elevation Meter changes from rising to falling or from falling to rising. Switch to Side view and move just before and just after a suspected constrained local extremum to compare the trail height. Then classify it using nearby allowed trail values.",
+folds:"💡 Watch where the Elevation Meter changes from rising to falling or from falling to rising. Use Side View and move just before and just after a suspected constrained local extremum to compare the trail height. Near the extremum is enough; your stake does not need to be in the exact position to be accepted.",
 dome:"💡 Look for a level curve tangent to the trail — touching without crossing. Zoom with ＋ when needed.",
 cinder:"💡 Look for \\(\\nabla f\\) and \\(\\nabla g\\) on one line. Same and opposite directions both count. Use the Angle Gauge: readings near \\(0^\\circ\\) or \\(180^\\circ\\) indicate alignment.",
 mojave:"💡 Confirm every constrained critical point first. Then compare all \\(f\\)-values in the Ledger.",
@@ -4063,6 +4277,7 @@ mojave:"💡 Confirm every constrained critical point first. Then compare all \\
 'survey-max':"💡 Sweep the whole loop for constrained critical points the earlier survey missed, then compare every \\(f\\)-value.",
 'survey-min':"💡 Sweep the whole loop for constrained critical points the earlier survey missed, then compare every \\(f\\)-value."
 };
+const MISSION_CONTROLS_FOOTNOTE = `<p class="missionControlsFootnote"><strong>Controls:</strong> On a keyboard, use <kbd>←</kbd> and <kbd>→</kbd> to hike. Hold <kbd>Shift</kbd> with an arrow to jump farther. You can also drag the walk control.</p>`;
 const HINT_SHADE_TOAST = "The shaded half of the trail contains something still required by the objective.";
 const CONTOUR_DENSITIES = [
 {key:'sparse',multiplier:2,toast:'Contours: sparse'},
@@ -4077,7 +4292,7 @@ terrain:makeTwinSisters(),trail:ellipseTrail({cx:0,cy:.02,a:2.35,b:1.55,theta:-.
 domain:commonDomain,contour:8,seed:34502,biome:'badlands',sky:SKY.badlands,reliefMult:.85,
 views:{map:'inset',scene:'main'},
 mapLayers:{terrainFill:false,contours:'none',contourLabels:false,currentFContour:false,currentFValue:false},
-instruments:{elevation:true,gradFMap:false,gradGMap:false},panels:['elev','gradF'],toolKeys:['elev','gradF'],
+instruments:{elevation:true,gradFMap:false,gradGMap:false},panels:['elev'],toolKeys:['elev'],
 goal:{kind:'typed-optima',askType:true},briefKey:'t1_brief',lessonKey:'t1_lesson',quizKey:'t1_quiz',
 progressRevision:1,flags:'stakes'
 },
@@ -4099,12 +4314,12 @@ progressRevision:1,flags:'stakes'
 {
 id:'cinder',name:'Obsidian Caldera',subtitle:'The Two Arrows',expectedCandidates:4,
 terrain:makeCraterLake(),trail:ellipseTrail({cx:-.06,cy:.15,a:2.04,b:1.39,theta:.66,start:.7}),
-domain:commonDomain,contour:7,seed:34503,biome:'cinder',sky:SKY.cinder,reliefMult:1,
+domain:commonDomain,contour:7,seed:34503,biome:'cinder',sky:SKY.cinder,reliefMult:1.28,
 views:{map:'split',scene:'split',splitAvailable:true},
 mapLayers:{terrainFill:false,contours:'neutral',contourLabels:false,currentFContour:false,currentFValue:false},
 instruments:{elevation:false,gradFMap:true,gradGMap:true},panels:['angle'],toolKeys:['angle'],
 goal:{kind:'parallel-gradients',askType:false},briefKey:'t3_brief',lessonKey:'t3_lesson',quizKey:'t3_quiz',
-progressRevision:1,flags:'stakes'
+progressRevision:2,flags:'stakes'
 },
 {
 id:'mojave',name:'Yucca Bowl',subtitle:"The Ranger's Ledger",expectedCandidates:4,
@@ -4663,21 +4878,44 @@ if(row.gradientRatio<.08)throw new Error(`[marmot-check] ${row.candidate.kind} g
 }
 }
 
-function patrolStartPosition(samples,candidates,seed=0) {
+function farthestTrailPosition(samples,candidates,phase=0) {
 const N=samples.length;
 if(!N||!candidates.length)return Math.round(N*.08);
-const phase=mod(mixSeed32((Number(seed)||0)^0x51f15e1d),N);
-let bestIndex=phase,bestDistance=-1;
+const firstIndex=mod(phase,N);
+let bestIndex=firstIndex,bestDistance=-1;
 for(let step=0;step<N;step++){
-const index=mod(phase+step,N);
+const index=mod(firstIndex+step,N);
 const nearest=Math.min(...candidates.map(candidate=>trailArcDistanceFrac(index,candidate.i,samples)));
 if(nearest>bestDistance+1e-9){bestDistance=nearest;bestIndex=index;}
 }
 return bestIndex;
 }
 
+function guidedStartPosition(samples,candidates,seed=0) {
+return farthestTrailPosition(samples,candidates,mixSeed32((Number(seed)||0)^0x47554944));
+}
+
+function patrolStartPosition(samples,candidates,seed=0) {
+return farthestTrailPosition(samples,candidates,mixSeed32((Number(seed)||0)^0x51f15e1d));
+}
+
+function guidedStartAudit() {
+return storyLevels.map(level=>{
+const built=buildSamples(level);
+const start=guidedStartPosition(built.samples,built.candidates,level.seed);
+const clearance=Math.min(...built.candidates.map(candidate=>trailArcDistanceFrac(start,candidate.i,built.samples)));
+let globalBest=-1;
+for(let i=0;i<built.samples.length;i++){
+const nearest=Math.min(...built.candidates.map(candidate=>trailArcDistanceFrac(i,candidate.i,built.samples)));
+globalBest=Math.max(globalBest,nearest);
+}
+return {level:level.id,startArc:Number((built.samples[start].dist/built.samples.totalDist).toFixed(5)),clearance:Number(clearance.toFixed(5)),globalBest:Number(globalBest.toFixed(5)),stakeRadius:STAKE_EPS_FRAC,pass:Math.abs(clearance-globalBest)<1e-9&&clearance>STAKE_EPS_FRAC};
+});
+}
+
 function initializeLevel(level, meta={}) {
 dismissToast({clearQueue:true,immediate:true});
+dismissEntryCoaches();
 state.level = level;
 state.runType = meta.runType || 'story';
 state.levelIndex = Number.isInteger(meta.levelIndex) ? meta.levelIndex : -1;
@@ -4748,7 +4986,7 @@ state.visited = new Array(state.samples.length).fill(false);
 state.visitedVersion=0;
 state.pos = state.runType==='patrol'
 ?patrolStartPosition(state.samples,state.candidates,state.patrolSeed)
-:Math.round(state.samples.length * .08);
+:guidedStartPosition(state.samples,state.candidates,state.level?.seed);
 state.vel = 0;
 state.controlDir = 0;
 state.scrubVisual = 0;
@@ -4786,6 +5024,9 @@ threeView.autoSideSuppressed = false;
 threeView.trailCentroid = null;
 threeView.slopeLiftSmooth = 0;
 threeView.eyeLift = 0;
+threeView.sideShotActive = false;
+threeView.sideShotMode = null;
+threeView.sideShotDecision = null;
 threeView.cameraTransition = null;
 threeView.cameraSequence = null;
 threeView.levelIndex = null;
@@ -5616,9 +5857,9 @@ eye.y+=threeView.eyeLift;
 return limitEyePitch(eye,target,(kind==='side'?30:34)*Math.PI/180);
 }
 
-function clearSideShot(eye,target) {
+function clearSideShot(eye,target,overhead=false) {
 eye.y+=verticalLiftNeeded(eye,target);
-return limitEyePitch(eye,target,30*Math.PI/180);
+return limitEyePitch(eye,target,(overhead?56:30)*Math.PI/180);
 }
 
 function trailCentroid() {
@@ -5717,11 +5958,38 @@ return {center,radius:Math.max(5,...world.map(point=>point.distanceTo(center)))}
 }
 
 function defaultCameraView(level=state.level) {
-return 'follow';
+return level?.id==='folds'||(CAMERA_TEST_SIDE&&CAMERA_TEST_TRAIL===level?.id)?'side':'follow';
+}
+
+function dismissMovementCoach() {
+if(!state.movementCoachActive)return;
+state.movementCoachActive=false;
+updateWalkHint();
+}
+
+function dismissViewCoach() {
+if(!state.viewCoachActive)return;
+state.viewCoachActive=false;
+updateCameraViewButton();
+}
+
+function dismissEntryCoaches() {
+dismissMovementCoach();
+dismissViewCoach();
+}
+
+function showEntryCoaches() {
+dismissEntryCoaches();
+state.movementCoachActive=matchMedia('(hover:hover) and (pointer:fine)').matches;
+state.viewCoachActive=sceneSupportsSideView();
+updateWalkHint();
+updateCameraViewButton();
 }
 
 function beginEntryCamera() {
 state.cameraView=defaultCameraView();threeView.cameraTransition=null;
+threeView.sideShotActive=false;threeView.sideShotMode=null;threeView.sideShotDecision=null;
+showEntryCoaches();
 if(motionReduced()){threeView.cameraSequence=null;state.cameraSnap=true;return false;}
 threeView.cameraSequence={kind:'entry',elapsed:0,hold:.90,dur:2.10,fromEye:null,fromTarget:null};
 threeView.cameraReady=false;state.cameraSnap=true;state.sceneDirty=true;return true;
@@ -6799,20 +7067,9 @@ return group;
 
 function buildWater3D() {
 const biome = state.level.biome;
-if (biome === 'tundra') {
-const group = new THREE.Group();
-const x = 2.10, y = -2.10;
-const z = state.level.terrain.f(x, y) - 1.3;
-const mat = new THREE.MeshStandardMaterial({color:0x7fa8c0, roughness:.15, metalness:0, transparent:true, opacity:.72, side:THREE.DoubleSide});
-const tarn = new THREE.Mesh(new THREE.CircleGeometry(2.05, 64), mat);
-tarn.rotation.x = -Math.PI / 2;
-tarn.position.copy(threePoint(x, y, z, .06));
-tarn.scale.set(1.35, .78, 1);
-tarn.userData.animate = true;
-tarn.userData.baseOpacity = .72;
-group.add(tarn);
-return group;
-}
+// Marmot Dome has no authored shoreline. A flat tundra tarn exposes its disc
+// edge against the steep Gaussian terrain, so only crater terrain gets water.
+if (biome === 'tundra') return null;
 // The crater lake belongs to Obsidian Caldera's authored terrain. Random
 // cinder patrol terrain has no matching basin, so a flat lake clips through it.
 if (!(biome === 'volcanic' || biome === 'cinder' && state.level?.id === 'cinder')) return null;
@@ -7233,27 +7490,63 @@ a.userData.shadow.material.opacity=.10*up;
 }
 a.visible=true;
 }
+function chooseAnimalEscapeWaypoint(a,cur,now) {
+const d=state.level.domain;
+const awayX=a.userData.mapX-cur.x,awayY=a.userData.mapY-cur.y;
+const baseAngle=Math.hypot(awayX,awayY)>.015?Math.atan2(awayY,awayX):(a.userData.phase||0);
+const radius=Math.max(.32,(a.userData.radius||.45)*.85);
+for(const distanceScale of [1,.72]){
+for(const angleOffset of [0,.48,-.48,.92,-.92,Math.PI]){
+const angle=baseAngle+angleOffset;
+const x=clamp(a.userData.mapX+Math.cos(angle)*radius*distanceScale,d.xmin+.09,d.xmax-.09);
+const y=clamp(a.userData.mapY+Math.sin(angle)*radius*distanceScale,d.ymin+.09,d.ymax-.09);
+if(wildlifePointValid(x,y,a.userData.minTrail??.17,a.userData.maxSlope??Infinity)){
+a.userData.fleeWaypoint={x,y};
+a.userData.fleeUntil=now+1200;
+return a.userData.fleeWaypoint;
+}
+}
+}
+a.userData.fleeWaypoint=null;
+a.userData.fleeUntil=now+450;
+a.userData.fleeRetryAt=now+450;
+return null;
+}
 function updateAnimalWanderer(a, cur, dt, now, darter=false) {
 const near = Math.hypot(a.userData.mapX - cur.x, a.userData.mapY - cur.y) < .25;
 if (!a.userData.waypoint || Math.hypot(a.userData.mapX - a.userData.waypoint.x, a.userData.mapY - a.userData.waypoint.y) < .04) a.userData.waypoint = chooseAnimalWaypoint(a);
 let tx = a.userData.waypoint.x, ty = a.userData.waypoint.y;
 let spd = a.userData.speed || .02;
-if (near) { const dx = a.userData.mapX - cur.x, dy = a.userData.mapY - cur.y, m = Math.hypot(dx,dy) || 1; tx = a.userData.mapX + dx/m * .40; ty = a.userData.mapY + dy/m * .40; spd *= 1.55; }
+const fleeActive=near||(a.userData.fleeWaypoint&&now<(a.userData.fleeUntil||0));
+if(near&&(!a.userData.fleeWaypoint||now>=(a.userData.fleeUntil||0))&&now>=(a.userData.fleeRetryAt||0))chooseAnimalEscapeWaypoint(a,cur,now);
+if(fleeActive){
+if(a.userData.fleeWaypoint){tx=a.userData.fleeWaypoint.x;ty=a.userData.fleeWaypoint.y;spd*=1.55;}
+else spd=0;
+}else if(a.userData.fleeWaypoint){
+a.userData.fleeWaypoint=null;
+}
 if (darter) { const burst = mod(now*.001 + a.userData.phase, 18) < 1.6 || near; spd = burst ? Math.max(spd, .070) : 0; }
 const dx = tx - a.userData.mapX, dy = ty - a.userData.mapY, m = Math.hypot(dx,dy);
+let moved=false;
 if (m > 1e-4 && spd > 0) {
 const step = Math.min(m, spd * dt);
 const nextX=a.userData.mapX+dx/m*step,nextY=a.userData.mapY+dy/m*step;
 if(wildlifePointValid(nextX,nextY,a.userData.minTrail??.17,a.userData.maxSlope??Infinity)){
 a.userData.mapX=nextX;a.userData.mapY=nextY;clampAnimalToDomain(a);
+moved=true;
 }else{
 a.userData.waypoint=null;
+a.userData.fleeWaypoint=null;
+a.userData.fleeRetryAt=now+450;
 }
-a.rotation.y = dampAngle(a.rotation.y, wildlifeYaw(dx, dy), 1 - Math.exp(-dt/.25));
+if(moved)a.rotation.y = dampAngle(a.rotation.y, wildlifeYaw(dx, dy), 1 - Math.exp(-dt/.25));
 }
 placeGroundAnimal(a);
 const parts = a.userData.parts || {};
-if (parts.legs?.length) { const swing = (darter ? .42 : .16) * Math.sin(now*.007 + a.userData.phase); parts.legs.forEach((leg, i) => leg.rotation.x = (i % 2 ? 1 : -1) * swing); }
+if (parts.legs?.length) {
+const swing=moved?(darter ? .42 : .16)*Math.sin(now*.007+a.userData.phase):0;
+parts.legs.forEach((leg,i)=>leg.rotation.x=lerp(leg.rotation.x||0,(i%2?1:-1)*swing,moved?.55:.22));
+}
 if (parts.head && !darter) parts.head.rotation.x = -0.12 + .10 * Math.sin(now*.0012 + a.userData.phase);
 }
 function updateAnimalFlyer(a, dt, now) {
@@ -7679,11 +7972,33 @@ if(outward.lengthSq()<1e-8)outward.set(1,0,0);
 outward.normalize();
 const sideNormal=new THREE.Vector3(rig.facing.z,0,-rig.facing.x).normalize();
 if(sideNormal.dot(outward)<0)sideNormal.multiplyScalar(-1);
-const distance=9*aspectPull;
-const height=immersive?4.6:3.8;
 target=ground.clone().add(new THREE.Vector3(0,1.04+tallHorizonLift,0));
+const outsideDistance=9*aspectPull;
+const outsideHeight=immersive?4.6:3.8;
+const outsideEye=ground.clone().addScaledVector(sideNormal,outsideDistance).add(new THREE.Vector3(0,outsideHeight,0));
+if(!threeView.sideShotActive){
+const gradient=threeDir(cur.gF);
+const gradientMagnitude=norm(cur.gF);
+const uphillTowardCamera=gradient.dot(sideNormal);
+const outsideLift=verticalLiftRequired(outsideEye,target);
+const outsideOcclusion=lineOfSightOcclusion(target,outsideEye).pen;
+const domeBlindSide=state.level?.id==='dome'&&uphillTowardCamera>.72&&gradientMagnitude>.25;
+const overhead=state.level?.id==='dome'&&(outsideOcclusion>.35||(outsideLift>.70&&uphillTowardCamera>.05)||domeBlindSide);
+threeView.sideShotMode=overhead?'overhead':'outside';
+threeView.sideShotDecision={
+outsideLift:Number(outsideLift.toFixed(3)),
+outsideOcclusion:Number(outsideOcclusion.toFixed(3)),
+uphillTowardCamera:Number(uphillTowardCamera.toFixed(3)),
+gradientMagnitude:Number(gradientMagnitude.toFixed(3))
+};
+threeView.sideShotActive=true;
+}
+const overhead=threeView.sideShotMode==='overhead';
+const distance=(overhead?7.2:9)*aspectPull;
+const height=overhead?(immersive?9.2:8.4):outsideHeight;
 eye=ground.clone().addScaledVector(sideNormal,distance).add(new THREE.Vector3(0,height,0));
 }else{
+threeView.sideShotActive=false;threeView.sideShotMode=null;threeView.sideShotDecision=null;
 const distance=(immersive?7.2:5.8)*aspectPull;
 const height=immersive?4.85:3.75;
 const ahead=immersive?7.2:5.6;
@@ -7695,7 +8010,7 @@ target=ground.clone()
 .add(new THREE.Vector3(0,1.10+clamp(threeView.slopeLiftSmooth,-.15,.15)+tallHorizonLift,0))
 .addScaledVector(camForward,ahead);
 }
-eye=side?clearSideShot(eye,target):clearShot(eye,target,dt,'follow');
+eye=side?clearSideShot(eye,target,threeView.sideShotMode==='overhead'):clearShot(eye,target,dt,'follow');
 
 const sequence=threeView.cameraSequence;
 let sequenceActive=false;
@@ -7770,30 +8085,33 @@ el.compassHeading.textContent = `${dir} ${deg}°`;
 }
 
 function updateCameraViewButton() {
-if(!el.viewModeBtn||!el.splitRestoreBtn||!state.level)return;
+if(!el.viewModeBtn||!state.level)return;
 const chromeAllowed=!state.titleOpen&&!state.modalOpen&&!state.done;
 const showSide=chromeAllowed&&sceneSupportsSideView();
 el.viewModeBtn.style.display=showSide?'':'none';
+const coachVisible=showSide&&state.viewCoachActive;
+el.viewModeBtn.classList.toggle('entry-coach',coachVisible);
+if(el.viewCoach)el.viewCoach.hidden=!coachVisible;
 if(showSide){
 const rect=overlayLayout().scene;
 const side=state.cameraView==='side';
-const label=side?'Trail view':'Side view',width=side?78:82;
+const targetView=side?'Trail View':'Side View',width=96,buttonHeight=42,buttonInset=10;
 el.viewModeBtn.style.left=`${rect.right-width-10}px`;
-el.viewModeBtn.style.top=`${rect.bottom-40}px`;
+el.viewModeBtn.style.top=`${rect.bottom-buttonHeight-buttonInset}px`;
 el.viewModeBtn.style.minWidth=`${width}px`;
-el.viewModeBtn.textContent=label;
+const targetLabel=el.viewModeBtn.querySelector('.viewModeTarget');
+if(targetLabel&&targetLabel.textContent!==targetView)targetLabel.textContent=targetView;
 el.viewModeBtn.title=side?'Return to following behind the hiker':'Zoom out beside the hiker; drag sideways to pan';
-el.viewModeBtn.setAttribute('aria-label',el.viewModeBtn.title);
+el.viewModeBtn.setAttribute('aria-label',`Switch to ${targetView}`);
 el.viewModeBtn.setAttribute('aria-pressed',String(state.cameraView!=='follow'));
+if(coachVisible&&el.viewCoach){
+const coachWidth=Math.min(238,Math.max(190,rect.width-20));
+el.viewCoach.textContent=side?'Side View is on. Use Trail View to follow behind the hiker.':'Use Side View for a wider look at the hiker and trail.';
+el.viewCoach.style.width=`${coachWidth}px`;
+el.viewCoach.style.left=`${Math.max(rect.left+8,rect.right-coachWidth-10)}px`;
+el.viewCoach.style.top='auto';
+el.viewCoach.style.bottom=`${Math.max(60,innerHeight-rect.bottom+buttonHeight+16)}px`;
 }
-const portrait=window.innerHeight>window.innerWidth||window.innerWidth<=760;
-const showSplit=chromeAllowed&&levelCanSplit()&&!splitIsActive()&&!portrait;
-el.splitRestoreBtn.hidden=!showSplit;
-if(showSplit){
-const rect=overlayLayout().main||overlayLayout().scene;
-el.splitRestoreBtn.style.left=`${rect.left+10}px`;
-el.splitRestoreBtn.style.top=`${rect.bottom-40}px`;
-el.splitRestoreBtn.style.minWidth='74px';
 }
 }
 
@@ -8057,7 +8375,7 @@ function updateStakeLedger() {
 if (!el.stakeLedger) return;
 if (!state.stakes.length) { if(el.stakeLedger.innerHTML)el.stakeLedger.innerHTML=''; return; }
 const showElevation=!!currentInstruments().elevation;
-const valueOnlyReadings=state.runType==='patrol'||state.level?.id==='mojave';
+const valueOnlyReadings=state.runType==='patrol'||state.level?.id==='mojave'||state.level?.id==='folds';
 const html=state.stakes
 .slice().sort((a,b)=>a.id-b.id)
 .map(stake=>{
@@ -8097,9 +8415,11 @@ if (!el.globalLedgerRows) return;
 el.globalLedgerSheet.dataset.levelId=state.level?.id||'';
 const ordered=state.stakes.slice().sort((a,b)=>a.id-b.id);
 const reportReady=state.runType==='patrol'&&state.level?.mission?.kind==='survey'&&patrolGoalSatisfied();
-if(el.ledgerCloseBtn){
-el.ledgerCloseBtn.textContent=reportReady?COPY.chrome_report:COPY.continue_label;
-el.ledgerCloseBtn.dataset.action=reportReady?'report':'continue';
+const storyGlobalRanking=state.runType==='story'&&state.level?.goal?.kind==='critical-then-global';
+if(el.globalLedgerActions)el.globalLedgerActions.hidden=storyGlobalRanking;
+if(el.ledgerCloseBtn&&!storyGlobalRanking){
+el.ledgerCloseBtn.textContent=reportReady?COPY.chrome_report:COPY.dismiss_label;
+el.ledgerCloseBtn.dataset.action=reportReady?'report':'dismiss';
 }
 const showElevation=!!currentInstruments().elevation;
 const mapAvailable=state.level?.views?.map!=='hidden';
@@ -8109,16 +8429,25 @@ const patrolRankTarget=state.runType==='patrol'&&state.level?.mission?.kind==='s
 const rankingControls=state.level?.flags==='stakes+globals'||!!patrolRankTarget;
 const allCandidatesConfirmed=state.candidates.length>0&&confirmedStakes().length>=state.candidates.length;
 const rankLocked=state.level?.goal?.kind==='critical-then-global'&&(!allCandidatesConfirmed||state.phase!=='rank');
+const promptVisible=storyGlobalRanking&&rankLocked;
+const footerVisible=rankingControls&&(!storyGlobalRanking||!rankLocked);
+if(el.globalLedgerPrompt){
+el.globalLedgerPrompt.hidden=!promptVisible;
+el.globalLedgerPrompt.textContent=rankLocked?COPY.t4_report_phase1_missing:COPY.ledger_rank_prompt;
+}
 if(el.globalLedgerFooter){
-el.globalLedgerFooter.hidden=!rankingControls;
-el.globalLedgerFooter.textContent=rankLocked
-?COPY.t4_report_phase1_missing
-:patrolRankTarget==='high'
+el.globalLedgerFooter.hidden=!footerVisible;
+const footerText=patrolRankTarget==='high'
 ?COPY.ledger_footer_max
 :patrolRankTarget==='low'
 ?COPY.ledger_footer_min
 :COPY.ledger_footer;
+el.globalLedgerFooter.textContent=storyGlobalRanking&&!rankLocked
+?`${COPY.ledger_rank_prompt} ${footerText}`
+:footerText;
+el.globalLedgerFooter.classList.toggle('storyRankingCopy',storyGlobalRanking&&!rankLocked);
 }
+if(el.globalLedgerInstructions)el.globalLedgerInstructions.hidden=!promptVisible&&!footerVisible;
 if (!ordered.length) {
 el.globalLedgerRows.innerHTML='<p class="ledgerEmpty">No stakes yet — plant one and it appears here.</p>';
 return;
@@ -8135,7 +8464,7 @@ const removable=!stake.locked&&(stake.verdict==='pending'||state.runType==='patr
 const remove=removable?`<button class="ledgerRemoveBtn" type="button" data-ledger-remove="${stake.id}" aria-label="Remove this stake">✕</button>`:'';
 const sample=state.samples[stake.idx];
 const gradNorm=sample?.gF?norm(sample.gF):NaN;
-const readings=state.runType==='story'&&state.level?.id!=='mojave'&&showElevation&&!rankingControls&&Number.isFinite(gradNorm)
+const readings=state.runType==='story'&&!['folds','mojave'].includes(state.level?.id)&&showElevation&&!rankingControls&&Number.isFinite(gradNorm)
 ?`<span class="globalLedgerReadings"><span>f = ${fmt(stake.z,1)}</span><span class="globalLedgerReadingDivider" aria-hidden="true">·</span><span>‖∇f‖ = ${fmt(gradNorm,1)}</span><span class="globalLedgerReadingDivider" aria-hidden="true">·</span></span>`
 :'';
 const elevation=showElevation&&!readings?`<span class="globalLedgerElevation">f = ${fmt(stake.z,1)} m</span>`:'';
@@ -8404,7 +8733,7 @@ state.modalLocked=true;
 showModal(COPY.t1_success_title,`<div class="classificationSuccess"><div class="classificationSuccessThumb" aria-hidden="true">👍</div><p>${summary}</p>${extraHtml}</div>`,[
 ready
 ?{label:COPY.chrome_report,className:'miniBtn primary',onClick:()=>{state.modalLocked=false;closeModal(true);reportToRanger();}}
-:{label:COPY.dismiss_label,className:'miniBtn primary',onClick:()=>{state.modalLocked=false;closeModal(true);}}
+:{label:COPY.continue_label,className:'miniBtn primary',onClick:()=>{state.modalLocked=false;closeModal(true);}}
 ]);
 if(modalWasOpen)state.modalReturnFocus=returnFocus;
 }
@@ -8453,7 +8782,7 @@ if(state.runType==='story'&&guidedReadyToReport())extra=COPY.report_ready;
 }
 noteInput();updateHud();
 if(state.ledgerOpen)renderGlobalLedger();
-const summary=fill(feedback,{found,total});
+const summary=fill(feedback,{found,total,elevation:fmt(stake.z,1)});
 if(openRankingLedger){
 dismissToast({clearQueue:true,immediate:true});
 if(!state.ledgerOpen)openGlobalLedger();
@@ -8738,11 +9067,11 @@ const priorReturnFocus=el.modalBackdrop.classList.contains('show')?state.modalRe
 const actions=page==='test'
 ?[
 {label:COPY.quiz_back,className:'miniBtn',onClick:()=>showLessonPage(level,'review')},
-{label:COPY.continue_label,className:'miniBtn primary',onClick:()=>closeModal()}
+{label:COPY.lesson_return_park,className:'miniBtn primary',onClick:()=>closeModal()}
 ]
 :[
 {label:COPY.quiz_take,className:'miniBtn primary',onClick:()=>showLessonPage(level,'test')},
-{label:COPY.continue_label,className:'miniBtn',onClick:()=>closeModal()}
+{label:COPY.lesson_return_park,className:'miniBtn',onClick:()=>closeModal()}
 ];
 showModal(fill(COPY.lesson_modal_title,{name:level.name}),lessonBlockV2(level,page),actions);
 el.modalCard.classList.add('lessonPaged');
@@ -8775,11 +9104,11 @@ const finish=()=>{state.modalLocked=false;closeModal(true);openTitle();};
 const actions=page==='test'
 ?[
 {label:COPY.quiz_back,className:'miniBtn',onClick:()=>showCompletionLessonPage(level,outcome,'review')},
-{label:COPY.continue_label,className:'miniBtn primary',onClick:finish}
+{label:COPY.lesson_return_park,className:'miniBtn primary',onClick:finish}
 ]
 :[
 {label:COPY.quiz_take,className:'miniBtn primary',onClick:()=>showCompletionLessonPage(level,outcome,'test')},
-{label:COPY.continue_label,className:'miniBtn',onClick:finish}
+{label:COPY.lesson_return_park,className:'miniBtn',onClick:finish}
 ];
 state.modalLocked=true;
 const body=page==='test'?lessonBlockV2(level,'test'):`${outcome}${lessonBlockV2(level,'review')}`;
@@ -8855,7 +9184,7 @@ state.modalReturnFocus=document.activeElement instanceof HTMLElement?document.ac
 state.modalOpen=true;
 delete el.modalCard.dataset.completionLevel;
 delete el.modalCard.dataset.dialogKind;
-el.modalCard.classList.remove('lessonPaged','completionPaged','completionReview','completionTest','feedbackExpanded','classificationPrompt','patrolBrief','aboutParkDialog');
+el.modalCard.classList.remove('lessonPaged','completionPaged','completionReview','completionTest','feedbackExpanded','classificationPrompt','patrolBrief','missionBrief','aboutParkDialog');
 el.modalTitle.textContent=title;
 el.modalBody.innerHTML=bodyHtml;
 el.modalActions.innerHTML='';
@@ -8869,7 +9198,11 @@ el.modalActions.appendChild(button);
 }
 el.modalBackdrop.classList.add('show');
 if (window.MathJax?.typesetPromise) MathJax.typesetPromise([el.modalBody,el.modalActions]).catch(()=>{});
-requestAnimationFrame(()=>el.modalActions.querySelector('button')?.focus());
+requestAnimationFrame(()=>{
+const firstAction=el.modalActions.querySelector('button');
+if(!firstAction)return;
+firstAction.focus(el.modalCard.classList.contains('missionBrief')?{preventScroll:true}:undefined);
+});
 }
 
 
@@ -8886,11 +9219,13 @@ delete el.modalCard.dataset.dialogKind;
 function showParkInfo() {
 el.parkInfoBtn.setAttribute('aria-expanded','true');
 showModal('About Lagrange National Park',`<div class="parkAboutList">
-  <p><strong>Version:</strong> Lagrange National Park [v0.2(beta)]</p>
+  <p><strong>Version:</strong> Lagrange National Park [v0.3(beta)]</p>
   <p><strong>Copyright:</strong> © 2026 <a href="https://people.math.wisc.edu/~roch/" target="_blank" rel="noopener noreferrer">Sébastien Roch</a></p>
-  <p><strong>License:</strong> <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener noreferrer">Creative Commons Attribution-NonCommercial 4.0 International License</a></p>
+  <p><strong>Code license:</strong> The software source code—including the functional HTML, CSS, and JavaScript—is available under the <a href="https://opensource.org/license/mit" target="_blank" rel="noopener noreferrer">MIT License</a>.</p>
+  <p><strong>Content license:</strong> Except where otherwise noted, the original instructional text, questions, feedback, and visual assets are licensed under the <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener noreferrer">Creative Commons Attribution-NonCommercial 4.0 International License</a>.</p>
   <p><strong>Textbook:</strong> <a href="https://math345-textbook.github.io/" target="_blank" rel="noopener noreferrer">math345-textbook.github.io</a></p>
   <p><strong>Privacy:</strong> Your guided-trail progress and Ranger Patrol record are saved in this browser on this device. They are not uploaded anywhere. If you use a private window, clear site data, switch browsers, or block site storage, your progress may reset.</p>
+  <p><strong>Acknowledgments:</strong> Thanks to Betsy Stovall for helpful feedback.</p>
 </div>`,[{label:'Close',className:'miniBtn primary',onClick:()=>closeModal()}]);
 el.modalCard.dataset.dialogKind='park-info';
 el.modalCard.classList.add('aboutParkDialog');
@@ -8900,8 +9235,8 @@ el.modalCard.classList.add('aboutParkDialog');
 function showLevelIntro(reopen=false) {
 if(!state.level||state.runType!=='story')return;
 const {nMax,nMin}=candidateKindCounts();
-const body=`<div class="storyCopy">${fill(COPY[state.level.briefKey],{nMax,nMin,total:state.candidates.length})}</div>`;
-const actions=[{label:reopen?COPY.continue_label:COPY.dismiss_label,className:'miniBtn primary',onClick:()=>{
+const body=`<div class="storyCopy">${fill(COPY[state.level.briefKey],{nMax,nMin,total:state.candidates.length})}${MISSION_CONTROLS_FOOTNOTE}</div>`;
+const actions=[{label:reopen?COPY.dismiss_label:COPY.close_label,className:'miniBtn primary',onClick:()=>{
 closeModal();
 el.objectiveBtn?.blur();
 state.started=true;
@@ -8909,6 +9244,7 @@ if(!reopen)beginEntryCamera();
 saveGuidedSnapshot({immediate:true});
 }}];
 showModal(`${state.level.name} · ${state.level.subtitle}`,body,actions);
+el.modalCard.classList.add('missionBrief');
 }
 
 function showObjective() {
@@ -8929,6 +9265,7 @@ openTitle();
 }
 function openTitle() {
 flushGuidedSnapshot();
+dismissEntryCoaches();
 closeGlobalLedger(true);
 hideWildlifeTag();
 threeView.cameraSequence=null;
@@ -8941,12 +9278,14 @@ function closeTitle() { state.titleOpen=false; state.modalOpen=el.modalBackdrop.
 
 function toggleCameraView() {
 if(!sceneSupportsSideView())return;
+dismissViewCoach();
 if(threeView.cameraViewAuto){
 threeView.cameraViewAuto=null;
 threeView.autoSideSuppressed=true;
 }
 const next=state.cameraView==='follow'?'side':'follow';
 state.cameraView=next;
+threeView.sideShotActive=false;threeView.sideShotMode=null;threeView.sideShotDecision=null;
 state.cameraSnap=true;
 state.sceneDirty=false;threeView.lastRender=0;invalidateOverlayLayout();noteInput();updateCameraViewButton();
 }
@@ -8997,9 +9336,8 @@ showModal(COPY.chrome_toolkit,`<p class="toolkitScopeHeader">${header}</p><div c
 requestAnimationFrame(()=>{el.modalCard.scrollTop=0;});
 }
 
-function storyUnlocked(index) {
-if (index===0) return true;
-return !!state.progress.guidedCompleted[storyLevels[index-1].id];
+function storyUnlocked() {
+return true;
 }
 
 
@@ -9038,25 +9376,24 @@ menuColumn.classList.add('referenceAnchorLocked');
 
 function guidedCardState(level,index) {
 const completed=!!state.progress.guidedCompleted[level.id];
-const snapshot=state.progress.guidedRuns[level.id];
+const rawSnapshot=state.progress.guidedRuns[level.id];
+const candidateSnapshot=guidedSnapshotHasProgress(rawSnapshot)?rawSnapshot:null;
+const candidateProgress=guidedCardProgress(level,candidateSnapshot);
+const snapshot=Math.round(candidateProgress*100)>0?candidateSnapshot:null;
 const unlocked=storyUnlocked(index);
 const progress=guidedCardProgress(level,snapshot);
 const percent=Math.round(progress*100);
 const status=fill(COPY.card_percent,{percent});
-let label=COPY.card_start;
-if(completed&&snapshot)label=COPY.card_continue_replay;
-else if(completed)label=COPY.card_replay;
-else if(snapshot)label=COPY.card_continue;
-return {completed,snapshot,unlocked,progress,percent,status,label};
+return {completed,snapshot,unlocked,progress,percent,status};
 }
 
 function enterGuidedFromCard(level,index,card) {
 if(!card.unlocked)return;
 if(card.snapshot){
-const restored=continueGuidedTrail(level.id,{notify:true});
+const restored=continueGuidedTrail(level.id,{notify:false});
 if(!restored){
-buildLevelTiles();
-return;
+startGuidedTrail(level.id,{replay:card.completed});
+closeTitle();showLevelIntro(false);return;
 }
 closeTitle();state.started=true;beginEntryCamera();updateHud();return;
 }
@@ -9071,7 +9408,7 @@ enterGuidedFromCard(level,index,card);
 return;
 }
 showModal(fill(COPY.card_run_choice_title,{name:level.name}),COPY.card_run_choice_body,[
-{label:COPY.card_continue_replay,className:'miniBtn primary',onClick:()=>{
+{label:COPY.card_resume,className:'miniBtn primary',onClick:()=>{
 closeModal(true);
 enterGuidedFromCard(level,index,card);
 }},
@@ -9100,21 +9437,22 @@ const displayedPercent=card.snapshot?card.percent:(card.completed?100:card.perce
 const article=document.createElement('article');
 article.className=`levelTile${card.unlocked?'':' locked'}${card.completed?' completed':''}${card.completed&&card.snapshot?' replay-active':''}`;
 article.dataset.levelId=level.id;
-article.innerHTML=`<button class="levelTilePrimary" type="button" ${card.unlocked?'':'disabled'} aria-label="${card.unlocked?`${card.label} ${level.name}`:`${level.name} locked`}">
+article.innerHTML=`<div class="levelTilePrimary">
           <span class="levelNumberBadge">${index+1}</span>
           <span class="levelTileName">${level.name}</span><span class="levelTileSubtitle">${level.subtitle}</span>
           <span class="levelTileState">${card.unlocked?card.status:'🔒'}</span>
           <span class="levelTileDescription">${COPY.card_desc[index]}</span>
           <span class="biomeSwatch" style="--swatch:${biomeSwatch(level)}"></span>
-        </button>
+        </div>
         <div class="levelTileActions">
           <button class="levelTileLesson" type="button" aria-label="${fill(COPY.lesson_btn_aria,{name:level.name})}">${COPY.card_lesson}</button>
+          <button class="levelTilePlay" type="button" aria-label="${fill(COPY.play_btn_aria,{name:level.name})}" ${card.unlocked?'':'disabled'}>${COPY.card_play}</button>
         </div>
         <div class="levelTileProgress" role="progressbar" aria-label="${level.name}: ${card.status}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${displayedPercent}">
           <div class="progressTrack" aria-hidden="true"><div class="progressFill" style="--progress:${displayedPercent}%"></div></div>
         </div>`;
-article.querySelector('.levelTilePrimary').addEventListener('click',()=>chooseGuidedRunFromCard(level,index,card));
 article.querySelector('.levelTileLesson').addEventListener('click',()=>showLesson(level));
+article.querySelector('.levelTilePlay').addEventListener('click',()=>chooseGuidedRunFromCard(level,index,card));
 tileGrid.appendChild(article);
 });
 
@@ -9447,7 +9785,7 @@ function showPatrolBrief(reopen=false) {
 const mission=state.level?.mission;
 if(!mission)return;
 const surveyBrief=mission.kind==='survey'?`${INCOMPLETE_SURVEY_DIAGRAM}${COPY.p_survey_note}`:'';
-const body=`${fill(COPY.p_brief_goal,{goal:COPY[mission.goalKey]||''})}${surveyBrief}${fill(COPY.p_brief_tools,{tools:patrolMissionToolNames(mission)})}`;
+const body=`${fill(COPY.p_brief_goal,{goal:COPY[mission.goalKey]||''})}${surveyBrief}${fill(COPY.p_brief_tools,{tools:patrolMissionToolNames(mission)})}${MISSION_CONTROLS_FOOTNOTE}`;
 showModal(`${COPY.patrol_title}: ${state.level?.trailName||'Trail Loop'}`,body,[{
 label:reopen?COPY.continue_label:COPY.patrol_start,
 className:'miniBtn primary',
@@ -9601,6 +9939,10 @@ const views=state.level?.views||{};
 return views.map==='split'||views.scene==='split'||!!views.splitAvailable;
 }
 
+function splitLayoutUsable() {
+return levelCanSplit()&&window.innerWidth>760&&window.innerHeight<=window.innerWidth;
+}
+
 function splitIsActive() { return el.mapCanvas.classList.contains('split-map')&&el.sceneCanvas.classList.contains('split-scene'); }
 
 function sceneIsFullView() { return el.sceneCanvas.classList.contains('main') && !el.sceneCanvas.classList.contains('inset') && !el.sceneCanvas.classList.contains('split-scene'); }
@@ -9641,6 +9983,13 @@ el.sceneCanvas.className='view main';
 }
 el.app.classList.toggle('split-active',splitIsActive());
 el.app.classList.toggle('scene-inset-active',el.sceneCanvas.classList.contains('inset'));
+const insetReturnsToSplit=splitLayoutUsable()&&!splitIsActive();
+const mapInset=el.mapCanvas.classList.contains('inset');
+const sceneInset=el.sceneCanvas.classList.contains('inset');
+el.mapCanvas.title=mapInset?(insetReturnsToSplit?'Return to split view':'Focus the contour map'):splitIsActive()?'Focus the contour map':'';
+el.sceneCanvas.title=sceneInset?(insetReturnsToSplit?'Return to split view':'Focus the 3D hiking view'):splitIsActive()?'Focus the 3D hiking view':'';
+el.mapCanvas.setAttribute('aria-label',mapInset?(insetReturnsToSplit?'Topographic contour map inset; activate to return to split view':'Topographic contour map inset; activate to focus the map'):splitIsActive()?'Topographic contour map; activate to focus the map':'Topographic contour map');
+el.sceneCanvas.setAttribute('aria-label',sceneInset?(insetReturnsToSplit?'3D hiking inset; activate to return to split view':'3D hiking inset; activate to focus the hiking view'):splitIsActive()?'3D hiking view; activate to focus the hiking view':'3D hiking view');
 invalidateOverlayLayout();
 invalidateHud();
 const sceneVisible=!el.sceneCanvas.classList.contains('view-hidden');
@@ -9720,7 +10069,9 @@ el.walkThumb.style.transform = `translate(calc(-50% + ${state.scrubVisual * max}
 function updateWalkHint() {
 if (!el.walkPad || !el.walkHint) return;
 el.walkHint.textContent = '⟷ drag to hike';
-el.walkPad.classList.toggle('hint-faded', !!state.walkHintFaded);
+el.walkPad.classList.toggle('hint-faded', !!state.walkHintFaded&&!state.movementCoachActive);
+el.walkPad.classList.toggle('movement-coach',state.movementCoachActive);
+el.controlsBox?.classList.toggle('movement-coach',state.movementCoachActive);
 }
 
 function recordWalkingInput(dt) {
@@ -9739,6 +10090,7 @@ updateWalkHint();
 function nudgeWalk(dir, e) {
 e?.preventDefault?.(); e?.stopPropagation?.();
 if (!actionUiAllowed()) return;
+dismissMovementCoach();
 startPlaying();
 const N=state.samples.length, step=Math.max(8,Math.round(N/90));
 state.dragTarget=mod(Math.round(state.pos)+dir*step,N);
@@ -9747,6 +10099,7 @@ state.lastDir=dir; noteInput();
 
 function scrubFromEvent(e) {
 if (!actionUiAllowed()) return;
+dismissMovementCoach();
 const r=el.walkTrack.getBoundingClientRect(), center=r.left+r.width/2;
 const value=clamp((e.clientX-center)/Math.max(1,r.width/2),-1,1);
 state.keyWalk={active:false,dir:0,start:0};
@@ -9767,6 +10120,7 @@ return i+frac;
 }
 
 function advanceAlongTrailFraction(dir,fraction=.0015) {
+dismissMovementCoach();
 const current=currentSample().dist;
 state.pos=mod(trailPositionAtDistance(current+dir*state.samples.totalDist*fraction),state.samples.length);
 state.vel=0;state.dragTarget=null;state.controlDir=0;state.lastDir=dir;markVisited();noteInput();
@@ -9887,6 +10241,7 @@ clampMapView();captureMapFollowAnchor(rect);updateMapResetButton(rect,el.mapCanv
 
 function moveHikerToTrailIndex(index) {
 if(!actionUiAllowed())return false;
+dismissMovementCoach();
 const N=state.samples.length,idx=mod(Math.round(index),N);
 const direction=Math.sign(signedTrailDelta(state.pos,idx,N));
 startPlaying();stopForAction();
@@ -9951,6 +10306,10 @@ function handleReportButton(e) { e.preventDefault(); e.stopPropagation(); startP
 
 function setupEvents() {
 const clearScrub=()=>{state.scrubPointer=null;state.controlDir=0;updateScrubThumb(0);};
+el.app.addEventListener('pointerdown',()=>{
+if(state.titleOpen||state.modalOpen||state.done)return;
+if(state.movementCoachActive||state.viewCoachActive)dismissEntryCoaches();
+},true);
 el.walkPad.addEventListener('pointerdown',event=>{
 event.preventDefault();event.stopPropagation();if(!actionUiAllowed())return;startPlaying();state.scrubPointer=event.pointerId;scrubFromEvent(event);try{el.walkPad.setPointerCapture(event.pointerId);}catch{}
 });
@@ -9967,7 +10326,12 @@ el.controlsBox?.addEventListener('pointerdown',event=>event.stopPropagation());
 el.stakeBtn.addEventListener('pointerdown',handleStakeButton);el.ledgerBtn.addEventListener('pointerdown',handleLedgerButton);el.reportBanner.addEventListener('pointerdown',handleReportButton);
 el.hintBtn.addEventListener('pointerdown',event=>{event.preventDefault();event.stopPropagation();startPlaying();stopForAction();showHint();});
 el.toastDismiss.addEventListener('pointerdown',event=>{event.preventDefault();event.stopPropagation();});
-el.toastDismiss.addEventListener('click',event=>{event.preventDefault();event.stopPropagation();dismissToast();(el.hintBtn.hidden?el.stakeBtn:el.hintBtn).focus({preventScroll:true});});
+el.toastDismiss.addEventListener('click',event=>{
+event.preventDefault();event.stopPropagation();dismissToast();
+const focusTarget=el.hintBtn.hidden?el.stakeBtn:el.hintBtn;
+if(event.detail===0)focusTarget.focus({preventScroll:true});
+else el.toastDismiss.blur();
+});
 el.stakeBtn.addEventListener('click',event=>{if(event.detail===0)handleStakeButton(event);else{event.preventDefault();event.stopPropagation();}});
 el.ledgerBtn.addEventListener('click',event=>{if(event.detail===0)handleLedgerButton(event);else{event.preventDefault();event.stopPropagation();}});
 el.reportBanner.addEventListener('click',event=>{if(event.detail===0)handleReportButton(event);else{event.preventDefault();event.stopPropagation();}});
@@ -10011,9 +10375,6 @@ closeGlobalLedger(false);updateHud();
 el.returnParkBtn.addEventListener('click',confirmReturnToParkMap);el.objectiveBtn.addEventListener('click',showObjective);el.parkInfoBtn.addEventListener('click',showParkInfo);
 el.viewModeBtn.addEventListener('pointerdown',event=>{event.preventDefault();event.stopPropagation();});
 el.viewModeBtn.addEventListener('click',event=>{event.preventDefault();event.stopPropagation();startPlaying();toggleCameraView();});
-el.splitRestoreBtn.addEventListener('pointerdown',event=>{event.preventDefault();event.stopPropagation();});
-el.splitRestoreBtn.addEventListener('click',event=>{event.preventDefault();event.stopPropagation();setMode('split');});
-
 el.sceneCanvas.addEventListener('pointerdown',event=>{
 event.preventDefault();noteInput();
 const split=el.sceneCanvas.classList.contains('split-scene');
@@ -10030,8 +10391,14 @@ if(Math.hypot(event.clientX-pointer.startX,event.clientY-pointer.startY)>=6)poin
 const endScenePointer=event=>{
 const pointer=state.scenePointer;if(!pointer||pointer.id!==event.pointerId)return;state.scenePointer=null;
 if(!pointer.moved){
+if(pointer.inset&&supportsViewSwap()&&splitLayoutUsable()){
+setMode('split');
+try{el.sceneCanvas.releasePointerCapture(event.pointerId);}catch{}
+return;
+}
 if(pointer.pointerType==='touch'&&showWildlifeTagAtPointer(event.clientX,event.clientY,2500)){try{el.sceneCanvas.releasePointerCapture(event.pointerId);}catch{}return;}
-if(pointer.split)setMode('scene');else if(pointer.inset&&supportsViewSwap())setMode('scene');
+if(pointer.split)setMode('scene');
+else if(pointer.inset&&supportsViewSwap())setMode(splitLayoutUsable()?'split':'scene');
 }
 try{el.sceneCanvas.releasePointerCapture(event.pointerId);}catch{}
 };
@@ -10055,7 +10422,9 @@ setMapZoomAbout(geometry.x,geometry.y,geometry.rect,zoom);noteInput();
 el.mapCanvas.addEventListener('pointerdown',event=>{
 if(el.mapCanvas.classList.contains('view-hidden'))return;
 event.preventDefault();
-if(el.mapCanvas.classList.contains('inset')&&supportsViewSwap()){setMode('map');noteInput();return;}
+if(el.mapCanvas.classList.contains('inset')&&supportsViewSwap()){
+setMode(splitLayoutUsable()?'split':'map');noteInput();return;
+}
 const geometry=mapEventGeometry(event);
 state.mapHoverSnap=null;
 state.mapPointers.set(event.pointerId,{x:event.clientX,y:event.clientY,pointerType:event.pointerType});
@@ -10075,7 +10444,7 @@ stakeId:stake?.id||0,nearTrail,trailIdx:nearest.idx,
 canPan:!hiker&&!stake&&!nearTrail&&(state.mapView.zoom||1)>1
 };
 if(hiker){
-startPlaying();noteInput();state.draggingHiker=true;
+dismissMovementCoach();startPlaying();noteInput();state.draggingHiker=true;
 const mapPoint=screenToMap(geometry.x,geometry.y,geometry.rect);state.dragTarget=nearestSampleIndex(mapPoint.x,mapPoint.y);state.probe=null;
 }
 });
@@ -10095,6 +10464,7 @@ const mapPoint=screenToMap(clamp(geometry.x,geometry.rect.x,geometry.rect.x+geom
 state.dragTarget=nearestSampleIndex(mapPoint.x,mapPoint.y);noteInput();return;
 }
 if(gesture.type==='trail'&&gesture.moved){
+dismissMovementCoach();
 const nearest=nearestScreenSample(clamp(geometry.x,geometry.rect.x,geometry.rect.x+geometry.rect.w),clamp(geometry.y,geometry.rect.y,geometry.rect.y+geometry.rect.h),geometry.rect);
 state.dragTarget=nearest.idx;state.probe=null;startPlaying();noteInput();return;
 }
@@ -10136,7 +10506,11 @@ el.modalBackdrop.addEventListener('pointerdown',event=>{if(event.target===el.mod
 window.addEventListener('resize',()=>{state.sceneDirty=true;invalidateOverlayLayout();invalidateHud();applyViewConfig();updateScrubThumb();updateWalkHint();updateCameraViewButton();});
 window.addEventListener('keydown',event=>{
 if(event.repeat)return;
-if(threeView.cameraSequence&&event.key!=='Tab'){event.preventDefault();skipCameraSequence();return;}
+const pressedKey=event.key.toLowerCase();
+if(threeView.cameraSequence&&event.key!=='Tab'){
+skipCameraSequence();
+if(!['ArrowLeft','ArrowRight'].includes(event.key)&&!['a','d'].includes(pressedKey)){event.preventDefault();return;}
+}
 if(event.key==='Tab'&&el.modalBackdrop.classList.contains('show')){
 const focusable=[...el.modalBackdrop.querySelectorAll('button:not([disabled]),a[href],[tabindex]:not([tabindex="-1"])')];
 if(focusable.length){
@@ -10145,7 +10519,11 @@ if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.f
 else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus();}
 }
 }
-const key=event.key.toLowerCase(),canMove=actionUiAllowed();
+const key=pressedKey,canMove=actionUiAllowed();
+if(canMove&&(
+['ArrowLeft','ArrowRight','Home','Enter',' '].includes(event.key)||
+['a','d','s','h','v'].includes(key)
+))dismissEntryCoaches();
 if(event.key==='ArrowLeft'&&event.shiftKey&&canMove){event.preventDefault();startPlaying();advanceAlongTrailFraction(-1,.02);}
 else if((event.key==='ArrowLeft'||key==='a')&&canMove){event.preventDefault();beginKeyWalk(-1);}
 if(event.key==='ArrowRight'&&event.shiftKey&&canMove){event.preventDefault();startPlaying();advanceAlongTrailFraction(1,.02);}
@@ -10180,6 +10558,8 @@ visible:{mapLayers:currentMapLayers(),panels:state.level?.panels||[],instruments
 terrain3D:{
 shader:threeView.terrainShaderEnabled,
 fallbackLines:!threeView.terrainShaderEnabled,
+verticalScale:Number((state.verticalScale||0).toFixed(4)),
+waterMeshes:threeView.water?threeView.water.children.length:0,
 bake:threeView.terrainBake?{
 status:threeView.terrainBake.status,tier:threeView.terrainBake.tier,grid:threeView.terrainBake.grid,
 progress:Number((threeView.terrainBake.progress||0).toFixed(3)),mix:Number((threeView.terrainBake.mix||0).toFixed(3)),
@@ -10199,6 +10579,7 @@ experiential3D:{
 cameraSequence:threeView.cameraSequence?{kind:threeView.cameraSequence.kind,elapsed:Number(threeView.cameraSequence.elapsed.toFixed(3)),duration:threeView.cameraSequence.hold+threeView.cameraSequence.dur}:null,
 yawPolicy:YAW_POLICY,
 effectiveView:threeView.cameraViewAuto??state.cameraView,
+sideShot:threeView.sideShotMode?{mode:threeView.sideShotMode,...threeView.sideShotDecision}:null,
 commit:{time:Number(threeView.commitTime.toFixed(3)),arc:Number(threeView.commitArc.toFixed(4)),yawFlip:Number(threeView.yawFlip.toFixed(4))},
 hikerVisible:threeView.hiker?.visible??false,fov:Number((threeView.camera?.fov||0).toFixed(3)),
 loopRingVisible:!el.loopRing.hidden,
@@ -10231,12 +10612,15 @@ pendingStakeId:state.pendingStakeId,
 restoredState:state.restoredState,
 candidateSignature:state.level?.candidateSignature||state.candidateSignature||'',
 claims:state.candidates.map(candidate=>({key:candidate.key,kind:candidate.kind,claimedBy:candidate.claimedBy})),
+guidedStarts:guidedStartAudit(),
+guidedCards:storyLevels.map((level,index)=>{const card=guidedCardState(level,index);return {level:level.id,percent:card.percent,resumable:!!card.snapshot};}),
 patrolMission:state.level?.mission||null,
 hiker:{arcFraction:Number((currentSample().dist/Math.max(1e-9,state.samples.totalDist)).toFixed(4)),height:Number(currentSample().z.toFixed(4)),visitedPercent:Math.round(state.visited.reduce((sum,seen)=>sum+(seen?1:0),0)/Math.max(1,state.visited.length)*100)},
 stakes:state.stakes.map(stake=>({id:stake.id,slot:stake.slot,candidateKey:stake.candidateKey,arcFraction:Number((state.samples[stake.idx].dist/Math.max(1e-9,state.samples.totalDist)).toFixed(4)),verdict:stake.verdict,claimType:stake.claimType,mark:stake.mark,angle:state.level?.panels?.includes('angle')?`∠ ${stake.alignmentDeg}°`:null,lineResidual:state.level?.panels?.includes('angle')?`${stake.alignmentResidualDeg}°`:null})),
 report:{count:state.reportCount,rejectedAttempts:state.missCount,typeMissCount:state.typeMissCount,lastFalse:state.lastReport?.falseCount??null},
 hint:{stage:state.hintStage,revealUsed:state.hintUsed,visible:state.toastActive?.kind==='hint',dismissible:!el.toastDismiss.hidden,text:state.toastActive?.kind==='hint'?el.toastMessage.textContent:''},
 interaction:{hoverSnap:state.mapHoverSnap?{arcFraction:Number((state.samples[state.mapHoverSnap.idx].dist/Math.max(1e-9,state.samples.totalDist)).toFixed(4))}:null,ripple:!!state.mapRipple,gesture:state.mapGesture?.type||null,mapFollow:(state.mapView?.zoom||1)>1.05&&state.mapView?.follow!==false,currentContourLevel:Number((state.mapAssets?.dynamicContourTarget??currentSample().z).toFixed(4))},
+entryCoach:{movement:state.movementCoachActive,view:state.viewCoachActive},
 done:state.done
 });
 window.advanceTime=ms=>{
@@ -10253,7 +10637,7 @@ startGuidedTrail,continueGuidedTrail,clearGuidedRun,completeGuidedRun,guidedRunP
 guidedLevelById,guidedCandidateByKey,goalChipText,objectiveReady,objectiveCandidateIndices,patrolGoalSatisfied,guidedCardState,
 renderInstrumentDock,updateInstrumentDock,positionInstrumentDock,elevationMeterRange,
 plotRect,mapToScreen,visibleMapBounds,screenToMap,setMapZoomAbout,panMapByPixels,resetMapView,followCurrentMapLocation,captureMapFollowAnchor,ensureContourLod,contourLodForRect,marchingSegments,dynamicContourSegments,drawCurrentFContour,fittedArrowSegment,cycleContourDensity,updateContourDensityButton,maybePulseZoomHint,drawMap,updateMapResetButton,applyViewConfig,setMode,chooseWildlifeAnchors,updateMotion,wildlifeAvoidsExtrema,toggleCameraView,updateCameraViewButton,
-diagnosticForStake,reportCardBody,showToolkit,startPatrol,finishPatrol,showPatrolBrief,levelCanSplit,splitIsActive,trailArcDistanceFrac,lessonBlockV2,lessonAndToolBlocks,assertLessonAndToolParity,showLessonPage,showCompletionLessonPage,
+diagnosticForStake,reportCardBody,showToolkit,startPatrol,finishPatrol,showPatrolBrief,levelCanSplit,splitIsActive,trailArcDistanceFrac,farthestTrailPosition,guidedStartPosition,patrolStartPosition,guidedStartAudit,lessonBlockV2,lessonAndToolBlocks,assertLessonAndToolParity,showLessonPage,showCompletionLessonPage,
 answerPendingClassification,pickupPendingStake,openPendingClassification,plantCandidateStake,PATROL_MISSIONS,patrolGlobalExtremaInfo,alignmentGaugeRegionsClean,missionEligible,configurePatrolMission,selectPatrolMission,seedPatrolSurvey,runPatrolFuzz,
 assignMarkToStake,selectGlobalMark,toggleLedgerMark,evaluateGlobalMarks,openGlobalLedger,closeGlobalLedger,locateStakeOnMap,removeStakeById,updateHud,setActionButtonState,buildLevelTiles,showLevelIntro,showLesson,completeStoryLevel,openTitle,closeTitle,closeModal,
 updateThreeCamera,updateHikerRig,resolveCameraYaw,clearShot,terrainHeightAtWorld,currentSample,threeView,assertMarmotDomeTerrain,lineOfSightOcclusion,threePoint,fovForAspect,desiredThreeShadowMapSize,syncThreeShadowMapSize,updatePlayerShadowCamera,beginEntryCamera,skipCameraSequence,
