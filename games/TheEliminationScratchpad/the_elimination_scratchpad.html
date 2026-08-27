@@ -1,0 +1,1160 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-060RZGCFFW"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag("js", new Date());
+  gtag("config", "G-060RZGCFFW");
+</script>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>The Elimination Scratchpad</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop stop-color='%235b65f2'/%3E%3Cstop offset='1' stop-color='%2314b8a6'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M8 12 h16 v13 h16 v13 h16 v14' fill='none' stroke='url(%23g)' stroke-width='9' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+<style>
+:root{
+  color-scheme:light;
+  --bg:#f7f8fc;--card:#fff;--card-2:#f9fbff;--ink:#172033;--muted:#647086;
+  --line:#dce2ee;--accent:#5b65f2;--accent-b:#14b8a6;
+  --accent-grad:linear-gradient(135deg,#5b65f2,#14b8a6);
+  --pink:#ffeaf3;--pink-line:#f5b8ce;--pink-ink:#a33362;
+  --ok:#18794e;--ok-2:#e9f8ef;--bad:#b42318;--bad-2:#fff0ee;
+  --warn:#925d00;--warn-2:#fff6df;--zero:#eef2f7;
+  --shadow:0 22px 60px rgba(22,34,51,.12);--coefw:62px;--constw:70px;--rowh:48px
+}
+*{box-sizing:border-box}
+html,body{min-height:100%}
+body{
+  margin:0;min-height:100vh;padding:18px;display:grid;place-items:center;color:var(--ink);
+  background:
+    radial-gradient(circle at 50% 0%,rgba(91,101,242,.11),transparent 34rem),
+    linear-gradient(rgba(24,32,51,.035) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(24,32,51,.035) 1px,transparent 1px),var(--bg);
+  background-size:auto,24px 24px,24px 24px,auto;
+  font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif
+}
+button,input,select,textarea{font:inherit}
+button{touch-action:manipulation}
+.hidden{display:none!important}
+[hidden]{display:none!important}
+.appShell{width:min(100%,760px);display:grid;gap:10px;justify-items:end}
+.game{width:100%;background:var(--card);border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow);overflow:hidden;position:relative}
+.top{padding:16px 18px 14px;border-bottom:1px solid var(--line);background:linear-gradient(180deg,rgba(255,255,255,.96),rgba(249,251,255,.94))}
+.titleRow{display:flex;align-items:center;justify-content:space-between;gap:12px}
+h1{display:flex;align-items:center;gap:10px;margin:0;font-size:clamp(24px,4.2vw,32px);line-height:1;font-weight:800;letter-spacing:-.04em;min-width:0}
+h1>span:last-child{min-width:0;overflow-wrap:anywhere}
+.logoGlyph{width:44px;height:44px;display:inline-grid;place-items:center;flex:0 0 auto}
+.logoGlyph svg{width:44px;height:44px;display:block}
+.logoGlyph path{fill:none;stroke:url(#logoGrad);stroke-width:9;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:140;stroke-dashoffset:140;animation:drawStair .6s ease .15s forwards}
+@keyframes drawStair{to{stroke-dashoffset:0}}
+.statBar{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.stat{display:inline-flex;align-items:center;min-height:28px;padding:5px 10px;border-radius:999px;background:var(--card-2);border:1px solid var(--line);color:var(--muted);font-size:12px;font-weight:750;font-variant-numeric:tabular-nums}
+.btn{appearance:none;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--ink);min-height:38px;padding:8px 13px;font-weight:750;cursor:pointer;transition:transform .12s ease,box-shadow .12s ease,background .12s ease,border-color .12s ease}
+.btn:hover{transform:translateY(-1px);box-shadow:0 8px 16px rgba(22,34,51,.08)}
+.btn:active{transform:translateY(0);box-shadow:none}
+.btn.primary{border:0;background:var(--accent-grad);color:#fff;box-shadow:0 8px 18px rgba(91,101,242,.24)}
+.btn.pinkTop{background:var(--pink);border-color:var(--pink-line);color:var(--pink-ink);box-shadow:none;min-height:34px;padding:7px 12px;font-size:13px;white-space:nowrap}
+.btn.pinkTop:hover{background:#ffe1ee;box-shadow:0 7px 16px rgba(163,51,98,.12)}
+.btn:focus-visible,.choice:focus-visible,.iconBtn:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid rgba(91,101,242,.35);outline-offset:2px}
+.progressPanel{padding:9px 14px;border-bottom:1px solid var(--line);background:var(--card)}
+.tracker{--progress:0%;position:relative;display:flex;gap:6px;align-items:center;justify-content:center;flex-wrap:wrap;padding:3px 0 5px}
+.tracker::before{content:"";position:absolute;left:0;right:0;top:50%;height:2px;background:var(--line);transform:translateY(-50%)}
+.tracker::after{content:"";position:absolute;left:0;top:50%;height:2px;width:var(--progress);background:var(--accent-grad);transform:translateY(-50%);transition:width .25s ease}
+.trackStep{position:relative;z-index:1;display:inline-flex;align-items:center;gap:5px;min-height:30px;padding:5px 9px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--muted);font-size:12px;font-weight:800;white-space:nowrap}
+.trackStep .num{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;border-radius:999px;background:var(--card-2);font-size:10px;color:var(--muted)}
+.trackStep.now{border-color:#bec6ff;color:var(--accent);background:#f3f5ff}
+.trackStep.now .num{background:var(--accent);color:#fff}
+.trackStep.done{border-color:#bde7ce;color:var(--ok);background:var(--ok-2)}
+.trackStep.done .num{background:var(--ok);color:#fff}
+.play{padding:12px 14px 14px}
+.taskPanel{padding:11px 13px;border:1px solid var(--line);border-radius:18px;background:var(--card-2)}
+.taskLabel{font-size:12px;font-weight:850;color:var(--accent);text-transform:uppercase;letter-spacing:.065em;margin-bottom:4px}
+.promptText{margin:0;font-size:clamp(18px,3.8vw,24px);line-height:1.15;letter-spacing:-.025em}
+.validChoicesNote{margin:5px 0 0;color:var(--muted);font-size:11.5px;font-weight:650;line-height:1.3}
+.matrixCard{margin-top:10px;border:1px solid var(--line);border-radius:20px;background:var(--card);padding:10px}
+.matrixStage{display:grid;grid-template-columns:32px minmax(0,1fr);gap:8px;align-items:center;justify-content:center;padding:4px 2px}
+.rowLabels{display:grid;grid-template-rows:repeat(var(--rows,3),var(--rowh));gap:4px;align-items:center}
+.rowLabel{font:800 14px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;text-align:right;color:var(--muted)}
+.matrixWrap{display:flex;justify-content:center;align-items:center;min-width:0;overflow-x:auto;padding:6px 0}
+.matrixShell{position:relative;display:inline-block;padding:0 11px;--coefw:62px;--constw:70px;--rowh:48px}
+.matrixShell::before,.matrixShell::after{content:"";position:absolute;top:-5px;bottom:-5px;width:10px;border-top:2px solid var(--ink);border-bottom:2px solid var(--ink);pointer-events:none}
+.matrixShell::before{left:0;border-left:2px solid var(--ink);border-radius:10px 0 0 10px}
+.matrixShell::after{right:0;border-right:2px solid var(--ink);border-radius:0 10px 10px 0}
+.augLine{position:absolute;top:-5px;bottom:-5px;left:0;width:2px;background:var(--ink);border-radius:999px;z-index:4;pointer-events:none}
+.stairSvg{position:absolute;top:0;left:11px;z-index:3;pointer-events:none;overflow:visible}
+.stairSvg path{fill:none;stroke:url(#stairGradient);stroke-width:5;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 7px rgba(20,184,166,.22));stroke-dasharray:1000;stroke-dashoffset:1000;animation:drawStair .42s ease forwards}
+.stairSvg polygon{fill:rgba(91,101,242,.055)}
+table.matrix{border-collapse:separate;border-spacing:0 4px;table-layout:fixed;width:auto;font:800 18px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;position:relative;z-index:2}
+table.matrix col.coef{width:var(--coefw)}
+table.matrix col.constantCol{width:var(--constw)}
+.matrix td{width:var(--coefw);min-width:var(--coefw);height:var(--rowh);padding:0 6px;text-align:center;border-radius:12px;position:relative;transition:background .16s ease,box-shadow .16s ease,color .16s ease;white-space:nowrap}
+.matrix td.constant{width:var(--constw);min-width:var(--constw);padding-left:16px}
+.matrix td.activeCol{background:rgba(91,101,242,.055)}
+.matrix td.focus{background:#fff5cf;box-shadow:inset 0 0 0 2px #f0c861}
+.matrix td.pivotDone{background:var(--ok-2);box-shadow:inset 0 0 0 1px #c7ebd4;color:var(--ok)}
+.matrix td.zeroZone{background:var(--zero);color:#8c98aa}
+.matrix tr.flash td{animation:flash .46s ease}
+@keyframes flash{0%{transform:scale(1)}38%{transform:scale(1.045);background:#e5fbff}100%{transform:scale(1)}}
+.matrix tr.swapFromDown{animation:swapDown .25s ease}
+.matrix tr.swapFromUp{animation:swapUp .25s ease}
+@keyframes swapDown{from{transform:translateY(calc(-1*var(--swapdist)))}to{transform:translateY(0)}}
+@keyframes swapUp{from{transform:translateY(var(--swapdist))}to{transform:translateY(0)}}
+.equationsPanel{margin-top:8px;border-radius:16px;border:1px solid var(--line);background:var(--card-2);padding:9px 11px}
+.equationsSummary{font-size:13px;font-weight:850;color:var(--ink);margin-bottom:4px}
+.equations{font:750 13px/1.55 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:var(--ink)}
+.eqLine{white-space:pre-wrap}
+.choiceArea{margin-top:10px}
+.choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.choices.fullWidth{grid-template-columns:minmax(0,1fr)}
+.choice{appearance:none;border:1.5px solid var(--line);border-radius:17px;background:var(--card);min-height:58px;padding:10px 12px;text-align:left;color:var(--ink);cursor:pointer;display:grid;grid-template-columns:26px 1fr;gap:8px;align-items:center;font-size:15px;font-weight:760;line-height:1.25;transition:transform .1s ease,box-shadow .1s ease,border-color .12s ease,background .12s ease}
+.choice:hover{transform:translateY(-1px);box-shadow:0 10px 20px rgba(22,34,51,.08);border-color:#c5cce0}
+.choice:active{transform:translateY(0);box-shadow:none}
+.choice:disabled{cursor:default}
+.choiceKey{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:999px;background:var(--card-2);border:1px solid var(--line);color:var(--muted);font-size:12px;font-weight:850}
+.choiceText{min-width:0;white-space:pre-line;overflow-wrap:anywhere}
+.choiceText[data-tex]{white-space:normal;font-size:17px}
+.choiceText mjx-container,.choice .MathJax,.choice .mjx-chtml{font-size:1.02em!important;margin:0!important;max-width:100%;overflow-x:auto;overflow-y:hidden}
+.choice.correct{border-color:#a8dfbf;background:var(--ok-2);color:var(--ok)}
+.choice.wrong{border-color:#f2b5af;background:var(--bad-2);color:var(--bad);animation:shake .28s ease}
+@keyframes shake{25%{transform:translateX(-5px)}50%{transform:translateX(5px)}75%{transform:translateX(-3px)}}
+.feedback{margin-top:10px;border:0;border-radius:999px;background:transparent;padding:4px 0;height:64px;min-height:64px;overflow:auto;color:var(--muted);display:grid;align-items:center}
+.feedback.hiddenFeedback{visibility:hidden;pointer-events:none}
+.feedbackMain{display:grid;grid-template-columns:24px 1fr;gap:8px;align-items:center}
+.feedbackMain p{margin:0;font-size:13px;font-weight:700;line-height:1.3}
+.feedbackIcon{width:22px;height:22px;border-radius:999px;display:grid;place-items:center;background:var(--card-2);color:var(--accent);font-weight:850;font-size:12px}
+.feedback.good{color:var(--ok)}
+.feedback.bad{color:var(--bad)}
+.feedback.bad .feedbackIcon{background:var(--bad-2);color:var(--bad)}
+.endPanel,.modalPanel{display:none;position:fixed;inset:0;z-index:70;background:rgba(247,248,252,.82);backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px);place-items:center;padding:18px;overflow:auto}
+.endPanel.show,.modalPanel.show{display:grid}
+.endCard,.modalCard{width:min(100%,500px);background:var(--card);border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow);padding:22px;text-align:center}
+.endCard h2,.modalCard h2{margin:0 0 4px;font-size:clamp(26px,5vw,34px);letter-spacing:-.04em}
+.endStair{width:170px;height:80px;margin:2px auto 4px;display:block}
+.endStair path{fill:none;stroke:url(#endGrad);stroke-width:7;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:400;stroke-dashoffset:400;animation:drawStair .55s ease forwards}
+.endStars{font-size:28px;color:var(--warn);letter-spacing:.04em}
+.starIcon{display:inline-block}
+.starIcon.empty{opacity:.35;filter:grayscale(1)}
+.summaryGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin:12px auto 0;width:min(100%,360px)}
+.summaryBox{background:var(--card-2);border:1px solid var(--line);border-radius:16px;padding:10px}
+.summaryBox span{display:block;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.08em;font-weight:800}
+.summaryBox b{font-size:22px;font-variant-numeric:tabular-nums}
+.endNote{color:var(--muted);font-weight:650;line-height:1.38}
+.endBtns,.modalBtns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:12px}
+.aboutCard{text-align:left;width:min(100%,560px)}
+.aboutCard h2{text-align:left;margin-bottom:14px}
+.aboutList{display:grid;gap:11px}
+.aboutList p{margin:0;overflow-wrap:anywhere;color:var(--muted);font-size:14px;font-weight:650;line-height:1.45}
+.aboutList strong{color:var(--ink)}
+.aboutList a{color:var(--accent);font-weight:800;text-decoration-thickness:1.5px;text-underline-offset:2px}
+.iconBtn{appearance:none;display:grid;place-items:center;flex:0 0 auto;width:38px;height:38px;border:1px solid var(--line);border-radius:999px;background:var(--card-2);color:var(--muted);font-size:25px;line-height:1;cursor:pointer}
+.aboutBtn{appearance:none;margin-right:18px;width:42px;height:42px;border:1px solid #bec6ff;border-radius:50%;display:grid;place-items:center;background:var(--card);color:var(--accent);font-size:22px;line-height:1;font-weight:900;cursor:pointer;box-shadow:0 3px 10px rgba(91,101,242,.12);transition:transform .12s ease,border-color .12s ease,box-shadow .12s ease}
+.aboutBtn:hover{transform:translateY(-1px);border-color:var(--accent);box-shadow:0 5px 14px rgba(91,101,242,.16)}
+.errorView{padding:18px}
+.errorCard{border:1px solid #f2b5af;border-radius:20px;background:var(--bad-2);padding:18px}
+.errorCard h2{margin:0;color:var(--bad);font-size:24px;letter-spacing:-.03em}
+.errorCard p{margin:8px 0 0;color:var(--ink);font-weight:650;line-height:1.45}
+.errorActions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.builderView{padding:14px;display:grid;gap:12px}
+.builderIntro,.builderCard,.auditCard{border:1px solid var(--line);border-radius:20px;background:var(--card-2);padding:15px 16px}
+.builderEyebrow{display:block;margin-bottom:4px;color:var(--accent);font-size:11px;font-weight:850;letter-spacing:.075em;text-transform:uppercase}
+.builderIntro h2{margin:0;font-size:clamp(21px,4vw,27px);line-height:1.1;letter-spacing:-.03em}
+.builderIntro p{margin:7px 0 0;color:var(--muted);font-size:13.5px;font-weight:650;line-height:1.45}
+.builderGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.field{display:grid;gap:5px;min-width:0}
+.field.full{grid-column:1/-1}
+.field label{font-size:12px;font-weight:850;color:var(--muted)}
+.field input,.field select,.field textarea{width:100%;border:1px solid var(--line);border-radius:13px;background:var(--card);color:var(--ink);padding:9px 10px;min-height:40px}
+.field textarea{min-height:72px;resize:vertical;line-height:1.35}
+.fieldHint{color:var(--muted);font-size:11.5px;font-weight:650;line-height:1.35}
+.builderMatrixWrap{margin-top:12px;overflow-x:auto;padding-bottom:3px}
+.builderMatrix{display:grid;gap:7px;width:max-content;max-width:100%;margin-inline:auto}
+.builderMatrixHeader,.builderMatrixRow{display:grid;grid-template-columns:34px repeat(var(--cols),minmax(58px,90px));gap:6px;align-items:center;justify-content:center}
+.builderMatrixHeader span{font-size:12px;font-weight:850;color:var(--muted);text-align:center}
+.builderMatrixHeader .augHead{border-left:2px solid var(--ink);padding-left:6px}
+.builderRowLabel{font:800 13px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:var(--muted);text-align:right}
+.builderCell{width:100%;min-width:58px;border:1px solid var(--line);border-radius:11px;background:var(--card);color:var(--ink);padding:8px 6px;text-align:center;font:750 15px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.builderCell.constant{border-left:2px solid var(--ink)}
+.auditCard{display:grid;gap:8px}
+.auditTitle{margin:0;font-size:14px;color:var(--accent);font-weight:850;text-transform:uppercase;letter-spacing:.06em}
+.auditGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.auditItem{border:1px solid var(--line);border-radius:14px;background:var(--card);padding:9px}
+.auditItem span{display:block;color:var(--muted);font-size:10.5px;font-weight:850;text-transform:uppercase;letter-spacing:.06em}
+.auditItem b{display:block;margin-top:2px;font-size:16px;overflow-wrap:anywhere}
+.auditMessage{margin:0;border-radius:13px;padding:9px 11px;background:var(--ok-2);color:var(--ok);font-size:12.5px;font-weight:700;line-height:1.4}
+.auditMessage.warn{background:var(--warn-2);color:var(--warn)}
+.auditMessage.bad{background:var(--bad-2);color:var(--bad)}
+.builderActions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.copyStatus{min-height:20px;color:var(--muted);font-size:12px;font-weight:750}
+.builderOutput{width:100%;min-height:88px;border:1px solid var(--line);border-radius:13px;background:var(--card);color:var(--ink);padding:10px;font:650 12px/1.45 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;resize:vertical}
+body.modalOpen{overflow:hidden}
+@media(max-width:600px){
+  body{padding:8px;place-items:start center}.game{border-radius:18px}.top{padding:13px}.logoGlyph,.logoGlyph svg{width:34px;height:34px}h1{font-size:22px}.btn.pinkTop{font-size:12px;padding:7px 10px}.statBar{gap:6px}.stat{font-size:11.5px}.progressPanel{padding:8px 10px}.play{padding:10px}.taskPanel{padding:10px 11px}.matrixCard{padding:9px 8px}.matrixStage{grid-template-columns:28px minmax(0,1fr);gap:5px}.matrixShell{--coefw:52px!important;--constw:60px!important}.matrix td{font-size:16px;padding:0 4px}.rowLabel{font-size:13px}.choices{grid-template-columns:1fr}.choiceText[data-tex]{font-size:15.5px}.summaryGrid{grid-template-columns:repeat(2,1fr)}.aboutBtn{margin-right:12px}.builderGrid{grid-template-columns:1fr}.field.full{grid-column:auto}.auditGrid{grid-template-columns:repeat(2,minmax(0,1fr))}.builderView{padding:10px}.builderIntro,.builderCard,.auditCard{padding:13px 12px}.endPanel,.modalPanel{padding:8px}.endCard,.modalCard{padding:18px 14px;border-radius:20px}
+}
+@media(max-width:370px){h1{font-size:19px}.logoGlyph,.logoGlyph svg{width:30px;height:30px}.btn.pinkTop{padding-inline:8px}.matrixStage{grid-template-columns:24px minmax(0,1fr)}.auditGrid{grid-template-columns:1fr}.builderMatrixHeader,.builderMatrixRow{grid-template-columns:28px repeat(var(--cols),54px)}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.logoGlyph path,.stairSvg path,.endStair path{stroke-dashoffset:0!important}}
+@media(prefers-color-scheme:dark){
+  :root{color-scheme:dark;--bg:#0f1420;--card:#151b2a;--card-2:#101827;--ink:#edf3ff;--muted:#a6b1c5;--line:#2b3548;--accent:#8b8dff;--accent-b:#2dd4bf;--accent-grad:linear-gradient(135deg,#8b8dff,#2dd4bf);--pink:#321a29;--pink-line:#714059;--pink-ink:#ffd2e5;--ok:#7bd99f;--ok-2:#10281d;--bad:#ff8d82;--bad-2:#311715;--warn:#ffd36a;--warn-2:#2a2111;--zero:#1e2634;--shadow:0 18px 48px rgba(0,0,0,.35)}
+  .top{background:linear-gradient(180deg,rgba(21,27,42,.98),rgba(16,24,39,.96))}.btn.primary{color:#07101d}.btn.pinkTop:hover{background:#3e2032}.choiceKey{background:#111a2b}.endPanel,.modalPanel{background:rgba(15,20,32,.82)}
+}
+</style>
+<script>
+window.MathJax={
+  tex:{inlineMath:[['\\(','\\)']],processEscapes:true},
+  options:{skipHtmlTags:['script','noscript','style','textarea','pre','code']},
+  startup:{typeset:false,ready:()=>{MathJax.startup.defaultReady();MathJax.startup.promise.then(()=>window.dispatchEvent(new Event('mathjax-ready')));}}
+};
+</script>
+<script defer id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+<div class="appShell">
+<main class="game" id="game">
+  <header class="top">
+    <div class="titleRow">
+      <h1><span class="logoGlyph" aria-hidden="true"><svg viewBox="0 0 64 64"><defs><linearGradient id="logoGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#5b65f2"/><stop offset="100%" stop-color="#14b8a6"/></linearGradient></defs><path d="M8 12 h16 v13 h16 v13 h16 v14"/></svg></span><span id="pageTitle">The Elimination Scratchpad</span></h1>
+      <button class="btn pinkTop" id="backBtn" type="button">Back to notes</button>
+    </div>
+    <div class="statBar" id="statBar" aria-label="Activity information">
+      <span class="stat" id="padStat">Instructor link builder</span>
+      <span class="stat" id="goalStat">1–4 equations · 1–4 variables</span>
+      <span class="stat" id="questionStat">URL + PreTeXt</span>
+      <span class="stat" id="missStat">exact fractions</span>
+    </div>
+  </header>
+
+  <section class="errorView" id="errorView" hidden>
+    <div class="errorCard">
+      <h2>Activity link could not be loaded</h2>
+      <p id="errorText"></p>
+      <div class="errorActions">
+        <button class="btn primary" id="errorBuilderBtn" type="button">Open link builder</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="builderView" id="builderView" hidden aria-label="Instructor link builder">
+    <section class="builderIntro">
+      <span class="builderEyebrow">Instructor tool</span>
+      <h2>Build a textbook-activity link</h2>
+      <p>Opening the Scratchpad without activity options brings you here. Enter an augmented matrix with at most four equations and four variables, or use Codex to generate the URL options from a textbook screenshot or source. The selected goal supplies the multiple-choice sequence automatically.</p>
+    </section>
+
+    <section class="builderCard">
+      <div class="builderGrid">
+        <div class="field">
+          <label for="builderActivity">Activity number</label>
+          <input id="builderActivity" value="" placeholder="e.g. 4.2.1" autocomplete="off" />
+        </div>
+        <div class="field">
+          <label for="builderGoal">Goal</label>
+          <select id="builderGoal">
+            <option value="ref">Reach row echelon form</option>
+            <option value="classify" selected>Classify the system</option>
+            <option value="solve">Solve the system</option>
+            <option value="nullspace">Find the null space</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="builderRows">Equations</label>
+          <select id="builderRows"><option>1</option><option selected>2</option><option>3</option><option>4</option></select>
+        </div>
+        <div class="field">
+          <label for="builderVarsCount">Variables</label>
+          <select id="builderVarsCount"><option>1</option><option selected>2</option><option>3</option><option>4</option></select>
+        </div>
+        <div class="field full">
+          <label for="builderVars">Variable names</label>
+          <input id="builderVars" value="x,y" autocomplete="off" />
+          <span class="fieldHint">Comma-separated names; the number must match the variable count.</span>
+        </div>
+        <div class="field full">
+          <label for="builderBack">Back-to-notes URL</label>
+          <input id="builderBack" value="" placeholder="https://math345-textbook.github.io/…#activity-…" autocomplete="off" />
+          <span class="fieldHint">A full URL or a relative textbook path. The activity’s top button returns here.</span>
+        </div>
+      </div>
+
+      <div class="builderMatrixWrap">
+        <div class="builderMatrix" id="builderMatrix" style="--cols:3"></div>
+      </div>
+    </section>
+
+    <section class="auditCard" aria-live="polite">
+      <h3 class="auditTitle">Complexity audit</h3>
+      <div class="auditGrid" id="auditGrid"></div>
+      <p class="auditMessage" id="auditMessage">Ready.</p>
+    </section>
+
+    <section class="builderCard">
+      <div class="builderActions">
+        <button class="btn primary" id="previewBtn" type="button">Preview activity</button>
+        <button class="btn" id="copyUrlBtn" type="button">Copy activity link</button>
+        <button class="btn" id="copyPretextBtn" type="button">Copy PreTeXt snippet</button>
+      </div>
+      <p class="copyStatus" id="copyStatus" aria-live="polite"></p>
+      <textarea class="builderOutput" id="builderOutput" readonly aria-label="Generated link or PreTeXt snippet"></textarea>
+    </section>
+  </section>
+
+  <section id="playView" hidden>
+    <section class="progressPanel" aria-label="Goal steps and progress">
+      <div class="tracker" id="tracker"></div>
+    </section>
+
+    <div class="play">
+      <section class="taskPanel" id="taskPanel" aria-labelledby="promptText" tabindex="-1">
+        <div class="taskLabel" id="taskLabel">REF · pivot</div>
+        <h2 class="promptText" id="promptText">Pick the next valid row operation.</h2>
+        <p class="validChoicesNote" id="validChoicesNote">Several choices may be valid.</p>
+      </section>
+
+      <section class="matrixCard" aria-label="Current augmented matrix">
+        <div class="matrixStage" id="matrixStage">
+          <div class="rowLabels" id="rowLabels" aria-hidden="true"></div>
+          <div class="matrixWrap">
+            <div class="matrixShell" id="matrixShell">
+              <div class="augLine" id="augLine" aria-hidden="true"></div>
+              <svg class="stairSvg" id="stairSvg" aria-hidden="true"></svg>
+              <table class="matrix" id="matrix"></table>
+            </div>
+          </div>
+        </div>
+        <div class="equationsPanel" id="equationsDetails" aria-live="polite">
+          <div class="equationsSummary">System as equations</div>
+          <div class="equations" id="equations"></div>
+        </div>
+      </section>
+
+      <section class="choiceArea" aria-label="Answer choices">
+        <div class="choices" id="choices"></div>
+        <div class="feedback hiddenFeedback" id="feedback" aria-live="polite">
+          <div class="feedbackMain"><span class="feedbackIcon" id="feedbackIcon" aria-hidden="true">•</span><p id="feedbackText"></p></div>
+        </div>
+      </section>
+    </div>
+  </section>
+
+  <div class="endPanel" id="endPanel" role="dialog" aria-modal="true" aria-labelledby="endTitle">
+    <div class="endCard">
+      <h2 id="endTitle">Activity complete</h2>
+      <svg class="endStair" id="endStairSvg" viewBox="0 0 180 90" aria-hidden="true"></svg>
+      <div class="endStars" id="endStars">★★★</div>
+      <div class="summaryGrid">
+        <div class="summaryBox"><span>Questions</span><b id="endQuestions">0</b></div>
+        <div class="summaryBox"><span>Misses</span><b id="endMistakes">0</b></div>
+      </div>
+      <p class="endNote" id="endNote"></p>
+      <div class="endBtns">
+        <button class="btn" id="endBackBtn" type="button">Back to notes</button>
+        <button class="btn primary" id="againBtn" type="button">Try again</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modalPanel" id="aboutPanel" role="dialog" aria-modal="true" aria-labelledby="aboutTitle">
+    <div class="modalCard aboutCard">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
+        <h2 id="aboutTitle">About The Elimination Scratchpad</h2>
+        <button class="iconBtn" id="aboutCloseBtn" type="button" aria-label="Close">×</button>
+      </div>
+      <div class="aboutList">
+        <p><strong>Purpose:</strong> This activity player loads a small augmented matrix from a textbook link and follows a goal-dependent sequence of Gaussian or Gauss–Jordan elimination questions, entirely through multiple choice.</p>
+        <p><strong>Link builder:</strong> Opening the file without activity options opens the instructor tool. Adding <code>?author=1</code> also forces this view.</p>
+        <p><strong>Version:</strong> The Elimination Scratchpad [v0.3(beta)]</p>
+        <p><strong>Copyright:</strong> © 2026 <a href="https://people.math.wisc.edu/~roch/" target="_blank" rel="noopener noreferrer">Sébastien Roch</a></p>
+        <p><strong>Code license:</strong> MIT. <strong>Instructional content:</strong> CC BY-NC 4.0, except where otherwise noted.</p>
+        <p><strong>Privacy:</strong> The file stores no scores and sends no activity data anywhere.</p>
+      </div>
+      <div class="modalBtns"><button class="btn primary" id="aboutDoneBtn" type="button">Close</button></div>
+    </div>
+  </div>
+</main>
+<button class="aboutBtn" id="aboutBtn" type="button" aria-label="About The Elimination Scratchpad" aria-haspopup="dialog">?</button>
+</div>
+
+<script>
+'use strict';
+
+class Frac{
+  constructor(n,d=1){
+    if(!Number.isSafeInteger(n)||!Number.isSafeInteger(d))throw new Error('fraction entries must be safe integers');
+    if(d===0)throw new Error('zero denominator');
+    if(d<0){n=-n;d=-d;}
+    const g=Frac.gcd(Math.abs(n),Math.abs(d));
+    this.n=n/g;this.d=d/g;
+  }
+  static gcd(a,b){while(b){const t=a%b;a=b;b=t;}return a||1;}
+  static of(x){return x instanceof Frac?x:new Frac(x,1);}
+  add(o){o=Frac.of(o);return new Frac(this.n*o.d+o.n*this.d,this.d*o.d);}
+  sub(o){o=Frac.of(o);return new Frac(this.n*o.d-o.n*this.d,this.d*o.d);}
+  mul(o){o=Frac.of(o);return new Frac(this.n*o.n,this.d*o.d);}
+  neg(){return new Frac(-this.n,this.d);}
+  inv(){if(this.n===0)throw new Error('zero reciprocal');return new Frac(this.d,this.n);}
+  abs(){return new Frac(Math.abs(this.n),this.d);}
+  eq(o){o=Frac.of(o);return this.n===o.n&&this.d===o.d;}
+  zero(){return this.n===0;}
+  one(){return this.n===this.d;}
+  value(){return this.n/this.d;}
+  text(){if(this.d===1)return String(this.n).replace('-', '−');return (this.n<0?'−':'')+Math.abs(this.n)+'/'+this.d;}
+  ascii(){return this.d===1?String(this.n):`${this.n}/${this.d}`;}
+}
+
+const F=(n,d=1)=>new Frac(n,d);
+const MAX_ROWS=4;
+const MAX_VARS=4;
+const GOALS=new Set(['ref','classify','solve','nullspace']);
+const GOAL_LABELS={ref:'Reach REF',classify:'Classify the system',solve:'Solve the system',nullspace:'Find the null space'};
+const allVars=['x','y','z','w'];
+
+let problem=null;
+let startM=null;
+let M=null;
+let nVars=2;
+let rowCount=2;
+let activeVars=['x','y'];
+let goal='classify';
+let phase='ref';
+let pivotRow=0;
+let pivotCol=0;
+let mistakes=0;
+let completedQuestions=0;
+let solved=false;
+let currentTask=null;
+let currentChoices=[];
+let currentFeedback={type:'',text:''};
+let answerLocked=false;
+let flashing=[];
+let swapAnim={};
+let swapAnimDist={};
+let lastModalFocus=null;
+let builderLastGrid=null;
+let builderLastRows=2;
+let builderLastVars=2;
+
+const clone=A=>A.map(row=>row.map(x=>F(x.n,x.d)));
+const escapeHtml=s=>String(s).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+const shuffle=a=>{const out=[...a];for(let i=out.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[out[i],out[j]]=[out[j],out[i]];}return out;};
+const sub=n=>String(n).replace(/[123456789]/g,m=>({'1':'₁','2':'₂','3':'₃','4':'₄','5':'₅','6':'₆','7':'₇','8':'₈','9':'₉'}[m]));
+const rname=i=>'R'+sub(i+1);
+const rowTex=i=>`R_${i+1}`;
+const wrapCoeff=c=>{const t=c.text();return c.n<0||c.d!==1?`(${t})`:t;};
+const fracTex=c=>{c=F(c.n,c.d);if(c.d===1)return String(c.n);return `${c.n<0?'-':''}\\tfrac{${Math.abs(c.n)}}{${c.d}}`;};
+const fracPlain=c=>c.text();
+
+function opScale(row,c){return {t:'scale',row,c,txt:`${rname(row)} → ${wrapCoeff(c)}${rname(row)}`,tex:`${rowTex(row)} \\to ${fracTex(c)}${rowTex(row)}`};}
+function opSwap(a,b){return {t:'swap',a,b,txt:`${rname(a)} ↔ ${rname(b)}`,tex:`${rowTex(a)} \\leftrightarrow ${rowTex(b)}`};}
+function opKeep(row){return {t:'keep',row,txt:`${rname(row)} stays`,tex:`${rowTex(row)} \\text{ stays}`};}
+function opAdd(target,source,c){
+  const sign=c.n<0?' − ':' + ';const mag=c.abs();const coeff=mag.one()?'':wrapCoeff(mag);
+  const texSign=c.n<0?' - ':' + ';const texCoeff=mag.one()?'':fracTex(mag);
+  return {t:'add',target,source,c,txt:`${rname(target)} → ${rname(target)}${sign}${coeff}${rname(source)}`,tex:`${rowTex(target)} \\to ${rowTex(target)}${texSign}${texCoeff}${rowTex(source)}`};
+}
+function sameOp(a,b){
+  if(!a||!b||a.t!==b.t)return false;
+  if(a.t==='keep')return a.row===b.row;
+  if(a.t==='swap')return (a.a===b.a&&a.b===b.b)||(a.a===b.b&&a.b===b.a);
+  if(a.t==='scale')return a.row===b.row&&a.c.eq(b.c);
+  if(a.t==='add')return a.target===b.target&&a.source===b.source&&a.c.eq(b.c);
+  return false;
+}
+function addUniqueChoice(arr,item){
+  const duplicate=arr.some(x=>(x.op&&item.op&&sameOp(x.op,item.op))||(x.tex&&item.tex&&x.tex===item.tex)||(!x.tex&&!item.tex&&x.txt===item.txt));
+  if(!duplicate)arr.push(item);
+}
+function rawAdd(A,target,source,c){A[target]=A[target].map((x,j)=>x.add(A[source][j].mul(c)));}
+function rawSwap(A,a,b){[A[a],A[b]]=[A[b],A[a]];}
+function rawScale(A,row,c){A[row]=A[row].map(x=>x.mul(c));}
+function applyToMatrix(A,op){if(op.t==='keep')return;if(op.t==='swap')rawSwap(A,op.a,op.b);else if(op.t==='scale')rawScale(A,op.row,op.c);else if(op.t==='add')rawAdd(A,op.target,op.source,op.c);}
+function applyOperation(op){
+  flashing=[];swapAnim={};swapAnimDist={};
+  if(op.t==='keep')return;
+  if(op.t==='swap'){
+    rawSwap(M,op.a,op.b);flashing=[op.a,op.b];
+    const dist=Math.abs(op.b-op.a)*48;
+    swapAnim[op.a]=op.b>op.a?'swapFromDown':'swapFromUp';
+    swapAnim[op.b]=op.a>op.b?'swapFromDown':'swapFromUp';
+    swapAnimDist[op.a]=dist;swapAnimDist[op.b]=dist;
+  }else if(op.t==='scale'){
+    rawScale(M,op.row,op.c);flashing=[op.row];
+  }else if(op.t==='add'){
+    rawAdd(M,op.target,op.source,op.c);flashing=[op.target];
+  }
+}
+
+function sanitizeActivity(value){
+  const s=String(value||'').trim().replace(/^activity\s*/i,'').slice(0,40);
+  return s||'Untitled';
+}
+function parseIntegerToken(token,rowIndex,colIndex){
+  const text=String(token).trim();
+  if(!/^-?\d+$/.test(text))throw new Error(`Entry (${rowIndex+1}, ${colIndex+1}) is not an integer.`);
+  const value=Number(text);
+  if(!Number.isSafeInteger(value)||Math.abs(value)>999)throw new Error(`Entry (${rowIndex+1}, ${colIndex+1}) must be between −999 and 999.`);
+  return F(value);
+}
+function normalizeBackUrl(raw){
+  const text=String(raw||'').trim();
+  if(!text)return 'https://math345-textbook.github.io/';
+  let url;
+  try{
+    const hasScheme=/^[A-Za-z][A-Za-z0-9+.-]*:/.test(text);
+    url=new URL(text,hasScheme?undefined:'https://math345-textbook.github.io/');
+  }catch(e){throw new Error('The Back-to-notes URL is not valid.');}
+  if(!['http:','https:','file:'].includes(url.protocol))throw new Error('The Back-to-notes URL must use http, https, or a relative textbook path.');
+  return url.toString();
+}
+function parseProblemFromParams(params){
+  const raw=params.get('m');
+  if(!raw)throw new Error('No augmented matrix was supplied. Open the bare Scratchpad URL to use the instructor link builder.');
+  const activityValue=params.get('activity')||params.get('label');
+  if(!String(activityValue||'').trim())throw new Error('No activity number was supplied.');
+  const matrix=raw.split('~').map((rowText,i)=>rowText.split(',').map((token,j)=>parseIntegerToken(token,i,j)));
+  if(matrix.length<1||matrix.length>MAX_ROWS)throw new Error('An activity must have between 1 and 4 equations.');
+  const width=matrix[0].length;
+  if(matrix.some(row=>row.length!==width))throw new Error('Every augmented-matrix row must have the same number of entries.');
+  const variablesCount=width-1;
+  if(variablesCount<1||variablesCount>MAX_VARS)throw new Error('An activity must have between 1 and 4 variables.');
+  const varsRaw=params.get('vars');
+  const variables=varsRaw?varsRaw.split(',').map(x=>x.trim()):allVars.slice(0,variablesCount);
+  if(variables.length!==variablesCount)throw new Error('The variable list does not match the number of coefficient columns.');
+  if(variables.some(name=>!/^[A-Za-z][A-Za-z0-9_]*$/.test(name)))throw new Error('Variable names must begin with a letter and use only letters, digits, or underscores.');
+  if(new Set(variables).size!==variables.length)throw new Error('Variable names must be distinct.');
+  const selectedGoal=params.get('goal')||'classify';
+  if(!GOALS.has(selectedGoal))throw new Error(`Unknown goal “${selectedGoal}”.`);
+  if(selectedGoal==='nullspace'&&matrix.some(row=>!row[variablesCount].zero()))throw new Error('The null-space goal requires a homogeneous system: every right-hand side must be 0.');
+  return {
+    version:params.get('v')||'1',
+    activity:sanitizeActivity(activityValue),
+    goal:selectedGoal,
+    matrix,
+    variables,
+    back:normalizeBackUrl(params.get('back')||'https://math345-textbook.github.io/')
+  };
+}
+
+function columnName(col){return col<nVars?`${activeVars[col]}-column`:'augmented column';}
+function columnShort(col){return col<nVars?activeVars[col]:'b';}
+function leadingIndex(row,cols=row.length){for(let j=0;j<cols;j++)if(!row[j].zero())return j;return -1;}
+function pivotData(B=M){
+  const out=[];
+  for(let r=0;r<B.length;r++){
+    const col=leadingIndex(B[r],B[r].length);
+    if(col>=0)out.push({row:r,col});
+  }
+  return out;
+}
+function nonzeroRowsFrom(row,col){const out=[];for(let r=row;r<rowCount;r++)if(!M[r][col].zero())out.push(r);return out;}
+function belowNonzero(row,col){const out=[];for(let r=row+1;r<rowCount;r++)if(!M[r][col].zero())out.push(r);return out;}
+function aboveNonzero(row,col){const out=[];for(let r=0;r<row;r++)if(!M[r][col].zero())out.push(r);return out;}
+
+function computeRefTask(){
+  const totalCols=nVars+1;
+  while(true){
+    if(pivotRow>=rowCount||pivotCol>=totalCols)return null;
+    const candidates=nonzeroRowsFrom(pivotRow,pivotCol);
+    if(!candidates.length){pivotCol++;continue;}
+    if(M[pivotRow][pivotCol].zero())return {kind:'pivot',stage:'ref',row:pivotRow,col:pivotCol,candidates};
+    if(!M[pivotRow][pivotCol].one())return {kind:'scale',stage:'ref',row:pivotRow,col:pivotCol,pivot:M[pivotRow][pivotCol]};
+    const targets=belowNonzero(pivotRow,pivotCol);
+    if(targets.length)return {kind:'clear',stage:'ref',row:pivotRow,col:pivotCol,targets};
+    pivotRow++;pivotCol++;
+  }
+}
+function computeRrefTask(){
+  const pivots=pivotData(M);
+  for(let i=pivots.length-1;i>=0;i--){
+    const p=pivots[i];
+    const targets=aboveNonzero(p.row,p.col);
+    if(targets.length)return {kind:'clearAbove',stage:'rref',row:p.row,col:p.col,targets};
+  }
+  return null;
+}
+function computeTask(){
+  while(true){
+    if(phase==='ref'){
+      const task=computeRefTask();
+      if(task)return task;
+      if(goal==='ref'){phase='refConfirm';continue;}
+      if(goal==='classify'){phase='variables';continue;}
+      phase='rref';continue;
+    }
+    if(phase==='rref'){
+      const task=computeRrefTask();
+      if(task)return task;
+      phase='finalAnswer';continue;
+    }
+    if(phase==='refConfirm')return {kind:'refConfirm',stage:'check'};
+    if(phase==='variables')return {kind:'variables',stage:'variables'};
+    if(phase==='solutionCount')return {kind:'solutionCount',stage:'solutions'};
+    if(phase==='finalAnswer')return {kind:goal==='nullspace'?'nullspaceAnswer':'solveAnswer',stage:'answer'};
+    return null;
+  }
+}
+
+function basicFree(B=M){
+  const basicIdx=[];
+  for(const row of B){
+    const p=leadingIndex(row,nVars);
+    if(p>=0&&!basicIdx.includes(p))basicIdx.push(p);
+  }
+  const freeIdx=[];for(let j=0;j<nVars;j++)if(!basicIdx.includes(j))freeIdx.push(j);
+  return {basicIdx,freeIdx,basic:basicIdx.map(j=>activeVars[j]),free:freeIdx.map(j=>activeVars[j])};
+}
+function isInconsistent(B=M){
+  return B.some(row=>row.slice(0,nVars).every(x=>x.zero())&&!row[nVars].zero());
+}
+function solutionCount(B=M){if(isInconsistent(B))return 'none';return basicFree(B).freeIdx.length?'inf':'one';}
+function rrefClone(A){
+  const B=clone(A);const rows=B.length,cols=B[0].length;let pr=0;
+  for(let c=0;c<cols&&pr<rows;c++){
+    let k=pr;while(k<rows&&B[k][c].zero())k++;
+    if(k===rows)continue;
+    if(k!==pr)rawSwap(B,k,pr);
+    if(!B[pr][c].one())rawScale(B,pr,B[pr][c].inv());
+    for(let r=0;r<rows;r++)if(r!==pr&&!B[r][c].zero())rawAdd(B,r,pr,B[r][c].neg());
+    pr++;
+  }
+  return B;
+}
+function analyzeSystem(B=M){
+  const R=rrefClone(B);
+  const inconsistent=R.some(row=>row.slice(0,nVars).every(x=>x.zero())&&!row[nVars].zero());
+  if(inconsistent)return {kind:'none',R,pivotCols:[],freeCols:[],particular:null,basis:[]};
+  const pivotRows=[];const pivotCols=[];
+  for(let r=0;r<R.length;r++){
+    const p=leadingIndex(R[r],nVars);
+    if(p>=0){pivotRows.push({row:r,col:p});pivotCols.push(p);}
+  }
+  const freeCols=[];for(let j=0;j<nVars;j++)if(!pivotCols.includes(j))freeCols.push(j);
+  const particular=Array.from({length:nVars},()=>F(0));
+  for(const p of pivotRows)particular[p.col]=R[p.row][nVars];
+  const basis=freeCols.map(f=>{
+    const v=Array.from({length:nVars},()=>F(0));v[f]=F(1);
+    for(const p of pivotRows)v[p.col]=R[p.row][f].neg();
+    return v;
+  });
+  return {kind:freeCols.length?'inf':'one',R,pivotCols,freeCols,particular,basis};
+}
+
+function fmtVarList(indices){return indices.length?indices.map(j=>activeVars[j]).join(', '):'none';}
+function texVarList(indices){return indices.length?indices.map(j=>activeVars[j]).join(', '):'\\text{none}';}
+function variableChoice(basicIdx,freeIdx,correct=false,reason='Basic variables correspond to pivot columns; every other variable is free.'){
+  return {txt:`basic: ${fmtVarList(basicIdx)}\nfree: ${fmtVarList(freeIdx)}`,tex:`\\begin{array}{l}\\text{basic: }${texVarList(basicIdx)}\\\\ \\text{free: }${texVarList(freeIdx)}\\end{array}`,basicIdx,freeIdx,correct,reason};
+}
+function variableChoices(){
+  const bf=basicFree();const correct=variableChoice(bf.basicIdx,bf.freeIdx,true);
+  const wrong=[];
+  for(let mask=0;mask<(1<<nVars);mask++){
+    const basic=[];const free=[];
+    for(let j=0;j<nVars;j++)((mask>>j)&1?basic:free).push(j);
+    if(basic.length===bf.basicIdx.length&&basic.every(j=>bf.basicIdx.includes(j)))continue;
+    wrong.push(variableChoice(basic,free,false));
+  }
+  return shuffle([correct,...shuffle(wrong).slice(0,3)]);
+}
+function solutionCountChoices(){
+  const answer=solutionCount();
+  return shuffle([
+    {txt:'No solutions',answer:'none',correct:answer==='none',reason:'No solutions occur only when RREF contains a contradiction row.'},
+    {txt:'Exactly one solution',answer:'one',correct:answer==='one',reason:'A unique solution requires consistency and a pivot in every variable column.'},
+    {txt:'Infinitely many solutions',answer:'inf',correct:answer==='inf',reason:'A consistent system with at least one free variable has infinitely many solutions.'}
+  ]);
+}
+function refConfirmChoices(){
+  return shuffle([
+    {txt:'The matrix is in row echelon form, so the REF goal is reached.',correct:true},
+    {txt:'It is not in REF because entries above pivots may be nonzero.',correct:false,reason:'Entries above pivots may be nonzero in REF; they must be zero only in RREF.'},
+    {txt:'It is not in REF because every variable column needs a pivot.',correct:false,reason:'A free-variable column may have no pivot. That does not prevent the matrix from being in REF.'},
+    {txt:'It is not in REF unless the augmented column contains a pivot.',correct:false,reason:'A pivot in the augmented column is not required for REF.'}
+  ]);
+}
+
+function vectorTex(v){return `\\begin{bmatrix}${v.map(fracTex).join('\\\\')}\\end{bmatrix}`;}
+function zeroVector(n=nVars){return Array.from({length:n},()=>F(0));}
+function standardVector(index,n=nVars){const v=zeroVector(n);v[index]=F(1);return v;}
+function variablesVectorTex(){return `\\begin{bmatrix}${activeVars.join('\\\\')}\\end{bmatrix}`;}
+function vectorPlain(v){return `[${v.map(fracPlain).join(', ')}]^T`;}
+function isZeroVector(v){return v.every(x=>x.zero());}
+function solutionTex(data){
+  if(data.kind==='none')return '\\text{No solution}';
+  if(data.kind==='one')return `${variablesVectorTex()}=${vectorTex(data.particular)}`;
+  const terms=[];
+  if(!isZeroVector(data.particular))terms.push(vectorTex(data.particular));
+  data.basis.forEach((v,i)=>terms.push(`t_${i+1}${vectorTex(v)}`));
+  const rhs=terms.join('+').replace(/\+\-/g,'-')||vectorTex(zeroVector());
+  const params=data.basis.map((_,i)=>`t_${i+1}`).join(',');
+  return `${variablesVectorTex()}=${rhs},\\qquad ${params}\\in\\mathbb R`;
+}
+function solutionPlain(data){
+  if(data.kind==='none')return 'No solution';
+  if(data.kind==='one')return `(${activeVars.join(', ')}) = ${vectorPlain(data.particular)}`;
+  return 'A parametric solution family';
+}
+function nullspaceTex(data){
+  if(!data.basis.length)return '\\operatorname{Null}(A)=\\{\\mathbf 0\\}';
+  return `\\operatorname{Null}(A)=\\operatorname{span}\\left\\{${data.basis.map(vectorTex).join(',')}\\right\\}`;
+}
+function nullspacePlain(data){return data.basis.length?`Null(A) is spanned by ${data.basis.length} vector${data.basis.length===1?'':'s'}.`:'Null(A) = {0}';}
+function modifiedWrongBasis(data){
+  if(!data.basis.length)return null;
+  const wrong=data.basis.map(v=>v.map(x=>F(x.n,x.d)));
+  if(data.pivotCols.length){const p=data.pivotCols[0];wrong[0][p]=wrong[0][p].add(F(1));return wrong;}
+  if(wrong.length>1)return wrong.slice(0,-1);
+  return null;
+}
+function solveAnswerChoices(){
+  const data=analyzeSystem();const choices=[];
+  addUniqueChoice(choices,{txt:solutionPlain(data),tex:solutionTex(data),correct:true});
+  const commonReason='Read the pivot equations from RREF and use one parameter for each free variable.';
+  if(data.kind==='none'){
+    const zero=zeroVector();
+    addUniqueChoice(choices,{txt:'The zero vector is the unique solution.',tex:`${variablesVectorTex()}=${vectorTex(zero)}`,reason:'The contradiction row makes the system inconsistent, so no vector satisfies every equation.'});
+    addUniqueChoice(choices,{txt:'Every vector is a solution.',tex:`${variablesVectorTex()}\\in\\mathbb R^{${nVars}}`,reason:'A contradiction row rules out every vector.'});
+    addUniqueChoice(choices,{txt:'A nonzero vector is the unique solution.',tex:`${variablesVectorTex()}=${vectorTex(standardVector(0))}`,reason:'The contradiction row makes the system inconsistent, so no vector is a solution.'});
+  }else if(data.kind==='one'){
+    const wrong=data.particular.map(x=>F(x.n,x.d));wrong[0]=wrong[0].add(F(1));
+    addUniqueChoice(choices,{txt:'A nearby vector.',tex:`${variablesVectorTex()}=${vectorTex(wrong)}`,reason:commonReason});
+    addUniqueChoice(choices,{txt:'No solution.',tex:'\\text{No solution}',reason:'The RREF matrix has no contradiction row.'});
+    addUniqueChoice(choices,{txt:'A one-parameter family.',tex:`${variablesVectorTex()}=${vectorTex(data.particular)}+t${vectorTex(standardVector(nVars-1))},\\ t\\in\\mathbb R`,reason:'There is a pivot in every variable column, so there is no free parameter.'});
+  }else{
+    addUniqueChoice(choices,{txt:'No solution.',tex:'\\text{No solution}',reason:'The RREF matrix is consistent.'});
+    addUniqueChoice(choices,{txt:'Only the particular solution.',tex:`${variablesVectorTex()}=${vectorTex(data.particular)}`,reason:'Each free variable contributes a direction to the full solution set.'});
+    const wrongBasis=modifiedWrongBasis(data);
+    if(wrongBasis){
+      const fake={...data,basis:wrongBasis};
+      addUniqueChoice(choices,{txt:'A parametric family with an incorrect direction.',tex:solutionTex(fake),reason:commonReason});
+    }
+    if(choices.length<4){
+      const wrong=data.particular.map(x=>F(x.n,x.d));wrong[0]=wrong[0].add(F(1));
+      addUniqueChoice(choices,{txt:'A different single vector.',tex:`${variablesVectorTex()}=${vectorTex(wrong)}`,reason:'A system with a free variable has infinitely many solutions, not a single solution.'});
+    }
+  }
+  return shuffle(choices.slice(0,4));
+}
+function nullspaceAnswerChoices(){
+  const data=analyzeSystem();const choices=[];
+  addUniqueChoice(choices,{txt:nullspacePlain(data),tex:nullspaceTex(data),correct:true});
+  const reason='Every spanning vector must satisfy A\\mathbf v=\\mathbf 0, and the number of independent directions must equal the number of free variables.';
+  if(!data.basis.length){
+    addUniqueChoice(choices,{txt:'The whole space.',tex:`\\operatorname{Null}(A)=\\mathbb R^{${nVars}}`,reason:'A pivot in every variable column leaves no nonzero null-space direction.'});
+    if(nVars>1)addUniqueChoice(choices,{txt:'The first coordinate axis.',tex:`\\operatorname{Null}(A)=\\operatorname{span}\\left\\{${vectorTex(standardVector(0))}\\right\\}`,reason});
+    addUniqueChoice(choices,{txt:'A nonzero singleton.',tex:`\\operatorname{Null}(A)=\\left\\{${vectorTex(standardVector(0))}\\right\\}`,reason:'A null space is a subspace and must contain the zero vector.'});
+    if(choices.length<4)addUniqueChoice(choices,{txt:'The empty set.',tex:'\\operatorname{Null}(A)=\\varnothing',reason:'The zero vector is always in a null space.'});
+  }else{
+    addUniqueChoice(choices,{txt:'Only the zero vector.',tex:'\\operatorname{Null}(A)=\\{\\mathbf 0\\}',reason:'At least one variable is free, so the null space has a nonzero direction.'});
+    if(data.basis.length<nVars)addUniqueChoice(choices,{txt:'The whole space.',tex:`\\operatorname{Null}(A)=\\mathbb R^{${nVars}}`,reason:'Only matrices with no pivot constraints have the whole space as their null space.'});
+    const wrongBasis=modifiedWrongBasis(data);
+    if(wrongBasis)addUniqueChoice(choices,{txt:'A span with an incorrect basis vector.',tex:`\\operatorname{Null}(A)=\\operatorname{span}\\left\\{${wrongBasis.map(vectorTex).join(',')}\\right\\}`,reason});
+    if(data.basis.length>1)addUniqueChoice(choices,{txt:'A span missing a free direction.',tex:`\\operatorname{Null}(A)=\\operatorname{span}\\left\\{${data.basis.slice(0,-1).map(vectorTex).join(',')}\\right\\}`,reason:'This omits one independent direction associated with a free variable.'});
+    if(choices.length<4)addUniqueChoice(choices,{txt:'The empty set.',tex:'\\operatorname{Null}(A)=\\varnothing',reason:'The zero vector is always in a null space.'});
+    if(choices.length<4)addUniqueChoice(choices,{txt:'A nonzero singleton.',tex:`\\operatorname{Null}(A)=\\left\\{${vectorTex(standardVector(0))}\\right\\}`,reason:'A null space is a subspace and must contain the zero vector.'});
+  }
+  return shuffle(choices.slice(0,4));
+}
+
+function operationChoices(task){
+  const good=[];const wrong=[];const r=task.row,c=task.col;
+  const addWrong=(item,priority=99)=>{item.priority=priority;addUniqueChoice(wrong,item);};
+  if(task.kind==='pivot'){
+    task.candidates.forEach(k=>addUniqueChoice(good,{txt:opSwap(r,k).txt,tex:opSwap(r,k).tex,op:opSwap(r,k),correct:true}));
+    addWrong({txt:opKeep(r).txt,tex:opKeep(r).tex,op:opKeep(r),reason:`${rname(r)} has 0 in the ${columnName(c)}, so it cannot supply the next pivot.`},1);
+    for(let a=0;a<rowCount;a++)for(let b=a+1;b<rowCount;b++)if(!good.some(g=>sameOp(g.op,opSwap(a,b))))addWrong({txt:opSwap(a,b).txt,tex:opSwap(a,b).tex,op:opSwap(a,b),reason:`The next pivot must be moved into ${rname(r)}, and the chosen row needs a nonzero entry in the ${columnName(c)}.`},2);
+    addWrong({txt:opScale(r,F(2)).txt,tex:opScale(r,F(2)).tex,op:opScale(r,F(2)),reason:'Scaling does not help while the pivot position is 0. First swap a nonzero entry into place.'},3);
+    if(rowCount>1){const source=(r+1)%rowCount;addWrong({txt:opAdd(r,source,F(1)).txt,tex:opAdd(r,source,F(1)).tex,op:opAdd(r,source,F(1)),reason:'The fixed Gaussian-elimination route first moves a nonzero entry into the pivot position.'},4);}
+  }
+  if(task.kind==='scale'){
+    const corr=opScale(r,task.pivot.inv());addUniqueChoice(good,{txt:corr.txt,tex:corr.tex,op:corr,correct:true});
+    const candidates=[task.pivot,task.pivot.inv().neg(),F(2),F(-2),F(0)];
+    candidates.forEach((factor,i)=>addWrong({txt:opScale(r,factor).txt,tex:opScale(r,factor).tex,op:opScale(r,factor),reason:factor.zero()?'Scaling by 0 is not an elementary row operation.':`The pivot must become exactly 1. Multiply by its reciprocal, ${task.pivot.inv().text()}.`},i+1));
+    if(rowCount>1){const other=r===0?1:0;const op=opScale(other,task.pivot.inv());addWrong({txt:op.txt,tex:op.tex,op,reason:`Scale the pivot row ${rname(r)}, not another row.`},3);}
+    if(rowCount>1){const source=r===rowCount-1?r-1:r+1;const op=opAdd(r,source,F(1));addWrong({txt:op.txt,tex:op.tex,op,reason:'First make the pivot equal to 1 by scaling the pivot row.'},5);}
+  }
+  if(task.kind==='clear'||task.kind==='clearAbove'){
+    task.targets.forEach(t=>{const op=opAdd(t,r,M[t][c].neg());addUniqueChoice(good,{txt:op.txt,tex:op.tex,op,correct:true});});
+    task.targets.forEach(t=>{
+      const wrongSign=opAdd(t,r,M[t][c]);addWrong({txt:wrongSign.txt,tex:wrongSign.tex,op:wrongSign,reason:`Wrong sign: the entry is ${M[t][c].text()}, so add ${M[t][c].neg().text()} times ${rname(r)} to make it 0.`},1);
+      const swapped=opAdd(r,t,M[t][c].neg());addWrong({txt:swapped.txt,tex:swapped.tex,op:swapped,reason:`Keep the pivot row ${rname(r)} unchanged; replace ${rname(t)} instead.`},2);
+      const minusOne=opAdd(t,r,F(-1));addWrong({txt:minusOne.txt,tex:minusOne.tex,op:minusOne,reason:`Use the multiplier that cancels the entry, ${M[t][c].neg().text()}, rather than always using −1.`},3);
+    });
+    const scale=opScale(r,F(2));addWrong({txt:scale.txt,tex:scale.tex,op:scale,reason:'The pivot is already 1. Use row replacement to clear the highlighted entry.'},4);
+    if(rowCount>1){const a=Math.max(0,Math.min(r,rowCount-2));const sw=opSwap(a,a+1);addWrong({txt:sw.txt,tex:sw.tex,op:sw,reason:'Swapping now would move a completed pivot out of place. Clear the highlighted entry instead.'},5);}
+  }
+  const filtered=wrong.filter(w=>!good.some(g=>(g.op&&w.op&&sameOp(g.op,w.op))||(g.tex&&w.tex&&g.tex===w.tex))).sort((a,b)=>(a.priority??99)-(b.priority??99));
+  return shuffle([...good,...filtered.slice(0,Math.max(0,4-good.length))]).slice(0,4);
+}
+function choiceSet(task){
+  if(['pivot','scale','clear','clearAbove'].includes(task.kind))return operationChoices(task);
+  if(task.kind==='variables')return variableChoices();
+  if(task.kind==='solutionCount')return solutionCountChoices();
+  if(task.kind==='refConfirm')return refConfirmChoices();
+  if(task.kind==='solveAnswer')return solveAnswerChoices();
+  if(task.kind==='nullspaceAnswer')return nullspaceAnswerChoices();
+  return [];
+}
+
+function promptFor(task){
+  if(task.kind==='pivot')return {label:`REF · ${columnShort(task.col)} · pivot`,text:`Pick a pivot row for the ${columnName(task.col)}.`};
+  if(task.kind==='scale')return {label:`REF · ${columnShort(task.col)} · scale`,text:`Make the pivot in ${rname(task.row)} equal to 1.`};
+  if(task.kind==='clear')return {label:`REF · ${columnShort(task.col)} · clear below`,text:'Use the leading 1 to clear below it.'};
+  if(task.kind==='clearAbove')return {label:`RREF · ${columnShort(task.col)} · clear above`,text:'Use the pivot to clear above it.'};
+  if(task.kind==='variables')return {label:'Classify variables',text:'Which variables are basic and which are free?'};
+  if(task.kind==='solutionCount')return {label:'Classify solutions',text:'How many solutions does the system have?'};
+  if(task.kind==='refConfirm')return {label:'REF reached',text:'What is the status of the current matrix?'};
+  if(task.kind==='solveAnswer')return {label:'Read the RREF matrix',text:'Which is the solution set?'};
+  if(task.kind==='nullspaceAnswer')return {label:'Read the RREF matrix',text:'Which is the null space?'};
+  return {label:'Activity',text:'Choose the correct answer.'};
+}
+function stageDefinitions(){
+  if(goal==='ref')return [{id:'ref',label:'Reach REF'},{id:'check',label:'Confirm REF'}];
+  if(goal==='classify')return [{id:'ref',label:'Reach REF'},{id:'variables',label:'Identify variables'},{id:'solutions',label:'Classify solutions'}];
+  if(goal==='solve')return [{id:'ref',label:'Reach REF'},{id:'rref',label:'Reach RREF'},{id:'answer',label:'Choose solution set'}];
+  return [{id:'ref',label:'Reach REF'},{id:'rref',label:'Reach RREF'},{id:'answer',label:'Choose null space'}];
+}
+function renderTracker(task){
+  const defs=stageDefinitions();const current=Math.max(0,defs.findIndex(x=>x.id===task.stage));
+  const tracker=document.getElementById('tracker');
+  tracker.style.setProperty('--progress',defs.length<=1?'100%':`${Math.round(current/(defs.length-1)*100)}%`);
+  tracker.innerHTML=defs.map((d,i)=>{
+    const cls=i<current?'done':(i===current?'now':'');const num=i<current?'✓':i+1;
+    return `<span class="trackStep ${cls}"><span class="num">${num}</span>${escapeHtml(d.label)}</span>`;
+  }).join('');
+}
+function completedPivotData(){
+  const out=[];
+  for(let r=0;r<M.length;r++){
+    const p=leadingIndex(M[r],M[r].length);
+    if(p>=0&&M[r][p].one())out.push({row:r,col:p});
+  }
+  return out;
+}
+function isZeroZone(i,j){
+  if(j>nVars)return false;
+  const pivots=completedPivotData().sort((a,b)=>a.row-b.row||a.col-b.col);let last=-1;
+  for(const p of pivots){if(p.col<=last)continue;last=p.col;if(i>p.row&&j<=p.col)return true;}
+  return false;
+}
+function cellClass(i,j,task){
+  const cls=[];const p=leadingIndex(M[i],M[i].length);
+  if(p===j&&M[i][j].one())cls.push('pivotDone');
+  if(isZeroZone(i,j))cls.push('zeroZone');
+  if(['pivot','scale','clear','clearAbove'].includes(task.kind)){
+    if(j===task.col)cls.push('activeCol');
+    const targetFocus=(task.targets||[]).includes(i);
+    if(j===task.col&&(i===task.row||targetFocus))cls.push('focus');
+  }
+  return cls.join(' ');
+}
+function renderRowLabels(){
+  const el=document.getElementById('rowLabels');el.style.setProperty('--rows',String(rowCount));el.style.setProperty('--rowh','48px');
+  el.innerHTML=Array.from({length:rowCount},(_,i)=>`<div class="rowLabel">${rname(i)}</div>`).join('');
+}
+function renderMatrix(task){
+  const tbl=document.getElementById('matrix');tbl.innerHTML='';
+  const coefW=nVars===4?52:(nVars===3?62:(nVars===2?70:78));const constW=nVars===4?62:70;const rowH=48;
+  const shell=document.getElementById('matrixShell');shell.style.setProperty('--coefw',coefW+'px');shell.style.setProperty('--constw',constW+'px');shell.style.setProperty('--rowh',rowH+'px');
+  document.getElementById('augLine').style.left=(11+coefW*nVars)+'px';
+  tbl.style.width=(coefW*nVars+constW)+'px';
+  const cg=document.createElement('colgroup');
+  for(let j=0;j<nVars+1;j++){const col=document.createElement('col');col.className=j===nVars?'constantCol':'coef';cg.appendChild(col);}tbl.appendChild(cg);
+  M.forEach((row,i)=>{
+    const tr=document.createElement('tr');const rowClasses=[];
+    if(flashing.includes(i))rowClasses.push('flash');if(swapAnim[i])rowClasses.push(swapAnim[i]);tr.className=rowClasses.join(' ');tr.style.setProperty('--swapdist',(swapAnimDist[i]||rowH)+'px');
+    row.forEach((x,j)=>{const td=document.createElement('td');td.className=cellClass(i,j,task);if(j===nVars)td.classList.add('constant');td.textContent=x.text();tr.appendChild(td);});tbl.appendChild(tr);
+  });
+  renderRowLabels();requestAnimationFrame(()=>renderStairSvg(coefW,constW,rowH,task));
+}
+function staircasePivotsForTask(task){
+  let pivots=completedPivotData();
+  if(task.stage==='ref')pivots=pivots.filter(p=>p.row<pivotRow||(p.row===pivotRow&&p.col<=pivotCol));
+  if(task.stage==='ref'&&typeof task.row==='number'&&typeof task.col==='number'&&!pivots.some(p=>p.row===task.row&&p.col===task.col))pivots.push({row:task.row,col:task.col,current:true});
+  pivots.sort((a,b)=>a.row-b.row||a.col-b.col);
+  const clean=[];let last=-1;
+  for(const p of pivots){if(p.col>last){clean.push(p);last=p.col;}}
+  return clean;
+}
+function renderStairSvg(coefW,constW,rowH,task){
+  const svg=document.getElementById('stairSvg');const tbl=document.getElementById('matrix');const first=tbl?.rows?.[0]?.cells?.[0];
+  const tableW=(tbl&&tbl.offsetWidth)||coefW*nVars+constW;const tableH=(tbl&&tbl.offsetHeight)||rowH*rowCount;
+  svg.setAttribute('width',tableW);svg.setAttribute('height',tableH);svg.setAttribute('viewBox',`0 0 ${tableW} ${tableH}`);
+  svg.innerHTML='<defs><linearGradient id="stairGradient" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#5b65f2"/><stop offset="100%" stop-color="#14b8a6"/></linearGradient></defs>';
+  const guide=staircasePivotsForTask(task);if(!guide.length)return;
+  const hasLayout=!!(first&&first.offsetWidth);const cell=(r,c)=>tbl?.rows?.[r]?.cells?.[c];
+  const left=c=>{const td=cell(0,Math.min(c,nVars));return hasLayout&&td?td.offsetLeft+3:c*coefW+3;};
+  const bottom=r=>{const td=cell(r,0);return hasLayout&&td?td.offsetTop+td.offsetHeight-2:(r+1)*rowH-2;};
+  const topY=hasLayout?Math.max(-4,(cell(0,0)?.offsetTop||0)-6):-4;const augCell=cell(0,nVars);const augX=hasLayout&&augCell?augCell.offsetLeft:nVars*coefW;
+  let d=`M ${left(guide[0].col)} ${topY} `;const pts=[`0 ${tableH}`,`0 ${topY}`,`${left(guide[0].col)} ${topY}`];
+  for(let i=0;i<guide.length;i++){
+    const p=guide[i];const nextX=i<guide.length-1?left(guide[i+1].col):(p.col===nVars?tableW:augX);
+    d+=`L ${left(p.col)} ${bottom(p.row)} L ${nextX} ${bottom(p.row)} `;pts.push(`${left(p.col)} ${bottom(p.row)}`,`${nextX} ${bottom(p.row)}`);
+  }
+  pts.push(`${augX} ${tableH}`);
+  const poly=document.createElementNS('http://www.w3.org/2000/svg','polygon');poly.setAttribute('points',pts.join(' '));poly.setAttribute('opacity',guide.some(p=>p.current)?'.38':'.7');svg.appendChild(poly);
+  const path=document.createElementNS('http://www.w3.org/2000/svg','path');path.setAttribute('d',d);path.setAttribute('opacity',guide.some(p=>p.current)?'.52':'.95');svg.appendChild(path);
+}
+function termCoeff(c){const a=c.abs();return a.one()?'':a.text();}
+function eqTerm(c,v,first){if(c.zero())return '';const neg=c.n<0,body=termCoeff(c)+v;if(first)return neg?'−'+body:body;return neg?' − '+body:' + '+body;}
+function rowEquation(row){let left='';for(let j=0;j<nVars;j++){const term=eqTerm(row[j],activeVars[j],left==='');if(term)left+=term;}if(!left)left='0';return `${left} = ${row[nVars].text()}`;}
+function renderEquations(){document.getElementById('equations').innerHTML=M.map((row,i)=>`<div class="eqLine">${rname(i)}  ${escapeHtml(rowEquation(row))}</div>`).join('');}
+function renderChoiceMath(root=document.getElementById('choices')){
+  const spans=[...root.querySelectorAll('.choiceText[data-tex]')];if(!spans.length||!(window.MathJax&&window.MathJax.typesetPromise))return;
+  spans.forEach(span=>{span.textContent=`\\(${span.dataset.tex}\\)`;});
+  try{if(window.MathJax.typesetClear)window.MathJax.typesetClear(spans);}catch(e){}
+  window.MathJax.typesetPromise(spans).catch(()=>spans.forEach(span=>{span.textContent=span.dataset.fallback||span.textContent;}));
+}
+function renderChoices(task){
+  currentChoices=choiceSet(task);const el=document.getElementById('choices');
+  el.className='choices'+(['variables','solveAnswer','nullspaceAnswer'].includes(task.kind)?' fullWidth':'');el.innerHTML='';
+  const keys='ABCD';
+  currentChoices.forEach((choice,i)=>{
+    const btn=document.createElement('button');btn.type='button';btn.className='choice';btn.dataset.i=String(i);
+    const plain=String(choice.txt||'');btn.setAttribute('aria-label',`${keys[i]}. ${plain.replace(/\n/g,' ')}`);
+    const attrs=choice.tex?` data-tex="${escapeHtml(choice.tex)}" data-fallback="${escapeHtml(plain)}"`:'';
+    btn.innerHTML=`<span class="choiceKey" aria-hidden="true">${keys[i]}</span><span class="choiceText"${attrs}>${escapeHtml(plain)}</span>`;
+    btn.addEventListener('click',()=>choose(choice,btn,task));el.appendChild(btn);
+  });
+  renderChoiceMath(el);
+}
+function renderFeedback(){
+  const box=document.getElementById('feedback');const hide=!currentFeedback.type&&!currentFeedback.text;
+  box.className='feedback '+(currentFeedback.type||'')+(hide?' hiddenFeedback':'');
+  document.getElementById('feedbackIcon').textContent=currentFeedback.type==='good'?'✓':(currentFeedback.type==='bad'?'✕':'•');
+  document.getElementById('feedbackText').textContent=currentFeedback.text||'';
+}
+function setFeedback(type,text){currentFeedback={type,text};renderFeedback();}
+function clearFeedback(){setFeedback('','');}
+function renderPrompt(task){
+  const p=promptFor(task);document.getElementById('taskLabel').textContent=p.label;document.getElementById('promptText').textContent=p.text;
+  document.getElementById('validChoicesNote').hidden=!(['pivot','clear','clearAbove'].includes(task.kind)&&((task.candidates||task.targets||[]).length>1));
+}
+function renderStats(){
+  document.getElementById('goalStat').textContent=GOAL_LABELS[goal];
+  document.getElementById('questionStat').textContent=solved?`questions ${completedQuestions}`:`question ${completedQuestions+1}`;
+  document.getElementById('missStat').textContent=`misses ${mistakes}`;
+}
+function renderAll(){
+  if(!M||solved)return;
+  currentTask=computeTask();
+  if(!currentTask)return;
+  renderTracker(currentTask);renderPrompt(currentTask);renderMatrix(currentTask);renderEquations();renderChoices(currentTask);renderFeedback();renderStats();
+}
+function wrongFeedback(choice,task){
+  if(choice.reason)return choice.reason;
+  if(task.kind==='pivot')return 'Move a row with a nonzero entry into the pivot position.';
+  if(task.kind==='scale')return 'Use the reciprocal of the current pivot so that it becomes 1.';
+  if(task.kind==='clear'||task.kind==='clearAbove')return 'Choose the row replacement whose multiplier makes the highlighted entry equal to 0.';
+  if(task.kind==='variables')return 'Basic variables correspond to pivot columns; the remaining variables are free.';
+  if(task.kind==='solutionCount')return 'Check for a contradiction row and then count free variables.';
+  if(task.kind==='solveAnswer')return 'Read the pivot equations from RREF and use one parameter for each free variable.';
+  if(task.kind==='nullspaceAnswer')return 'Each basis vector must satisfy A v = 0, with one independent direction for each free variable.';
+  return 'Try a different choice.';
+}
+function recordMistake(){mistakes++;renderStats();}
+function choose(choice,button,task){
+  if(answerLocked||solved||task!==currentTask)return;
+  if(choice.correct){
+    answerLocked=true;button.classList.add('correct');
+    setTimeout(()=>{
+      completedQuestions++;
+      if(choice.op){applyOperation(choice.op);}
+      else if(task.kind==='variables'){phase='solutionCount';}
+      else if(task.kind==='solutionCount'||task.kind==='refConfirm'||task.kind==='solveAnswer'||task.kind==='nullspaceAnswer'){finishActivity();answerLocked=false;return;}
+      clearFeedback();currentTask=null;renderAll();answerLocked=false;
+      if(flashing.length||Object.keys(swapAnim).length)setTimeout(()=>{flashing=[];swapAnim={};swapAnimDist={};if(!solved&&currentTask)renderMatrix(currentTask);},560);
+    },150);
+  }else{
+    recordMistake();button.classList.add('wrong');setFeedback('bad',wrongFeedback(choice,task));setTimeout(()=>button.classList.remove('wrong'),320);
+  }
+}
+function starRating(){return mistakes===0?3:(mistakes<=2?2:1);}
+function starHTML(n){let out='';for(let i=1;i<=3;i++)out+=`<span class="starIcon ${i<=n?'filled':'empty'}">★</span>`;return out;}
+function renderEndStair(){document.getElementById('endStairSvg').innerHTML='<defs><linearGradient id="endGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#5b65f2"/><stop offset="100%" stop-color="#14b8a6"/></linearGradient></defs><path d="M18 18 H62 V40 H104 V62 H150 V78"/>';}
+function finishMessage(){
+  if(goal==='ref')return 'You reached row echelon form.';
+  if(goal==='classify')return 'You reached REF, identified the basic and free variables, and classified the solution set.';
+  if(goal==='solve')return 'You finished RREF and identified the complete solution set.';
+  return 'You finished RREF and identified the null space.';
+}
+function finishActivity(){
+  solved=true;renderStats();renderEndStair();
+  document.getElementById('endTitle').textContent=`Activity ${problem.activity} complete`;
+  document.getElementById('endStars').innerHTML=starHTML(starRating());
+  document.getElementById('endQuestions').textContent=String(completedQuestions);
+  document.getElementById('endMistakes').textContent=String(mistakes);
+  document.getElementById('endNote').textContent=finishMessage();
+  setTimeout(()=>{document.getElementById('endPanel').classList.add('show');syncModalState();document.getElementById('againBtn').focus();},360);
+}
+function resetActivity(){
+  M=clone(startM);phase='ref';pivotRow=0;pivotCol=0;mistakes=0;completedQuestions=0;solved=false;currentTask=null;currentChoices=[];currentFeedback={type:'',text:''};answerLocked=false;flashing=[];swapAnim={};swapAnimDist={};document.getElementById('endPanel').classList.remove('show');syncModalState();renderAll();requestAnimationFrame(()=>document.getElementById('taskPanel').focus());
+}
+function goBackToNotes(){location.assign(problem?.back||'https://math345-textbook.github.io/');}
+function loadProblem(nextProblem){
+  problem=nextProblem;startM=clone(problem.matrix);M=clone(startM);nVars=problem.variables.length;activeVars=[...problem.variables];rowCount=M.length;goal=problem.goal;
+  document.getElementById('pageTitle').textContent=`Activity ${problem.activity}`;
+  document.title=`Activity ${problem.activity} · The Elimination Scratchpad`;
+  document.getElementById('backBtn').hidden=false;document.getElementById('backBtn').textContent='Back to notes';
+  document.getElementById('statBar').hidden=false;document.getElementById('padStat').textContent='The Elimination Scratchpad';
+  document.getElementById('builderView').hidden=true;document.getElementById('errorView').hidden=true;document.getElementById('playView').hidden=false;document.getElementById('aboutBtn').hidden=false;
+  resetActivity();
+}
+function showError(error){
+  document.getElementById('pageTitle').textContent='The Elimination Scratchpad';document.title='The Elimination Scratchpad · Invalid activity';
+  document.getElementById('backBtn').hidden=true;document.getElementById('statBar').hidden=true;document.getElementById('playView').hidden=true;document.getElementById('builderView').hidden=true;document.getElementById('errorView').hidden=false;document.getElementById('errorText').textContent=error instanceof Error?error.message:String(error);
+}
+
+function matrixMeasure(A){
+  let maxNumerator=0,maxDenominator=1;
+  for(const row of A)for(const x of row){maxNumerator=Math.max(maxNumerator,Math.abs(x.n));maxDenominator=Math.max(maxDenominator,x.d);}
+  return {maxNumerator,maxDenominator};
+}
+function simulateFixedPath(A,n){
+  const B=clone(A),rows=B.length,cols=n+1;let pr=0,pc=0,refMoves=0,rrefMoves=0;let measure=matrixMeasure(B);
+  const update=()=>{const m=matrixMeasure(B);measure.maxNumerator=Math.max(measure.maxNumerator,m.maxNumerator);measure.maxDenominator=Math.max(measure.maxDenominator,m.maxDenominator);};
+  while(pr<rows&&pc<cols){
+    let k=pr;while(k<rows&&B[k][pc].zero())k++;
+    if(k===rows){pc++;continue;}
+    if(B[pr][pc].zero()){rawSwap(B,pr,k);refMoves++;update();}
+    if(!B[pr][pc].one()){rawScale(B,pr,B[pr][pc].inv());refMoves++;update();}
+    for(let r=pr+1;r<rows;r++)if(!B[r][pc].zero()){rawAdd(B,r,pr,B[r][pc].neg());refMoves++;update();}
+    pr++;pc++;
+  }
+  const refMatrix=clone(B);const pivots=pivotData(B);
+  for(let i=pivots.length-1;i>=0;i--){const p=pivots[i];for(let r=0;r<p.row;r++)if(!B[r][p.col].zero()){rawAdd(B,r,p.row,B[r][p.col].neg());rrefMoves++;update();}}
+  const previousN=nVars,previousVars=activeVars;nVars=n;activeVars=allVars.slice(0,n);
+  const analysis=analyzeSystem(B);
+  nVars=previousN;activeVars=previousVars;
+  return {refMoves,rrefMoves,refMatrix,rrefMatrix:B,maxNumerator:measure.maxNumerator,maxDenominator:measure.maxDenominator,analysis};
+}
+function outcomeLabel(analysis){if(analysis.kind==='none')return 'no solutions';if(analysis.kind==='one')return 'one solution';return 'infinitely many';}
+
+function builderGridValues(){
+  const rows=Number(document.getElementById('builderRows').value),vars=Number(document.getElementById('builderVarsCount').value);const values=[];
+  for(let r=0;r<rows;r++){const row=[];for(let c=0;c<vars+1;c++){const input=document.querySelector(`[data-builder-cell="${r},${c}"]`);row.push(input?input.value:'0');}values.push(row);}return values;
+}
+function renderBuilderMatrix({preserve=true}={}){
+  const rows=Number(document.getElementById('builderRows').value),vars=Number(document.getElementById('builderVarsCount').value);
+  const old=preserve&&builderLastGrid?builderLastGrid:builderLastGrid;
+  const oldVars=builderLastVars;
+  const names=document.getElementById('builderVars').value.split(',').map(x=>x.trim());
+  const grid=document.getElementById('builderMatrix');grid.style.setProperty('--cols',String(vars+1));grid.innerHTML='';
+  const header=document.createElement('div');header.className='builderMatrixHeader';header.innerHTML='<span></span>'+Array.from({length:vars},(_,c)=>`<span>${escapeHtml(names[c]||allVars[c])}</span>`).join('')+'<span class="augHead">b</span>';grid.appendChild(header);
+  for(let r=0;r<rows;r++){
+    const row=document.createElement('div');row.className='builderMatrixRow';row.innerHTML=`<span class="builderRowLabel">${rname(r)}</span>`;
+    for(let c=0;c<vars+1;c++){
+      const input=document.createElement('input');input.className='builderCell'+(c===vars?' constant':'');input.inputMode='numeric';input.autocomplete='off';input.dataset.builderCell=`${r},${c}`;
+      let value;
+      if(old?.[r])value=c<vars?(c<oldVars?old[r][c]:'0'):(old[r][oldVars]??'0');
+      if(value===undefined)value='';
+      input.value=value;input.setAttribute('aria-label',`Row ${r+1}, ${c===vars?'right-hand side':`coefficient ${c+1}`}`);
+      input.addEventListener('input',()=>{builderLastGrid=builderGridValues();builderLastRows=rows;builderLastVars=vars;updateBuilderAudit();});row.appendChild(input);
+    }
+    grid.appendChild(row);
+  }
+  builderLastRows=rows;builderLastVars=vars;builderLastGrid=builderGridValues();updateBuilderAudit();
+}
+function readBuilderProblem(){
+  const rows=Number(document.getElementById('builderRows').value),vars=Number(document.getElementById('builderVarsCount').value);const raw=builderGridValues();
+  const activityValue=document.getElementById('builderActivity').value.trim();
+  if(!activityValue)throw new Error('Enter the activity number.');
+  const matrix=raw.map((row,r)=>row.map((token,c)=>parseIntegerToken(token,r,c)));
+  const variables=document.getElementById('builderVars').value.split(',').map(x=>x.trim());
+  if(variables.length!==vars)throw new Error('The variable-name list must contain exactly one name per variable column.');
+  if(variables.some(name=>!/^[A-Za-z][A-Za-z0-9_]*$/.test(name)))throw new Error('Variable names must begin with a letter and use only letters, digits, or underscores.');
+  if(new Set(variables).size!==variables.length)throw new Error('Variable names must be distinct.');
+  const selectedGoal=document.getElementById('builderGoal').value;
+  if(selectedGoal==='nullspace'&&matrix.some(row=>!row[vars].zero()))throw new Error('The null-space goal requires every right-hand side to be 0.');
+  return {version:'1',activity:sanitizeActivity(activityValue),goal:selectedGoal,matrix,variables,back:normalizeBackUrl(document.getElementById('builderBack').value),rows,vars};
+}
+function matrixParam(A){return A.map(row=>row.map(x=>x.ascii()).join(',')).join('~');}
+function activityURL(p){
+  const url=new URL(location.href);url.search='';url.hash='';
+  url.searchParams.set('v','1');url.searchParams.set('activity',p.activity);url.searchParams.set('m',matrixParam(p.matrix));url.searchParams.set('vars',p.variables.join(','));url.searchParams.set('goal',p.goal);
+  if(p.back)url.searchParams.set('back',p.back);
+  return url.toString();
+}
+function xmlEscape(s){return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function pretextSnippet(p){const link=activityURL(p);return `<url href="${xmlEscape(link)}" visual="The Elimination Scratchpad">Practice Activity ${escapeHtml(p.activity)} in The Elimination Scratchpad</url>`;}
+function updateBuilderAudit(){
+  const grid=document.getElementById('auditGrid'),message=document.getElementById('auditMessage');
+  try{
+    const p=readBuilderProblem();const sim=simulateFixedPath(p.matrix,p.variables.length);const nullity=sim.analysis.kind==='none'?'—':sim.analysis.freeCols.length;
+    grid.innerHTML=[
+      ['Dimensions',`${p.matrix.length} × ${p.variables.length}`],['Outcome',outcomeLabel(sim.analysis)],['Nullity',String(nullity)],
+      ['REF moves',String(sim.refMoves)],['RREF moves',String(sim.rrefMoves)],['Largest fraction',`${sim.maxNumerator}/${sim.maxDenominator}`]
+    ].map(([label,value])=>`<div class="auditItem"><span>${escapeHtml(label)}</span><b>${escapeHtml(value)}</b></div>`).join('');
+    const warnings=[];
+    if(sim.maxNumerator>96)warnings.push(`an intermediate numerator reaches ${sim.maxNumerator}`);
+    if(sim.maxDenominator>8)warnings.push(`an intermediate denominator reaches ${sim.maxDenominator}`);
+    if(p.goal==='ref'&&sim.refMoves===0)warnings.push('the starting matrix is already in REF, so the activity will consist only of the final REF check');
+    if((p.goal==='solve'||p.goal==='nullspace')&&sim.refMoves===0&&sim.rrefMoves===0)warnings.push('the starting matrix is already in RREF, so the activity will go directly to the final answer question');
+    if(warnings.length){message.className='auditMessage warn';message.textContent=`Valid, but note: ${warnings.join('; ')}.`;}
+    else{message.className='auditMessage';message.textContent='Valid. The fixed pivot–scale–clear route keeps the arithmetic within the recommended range.';}
+    document.getElementById('builderOutput').value=activityURL(p);
+  }catch(e){
+    grid.innerHTML='';message.className='auditMessage bad';message.textContent=e.message;document.getElementById('builderOutput').value='';
+  }
+}
+async function copyText(text){
+  try{await navigator.clipboard.writeText(text);return true;}catch(e){
+    const area=document.createElement('textarea');area.value=text;area.style.position='fixed';area.style.opacity='0';document.body.appendChild(area);area.select();let ok=false;try{ok=document.execCommand('copy');}catch(err){}area.remove();return ok;
+  }
+}
+function setCopyStatus(text){document.getElementById('copyStatus').textContent=text;}
+function showBuilder(){
+  document.getElementById('pageTitle').textContent='The Elimination Scratchpad';document.title='The Elimination Scratchpad · Link Builder';document.getElementById('backBtn').hidden=true;
+  document.getElementById('statBar').hidden=false;document.getElementById('padStat').textContent='Instructor link builder';document.getElementById('goalStat').textContent='1–4 equations · 1–4 variables';document.getElementById('questionStat').textContent='URL + PreTeXt';document.getElementById('missStat').textContent='exact fractions';
+  document.getElementById('playView').hidden=true;document.getElementById('errorView').hidden=true;document.getElementById('builderView').hidden=false;document.getElementById('aboutBtn').hidden=false;
+  builderLastRows=2;builderLastVars=2;builderLastGrid=[['','',''],['','','']];renderBuilderMatrix({preserve:false});
+}
+
+function anyModalOpen(){return document.getElementById('endPanel').classList.contains('show')||document.getElementById('aboutPanel').classList.contains('show');}
+function syncModalState(){document.body.classList.toggle('modalOpen',anyModalOpen());}
+function openAbout(){lastModalFocus=document.activeElement;document.getElementById('aboutPanel').classList.add('show');syncModalState();requestAnimationFrame(()=>document.getElementById('aboutCloseBtn').focus());}
+function closeAbout(){document.getElementById('aboutPanel').classList.remove('show');syncModalState();requestAnimationFrame(()=>lastModalFocus?.focus?.());}
+function activeDialog(){if(document.getElementById('aboutPanel').classList.contains('show'))return document.getElementById('aboutPanel');if(document.getElementById('endPanel').classList.contains('show'))return document.getElementById('endPanel');return null;}
+function trapDialogKeys(e){
+  const panel=activeDialog();if(!panel)return;
+  if(e.key==='Escape'){e.preventDefault();if(panel.id==='aboutPanel')closeAbout();return;}
+  if(e.key!=='Tab')return;const focusables=[...panel.querySelectorAll('button,[href],[tabindex]:not([tabindex="-1"])')].filter(el=>!el.disabled&&!el.hidden&&el.offsetParent!==null);if(!focusables.length)return;const first=focusables[0],last=focusables[focusables.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}
+}
+
+document.getElementById('backBtn').addEventListener('click',goBackToNotes);
+document.getElementById('endBackBtn').addEventListener('click',goBackToNotes);
+document.getElementById('againBtn').addEventListener('click',resetActivity);
+document.getElementById('aboutBtn').addEventListener('click',openAbout);
+document.getElementById('aboutCloseBtn').addEventListener('click',closeAbout);
+document.getElementById('aboutDoneBtn').addEventListener('click',closeAbout);
+document.getElementById('aboutPanel').addEventListener('click',e=>{if(e.target===e.currentTarget)closeAbout();});
+document.getElementById('errorBuilderBtn').addEventListener('click',()=>{const u=new URL(location.href);u.search='?author=1';u.hash='';location.href=u.toString();});
+document.getElementById('builderRows').addEventListener('change',()=>renderBuilderMatrix({preserve:true}));
+document.getElementById('builderVarsCount').addEventListener('change',()=>{
+  const count=Number(document.getElementById('builderVarsCount').value);const current=document.getElementById('builderVars').value.split(',').map(x=>x.trim()).filter(Boolean);document.getElementById('builderVars').value=Array.from({length:count},(_,i)=>current[i]||allVars[i]).join(',');renderBuilderMatrix({preserve:true});
+});
+document.getElementById('builderVars').addEventListener('input',()=>{renderBuilderMatrix({preserve:true});});
+['builderActivity','builderGoal','builderBack'].forEach(id=>document.getElementById(id).addEventListener('input',updateBuilderAudit));
+document.getElementById('builderGoal').addEventListener('change',updateBuilderAudit);
+document.getElementById('previewBtn').addEventListener('click',()=>{try{location.href=activityURL(readBuilderProblem());}catch(e){setCopyStatus(e.message);}});
+document.getElementById('copyUrlBtn').addEventListener('click',async()=>{try{const text=activityURL(readBuilderProblem());document.getElementById('builderOutput').value=text;setCopyStatus(await copyText(text)?'Activity link copied.':'Copy failed; select the link below.');}catch(e){setCopyStatus(e.message);}});
+document.getElementById('copyPretextBtn').addEventListener('click',async()=>{try{const text=pretextSnippet(readBuilderProblem());document.getElementById('builderOutput').value=text;setCopyStatus(await copyText(text)?'PreTeXt snippet copied.':'Copy failed; select the snippet below.');}catch(e){setCopyStatus(e.message);}});
+document.addEventListener('keydown',e=>{
+  if(activeDialog()){trapDialogKeys(e);return;}
+  if(document.getElementById('playView').hidden||solved)return;
+  if(e.target&&['INPUT','TEXTAREA','SELECT','BUTTON'].includes(e.target.tagName))return;
+  const map={'1':0,'2':1,'3':2,'4':3,'a':0,'b':1,'c':2,'d':3};const key=e.key.toLowerCase();
+  if(Object.prototype.hasOwnProperty.call(map,key)){const btn=[...document.querySelectorAll('#choices .choice')][map[key]];if(btn){e.preventDefault();btn.click();}}
+});
+window.addEventListener('resize',()=>{if(!document.getElementById('playView').hidden&&currentTask)renderMatrix(currentTask);});
+window.addEventListener('mathjax-ready',()=>{if(!document.getElementById('playView').hidden)renderChoiceMath();});
+
+const bootParams=new URLSearchParams(location.search);
+const activityOptionKeys=['m','activity','label','vars','goal','back','v'];
+const hasActivityOptions=activityOptionKeys.some(key=>bootParams.has(key));
+if(bootParams.get('author')==='1'||!hasActivityOptions)showBuilder();
+else{
+  try{loadProblem(parseProblemFromParams(bootParams));}
+  catch(error){showError(error);}
+}
+</script>
+</body>
+</html>
