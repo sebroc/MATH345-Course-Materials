@@ -1177,8 +1177,27 @@ pre code { white-space:inherit; }
   .progressDots { grid-column:1; grid-row:3; }
 }
 </style>
+
+<style id="all-games-navigation-styles">
+/* Collection navigation follows the landing screen; gameplay keeps its existing layout. */
+#allGamesNav{box-sizing:border-box;display:flex;align-items:center;justify-content:space-between;gap:12px;min-width:0;width:100%;margin:0;padding:0;position:relative;flex:0 0 auto;background:transparent;border:0;box-shadow:none}
+#allGamesNav[hidden],#allGamesNav.hidden{display:none!important}
+#allGamesLink{box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-width:126px;height:44px;min-height:44px;flex:0 0 auto;padding:0 15px;margin:0;color:#055f85;background:#ffffff;border:2px solid #050505;border-radius:13px;font-family:inherit;font-size:14px;font-weight:800;line-height:1;letter-spacing:0;text-decoration:none;text-shadow:none;white-space:nowrap;cursor:pointer;box-shadow:2px 3px 0 #050505;isolation:isolate;touch-action:manipulation}
+#allGamesLink svg{display:block;flex:none;width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+#allGamesNav > button{box-sizing:border-box;position:relative;inset:auto;display:grid;place-items:center;width:44px;min-width:44px;max-width:44px;height:44px;min-height:44px;max-height:44px;padding:0;margin:0;flex:0 0 44px;transform:none;line-height:1;font-size:22px;background:#ffffff;color:#055f85;border:2px solid #050505;box-shadow:2px 3px 0 #050505;touch-action:manipulation}
+#allGamesNav > button[hidden]{display:none!important}
+#allGamesLink:hover,#allGamesNav > button:hover{filter:brightness(.96);transform:none;text-decoration:none;background:#ffffff;color:#055f85}
+#allGamesLink:active,#allGamesNav > button:active{transform:translateY(1px)}
+#allGamesLink:focus-visible,#allGamesNav > button:focus-visible{outline:3px solid #055f85;outline-offset:3px}
+#allGamesNav{width:min(940px,100%);margin:0 auto 12px}
+@media print{#allGamesNav{display:none!important}}
+</style>
 </head>
 <body>
+<nav id="allGamesNav" aria-label="Games collection">
+  <a id="allGamesLink" href="https://math345-games.github.io/" aria-label="All games"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 12H5m6-6-6 6 6 6"/></svg><span>All games</span></a>
+  <button class="helpBtn" id="helpBtn" type="button" aria-label="About Differential Diagnosis" aria-haspopup="dialog">?</button>
+</nav>
 <main class="app" id="app" data-mode="standard">
   <section class="introScreen" id="introScreen" aria-labelledby="introTitle">
     <div class="introHero">
@@ -1318,6 +1337,7 @@ pre code { white-space:inherit; }
         <p><strong>Content license:</strong> Except where otherwise noted, the original instructional text, questions, feedback, and visual assets are licensed under the <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener noreferrer">Creative Commons Attribution-NonCommercial 4.0 International License</a>.</p>
         <p><strong>Textbook:</strong> <a href="https://math345-textbook.github.io/" target="_blank" rel="noopener noreferrer">math345-textbook.github.io</a></p>
         <p><strong>Privacy:</strong> Your best scores are saved in this browser on this device. They are not uploaded anywhere. If you use a private window, clear site data, switch browsers, or block site storage, your best scores may reset.</p>
+        <p><strong>Acknowledgments:</strong> Thanks to Jingyi Li for helpful feedback.</p>
       </div>
       <div class="modalActions">
         <button class="primaryBtn" id="closeAboutBtn" type="button">Close</button>
@@ -1365,9 +1385,7 @@ pre code { white-space:inherit; }
   <div class="confettiLayer" id="confettiLayer" aria-hidden="true"></div>
 </main>
 
-<div class="aboutDock" id="aboutDock">
-  <button class="helpBtn" id="helpBtn" type="button" aria-label="About Differential Diagnosis" aria-haspopup="dialog">?</button>
-</div>
+
 
 <script>
 
@@ -1658,7 +1676,7 @@ const retryMissesBtn = document.getElementById('retryMissesBtn');
 const changeWardBtn = document.getElementById('changeWardBtn');
 const confettiLayer = document.getElementById('confettiLayer');
 
-const aboutDock = document.getElementById('aboutDock');
+const aboutDock = document.getElementById('allGamesNav');
 const helpBtn = document.getElementById('helpBtn');
 const aboutModal = document.getElementById('aboutModal');
 const closeAboutBtn = document.getElementById('closeAboutBtn');

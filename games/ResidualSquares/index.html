@@ -2349,8 +2349,29 @@
     }
 
   </style>
+
+<style id="all-games-navigation-styles">
+/* Collection navigation follows the landing screen; gameplay keeps its existing layout. */
+#allGamesNav{box-sizing:border-box;display:flex;align-items:center;justify-content:space-between;gap:12px;min-width:0;width:100%;margin:0;padding:0;position:relative;flex:0 0 auto;background:transparent;border:0;box-shadow:none}
+#allGamesNav[hidden],#allGamesNav.hidden{display:none!important}
+#allGamesLink{box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-width:126px;height:44px;min-height:44px;flex:0 0 auto;padding:0 15px;margin:0;color:#6231c9;background:#ffffff;border:1px solid #b49bea;border-radius:18px;font-family:inherit;font-size:14px;font-weight:750;line-height:1;letter-spacing:0;text-decoration:none;text-shadow:none;white-space:nowrap;cursor:pointer;box-shadow:0 3px 9px #7c3aed15;isolation:isolate;touch-action:manipulation}
+#allGamesLink svg{display:block;flex:none;width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+#allGamesNav > button{box-sizing:border-box;position:relative;inset:auto;display:grid;place-items:center;width:44px;min-width:44px;max-width:44px;height:44px;min-height:44px;max-height:44px;padding:0;margin:0;flex:0 0 44px;transform:none;line-height:1;font-size:22px;background:#ffffff;color:#6231c9;border:1px solid #b49bea;box-shadow:0 3px 9px #7c3aed15;touch-action:manipulation}
+#allGamesNav > button[hidden]{display:none!important}
+#allGamesLink:hover,#allGamesNav > button:hover{filter:brightness(.96);transform:none;text-decoration:none;background:#ffffff;color:#6231c9}
+#allGamesLink:active,#allGamesNav > button:active{transform:translateY(1px)}
+#allGamesLink:focus-visible,#allGamesNav > button:focus-visible{outline:3px solid #6231c9;outline-offset:3px}
+#allGamesNav{width:min(1240px,calc(100% - 28px));margin:8px auto 12px}
+#allGamesNav:has(+ .app #introScreen.hidden){display:none}
+@media(max-width:520px){#allGamesNav{width:min(1240px,calc(100% - 16px))}}
+@media print{#allGamesNav{display:none!important}}
+</style>
 </head>
 <body>
+  <nav id="allGamesNav" aria-label="Games collection">
+  <a id="allGamesLink" href="https://math345-games.github.io/" aria-label="All games"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 12H5m6-6-6 6 6 6"/></svg><span>All games</span></a>
+  <button id="infoBtn" class="info-button" type="button" aria-label="About Residual Squares" aria-haspopup="dialog">?</button>
+</nav>
   <main class="app">
     <section id="introScreen" class="intro-stack" aria-label="Residual Squares level menu">
       <header class="hero-banner">
@@ -2377,7 +2398,7 @@
           <h1><span class="t1">Residual</span><span class="t2">Squares</span></h1>
           <p class="hero-sub">An interactive least-squares lab: shrink residuals, balance the normal equations, and bend polynomial models.</p>
         </div>
-        <button id="infoBtn" class="info-button" type="button" aria-label="About Residual Squares" aria-haspopup="dialog">?</button>
+        
       </header>
 
       <details id="learningGoals" class="cheatsheet learning-goals">
@@ -2768,6 +2789,7 @@
         <p><strong>Textbook:</strong> <a href="https://math345-textbook.github.io/" target="_blank" rel="noopener noreferrer">math345-textbook.github.io</a></p>
         <p><strong>Credit:</strong> The residual-square visualization used in this game was popularized by Gonick and Smith, <em>The Cartoon Guide to Statistics</em> (1993); an early interactive version is due to Bill Finzer (1995).</p>
         <p><strong>Privacy:</strong> Levels you have tried, optional unlocks, and your best challenge score are saved in this browser on this device. They are not uploaded anywhere. Private browsing or clearing site data may reset that progress.</p>
+        <p><strong>Acknowledgments:</strong> Thanks to Jingyi Li for helpful feedback.</p>
       </div>
       <div class="info-actions">
         <button id="closeInfo" class="info-close" type="button">Close</button>

@@ -193,9 +193,28 @@ window.MathJax = {
 };
 </script>
 <script defer id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
+<style id="all-games-navigation-styles">
+/* Collection navigation follows the landing screen; gameplay keeps its existing layout. */
+#allGamesNav{box-sizing:border-box;display:flex;align-items:center;justify-content:space-between;gap:12px;min-width:0;width:100%;margin:0;padding:0;position:relative;flex:0 0 auto;background:transparent;border:0;box-shadow:none}
+#allGamesNav[hidden],#allGamesNav.hidden{display:none!important}
+#allGamesLink{box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-width:126px;height:44px;min-height:44px;flex:0 0 auto;padding:0 15px;margin:0;color:#4d51c9;background:#ffffff;border:1px solid #b3b8f4;border-radius:15px;font-family:inherit;font-size:14px;font-weight:750;line-height:1;letter-spacing:0;text-decoration:none;text-shadow:none;white-space:nowrap;cursor:pointer;box-shadow:0 2px 5px #5b65f218;isolation:isolate;touch-action:manipulation}
+#allGamesLink svg{display:block;flex:none;width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+#allGamesNav > button{box-sizing:border-box;position:relative;inset:auto;display:grid;place-items:center;width:44px;min-width:44px;max-width:44px;height:44px;min-height:44px;max-height:44px;padding:0;margin:0;flex:0 0 44px;transform:none;line-height:1;font-size:22px;background:#ffffff;color:#4d51c9;border:1px solid #b3b8f4;box-shadow:0 2px 5px #5b65f218;touch-action:manipulation}
+#allGamesNav > button[hidden]{display:none!important}
+#allGamesLink:hover,#allGamesNav > button:hover{filter:brightness(.96);transform:none;text-decoration:none;background:#ffffff;color:#4d51c9}
+#allGamesLink:active,#allGamesNav > button:active{transform:translateY(1px)}
+#allGamesLink:focus-visible,#allGamesNav > button:focus-visible{outline:3px solid #4d51c9;outline-offset:3px}
+.gameShell{gap:12px}body:not(.introActive) #allGamesNav{display:none}
+@media print{#allGamesNav{display:none!important}}
+</style>
 </head>
 <body>
 <div class="gameShell">
+<nav id="allGamesNav" aria-label="Games collection">
+  <a id="allGamesLink" href="https://math345-games.github.io/" aria-label="All games"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 12H5m6-6-6 6 6 6"/></svg><span>All games</span></a>
+  <button class="aboutBtn" id="aboutBtn" type="button" aria-label="About The Elimination Game" aria-haspopup="dialog">?</button>
+</nav>
 <main class="game" id="game">
   <header class="top">
     <div class="titleRow">
@@ -439,7 +458,7 @@ window.MathJax = {
         <p><strong>Content license:</strong> Except where otherwise noted, the original instructional text, questions, feedback, and visual assets are licensed under the <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener noreferrer">Creative Commons Attribution-NonCommercial 4.0 International License</a>.</p>
         <p><strong>Textbook:</strong> <a href="https://math345-textbook.github.io/" target="_blank" rel="noopener noreferrer">math345-textbook.github.io</a></p>
         <p><strong>Privacy:</strong> Your best scores are saved in this browser on this device. They are not uploaded anywhere. If you use a private window, clear site data, switch browsers, or block site storage, your best scores may reset.</p>
-        <p><strong>Acknowledgments:</strong> Thanks to Betsy Stovall for helpful feedback.</p>
+        <p><strong>Acknowledgments:</strong> Thanks to Betsy Stovall and Jingyi Li for helpful feedback.</p>
       </div>
       <div class="confirmActions">
         <button class="btn primary" id="aboutCloseBtn" type="button">Close</button>
@@ -447,7 +466,7 @@ window.MathJax = {
     </div>
   </div>
 </main>
-<button class="aboutBtn" id="aboutBtn" type="button" aria-label="About The Elimination Game" aria-haspopup="dialog">?</button>
+
 </div>
 <script>
 
@@ -837,7 +856,7 @@ function setPlayChrome(show){
   updateIntroModeButtons();
 }
 function setBaseContentInert(on){
-  for(const el of [document.querySelector('.top'),document.getElementById('introView'),document.getElementById('playWrap'),document.getElementById('aboutBtn')])if(el)el.inert=on;
+  for(const el of [document.querySelector('.top'),document.getElementById('introView'),document.getElementById('playWrap'),document.getElementById('allGamesNav')])if(el)el.inert=on;
 }
 function anyModalOpen(){return !document.getElementById('warmupPanel').hidden||!document.getElementById('menuConfirmPanel').hidden||!document.getElementById('aboutPanel').hidden||document.getElementById('endPanel').classList.contains('show');}
 function syncModalState(){document.body.classList.toggle('modalOpen',anyModalOpen());setBaseContentInert(anyModalOpen());}

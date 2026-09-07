@@ -9,6 +9,7 @@
   gtag('js', new Date());
   gtag('config', 'G-060RZGCFFW');
 </script>
+<link rel="icon" href="data:,">
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="theme-color" content="#F0EEE6" />
@@ -59,7 +60,7 @@ button{touch-action:manipulation}
 
 /* ---------- compact mathematical typography ---------- */
 .math{font-family:var(--serif);font-size:1.04em;white-space:nowrap}
-.math
+.math 
 .math sub{font-size:.68em;vertical-align:-.27em}
 .math sup{font-size:.68em;vertical-align:.48em}
 .frac{display:inline-grid;grid-template-rows:auto auto;vertical-align:-.36em;text-align:center;line-height:1;min-width:.95em;margin:0 .08em}
@@ -468,14 +469,33 @@ button{touch-action:manipulation}
 @media(max-width:430px){.topbar{gap:5px;padding-inline:7px}.topTitle{font-size:16px}.topBrand .logoMark{width:27px;height:27px}.topMeta{display:none}.smallButton{padding-inline:7px}.toolName{display:none}.toolButton{min-height:46px}.factorEquation{scale:.9;transform-origin:left top}.algoRail{gap:1px}.algoStage{padding:2px 4px}.bannerNote{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}.sprintNextButton{min-width:124px;padding-inline:9px} }
 @media(pointer:coarse){.toolButton{min-height:62px}.inputObject{min-height:60px}.worldChip{min-height:40px}.dragGuide{width:80px;height:80px}}
 </style>
+
+<style id="all-games-navigation-styles">
+/* Collection navigation follows the landing screen; gameplay keeps its existing layout. */
+#allGamesNav{box-sizing:border-box;display:flex;align-items:center;justify-content:space-between;gap:12px;min-width:0;width:100%;margin:0;padding:0;position:relative;flex:0 0 auto;background:transparent;border:0;box-shadow:none}
+#allGamesNav[hidden],#allGamesNav.hidden{display:none!important}
+#allGamesLink{box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-width:126px;height:44px;min-height:44px;flex:0 0 auto;padding:0 15px;margin:0;color:#1f2a44;background:#fcfbf7;border:1px solid #aaa392;border-radius:0px;font-family:inherit;font-size:14px;font-weight:650;line-height:1;letter-spacing:0;text-decoration:none;text-shadow:none;white-space:nowrap;cursor:pointer;box-shadow:0 1px 3px #1f2a441f;isolation:isolate;touch-action:manipulation}
+#allGamesLink svg{display:block;flex:none;width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+#allGamesNav > button{box-sizing:border-box;position:relative;inset:auto;display:grid;place-items:center;width:44px;min-width:44px;max-width:44px;height:44px;min-height:44px;max-height:44px;padding:0;margin:0;flex:0 0 44px;transform:none;line-height:1;font-size:22px;background:#fcfbf7;color:#1f2a44;border:1px solid #aaa392;box-shadow:0 1px 3px #1f2a441f;touch-action:manipulation}
+#allGamesNav > button[hidden]{display:none!important}
+#allGamesLink:hover,#allGamesNav > button:hover{filter:brightness(.96);transform:none;text-decoration:none;background:#fcfbf7;color:#1f2a44}
+#allGamesLink:active,#allGamesNav > button:active{transform:translateY(1px)}
+#allGamesLink:focus-visible,#allGamesNav > button:focus-visible{outline:3px solid #1f2a44;outline-offset:3px}
+#allGamesNav{width:min(800px,100%);margin:0 auto 14px;z-index:1}
+@media print{#allGamesNav{display:none!important}}
+</style>
 </head>
 <body>
 <section id="menuScreen" class="menuScreen introScreen">
+  <nav id="allGamesNav" aria-label="Games collection">
+  <a id="allGamesLink" href="https://math345-games.github.io/" aria-label="All games"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 12H5m6-6-6 6 6 6"/></svg><span>All games</span></a>
+  <button class="aboutBtn" id="aboutBtn" type="button" aria-label="About Perfectly Normal" aria-haspopup="dialog">?</button>
+</nav>
   <div class="introShell">
     <div class="introBrandRow">
       <svg class="logoMark" viewBox="0 0 36 36" aria-hidden="true"><path d="M6 27 L25 27"/><path class="logoV" d="M6 27 L20 12"/><path class="logoQ" d="M6 27 L6 8"/><path class="logoRight" d="M6 22 L11 22 L11 27"/></svg>
       <h1>Perfectly Normal</h1>
-      <button class="aboutBtn" id="aboutBtn" type="button" aria-label="About Perfectly Normal" aria-haspopup="dialog">?</button>
+      
     </div>
 
     <section class="outcomesCard">
@@ -1767,7 +1787,7 @@ const AUDIT=auditPuzzles();if(AUDIT.some(x=>!x.ok))console.warn('Puzzle audit:',
 
 /* ---------- modal, toast, wiring ---------- */
 function openModal(html,kind=''){$('toast').classList.remove('show');$('modalCard').className=`modalCard${kind?` ${kind}`:''}`;$('modalCard').innerHTML=html;$('modalLayer').hidden=false;$('modalCard').querySelectorAll('[data-modal]').forEach(b=>b.addEventListener('click',()=>modalAction(b.dataset.modal)));renderMath($('modalCard'));requestAnimationFrame(()=>$('modalCard').querySelector('button')?.focus());}
-function closeModal(){$('modalLayer').hidden=true;$('modalCard').className='modalCard';$('modalCard').innerHTML='';}
+function closeModal(){const returnToAbout=$('modalCard').classList.contains('aboutCard')&&!$('menuScreen').hidden;$('modalLayer').hidden=true;$('modalCard').className='modalCard';$('modalCard').innerHTML='';if(returnToAbout)$('aboutBtn').focus({preventScroll:true});}
 function modalAction(action){if(action==='close')closeModal();if(action==='menu')leaveToMenu();if(action==='new'){closeModal();startMode(app.mode);}if(action==='study'){closeModal();startMode('study');}}
 let toastTimer;function toast(text){$('toast').textContent=text;$('toast').classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.remove('show'),2400);}
 function updateBest(){const s=storageGet('pn-v3-study',null),sp=storageGet('pn-v4-sprint-best',null);$('studyBest').textContent=s===null?'best: -':`best: ${s} miss${String(s)==='1'?'':'es'}`;$('sprintBest').textContent=sp===null?'best: -':`best: ${sp}/${SPRINT_TOTAL}`;const q=$('quizBestBadge'),qb=quizBest();if(q)q.textContent=qb===null?'BEST —':`BEST ${qb}/10`;}
@@ -1778,7 +1798,7 @@ function showAbout(){openModal(`<h2 id="modalTitle">About Perfectly Normal</h2><
   <p><strong>Content license:</strong> Except where otherwise noted, the original instructional text, questions, feedback, and visual assets are licensed under the <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener noreferrer">Creative Commons Attribution-NonCommercial 4.0 International License</a>.</p>
   <p><strong>Textbook:</strong> <a href="https://math345-textbook.github.io/" target="_blank" rel="noopener noreferrer">math345-textbook.github.io</a></p>
   <p><strong>Privacy:</strong> Your best scores are saved in this browser on this device. They are not uploaded anywhere. If you use a private window, clear site data, switch browsers, or block site storage, your best scores may reset.</p>
-  <p><strong>Acknowledgments:</strong> Thanks to Betsy Stovall for helpful feedback.</p>
+  <p><strong>Acknowledgments:</strong> Thanks to Betsy Stovall and Jingyi Li for helpful feedback.</p>
 </div><div class="modalActions"><button class="primaryButton" data-modal="close">close</button></div>`,'aboutCard');}
 function showGameCheatsheet(){const content=$('cheatsheetCard').querySelector('.introDisclosure').cloneNode(true);content.querySelector('summary')?.remove();content.querySelectorAll('[id]').forEach(node=>node.removeAttribute('id'));openModal(`<h2 id="modalTitle">Gram–Schmidt Cheatsheet</h2><div class="modalCheatsheet">${content.innerHTML}</div><div class="modalActions"><button class="primaryButton" data-modal="close">dismiss</button></div>`,'cheatsheetModal');}
 function showSprintHint(){

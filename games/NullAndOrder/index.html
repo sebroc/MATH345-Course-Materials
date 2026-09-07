@@ -10,10 +10,10 @@
 
   gtag('config', 'G-060RZGCFFW');
 </script>
+<link rel="icon" href="data:," />
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Null &amp; Order</title>
-<link rel="icon" href="data:," />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.css" integrity="sha384-vlBdW0r3AcZO/HboRPznQNowvexd3fY8qHOWkBi5q7KGgqJ+F48+DceybYmrVbmB" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js" integrity="sha384-AtrdNsnxl/75rvBneBVH7DtOvCxSVahR2zWqle1coBKd8DEmLoviqNeJSx64gNAs" crossorigin="anonymous"></script>
 
@@ -1778,8 +1778,28 @@ kbd{
 }
 </style>
 
+
+<style id="all-games-navigation-styles">
+/* Collection navigation follows the landing screen; gameplay keeps its existing layout. */
+#allGamesNav{box-sizing:border-box;display:flex;align-items:center;justify-content:space-between;gap:12px;min-width:0;width:100%;margin:0;padding:0;position:relative;flex:0 0 auto;background:transparent;border:0;box-shadow:none}
+#allGamesNav[hidden],#allGamesNav.hidden{display:none!important}
+#allGamesLink{box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-width:126px;height:44px;min-height:44px;flex:0 0 auto;padding:0 15px;margin:0;color:#1a2030;background:#fbf8f2;border:2px solid #202634;border-radius:12px;font-family:inherit;font-size:14px;font-weight:800;line-height:1;letter-spacing:0;text-decoration:none;text-shadow:none;white-space:nowrap;cursor:pointer;box-shadow:0 3px 0 #202634;isolation:isolate;touch-action:manipulation}
+#allGamesLink svg{display:block;flex:none;width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+#allGamesNav > button{box-sizing:border-box;position:relative;inset:auto;display:grid;place-items:center;width:44px;min-width:44px;max-width:44px;height:44px;min-height:44px;max-height:44px;padding:0;margin:0;flex:0 0 44px;transform:none;line-height:1;font-size:22px;background:#fbf8f2;color:#1a2030;border:2px solid #202634;box-shadow:0 3px 0 #202634;touch-action:manipulation}
+#allGamesNav > button[hidden]{display:none!important}
+#allGamesLink:hover,#allGamesNav > button:hover{filter:brightness(.96);transform:none;text-decoration:none;background:#fbf8f2;color:#1a2030}
+#allGamesLink:active,#allGamesNav > button:active{transform:translateY(1px)}
+#allGamesLink:focus-visible,#allGamesNav > button:focus-visible{outline:3px solid #1a2030;outline-offset:3px}
+#allGamesNav{width:min(1440px,100%);margin:0 auto 12px}
+@media(min-width:781px){#allGamesNav:not([hidden]) + #game{height:calc(100dvh - 72px);max-height:calc(100dvh - 72px)}}
+@media print{#allGamesNav{display:none!important}}
+</style>
 </head>
 <body>
+<nav id="allGamesNav" aria-label="Games collection">
+  <a id="allGamesLink" href="https://math345-games.github.io/" aria-label="All games"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 12H5m6-6-6 6 6 6"/></svg><span>All games</span></a>
+  <button class="menuInfoBtn" id="infoBtn" type="button" aria-label="About Null & Order" aria-haspopup="dialog" aria-controls="infoDialog">?</button>
+</nav>
 <div class="game" id="game"></div>
 <script>
 // Null &amp; Order — randomized one-clue case game
@@ -4449,10 +4469,10 @@ function openHelp(){state.helpOpen=true;state.infoOpen=false;render();}
 function closeHelp(){state.helpOpen=false;render();requestAnimationFrame(()=>document.getElementById('helpRoundBtn')?.focus({preventScroll:true}));}
 function renderInfoDialog() {
   if(!state.infoOpen)return '';
-  return `<div class="modalOverlay" id="infoOverlay"><section class="resultDialog infoDialog" id="infoDialog" role="dialog" aria-modal="true" aria-labelledby="infoTitle"><div class="resultDialogHead neutral"><div class="resultVerdictLine" id="infoTitle">About Null &amp; Order</div></div><div class="resultDialogBody infoList"><p><strong>Version:</strong> Null &amp; Order [v0.3(beta)]</p><p><strong>Copyright:</strong> © 2026 <a href="https://people.math.wisc.edu/~roch/" target="_blank" rel="noopener noreferrer">Sébastien Roch</a></p><p><strong>Code license:</strong> The software source code—including the functional HTML, CSS, and JavaScript—is available under the <a href="https://opensource.org/license/mit" target="_blank" rel="noopener noreferrer">MIT License</a>.</p><p><strong>Content license:</strong> Except where otherwise noted, the original instructional text, questions, feedback, and visual assets are licensed under the <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener noreferrer">Creative Commons Attribution-NonCommercial 4.0 International License</a>.</p><p><strong>Textbook:</strong> <a href="https://math345-textbook.github.io/" target="_blank" rel="noopener noreferrer">math345-textbook.github.io</a></p><p><strong>Privacy:</strong> Your best first-try score, rank, and completed-shift count are saved in this browser on this device. They are not uploaded anywhere. If you use a private window, clear site data, switch browsers, or block site storage, these records may reset.</p><p><strong>Acknowledgments:</strong> Thanks to Betsy Stovall for helpful feedback.</p></div><div class="resultDialogActions singleAction"><button class="btn gold" id="closeInfoBtn">Close</button></div></section></div>`;
+  return `<div class="modalOverlay" id="infoOverlay"><section class="resultDialog infoDialog" id="infoDialog" role="dialog" aria-modal="true" aria-labelledby="infoTitle"><div class="resultDialogHead neutral"><div class="resultVerdictLine" id="infoTitle">About Null &amp; Order</div></div><div class="resultDialogBody infoList"><p><strong>Version:</strong> Null &amp; Order [v0.3(beta)]</p><p><strong>Copyright:</strong> © 2026 <a href="https://people.math.wisc.edu/~roch/" target="_blank" rel="noopener noreferrer">Sébastien Roch</a></p><p><strong>Code license:</strong> The software source code—including the functional HTML, CSS, and JavaScript—is available under the <a href="https://opensource.org/license/mit" target="_blank" rel="noopener noreferrer">MIT License</a>.</p><p><strong>Content license:</strong> Except where otherwise noted, the original instructional text, questions, feedback, and visual assets are licensed under the <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener noreferrer">Creative Commons Attribution-NonCommercial 4.0 International License</a>.</p><p><strong>Textbook:</strong> <a href="https://math345-textbook.github.io/" target="_blank" rel="noopener noreferrer">math345-textbook.github.io</a></p><p><strong>Privacy:</strong> Your best first-try score, rank, and completed-shift count are saved in this browser on this device. They are not uploaded anywhere. If you use a private window, clear site data, switch browsers, or block site storage, these records may reset.</p><p><strong>Acknowledgments:</strong> Thanks to Betsy Stovall and Jingyi Li for helpful feedback.</p></div><div class="resultDialogActions singleAction"><button class="btn gold" id="closeInfoBtn">Close</button></div></section></div>`;
 }
 function renderStart() {
-  return `<header class="top menuTop"><h1 class="title">Null &amp; Order</h1><p class="subtitle">Each case has two suspects and a short list of clues. Identify decisive evidence and convict.</p><button class="menuInfoBtn" id="infoBtn" type="button" aria-label="About Null & Order" aria-haspopup="dialog" aria-controls="infoDialog">?</button></header><div class="startScreen"><div class="startStack">${renderReferenceStack()}<section class="startCard howPlayCard"><div class="startHead"><h2>How to play</h2></div><div class="startBody"><ol class="howPlaySteps"><li><span>1</span><div><strong>Read the crime, shared evidence, and both suspects.</strong><small>Decide what completed computation would prove the crime.</small></div></li><li><span>2</span><div><strong>Reveal a clue that directly establishes that condition.</strong><small>A result that merely rules out the other suspect is not enough.</small></div></li><li><span>3</span><div><strong>Charge the suspect supported by the evidence.</strong><small>A correct charge after one clue earns a first-try case.</small></div></li></ol></div></section><div class="startBottomGrid"><section class="recordCard"><h2>Your record</h2>${renderRankBadge()}<div class="recordFacts"><div><span>Best first-try score</span><strong>${bestShiftText()}</strong></div><div><span>Next promotion</span><strong>${nextPromotionText()}</strong></div></div></section><section class="launchCard"><div><h2>Ready for duty?</h2><p>Ten-case shift.</p></div><button class="btn gold startBtn" id="startShiftBtn">Start shift</button></section></div></div></div>${renderInfoDialog()}${renderHelpDialog()}`;
+  return `<header class="top menuTop"><h1 class="title">Null &amp; Order</h1><p class="subtitle">Each case has two suspects and a short list of clues. Identify decisive evidence and convict.</p></header><div class="startScreen"><div class="startStack">${renderReferenceStack()}<section class="startCard howPlayCard"><div class="startHead"><h2>How to play</h2></div><div class="startBody"><ol class="howPlaySteps"><li><span>1</span><div><strong>Read the crime, shared evidence, and both suspects.</strong><small>Decide what completed computation would prove the crime.</small></div></li><li><span>2</span><div><strong>Reveal a clue that directly establishes that condition.</strong><small>A result that merely rules out the other suspect is not enough.</small></div></li><li><span>3</span><div><strong>Charge the suspect supported by the evidence.</strong><small>A correct charge after one clue earns a first-try case.</small></div></li></ol></div></section><div class="startBottomGrid"><section class="recordCard"><h2>Your record</h2>${renderRankBadge()}<div class="recordFacts"><div><span>Best first-try score</span><strong>${bestShiftText()}</strong></div><div><span>Next promotion</span><strong>${nextPromotionText()}</strong></div></div></section><section class="launchCard"><div><h2>Ready for duty?</h2><p>Ten-case shift.</p></div><button class="btn gold startBtn" id="startShiftBtn">Start shift</button></section></div></div></div>${renderInfoDialog()}${renderHelpDialog()}`;
 }
 function entryOutcomeText(entry) { return entry.outcome==='acquittal'?'acquittal':`conviction with ${extraCluesText(entry.caseExtras)}`; }
 function renderLoggedClueRecap(entry) { return renderClueRecap({clueLog:entry.clueLog||[]}); }
@@ -4513,6 +4533,7 @@ function scheduleResultFit() {
 function render() {
   const app=document.getElementById('game'),consumeShake=!!state.current?.feedbackShake;
   app.className=`game ${state.mode==='play'?'playFrame':'screenFrame'}`;document.body.classList.toggle('playing',state.mode==='play');
+  document.getElementById('allGamesNav').hidden=state.mode!=='start';
   app.innerHTML=state.mode==='start'?renderStart():state.mode==='play'?renderCase():renderEnd();bindEvents();scheduleResultFit();requestAnimationFrame(focusTopModal);if(consumeShake&&state.current)state.current.feedbackShake=false;
 }
 function focusTopModal() { const target=document.getElementById('closeHelpBtn')||document.getElementById('closeInfoBtn')||document.getElementById('nextCaseBtn')||document.getElementById('cancelConfirmBtn')||document.getElementById('closeCaseReviewBtn');if(target)target.focus({preventScroll:true}); }
