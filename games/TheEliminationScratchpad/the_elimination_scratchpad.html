@@ -207,9 +207,26 @@ window.MathJax={
 };
 </script>
 <script defer id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<style id="all-games-navigation-styles">
+.appShell{gap:12px}
+#allGamesNav{--nav-ink:#4d51c9;--nav-border:#b3b8f4;display:flex;align-items:center;justify-content:space-between;gap:12px;min-width:0;width:100%;margin:0;padding:0;background:transparent}
+#allGamesLink{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-width:126px;height:44px;padding:0 15px;margin:0;border-radius:15px;font-family:inherit;font-size:14px;font-weight:750;line-height:1;text-decoration:none;white-space:nowrap;cursor:pointer}
+#allGamesLink svg{display:block;flex:none;width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+#allGamesNav > button{width:44px;min-width:44px;height:44px;padding:0;margin:0;flex:0 0 44px;transform:none}
+#allGamesLink,#allGamesNav > button{min-height:44px;box-sizing:border-box;background:var(--card);color:var(--nav-ink);border:1px solid var(--nav-border);box-shadow:0 2px 5px #5b65f218;touch-action:manipulation}
+#allGamesLink:hover,#allGamesNav > button:hover{filter:brightness(.96);transform:none;text-decoration:none}
+#allGamesLink:active,#allGamesNav > button:active{transform:translateY(1px)}
+#allGamesLink:focus-visible,#allGamesNav > button:focus-visible{outline:3px solid var(--nav-ink);outline-offset:3px}
+@media(prefers-color-scheme:dark){#allGamesNav{--nav-ink:#b5b9ff;--nav-border:#626bc2}}
+@media print{#allGamesNav{display:none!important}}
+</style>
 </head>
 <body>
 <div class="appShell">
+<nav id="allGamesNav" aria-label="Games collection">
+  <a id="allGamesLink" href="https://math345-games.github.io/" aria-label="All games"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 12H5m6-6-6 6 6 6"/></svg><span>All games</span></a>
+  <button class="aboutBtn" id="aboutBtn" type="button" aria-label="About The Elimination Scratchpad" aria-haspopup="dialog">?</button>
+</nav>
 <main class="game" id="game">
   <header class="top">
     <div class="titleRow">
@@ -366,12 +383,12 @@ window.MathJax={
         <p><strong>Copyright:</strong> © 2026 <a href="https://people.math.wisc.edu/~roch/" target="_blank" rel="noopener noreferrer">Sébastien Roch</a></p>
         <p><strong>Code license:</strong> MIT. <strong>Instructional content:</strong> CC BY-NC 4.0, except where otherwise noted.</p>
         <p><strong>Privacy:</strong> The file stores no scores and sends no activity data anywhere.</p>
+        <p><strong>Acknowledgments:</strong> Thanks to Jingyi Li for helpful feedback.</p>
       </div>
       <div class="modalBtns"><button class="btn primary" id="aboutDoneBtn" type="button">Close</button></div>
     </div>
   </div>
 </main>
-<button class="aboutBtn" id="aboutBtn" type="button" aria-label="About The Elimination Scratchpad" aria-haspopup="dialog">?</button>
 </div>
 
 <script>
@@ -1109,7 +1126,7 @@ function showBuilder(){
 }
 
 function anyModalOpen(){return document.getElementById('endPanel').classList.contains('show')||document.getElementById('aboutPanel').classList.contains('show');}
-function syncModalState(){document.body.classList.toggle('modalOpen',anyModalOpen());}
+function syncModalState(){const open=anyModalOpen();document.body.classList.toggle('modalOpen',open);document.getElementById('allGamesNav').inert=open;}
 function openAbout(){lastModalFocus=document.activeElement;document.getElementById('aboutPanel').classList.add('show');syncModalState();requestAnimationFrame(()=>document.getElementById('aboutCloseBtn').focus());}
 function closeAbout(){document.getElementById('aboutPanel').classList.remove('show');syncModalState();requestAnimationFrame(()=>lastModalFocus?.focus?.());}
 function activeDialog(){if(document.getElementById('aboutPanel').classList.contains('show'))return document.getElementById('aboutPanel');if(document.getElementById('endPanel').classList.contains('show'))return document.getElementById('endPanel');return null;}
