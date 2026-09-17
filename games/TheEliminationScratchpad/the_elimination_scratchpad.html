@@ -3,1175 +3,196 @@
 <head>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-060RZGCFFW"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag("js", new Date());
-  gtag("config", "G-060RZGCFFW");
-</script>
+<script>function gtag(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],gtag("js",new Date),gtag("config","G-060RZGCFFW");</script>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>The Elimination Scratchpad</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop stop-color='%235b65f2'/%3E%3Cstop offset='1' stop-color='%2314b8a6'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M8 12 h16 v13 h16 v13 h16 v14' fill='none' stroke='url(%23g)' stroke-width='9' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
-<style>
-:root{
-  color-scheme:light;
-  --bg:#f7f8fc;--card:#fff;--card-2:#f9fbff;--ink:#172033;--muted:#647086;
-  --line:#dce2ee;--accent:#5b65f2;--accent-b:#14b8a6;
-  --accent-grad:linear-gradient(135deg,#5b65f2,#14b8a6);
-  --pink:#ffeaf3;--pink-line:#f5b8ce;--pink-ink:#a33362;
-  --ok:#18794e;--ok-2:#e9f8ef;--bad:#b42318;--bad-2:#fff0ee;
-  --warn:#925d00;--warn-2:#fff6df;--zero:#eef2f7;
-  --shadow:0 22px 60px rgba(22,34,51,.12);--coefw:62px;--constw:70px;--rowh:48px
-}
-*{box-sizing:border-box}
-html,body{min-height:100%}
-body{
-  margin:0;min-height:100vh;padding:18px;display:grid;place-items:center;color:var(--ink);
-  background:
-    radial-gradient(circle at 50% 0%,rgba(91,101,242,.11),transparent 34rem),
-    linear-gradient(rgba(24,32,51,.035) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(24,32,51,.035) 1px,transparent 1px),var(--bg);
-  background-size:auto,24px 24px,24px 24px,auto;
-  font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif
-}
-button,input,select,textarea{font:inherit}
-button{touch-action:manipulation}
-.hidden{display:none!important}
-[hidden]{display:none!important}
-.appShell{width:min(100%,760px);display:grid;gap:10px;justify-items:end}
-.game{width:100%;background:var(--card);border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow);overflow:hidden;position:relative}
-.top{padding:16px 18px 14px;border-bottom:1px solid var(--line);background:linear-gradient(180deg,rgba(255,255,255,.96),rgba(249,251,255,.94))}
-.titleRow{display:flex;align-items:center;justify-content:space-between;gap:12px}
-h1{display:flex;align-items:center;gap:10px;margin:0;font-size:clamp(24px,4.2vw,32px);line-height:1;font-weight:800;letter-spacing:-.04em;min-width:0}
-h1>span:last-child{min-width:0;overflow-wrap:anywhere}
-.logoGlyph{width:44px;height:44px;display:inline-grid;place-items:center;flex:0 0 auto}
-.logoGlyph svg{width:44px;height:44px;display:block}
-.logoGlyph path{fill:none;stroke:url(#logoGrad);stroke-width:9;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:140;stroke-dashoffset:140;animation:drawStair .6s ease .15s forwards}
-@keyframes drawStair{to{stroke-dashoffset:0}}
-.statBar{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
-.stat{display:inline-flex;align-items:center;min-height:28px;padding:5px 10px;border-radius:999px;background:var(--card-2);border:1px solid var(--line);color:var(--muted);font-size:12px;font-weight:750;font-variant-numeric:tabular-nums}
-.btn{appearance:none;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--ink);min-height:38px;padding:8px 13px;font-weight:750;cursor:pointer;transition:transform .12s ease,box-shadow .12s ease,background .12s ease,border-color .12s ease}
-.btn:hover{transform:translateY(-1px);box-shadow:0 8px 16px rgba(22,34,51,.08)}
-.btn:active{transform:translateY(0);box-shadow:none}
-.btn.primary{border:0;background:var(--accent-grad);color:#fff;box-shadow:0 8px 18px rgba(91,101,242,.24)}
-.btn.pinkTop{background:var(--pink);border-color:var(--pink-line);color:var(--pink-ink);box-shadow:none;min-height:34px;padding:7px 12px;font-size:13px;white-space:nowrap}
-.btn.pinkTop:hover{background:#ffe1ee;box-shadow:0 7px 16px rgba(163,51,98,.12)}
-.btn:focus-visible,.choice:focus-visible,.iconBtn:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid rgba(91,101,242,.35);outline-offset:2px}
-.progressPanel{padding:9px 14px;border-bottom:1px solid var(--line);background:var(--card)}
-.tracker{--progress:0%;position:relative;display:flex;gap:6px;align-items:center;justify-content:center;flex-wrap:wrap;padding:3px 0 5px}
-.tracker::before{content:"";position:absolute;left:0;right:0;top:50%;height:2px;background:var(--line);transform:translateY(-50%)}
-.tracker::after{content:"";position:absolute;left:0;top:50%;height:2px;width:var(--progress);background:var(--accent-grad);transform:translateY(-50%);transition:width .25s ease}
-.trackStep{position:relative;z-index:1;display:inline-flex;align-items:center;gap:5px;min-height:30px;padding:5px 9px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--muted);font-size:12px;font-weight:800;white-space:nowrap}
-.trackStep .num{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;border-radius:999px;background:var(--card-2);font-size:10px;color:var(--muted)}
-.trackStep.now{border-color:#bec6ff;color:var(--accent);background:#f3f5ff}
-.trackStep.now .num{background:var(--accent);color:#fff}
-.trackStep.done{border-color:#bde7ce;color:var(--ok);background:var(--ok-2)}
-.trackStep.done .num{background:var(--ok);color:#fff}
-.play{padding:12px 14px 14px}
-.taskPanel{padding:11px 13px;border:1px solid var(--line);border-radius:18px;background:var(--card-2)}
-.taskLabel{font-size:12px;font-weight:850;color:var(--accent);text-transform:uppercase;letter-spacing:.065em;margin-bottom:4px}
-.promptText{margin:0;font-size:clamp(18px,3.8vw,24px);line-height:1.15;letter-spacing:-.025em}
-.validChoicesNote{margin:5px 0 0;color:var(--muted);font-size:11.5px;font-weight:650;line-height:1.3}
-.matrixCard{margin-top:10px;border:1px solid var(--line);border-radius:20px;background:var(--card);padding:10px}
-.matrixStage{display:grid;grid-template-columns:32px minmax(0,1fr);gap:8px;align-items:center;justify-content:center;padding:4px 2px}
-.rowLabels{display:grid;grid-template-rows:repeat(var(--rows,3),var(--rowh));gap:4px;align-items:center}
-.rowLabel{font:800 14px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;text-align:right;color:var(--muted)}
-.matrixWrap{display:flex;justify-content:center;align-items:center;min-width:0;overflow-x:auto;padding:6px 0}
-.matrixShell{position:relative;display:inline-block;padding:0 11px;--coefw:62px;--constw:70px;--rowh:48px}
-.matrixShell::before,.matrixShell::after{content:"";position:absolute;top:-5px;bottom:-5px;width:10px;border-top:2px solid var(--ink);border-bottom:2px solid var(--ink);pointer-events:none}
-.matrixShell::before{left:0;border-left:2px solid var(--ink);border-radius:10px 0 0 10px}
-.matrixShell::after{right:0;border-right:2px solid var(--ink);border-radius:0 10px 10px 0}
-.augLine{position:absolute;top:-5px;bottom:-5px;left:0;width:2px;background:var(--ink);border-radius:999px;z-index:4;pointer-events:none}
-.stairSvg{position:absolute;top:0;left:11px;z-index:3;pointer-events:none;overflow:visible}
-.stairSvg path{fill:none;stroke:url(#stairGradient);stroke-width:5;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 7px rgba(20,184,166,.22));stroke-dasharray:1000;stroke-dashoffset:1000;animation:drawStair .42s ease forwards}
-.stairSvg polygon{fill:rgba(91,101,242,.055)}
-table.matrix{border-collapse:separate;border-spacing:0 4px;table-layout:fixed;width:auto;font:800 18px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;position:relative;z-index:2}
-table.matrix col.coef{width:var(--coefw)}
-table.matrix col.constantCol{width:var(--constw)}
-.matrix td{width:var(--coefw);min-width:var(--coefw);height:var(--rowh);padding:0 6px;text-align:center;border-radius:12px;position:relative;transition:background .16s ease,box-shadow .16s ease,color .16s ease;white-space:nowrap}
-.matrix td.constant{width:var(--constw);min-width:var(--constw);padding-left:16px}
-.matrix td.activeCol{background:rgba(91,101,242,.055)}
-.matrix td.focus{background:#fff5cf;box-shadow:inset 0 0 0 2px #f0c861}
-.matrix td.pivotDone{background:var(--ok-2);box-shadow:inset 0 0 0 1px #c7ebd4;color:var(--ok)}
-.matrix td.zeroZone{background:var(--zero);color:#8c98aa}
-.matrix tr.flash td{animation:flash .46s ease}
-@keyframes flash{0%{transform:scale(1)}38%{transform:scale(1.045);background:#e5fbff}100%{transform:scale(1)}}
-.matrix tr.swapFromDown{animation:swapDown .25s ease}
-.matrix tr.swapFromUp{animation:swapUp .25s ease}
-@keyframes swapDown{from{transform:translateY(calc(-1*var(--swapdist)))}to{transform:translateY(0)}}
-@keyframes swapUp{from{transform:translateY(var(--swapdist))}to{transform:translateY(0)}}
-.equationsPanel{margin-top:8px;border-radius:16px;border:1px solid var(--line);background:var(--card-2);padding:9px 11px}
-.equationsSummary{font-size:13px;font-weight:850;color:var(--ink);margin-bottom:4px}
-.equations{font:750 13px/1.55 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:var(--ink)}
-.eqLine{white-space:pre-wrap}
-.choiceArea{margin-top:10px}
-.choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
-.choices.fullWidth{grid-template-columns:minmax(0,1fr)}
-.choice{appearance:none;border:1.5px solid var(--line);border-radius:17px;background:var(--card);min-height:58px;padding:10px 12px;text-align:left;color:var(--ink);cursor:pointer;display:grid;grid-template-columns:26px 1fr;gap:8px;align-items:center;font-size:15px;font-weight:760;line-height:1.25;transition:transform .1s ease,box-shadow .1s ease,border-color .12s ease,background .12s ease}
-.choice:hover{transform:translateY(-1px);box-shadow:0 10px 20px rgba(22,34,51,.08);border-color:#c5cce0}
-.choice:active{transform:translateY(0);box-shadow:none}
-.choice:disabled{cursor:default}
-.choiceKey{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:999px;background:var(--card-2);border:1px solid var(--line);color:var(--muted);font-size:12px;font-weight:850}
-.choiceText{min-width:0;white-space:pre-line;overflow-wrap:anywhere}
-.choiceText[data-tex]{white-space:normal;font-size:17px}
-.choiceText mjx-container,.choice .MathJax,.choice .mjx-chtml{font-size:1.02em!important;margin:0!important;max-width:100%;overflow-x:auto;overflow-y:hidden}
-.choice.correct{border-color:#a8dfbf;background:var(--ok-2);color:var(--ok)}
-.choice.wrong{border-color:#f2b5af;background:var(--bad-2);color:var(--bad);animation:shake .28s ease}
-@keyframes shake{25%{transform:translateX(-5px)}50%{transform:translateX(5px)}75%{transform:translateX(-3px)}}
-.feedback{margin-top:10px;border:0;border-radius:999px;background:transparent;padding:4px 0;height:64px;min-height:64px;overflow:auto;color:var(--muted);display:grid;align-items:center}
-.feedback.hiddenFeedback{visibility:hidden;pointer-events:none}
-.feedbackMain{display:grid;grid-template-columns:24px 1fr;gap:8px;align-items:center}
-.feedbackMain p{margin:0;font-size:13px;font-weight:700;line-height:1.3}
-.feedbackIcon{width:22px;height:22px;border-radius:999px;display:grid;place-items:center;background:var(--card-2);color:var(--accent);font-weight:850;font-size:12px}
-.feedback.good{color:var(--ok)}
-.feedback.bad{color:var(--bad)}
-.feedback.bad .feedbackIcon{background:var(--bad-2);color:var(--bad)}
-.endPanel,.modalPanel{display:none;position:fixed;inset:0;z-index:70;background:rgba(247,248,252,.82);backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px);place-items:center;padding:18px;overflow:auto}
-.endPanel.show,.modalPanel.show{display:grid}
-.endCard,.modalCard{width:min(100%,500px);background:var(--card);border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow);padding:22px;text-align:center}
-.endCard h2,.modalCard h2{margin:0 0 4px;font-size:clamp(26px,5vw,34px);letter-spacing:-.04em}
-.endStair{width:170px;height:80px;margin:2px auto 4px;display:block}
-.endStair path{fill:none;stroke:url(#endGrad);stroke-width:7;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:400;stroke-dashoffset:400;animation:drawStair .55s ease forwards}
-.endStars{font-size:28px;color:var(--warn);letter-spacing:.04em}
-.starIcon{display:inline-block}
-.starIcon.empty{opacity:.35;filter:grayscale(1)}
-.summaryGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin:12px auto 0;width:min(100%,360px)}
-.summaryBox{background:var(--card-2);border:1px solid var(--line);border-radius:16px;padding:10px}
-.summaryBox span{display:block;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.08em;font-weight:800}
-.summaryBox b{font-size:22px;font-variant-numeric:tabular-nums}
-.endNote{color:var(--muted);font-weight:650;line-height:1.38}
-.endBtns,.modalBtns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:12px}
-.aboutCard{text-align:left;width:min(100%,560px)}
-.aboutCard h2{text-align:left;margin-bottom:14px}
-.aboutList{display:grid;gap:11px}
-.aboutList p{margin:0;overflow-wrap:anywhere;color:var(--muted);font-size:14px;font-weight:650;line-height:1.45}
-.aboutList strong{color:var(--ink)}
-.aboutList a{color:var(--accent);font-weight:800;text-decoration-thickness:1.5px;text-underline-offset:2px}
-.iconBtn{appearance:none;display:grid;place-items:center;flex:0 0 auto;width:38px;height:38px;border:1px solid var(--line);border-radius:999px;background:var(--card-2);color:var(--muted);font-size:25px;line-height:1;cursor:pointer}
-.aboutBtn{appearance:none;margin-right:18px;width:42px;height:42px;border:1px solid #bec6ff;border-radius:50%;display:grid;place-items:center;background:var(--card);color:var(--accent);font-size:22px;line-height:1;font-weight:900;cursor:pointer;box-shadow:0 3px 10px rgba(91,101,242,.12);transition:transform .12s ease,border-color .12s ease,box-shadow .12s ease}
-.aboutBtn:hover{transform:translateY(-1px);border-color:var(--accent);box-shadow:0 5px 14px rgba(91,101,242,.16)}
-.errorView{padding:18px}
-.errorCard{border:1px solid #f2b5af;border-radius:20px;background:var(--bad-2);padding:18px}
-.errorCard h2{margin:0;color:var(--bad);font-size:24px;letter-spacing:-.03em}
-.errorCard p{margin:8px 0 0;color:var(--ink);font-weight:650;line-height:1.45}
-.errorActions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
-.builderView{padding:14px;display:grid;gap:12px}
-.builderIntro,.builderCard,.auditCard{border:1px solid var(--line);border-radius:20px;background:var(--card-2);padding:15px 16px}
-.builderEyebrow{display:block;margin-bottom:4px;color:var(--accent);font-size:11px;font-weight:850;letter-spacing:.075em;text-transform:uppercase}
-.builderIntro h2{margin:0;font-size:clamp(21px,4vw,27px);line-height:1.1;letter-spacing:-.03em}
-.builderIntro p{margin:7px 0 0;color:var(--muted);font-size:13.5px;font-weight:650;line-height:1.45}
-.builderGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-.field{display:grid;gap:5px;min-width:0}
-.field.full{grid-column:1/-1}
-.field label{font-size:12px;font-weight:850;color:var(--muted)}
-.field input,.field select,.field textarea{width:100%;border:1px solid var(--line);border-radius:13px;background:var(--card);color:var(--ink);padding:9px 10px;min-height:40px}
-.field textarea{min-height:72px;resize:vertical;line-height:1.35}
-.fieldHint{color:var(--muted);font-size:11.5px;font-weight:650;line-height:1.35}
-.builderMatrixWrap{margin-top:12px;overflow-x:auto;padding-bottom:3px}
-.builderMatrix{display:grid;gap:7px;width:max-content;max-width:100%;margin-inline:auto}
-.builderMatrixHeader,.builderMatrixRow{display:grid;grid-template-columns:34px repeat(var(--cols),minmax(58px,90px));gap:6px;align-items:center;justify-content:center}
-.builderMatrixHeader span{font-size:12px;font-weight:850;color:var(--muted);text-align:center}
-.builderMatrixHeader .augHead{border-left:2px solid var(--ink);padding-left:6px}
-.builderRowLabel{font:800 13px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:var(--muted);text-align:right}
-.builderCell{width:100%;min-width:58px;border:1px solid var(--line);border-radius:11px;background:var(--card);color:var(--ink);padding:8px 6px;text-align:center;font:750 15px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
-.builderCell.constant{border-left:2px solid var(--ink)}
-.auditCard{display:grid;gap:8px}
-.auditTitle{margin:0;font-size:14px;color:var(--accent);font-weight:850;text-transform:uppercase;letter-spacing:.06em}
-.auditGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
-.auditItem{border:1px solid var(--line);border-radius:14px;background:var(--card);padding:9px}
-.auditItem span{display:block;color:var(--muted);font-size:10.5px;font-weight:850;text-transform:uppercase;letter-spacing:.06em}
-.auditItem b{display:block;margin-top:2px;font-size:16px;overflow-wrap:anywhere}
-.auditMessage{margin:0;border-radius:13px;padding:9px 11px;background:var(--ok-2);color:var(--ok);font-size:12.5px;font-weight:700;line-height:1.4}
-.auditMessage.warn{background:var(--warn-2);color:var(--warn)}
-.auditMessage.bad{background:var(--bad-2);color:var(--bad)}
-.builderActions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-.copyStatus{min-height:20px;color:var(--muted);font-size:12px;font-weight:750}
-.builderOutput{width:100%;min-height:88px;border:1px solid var(--line);border-radius:13px;background:var(--card);color:var(--ink);padding:10px;font:650 12px/1.45 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;resize:vertical}
-body.modalOpen{overflow:hidden}
-@media(max-width:600px){
-  body{padding:8px;place-items:start center}.game{border-radius:18px}.top{padding:13px}.logoGlyph,.logoGlyph svg{width:34px;height:34px}h1{font-size:22px}.btn.pinkTop{font-size:12px;padding:7px 10px}.statBar{gap:6px}.stat{font-size:11.5px}.progressPanel{padding:8px 10px}.play{padding:10px}.taskPanel{padding:10px 11px}.matrixCard{padding:9px 8px}.matrixStage{grid-template-columns:28px minmax(0,1fr);gap:5px}.matrixShell{--coefw:52px!important;--constw:60px!important}.matrix td{font-size:16px;padding:0 4px}.rowLabel{font-size:13px}.choices{grid-template-columns:1fr}.choiceText[data-tex]{font-size:15.5px}.summaryGrid{grid-template-columns:repeat(2,1fr)}.aboutBtn{margin-right:12px}.builderGrid{grid-template-columns:1fr}.field.full{grid-column:auto}.auditGrid{grid-template-columns:repeat(2,minmax(0,1fr))}.builderView{padding:10px}.builderIntro,.builderCard,.auditCard{padding:13px 12px}.endPanel,.modalPanel{padding:8px}.endCard,.modalCard{padding:18px 14px;border-radius:20px}
-}
-@media(max-width:370px){h1{font-size:19px}.logoGlyph,.logoGlyph svg{width:30px;height:30px}.btn.pinkTop{padding-inline:8px}.matrixStage{grid-template-columns:24px minmax(0,1fr)}.auditGrid{grid-template-columns:1fr}.builderMatrixHeader,.builderMatrixRow{grid-template-columns:28px repeat(var(--cols),54px)}}
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.logoGlyph path,.stairSvg path,.endStair path{stroke-dashoffset:0!important}}
-@media(prefers-color-scheme:dark){
-  :root{color-scheme:dark;--bg:#0f1420;--card:#151b2a;--card-2:#101827;--ink:#edf3ff;--muted:#a6b1c5;--line:#2b3548;--accent:#8b8dff;--accent-b:#2dd4bf;--accent-grad:linear-gradient(135deg,#8b8dff,#2dd4bf);--pink:#321a29;--pink-line:#714059;--pink-ink:#ffd2e5;--ok:#7bd99f;--ok-2:#10281d;--bad:#ff8d82;--bad-2:#311715;--warn:#ffd36a;--warn-2:#2a2111;--zero:#1e2634;--shadow:0 18px 48px rgba(0,0,0,.35)}
-  .top{background:linear-gradient(180deg,rgba(21,27,42,.98),rgba(16,24,39,.96))}.btn.primary{color:#07101d}.btn.pinkTop:hover{background:#3e2032}.choiceKey{background:#111a2b}.endPanel,.modalPanel{background:rgba(15,20,32,.82)}
-}
-</style>
-<script>
-window.MathJax={
-  tex:{inlineMath:[['\\(','\\)']],processEscapes:true},
-  options:{skipHtmlTags:['script','noscript','style','textarea','pre','code']},
-  startup:{typeset:false,ready:()=>{MathJax.startup.defaultReady();MathJax.startup.promise.then(()=>window.dispatchEvent(new Event('mathjax-ready')));}}
-};
-</script>
+<style>:root{color-scheme:light;--z0:#f7f8fc;--z1:#fff;--z2:#f9fbff;--z3:#172033;--z4:#647086;--z5:#dce2ee;--z6:#5b65f2;--z7:#14b8a6;--z8:linear-gradient(135deg,#5b65f2,#14b8a6);--z9:#ffeaf3;--za:#f5b8ce;--zb:#a33362;--zc:#18794e;--zd:#e9f8ef;--ze:#b42318;--zf:#fff0ee;--zg:#925d00;--zh:#fff6df;--zi:#eef2f7;--zj:0 22px 60px rgba(22,34,51,.12);--zk:62px;--zl:70px;--zm:48px}*{box-sizing:border-box}body,html{min-height:100%}body{margin:0;min-height:100vh;padding:18px;display:grid;place-items:center;color:var(--z3);background:radial-gradient(circle at 50% 0,rgba(91,101,242,.11),transparent 34rem),linear-gradient(rgba(24,32,51,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(24,32,51,.035) 1px,transparent 1px),var(--z0);background-size:auto,24px 24px,24px 24px,auto;font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;align-content:start}button,input,select,textarea{font:inherit}button{touch-action:manipulation}.hidden,[hidden]{display:none!important}.q1y{width:min(100%,760px);display:grid;gap:10px;justify-items:end}.game{width:100%;background:var(--z1);border:1px solid var(--z5);border-radius:24px;box-shadow:var(--zj);overflow:hidden;position:relative}.top{padding:16px 18px 14px;border-bottom:1px solid var(--z5);background:linear-gradient(180deg,rgba(255,255,255,.96),rgba(249,251,255,.94))}.q1z{display:flex;align-items:center;justify-content:space-between;gap:12px}h1{display:flex;align-items:center;gap:10px;margin:0;font-size:clamp(24px,4.2vw,32px);line-height:1;font-weight:800;letter-spacing:-.04em;min-width:0}h1>span:last-child{min-width:0;overflow-wrap:anywhere}.q20{width:44px;height:44px;display:inline-grid;place-items:center;flex:0 0 auto}.q20 svg{width:44px;height:44px;display:block}.q20 path{fill:none;stroke:url(#q3);stroke-width:9;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:140;stroke-dashoffset:140;animation:.6s .15s forwards drawStair}@keyframes drawStair{to{stroke-dashoffset:0}}.q6{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.stat{display:inline-flex;align-items:center;min-height:28px;padding:5px 10px;border-radius:999px;background:var(--z2);border:1px solid var(--z5);color:var(--z4);font-size:12px;font-weight:750;font-variant-numeric:tabular-nums}.btn{appearance:none;border:1px solid var(--z5);border-radius:999px;background:var(--z1);color:var(--z3);padding:8px 13px;font-weight:750;cursor:pointer;transition:transform .12s,box-shadow .12s,background .12s,border-color .12s}.btn:hover{transform:translateY(-1px);box-shadow:0 8px 16px rgba(22,34,51,.08)}.btn:active{transform:translateY(0);box-shadow:none}.btn.primary{border:0;background:var(--z8);box-shadow:0 8px 18px rgba(91,101,242,.24)}.btn.q21{background:var(--z9);border-color:var(--za);color:var(--zb);box-shadow:none;min-height:34px;padding:7px 12px;font-size:13px;white-space:nowrap}.btn.q21:hover{background:#ffe1ee;box-shadow:0 7px 16px rgba(163,51,98,.12)}.btn:focus-visible,.choice:focus-visible,.q22:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:rgba(91,101,242,.35) solid 3px;outline-offset:2px}.q23{border-bottom:1px solid var(--z5);background:var(--z1)}.qu{--zn:0%;position:relative;display:flex;gap:6px;justify-content:center;flex-wrap:wrap;padding:3px 0 5px}.qu::before{content:"";position:absolute;left:0;right:0;top:50%;height:2px;background:var(--z5);transform:translateY(-50%)}.qu::after{content:"";position:absolute;left:0;top:50%;height:2px;width:var(--zn);background:var(--z8);transform:translateY(-50%);transition:width .25s}.q24{position:relative;z-index:1;display:inline-flex;align-items:center;gap:5px;padding:5px 9px;border-radius:999px;border:1px solid var(--z5);background:var(--z1);color:var(--z4);font-size:12px;font-weight:800}.q24 .num{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;border-radius:999px;background:var(--z2);font-size:10px;color:var(--z4)}.q24.now{border-color:#bec6ff;color:var(--z6);background:#f3f5ff}.q24.now .num{background:var(--z6);color:#fff}.q24.done{border-color:#bde7ce;color:var(--zc);background:var(--zd)}.q24.done .num{background:var(--zc);color:#fff}.qw{font-size:12px;font-weight:850;color:var(--z6);text-transform:uppercase;letter-spacing:.065em;margin-bottom:4px}.qx{margin:0;font-size:clamp(18px,3.8vw,24px);line-height:1.15;letter-spacing:-.025em}.qy{margin:5px 0 0;color:var(--z4);font-size:11.5px;font-weight:650;line-height:1.3}.q25{background:var(--z1)}.q13{grid-template-columns:32px minmax(0,1fr);gap:8px;align-items:center;justify-content:center}.q15{display:grid;grid-template-rows:repeat(var(--rows,3),var(--zm));align-items:center}.q26{font:800 14px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;text-align:right;color:var(--z4)}.q27{min-width:0;overflow-x:auto}.q16{position:relative;display:inline-block}.q16::after,.q16::before{content:"";position:absolute;border-top:2px solid var(--z3);border-bottom:2px solid var(--z3);pointer-events:none}.q16::before{left:0;border-left:2px solid var(--z3)}.q16::after{right:0;border-right:2px solid var(--z3)}.q17{position:absolute;top:-5px;bottom:-5px;left:0;width:2px;background:var(--z3);border-radius:999px;z-index:4;pointer-events:none}.q18{position:absolute;top:0;left:11px;z-index:3;pointer-events:none;overflow:visible}.q18 path{fill:none;stroke:url(#q1w);stroke-width:5;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 7px rgba(20,184,166,.22));stroke-dasharray:1000;stroke-dashoffset:1000;animation:.42s forwards drawStair}.q18 polygon{fill:rgba(91,101,242,.055)}table.matrix{border-collapse:separate;border-spacing:0 4px;table-layout:fixed;width:auto;font:800 18px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;position:relative;z-index:2}table.matrix col.coef{width:var(--zk)}table.matrix col.q28{width:var(--zl)}.matrix td{text-align:center;position:relative;white-space:nowrap}.matrix td.q29{background:rgba(91,101,242,.055)}.matrix td.focus{background:#fff5cf;box-shadow:inset 0 0 0 2px #f0c861}.matrix td.q2a{background:var(--zd);box-shadow:inset 0 0 0 1px #c7ebd4;color:var(--zc)}.matrix td.q2b{background:var(--zi)}@keyframes flash{0%,100%{transform:scale(1)}38%{transform:scale(1.045);background:#e5fbff}}.matrix tr.q2c{animation:.25s swapDown}.matrix tr.q2d{animation:.25s swapUp}@keyframes swapDown{from{transform:translateY(calc(-1*var(--swapdist)))}to{transform:translateY(0)}}@keyframes swapUp{from{transform:translateY(var(--swapdist))}to{transform:translateY(0)}}.q2e{background:var(--z2)}.q1a{font-size:13px;font-weight:850;color:var(--z3);margin-bottom:4px}.equations{color:var(--z3)}.choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.choices.q2f{grid-template-columns:minmax(0,1fr)}.choice{appearance:none;border:1.5px solid var(--z5);background:var(--z1);text-align:left;color:var(--z3);cursor:pointer;display:grid;align-items:center;font-size:15px;font-weight:760;line-height:1.25}.choice:hover{border-color:#c5cce0}.choice:disabled{cursor:default}.q2g{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:999px;background:var(--z2);border:1px solid var(--z5);color:var(--z4);font-size:12px;font-weight:850}.q2h{min-width:0;white-space:pre-line;overflow-wrap:anywhere}.q2h[data-tex]{white-space:normal;font-size:17px}.choice .MathJax,.choice .mjx-chtml,.q2h mjx-container{font-size:1.02em!important;margin:0!important;max-width:100%;overflow-x:auto;overflow-y:hidden}.choice.correct{border-color:#a8dfbf;background:var(--zd);color:var(--zc)}.choice.wrong{border-color:#f2b5af;background:var(--zf);color:var(--ze)}@keyframes shake{25%{transform:translateX(-5px)}50%{transform:translateX(5px)}75%{transform:translateX(-3px)}}.feedback{margin-top:10px}.feedback.q2i{visibility:hidden;pointer-events:none}.q2j p{margin:0;font-size:13px;font-weight:700;line-height:1.3}.q1b{border-radius:999px;display:grid;place-items:center;font-weight:850}.feedback.bad .q1b{background:var(--zf);color:var(--ze)}.q1e,.q2k{display:none;inset:0;z-index:70;background:rgba(247,248,252,.82);backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px);place-items:center}.q1e.show,.q2k.show{display:grid}.q2l,.q2m{width:min(100%,500px);background:var(--z1);border:1px solid var(--z5);border-radius:24px;box-shadow:var(--zj);padding:22px;text-align:center}.q2l h2,.q2m h2{margin:0 0 4px;font-size:clamp(26px,5vw,34px);letter-spacing:-.04em}.q2n{width:170px;height:80px;margin:2px auto 4px;display:block}.q2n path{fill:none;stroke:url(#q1x);stroke-width:7;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:400;stroke-dashoffset:400;animation:.55s forwards drawStair}.q1h{font-size:28px;color:var(--zg);letter-spacing:.04em}.q2o{display:inline-block}.q2o.empty{opacity:.35;filter:grayscale(1)}.q2p{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin:12px auto 0;width:min(100%,360px)}.q2q{background:var(--z2);border:1px solid var(--z5);border-radius:16px;padding:10px}.q2q span{display:block;color:var(--z4);font-size:11px;text-transform:uppercase;letter-spacing:.08em;font-weight:800}.q2q b{font-size:22px;font-variant-numeric:tabular-nums}.q1k{color:var(--z4);font-weight:650;line-height:1.38}.q2r,.q2s{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:12px}.q2t{text-align:left;width:min(100%,560px)}.q2t h2{text-align:left;margin-bottom:14px}.q2u{display:grid;gap:11px}.q2u p{margin:0;overflow-wrap:anywhere;color:var(--z4);font-size:14px;font-weight:650;line-height:1.45}.q2u strong{color:var(--z3)}.q2u a{color:var(--z6);font-weight:800;text-decoration-thickness:1.5px;text-underline-offset:2px}.q22{appearance:none;display:grid;place-items:center;flex:0 0 auto;width:38px;height:38px;border:1px solid var(--z5);border-radius:999px;background:var(--z2);color:var(--z4);font-size:25px;line-height:1;cursor:pointer}.q2{appearance:none;margin-right:18px;width:42px;height:42px;border:1px solid #bec6ff;border-radius:50%;display:grid;place-items:center;background:var(--z1);color:var(--z6);font-size:22px;line-height:1;font-weight:900;cursor:pointer;box-shadow:0 3px 10px rgba(91,101,242,.12);transition:transform .12s,border-color .12s,box-shadow .12s}.q2:hover{transform:translateY(-1px);border-color:var(--z6);box-shadow:0 5px 14px rgba(91,101,242,.16)}.qb{padding:18px}.q2v{border:1px solid #f2b5af;border-radius:20px;background:var(--zf);padding:18px}.q2v h2{margin:0;color:var(--ze);font-size:24px;letter-spacing:-.03em}.q2v p{margin:8px 0 0;color:var(--z3);font-weight:650;line-height:1.45}.q2w{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.qe{padding:14px;display:grid;gap:12px}.q2x,.q2y,.q2z{border:1px solid var(--z5);border-radius:20px;background:var(--z2);padding:15px 16px}.q30{display:block;margin-bottom:4px;color:var(--z6);font-size:11px;font-weight:850;letter-spacing:.075em;text-transform:uppercase}.q2x h2{margin:0;font-size:clamp(21px,4vw,27px);line-height:1.1;letter-spacing:-.03em}.q2x p{margin:7px 0 0;color:var(--z4);font-size:13.5px;font-weight:650;line-height:1.45}.q31{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.field{display:grid;gap:5px;min-width:0}.field.full{grid-column:1/-1}.field label{font-size:12px;font-weight:850;color:var(--z4)}.field input,.field select,.field textarea{width:100%;border:1px solid var(--z5);border-radius:13px;background:var(--z1);color:var(--z3);padding:9px 10px}.field textarea{min-height:72px;resize:vertical;line-height:1.35}.q32{color:var(--z4);font-size:11.5px;font-weight:650;line-height:1.35}.q33{margin-top:12px;overflow-x:auto;padding-bottom:3px;overscroll-behavior-x:contain}.ql{display:grid;gap:7px;width:max-content;max-width:100%;margin-inline:auto}.q34,.q35{display:grid;grid-template-columns:34px repeat(var(--cols),minmax(58px,90px));gap:6px;align-items:center;justify-content:center}.q34 span{font-size:12px;font-weight:850;color:var(--z4);text-align:center}.q34 .q36{border-left:2px solid var(--z3);padding-left:6px}.q37{font:800 13px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:var(--z4);text-align:right}.builderCell{width:100%;min-width:58px;border:1px solid var(--z5);border-radius:11px;background:var(--z1);color:var(--z3);padding:8px 6px;text-align:center}.builderCell.constant{border-left:2px solid var(--z3)}.q2z{display:grid;gap:8px}.q38{margin:0;font-size:14px;color:var(--z6);font-weight:850;text-transform:uppercase;letter-spacing:.06em}.qm{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.q39{border:1px solid var(--z5);border-radius:14px;background:var(--z1);padding:9px}.q39 span{display:block;color:var(--z4);font-size:10.5px;font-weight:850;text-transform:uppercase;letter-spacing:.06em}.q39 b{display:block;margin-top:2px;font-size:16px;overflow-wrap:anywhere}.qn{margin:0;border-radius:13px;padding:9px 11px;background:var(--zd);color:var(--zc);font-size:12.5px;font-weight:700;line-height:1.4}.qn.warn{background:var(--zh);color:var(--zg)}.qn.bad{background:var(--zf);color:var(--ze)}.q3a{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.qr{min-height:20px;color:var(--z4);font-size:12px;font-weight:750}.qs{width:100%;border:1px solid var(--z5);border-radius:13px;background:var(--z1);color:var(--z3);padding:10px;resize:vertical}body.q3b{overflow:hidden}@media(max-width:600px){body{padding:8px;place-items:start center}.game{border-radius:18px}.top{padding:13px}.q20,.q20 svg{width:34px;height:34px}h1{font-size:22px}.btn.q21{font-size:12px;padding:7px 10px}.q6{gap:6px}.stat{font-size:11.5px}.q13{grid-template-columns:28px minmax(0,1fr);gap:5px}.q16{--zk:52px!important;--zl:60px!important}.matrix td{font-size:16px}.choices{grid-template-columns:1fr}.q2h[data-tex]{font-size:15.5px}.q2p{grid-template-columns:repeat(2,1fr)}.q2{margin-right:12px}.q31{grid-template-columns:1fr}.field.full{grid-column:auto}.qm{grid-template-columns:repeat(2,minmax(0,1fr))}.qe{padding:10px}.q2x,.q2y,.q2z{padding:13px 12px}.q1e,.q2k{padding:8px}.q2l,.q2m{padding:18px 14px;border-radius:20px}}@media(max-width:370px){h1{font-size:19px}.q20,.q20 svg{width:30px;height:30px}.btn.q21{padding-inline:8px}.q13{grid-template-columns:24px minmax(0,1fr)}.qm{grid-template-columns:1fr}.q34,.q35{grid-template-columns:28px repeat(var(--cols),54px)}}@media(prefers-color-scheme:dark){:root{color-scheme:dark;--z0:#0f1420;--z1:#151b2a;--z2:#101827;--z3:#edf3ff;--z4:#a6b1c5;--z5:#2b3548;--z6:#8b8dff;--z7:#2dd4bf;--z8:linear-gradient(135deg,#8b8dff,#2dd4bf);--z9:#321a29;--za:#714059;--zb:#ffd2e5;--zc:#7bd99f;--zd:#10281d;--ze:#ff8d82;--zf:#311715;--zg:#ffd36a;--zh:#2a2111;--zi:#1e2634;--zj:0 18px 48px rgba(0,0,0,.35)}.top{background:linear-gradient(180deg,rgba(21,27,42,.98),rgba(16,24,39,.96))}.btn.primary{color:#07101d}.btn.q21:hover{background:#3e2032}.q2g{background:#111a2b}.q1e,.q2k{background:rgba(15,20,32,.82)}}.q1a var{font-family:serif;font-weight:400}.q3c{display:block;max-width:100%;overflow-x:auto;overflow-y:hidden;padding:2px 0}.q3d{display:flex;flex-wrap:wrap;align-items:center;gap:8px;white-space:normal}.q3e{display:inline-flex;align-items:center;gap:5px;flex-shrink:0;white-space:nowrap}.q3f{display:inline-grid;position:relative;flex-shrink:0;border-left:2px solid;border-right:2px solid;padding:4px 8px;text-align:center;gap:2px}.q3f>span{white-space:nowrap;line-height:1.3}.q3f:after,.q3f:before{content:"";position:absolute;top:0;bottom:0;width:5px;border-top:2px solid;border-bottom:2px solid}.q3f:before{left:0}.q3f:after{right:0}.qu{display:grid;grid-template-columns:repeat(var(--stages,3),minmax(0,1fr))}.q24{justify-content:center;white-space:normal;text-align:center;min-width:0}html:has(body.q3g){scrollbar-gutter:stable;overflow-anchor:none}body.q3g{place-items:start center;align-content:start;min-height:100vh}.q3g .play{padding:12px;min-width:0}.q3g .top .q1z{align-items:center;min-width:0}.q3g .top h1{min-width:0;white-space:normal;line-height:1.12;overflow-wrap:anywhere}.q3g .top .btn{min-height:44px;flex-shrink:0;white-space:nowrap}.q3g .q6{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));margin-top:6px;gap:4px 10px}.q3g .stat{border:0;background:0 0;padding:0;min-height:20px;min-width:0;line-height:1.3;overflow-wrap:anywhere}.q3g .q23{padding:4px 10px}.q3g .qu{align-items:stretch}.q3g .q24{min-height:34px;line-height:1.2}.q3g .qv{padding:9px 10px;border:0;background:var(--z2);border-radius:12px;overflow-wrap:anywhere}.q3g .qw{line-height:1.25}.q3g .qy{display:none!important}.q3g .q25{margin-top:6px;padding:0;border:0;border-radius:0;min-width:0}.q3h{display:grid;gap:3px;margin-bottom:4px}.q3i{display:none;grid-template-columns:1fr 1fr;gap:6px}.q3i button{min-height:44px;border:1px solid var(--z5);border-radius:10px;background:var(--z1);color:var(--z4);font-weight:800;cursor:pointer}.q3i button[aria-pressed=true]{background:var(--z2);color:var(--z6);border-color:var(--z6)}#q11{height:1.3em;line-height:1.3;font-size:11px;color:var(--z4);visibility:hidden}#q12{min-width:0}.q3g .q13{display:block;padding:0;min-width:0}.q3g .q27{display:flex;justify-content:start;align-items:start;overflow:auto;padding:5px 0 9px;max-width:100%}.q3g .q3j{display:grid;grid-template-columns:1.5em auto;column-gap:5px;row-gap:7px;flex:none;margin-inline:auto;font-size:14px}#q14{grid-column:2;display:grid;font-size:13px;font-weight:750;color:var(--z4);text-align:center;white-space:nowrap;line-height:1.3}.q3g .q15{grid-column:1;grid-row:2;align-content:start;gap:4px}.q3g .q26{font-size:13px;display:grid;align-items:center;justify-items:end;height:100%}.q3g .q16{grid-column:2;grid-row:2;flex:none;--zm:inherit;--zk:auto;--zl:auto;padding:0 9px}.q3g .q16::after,.q3g .q16::before{top:0;bottom:0;width:7px;border-radius:0}.q3g .q16 .q18{left:9px}.q3g .q16 .q17{top:0;bottom:0}.q3g .matrix{table-layout:auto;width:auto;border-spacing:0 4px;font-size:18px}.q3g .matrix td{width:auto;min-width:0;height:var(--zm);padding:0 6px;border-radius:8px;transition:none}.q3g .matrix td.constant{width:auto;min-width:0;padding-left:10px}.q3g .matrix td.q2b{color:#586577}.q3g .matrix tr.flash td{animation:.46s workingFlash}@keyframes workingFlash{50%{background:#dceff2}}.q3g .q2e{border:0;border-radius:10px;min-width:0;max-width:100%;margin-top:6px;padding:7px 9px;overflow-x:scroll;overflow-y:hidden}.q3g .q1a{white-space:normal;overflow-wrap:anywhere;line-height:1.3;min-height:1.3em}.q3g .equations{width:max-content;min-width:100%;font-size:14px;line-height:1.65}.q3g .q3k{white-space:pre;height:1.65em}.q3g .q3l{margin-top:4px}.q3g .choices{gap:7px;min-width:0}.q3g .choice{padding:8px 10px;min-height:48px;border-radius:12px;grid-template-columns:22px minmax(0,1fr);gap:7px;transform:none;transition:border-color .12s,background .12s}.q3g .choice.wrong,.q3g .choice:active,.q3g .choice:hover{transform:none;animation:none;box-shadow:none}.q3g .q2h{overflow-x:auto;overflow-y:hidden}.q3g .q3m .q2h{white-space:nowrap}.q3g .q2h mjx-container{overflow:visible;max-width:none}.q3g .feedback{visibility:visible;opacity:1;margin:0 0 7px;padding:5px 0;border:0;border-top:1px solid var(--z5);border-radius:0;background:0 0;display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:8px;align-items:center;height:auto;min-height:54px;overflow:visible;color:var(--z4)}.q3g .q2j{display:grid;grid-template-columns:16px minmax(0,1fr);gap:6px;align-items:center;min-width:0}.q3g .q1b{width:16px;height:16px;font-size:11px;background:0 0;color:inherit;line-height:16px}.q3g #q1c{margin:0;font-size:14px;line-height:19px;min-height:38px;display:flex;align-items:center;overflow-wrap:anywhere;font-weight:650}#q1d{min-height:44px;font-size:12px;min-width:96px;padding:6px 8px;transform:none;box-shadow:none}.q3g .feedback.q3n{grid-template-columns:1fr;row-gap:4px}.q3g .q3n #q1d{justify-self:end}.q3g .feedback.bad{color:var(--ze)}.q3g .feedback.good{color:var(--zc)}#q1r{position:fixed;inset:0;margin:auto;width:min(560px,calc(100% - 24px));max-height:calc(100dvh - 24px);padding:16px;border:1px solid var(--z5);border-radius:18px;background:var(--z1);color:var(--z3);overflow:hidden}#q1r[open]{display:flex;flex-direction:column;gap:12px}#q1r::backdrop{background:rgba(15,20,32,.6)}.q3o{display:flex;align-items:center;justify-content:space-between;gap:12px}.q3o h2{font-size:21px;line-height:1.2;margin:0;min-width:0;overflow-wrap:anywhere}.q3o button{min-height:44px;flex:none}.q3p{overflow:auto;line-height:1.5;overflow-wrap:anywhere;min-height:0;overscroll-behavior:contain}.q3p p{margin:0 0 12px;white-space:pre-wrap}#q1u{font-weight:750}#q1r button:focus-visible,.q3g :is(button,[tabindex]):focus-visible{outline:3px solid var(--z6);outline-offset:2px}@media(max-width:600px){body.q3g{padding:8px}.q3g .q1y{gap:6px}.q3g .top{padding:9px 10px}.q3g .top h1{font-size:22px;gap:7px}.q3g .top .q20,.q3g .top .q20 svg{width:30px;height:30px}.q3g .play{padding:9px 10px 8px}.q3g .qx{font-size:18px;line-height:1.2}.q3g .qw{font-size:11px}.q3g .stat{font-size:11.5px}.q3g .q24{font-size:11.5px;padding:4px 6px;min-height:34px}.q3i{display:grid}.q3g .matrix{font-size:16px}.q3g .q16{--zk:auto!important;--zl:auto!important}.q3g .q27{padding-top:4px}.q3g .choices{grid-template-columns:1fr}.q3g .choice{font-size:15px}.q3g .q2h[data-tex]{font-size:15.5px}.q3g .q2e{margin-top:0}.q3g .equations{font-size:14px}}@media(max-width:360px){.q3g .top .q1z{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px}.q3g .top h1{font-size:18px;gap:5px}.q3g .top .q20,.q3g .top .q20 svg{width:24px;height:24px}.q3g .top .q1z>.btn{justify-self:end}.q3g .top .btn{font-size:12px}}#q14 var,.q3f var{font-family:serif;font-size:16px;font-weight:400}:where(button,a,input,select,textarea,[tabindex]):focus-visible{outline:3px solid var(--z6);outline-offset:2px}.btn,.q2,.q22,.q3q{min-height:44px;min-width:44px}.btn:hover{transform:none}.btn.primary{background:#5059ce;color:#fff}.top h1{white-space:normal;overflow-wrap:anywhere;min-width:0}.q1e,.q2k,.q3r,.q3s{position:fixed;inset:0;padding:12px;overflow:hidden}.q2l,.q2m,.q3t,.q3u{max-height:calc(100dvh - 24px);display:flex;flex-direction:column;overflow:hidden;min-height:0}.q2l>*,.q2m>*,.q3t>*,.q3u>*{flex-shrink:0}#q3w,#q3x,.q2u,.q3v,.q3y{overflow:auto;min-height:0;flex-shrink:1;overscroll-behavior:contain}.q3v{overflow-wrap:anywhere}.q2r,.q2s,.q2u,.q3z{padding:3px}.q3o{min-width:0}@media(prefers-color-scheme:dark){.q3g .matrix td.focus{background:#493b13;color:#fff4cc;box-shadow:inset 0 0 0 2px #b99b45}.q3g .matrix td.q2b{color:#a6b1c5}.q3g .matrix td.q29{background:#242b47}.q3g .matrix td.focus.q29{background:#493b13}.q3g .matrix td.q2a{box-shadow:inset 0 0 0 1px #356b49}.q3g .q24.now{background:#242b47}.q3g .choice.wrong{color:#ffb0a7;background:#311715}.q3g .choice.correct{color:#7bd99f;background:#10281d}@keyframes workingFlash{50%{background:#21454b;color:#edf3ff}}.btn.primary{background:#4851b8}.choice.wrong{background:#311715;color:#ffb0a7}.choice.correct{background:#10281d;color:#7bd99f}}@media(prefers-reduced-motion:reduce){.q3g .matrix tr,.q3g .matrix tr.flash td{animation:none}.q3g .q18 path{animation:none;stroke-dashoffset:0}*,::after,::before{animation:none!important;transition:none!important;scroll-behavior:auto!important}.q18 path,.q20 path,.q2n path{stroke-dashoffset:0!important}}@media(prefers-color-scheme:light){:root{--z6:#4f59d7}}.qe{grid-template-columns:minmax(0,1fr)}.ql{max-width:none}.q34,.q35{justify-content:start;grid-template-columns:28px repeat(var(--cols),64px)}.builderCell,.field input,.field select,.qs{font-size:16px;min-height:44px}.q2v p{overflow-wrap:anywhere}.q3a .btn{white-space:normal}.q34 span{overflow-wrap:anywhere}.q3g #feedback:not(.good):not(.bad) .q1b{display:none}.q3g #feedback:not(.good):not(.bad) .q2j{grid-template-columns:minmax(0,1fr)}.btn.q21{background:var(--z2);border-color:var(--z5);color:var(--z4)}.btn.q21:hover{background:var(--z1);border-color:var(--z6);color:var(--z6)}</style>
+<script>window.MathJax={tex:{inlineMath:[["\\(","\\)"]],processEscapes:!0},options:{skipHtmlTags:["script","noscript","style","textarea","pre","code"]},startup:{typeset:!1,ready:()=>{MathJax.startup.defaultReady(),MathJax.startup.promise.then(()=>window.dispatchEvent(new Event("mathjax-ready")))}}};</script>
 <script defer id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
 <style id="all-games-navigation-styles">
-.appShell{gap:12px}
-#allGamesNav{--nav-ink:#4d51c9;--nav-border:#b3b8f4;display:flex;align-items:center;justify-content:space-between;gap:12px;min-width:0;width:100%;margin:0;padding:0;background:transparent}
-#allGamesLink{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-width:126px;height:44px;padding:0 15px;margin:0;border-radius:15px;font-family:inherit;font-size:14px;font-weight:750;line-height:1;text-decoration:none;white-space:nowrap;cursor:pointer}
-#allGamesLink svg{display:block;flex:none;width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-#allGamesNav > button{width:44px;min-width:44px;height:44px;padding:0;margin:0;flex:0 0 44px;transform:none}
-#allGamesLink,#allGamesNav > button{min-height:44px;box-sizing:border-box;background:var(--card);color:var(--nav-ink);border:1px solid var(--nav-border);box-shadow:0 2px 5px #5b65f218;touch-action:manipulation}
-#allGamesLink:hover,#allGamesNav > button:hover{filter:brightness(.96);transform:none;text-decoration:none}
-#allGamesLink:active,#allGamesNav > button:active{transform:translateY(1px)}
-#allGamesLink:focus-visible,#allGamesNav > button:focus-visible{outline:3px solid var(--nav-ink);outline-offset:3px}
-@media(prefers-color-scheme:dark){#allGamesNav{--nav-ink:#b5b9ff;--nav-border:#626bc2}}
-@media print{#allGamesNav{display:none!important}}
+.q1y{gap:12px}
+#q0{--nav-ink:#4d51c9;--nav-border:#b3b8f4;display:flex;align-items:center;justify-content:space-between;gap:12px;min-width:0;width:100%;margin:0;padding:0;background:transparent}
+#q1{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-width:126px;height:44px;padding:0 15px;margin:0;border-radius:15px;font-family:inherit;font-size:14px;font-weight:750;line-height:1;text-decoration:none;white-space:nowrap;cursor:pointer}
+#q1 svg{display:block;flex:none;width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+#q0 > button{width:44px;min-width:44px;height:44px;padding:0;margin:0;flex:0 0 44px;transform:none}
+#q1,#q0 > button{min-height:44px;box-sizing:border-box;background:var(--z1);color:var(--nav-ink);border:1px solid var(--nav-border);box-shadow:0 2px 5px #5b65f218;touch-action:manipulation}
+#q1:hover,#q0 > button:hover{filter:brightness(.96);transform:none;text-decoration:none}
+#q1:active,#q0 > button:active{transform:translateY(1px)}
+#q1:focus-visible,#q0 > button:focus-visible{outline:3px solid var(--nav-ink);outline-offset:3px}
+@media(prefers-color-scheme:dark){#q0{--nav-ink:#b5b9ff;--nav-border:#626bc2}}
+@media print{#q0{display:none!important}}
 </style>
 </head>
 <body>
-<div class="appShell">
-<nav id="allGamesNav" aria-label="Games collection">
-  <a id="allGamesLink" href="https://math345-games.github.io/" aria-label="All games"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 12H5m6-6-6 6 6 6"/></svg><span>All games</span></a>
-  <button class="aboutBtn" id="aboutBtn" type="button" aria-label="About The Elimination Scratchpad" aria-haspopup="dialog">?</button>
+<div class="q1y">
+<nav id="q0" aria-label="Games collection">
+<a id="q1" href="https://math345-games.github.io/" aria-label="All games"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 12H5m6-6-6 6 6 6"/></svg><span>All games</span></a>
+<button class="q2" id="q2" type="button" aria-label="About The Elimination Scratchpad" aria-haspopup="dialog">?</button>
 </nav>
 <main class="game" id="game">
-  <header class="top">
-    <div class="titleRow">
-      <h1><span class="logoGlyph" aria-hidden="true"><svg viewBox="0 0 64 64"><defs><linearGradient id="logoGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#5b65f2"/><stop offset="100%" stop-color="#14b8a6"/></linearGradient></defs><path d="M8 12 h16 v13 h16 v13 h16 v14"/></svg></span><span id="pageTitle">The Elimination Scratchpad</span></h1>
-      <button class="btn pinkTop" id="backBtn" type="button">Back to notes</button>
-    </div>
-    <div class="statBar" id="statBar" aria-label="Activity information">
-      <span class="stat" id="padStat">Instructor link builder</span>
-      <span class="stat" id="goalStat">1–4 equations · 1–4 variables</span>
-      <span class="stat" id="questionStat">URL + PreTeXt</span>
-      <span class="stat" id="missStat">exact fractions</span>
-    </div>
-  </header>
+<header class="top">
+<div class="q1z">
+<h1><span class="q20" aria-hidden="true"><svg viewBox="0 0 64 64"><defs><linearGradient id="q3" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#5b65f2"/><stop offset="100%" stop-color="#14b8a6"/></linearGradient></defs><path d="M8 12 h16 v13 h16 v13 h16 v14"/></svg></span><span id="q4">The Elimination Scratchpad</span></h1>
+<button class="btn q21" id="q5" type="button">Back to notes</button>
+</div>
+<div class="q6" id="q6" aria-label="Activity information">
+<span class="stat" id="q7">Instructor link builder</span>
+<span class="stat" id="q8">1–4 equations · 1–4 variables</span>
+<span class="stat" id="q9">URL + PreTeXt</span>
+<span class="stat" id="qa">exact fractions</span>
+</div>
+</header>
 
-  <section class="errorView" id="errorView" hidden>
-    <div class="errorCard">
-      <h2>Activity link could not be loaded</h2>
-      <p id="errorText"></p>
-      <div class="errorActions">
-        <button class="btn primary" id="errorBuilderBtn" type="button">Open link builder</button>
-      </div>
-    </div>
-  </section>
+<section class="qb" id="qb" hidden>
+<div class="q2v">
+<h2>Activity link could not be loaded</h2>
+<p id="qc"></p>
+<div class="q2w">
+<button class="btn primary" id="qd" type="button">Open link builder</button>
+</div>
+</div>
+</section>
 
-  <section class="builderView" id="builderView" hidden aria-label="Instructor link builder">
-    <section class="builderIntro">
-      <span class="builderEyebrow">Instructor tool</span>
-      <h2>Build a textbook-activity link</h2>
-      <p>Opening the Scratchpad without activity options brings you here. Enter an augmented matrix with at most four equations and four variables, or use Codex to generate the URL options from a textbook screenshot or source. The selected goal supplies the multiple-choice sequence automatically.</p>
-    </section>
+<section class="qe" id="qe" hidden aria-label="Instructor link builder">
+<section class="q2x">
+<span class="q30">Instructor tool</span>
+<h2>Build a textbook-activity link</h2>
+<p>Opening the Scratchpad without activity options brings you here. Enter an augmented matrix with at most four equations and four variables, or use Codex to generate the URL options from a textbook screenshot or source. The selected goal supplies the multiple-choice sequence automatically.</p>
+</section>
 
-    <section class="builderCard">
-      <div class="builderGrid">
-        <div class="field">
-          <label for="builderActivity">Activity number</label>
-          <input id="builderActivity" value="" placeholder="e.g. 4.2.1" autocomplete="off" />
-        </div>
-        <div class="field">
-          <label for="builderGoal">Goal</label>
-          <select id="builderGoal">
-            <option value="ref">Reach row echelon form</option>
-            <option value="classify" selected>Classify the system</option>
-            <option value="solve">Solve the system</option>
-            <option value="nullspace">Find the null space</option>
-          </select>
-        </div>
-        <div class="field">
-          <label for="builderRows">Equations</label>
-          <select id="builderRows"><option>1</option><option selected>2</option><option>3</option><option>4</option></select>
-        </div>
-        <div class="field">
-          <label for="builderVarsCount">Variables</label>
-          <select id="builderVarsCount"><option>1</option><option selected>2</option><option>3</option><option>4</option></select>
-        </div>
-        <div class="field full">
-          <label for="builderVars">Variable names</label>
-          <input id="builderVars" value="x,y" autocomplete="off" />
-          <span class="fieldHint">Comma-separated names; the number must match the variable count.</span>
-        </div>
-        <div class="field full">
-          <label for="builderBack">Back-to-notes URL</label>
-          <input id="builderBack" value="" placeholder="https://math345-textbook.github.io/…#activity-…" autocomplete="off" />
-          <span class="fieldHint">A full URL or a relative textbook path. The activity’s top button returns here.</span>
-        </div>
-      </div>
+<section class="q2y">
+<div class="q31">
+<div class="field">
+<label for="qf">Activity number</label>
+<input id="qf" value="" placeholder="e.g. 4.2.1" autocomplete="off" />
+</div>
+<div class="field">
+<label for="qg">Goal</label>
+<select id="qg">
+<option value="ref">Reach row echelon form</option>
+<option value="classify" selected>Classify the system</option>
+<option value="solve">Solve the system</option>
+<option value="nullspace">Find the null space</option>
+</select>
+</div>
+<div class="field">
+<label for="qh">Equations</label>
+<select id="qh"><option>1</option><option selected>2</option><option>3</option><option>4</option></select>
+</div>
+<div class="field">
+<label for="qi">Variables</label>
+<select id="qi"><option>1</option><option selected>2</option><option>3</option><option>4</option></select>
+</div>
+<div class="field full">
+<label for="qj">Variable names</label>
+<input id="qj" value="x,y" autocomplete="off" />
+<span class="q32">Comma-separated names; the number must match the variable count.</span>
+</div>
+<div class="field full">
+<label for="qk">Back-to-notes URL</label>
+<input id="qk" value="" placeholder="https://math345-textbook.github.io/…#activity-…" autocomplete="off" />
+<span class="q32">A full URL or a relative textbook path. The activity’s top button returns here.</span>
+</div>
+</div>
 
-      <div class="builderMatrixWrap">
-        <div class="builderMatrix" id="builderMatrix" style="--cols:3"></div>
-      </div>
-    </section>
+<div class="q33" tabindex="0" role="region" aria-label="Augmented matrix. Scroll horizontally to see all columns.">
+<div class="ql" id="ql" style="--cols:3"></div>
+</div>
+</section>
 
-    <section class="auditCard" aria-live="polite">
-      <h3 class="auditTitle">Complexity audit</h3>
-      <div class="auditGrid" id="auditGrid"></div>
-      <p class="auditMessage" id="auditMessage">Ready.</p>
-    </section>
+<section class="q2z">
+<h3 class="q38">Complexity audit</h3>
+<div class="qm" id="qm"></div>
+<p class="qn" id="qn">Ready.</p>
+</section>
 
-    <section class="builderCard">
-      <div class="builderActions">
-        <button class="btn primary" id="previewBtn" type="button">Preview activity</button>
-        <button class="btn" id="copyUrlBtn" type="button">Copy activity link</button>
-        <button class="btn" id="copyPretextBtn" type="button">Copy PreTeXt snippet</button>
-      </div>
-      <p class="copyStatus" id="copyStatus" aria-live="polite"></p>
-      <textarea class="builderOutput" id="builderOutput" readonly aria-label="Generated link or PreTeXt snippet"></textarea>
-    </section>
-  </section>
+<section class="q2y">
+<div class="q3a">
+<button class="btn primary" id="qo" type="button">Preview activity</button>
+<button class="btn" id="qp" type="button">Copy activity link</button>
+<button class="btn" id="qq" type="button">Copy PreTeXt snippet</button>
+</div>
+<p class="qr" id="qr" aria-live="polite"></p>
+      <textarea class="qs" id="qs" readonly aria-label="Generated link or PreTeXt snippet"></textarea>
+</section>
+</section>
 
-  <section id="playView" hidden>
-    <section class="progressPanel" aria-label="Goal steps and progress">
-      <div class="tracker" id="tracker"></div>
-    </section>
+<section id="qt" hidden>
+<section class="q23" aria-label="Goal steps and progress">
+<div class="qu" id="qu"></div>
+</section>
 
-    <div class="play">
-      <section class="taskPanel" id="taskPanel" aria-labelledby="promptText" tabindex="-1">
-        <div class="taskLabel" id="taskLabel">REF · pivot</div>
-        <h2 class="promptText" id="promptText">Pick the next valid row operation.</h2>
-        <p class="validChoicesNote" id="validChoicesNote">Several choices may be valid.</p>
-      </section>
+<div class="play">
+<section class="qv" id="qv" aria-labelledby="qx" tabindex="-1">
+<div class="qw" id="qw">REF · pivot</div>
+<h2 class="qx" id="qx">Pick the next valid row operation.</h2>
+<p class="qy" id="qy">Several choices may be correct.</p>
+</section>
 
-      <section class="matrixCard" aria-label="Current augmented matrix">
-        <div class="matrixStage" id="matrixStage">
-          <div class="rowLabels" id="rowLabels" aria-hidden="true"></div>
-          <div class="matrixWrap">
-            <div class="matrixShell" id="matrixShell">
-              <div class="augLine" id="augLine" aria-hidden="true"></div>
-              <svg class="stairSvg" id="stairSvg" aria-hidden="true"></svg>
-              <table class="matrix" id="matrix"></table>
-            </div>
-          </div>
-        </div>
-        <div class="equationsPanel" id="equationsDetails" aria-live="polite">
-          <div class="equationsSummary">System as equations</div>
-          <div class="equations" id="equations"></div>
-        </div>
-      </section>
+<section class="q25" aria-label="Current augmented matrix">
+<div class="q3h"><div class="q3i" role="group" aria-label="View the system"><button type="button" id="qz" aria-pressed="true">Matrix</button><button type="button" id="q10" aria-pressed="false">Equations</button></div><span id="q11">Scroll to see all columns.</span></div>
+<div id="q12">
+<div class="q13" id="q13"><div class="q27" tabindex="0" role="region" aria-label="Augmented matrix. Scroll horizontally to see all columns."><div class="q3j"><div id="q14"></div><div class="q15" id="q15" aria-hidden="true"></div><div class="q16" id="q16"><div class="q17" id="q17" aria-hidden="true"></div><svg class="q18" id="q18" aria-hidden="true"></svg><table class="matrix" id="matrix"></table></div></div></div></div>
+<div class="q2e" id="q19" tabindex="0" role="region" aria-label="System as equations. Scroll horizontally to see each equation."><div class="q1a" id="q1a">System as equations</div><div class="equations" id="equations"></div></div>
+</div>
+</section>
+<section class="q3l" aria-label="Answer choices">
+<div class="feedback" id="feedback"><div class="q2j"><span class="q1b" id="q1b" aria-hidden="true">•</span><p id="q1c" role="status" aria-live="polite" aria-atomic="true"></p></div><button type="button" class="btn" id="q1d">Explanation</button></div>
+<div class="choices" id="choices"></div>
+</section>
 
-      <section class="choiceArea" aria-label="Answer choices">
-        <div class="choices" id="choices"></div>
-        <div class="feedback hiddenFeedback" id="feedback" aria-live="polite">
-          <div class="feedbackMain"><span class="feedbackIcon" id="feedbackIcon" aria-hidden="true">•</span><p id="feedbackText"></p></div>
-        </div>
-      </section>
-    </div>
-  </section>
+</div>
+</section>
 
-  <div class="endPanel" id="endPanel" role="dialog" aria-modal="true" aria-labelledby="endTitle">
-    <div class="endCard">
-      <h2 id="endTitle">Activity complete</h2>
-      <svg class="endStair" id="endStairSvg" viewBox="0 0 180 90" aria-hidden="true"></svg>
-      <div class="endStars" id="endStars">★★★</div>
-      <div class="summaryGrid">
-        <div class="summaryBox"><span>Questions</span><b id="endQuestions">0</b></div>
-        <div class="summaryBox"><span>Misses</span><b id="endMistakes">0</b></div>
-      </div>
-      <p class="endNote" id="endNote"></p>
-      <div class="endBtns">
-        <button class="btn" id="endBackBtn" type="button">Back to notes</button>
-        <button class="btn primary" id="againBtn" type="button">Try again</button>
-      </div>
-    </div>
-  </div>
+<div class="q1e" id="q1e" role="dialog" aria-modal="true" aria-labelledby="q1f">
+<div class="q2l">
+<h2 id="q1f">Activity complete</h2>
+<svg class="q2n" id="q1g" viewBox="0 0 180 90" aria-hidden="true"></svg>
+<div class="q3v"><div class="q1h" id="q1h">★★★</div>
+<div class="q2p">
+<div class="q2q"><span>Questions</span><b id="q1i">0</b></div>
+<div class="q2q"><span>Misses</span><b id="q1j">0</b></div>
+</div>
+<p class="q1k" id="q1k"></p>
+</div><div class="q2r">
+<button class="btn" id="q1l" type="button">Back to notes</button>
+<button class="btn primary" id="q1m" type="button">Try again</button>
+</div>
+</div>
+</div>
 
-  <div class="modalPanel" id="aboutPanel" role="dialog" aria-modal="true" aria-labelledby="aboutTitle">
-    <div class="modalCard aboutCard">
-      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
-        <h2 id="aboutTitle">About The Elimination Scratchpad</h2>
-        <button class="iconBtn" id="aboutCloseBtn" type="button" aria-label="Close">×</button>
-      </div>
-      <div class="aboutList">
-        <p><strong>Purpose:</strong> This activity player loads a small augmented matrix from a textbook link and follows a goal-dependent sequence of Gaussian or Gauss–Jordan elimination questions, entirely through multiple choice.</p>
-        <p><strong>Link builder:</strong> Opening the file without activity options opens the instructor tool. Adding <code>?author=1</code> also forces this view.</p>
-        <p><strong>Version:</strong> The Elimination Scratchpad [v0.3(beta)]</p>
-        <p><strong>Copyright:</strong> © 2026 <a href="https://people.math.wisc.edu/~roch/" target="_blank" rel="noopener noreferrer">Sébastien Roch</a></p>
-        <p><strong>Code license:</strong> MIT. <strong>Instructional content:</strong> CC BY-NC 4.0, except where otherwise noted.</p>
-        <p><strong>Privacy:</strong> The file stores no scores and sends no activity data anywhere.</p>
-        <p><strong>Acknowledgments:</strong> Thanks to Jingyi Li for helpful feedback.</p>
-      </div>
-      <div class="modalBtns"><button class="btn primary" id="aboutDoneBtn" type="button">Close</button></div>
-    </div>
-  </div>
+<div class="q2k" id="q1n" role="dialog" aria-modal="true" aria-labelledby="q1o">
+<div class="q2m q2t">
+<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
+<h2 id="q1o">About The Elimination Scratchpad</h2>
+<button class="q22" id="q1p" type="button" aria-label="Close">×</button>
+</div>
+<div class="q2u">
+<p><strong>Purpose:</strong> This activity player loads a small augmented matrix from a textbook link and follows a goal-dependent sequence of Gaussian or Gauss–Jordan elimination questions, entirely through multiple choice.</p>
+<p><strong>Link builder:</strong> Opening the file without activity options opens the instructor tool. Adding <code>?author=1</code> also forces this view.</p>
+<p><strong>Version:</strong> The Elimination Scratchpad [v0.4(beta)]</p>
+<p><strong>Copyright:</strong> © 2026 <a href="https://people.math.wisc.edu/~roch/" target="_blank" rel="noopener noreferrer">Sébastien Roch</a></p>
+<p><strong>Code license:</strong> MIT. <strong>Instructional content:</strong> CC BY-NC 4.0, except where otherwise noted.</p>
+<p><strong>Privacy:</strong> The file stores no scores and sends no activity data anywhere.</p>
+<p><strong>Acknowledgments:</strong> Thanks to Jingyi Li for helpful feedback.</p>
+</div>
+<div class="q2s"><button class="btn primary" id="q1q" type="button">Close</button></div>
+</div>
+</div>
 </main>
 </div>
 
-<script>
-'use strict';
-
-class Frac{
-  constructor(n,d=1){
-    if(!Number.isSafeInteger(n)||!Number.isSafeInteger(d))throw new Error('fraction entries must be safe integers');
-    if(d===0)throw new Error('zero denominator');
-    if(d<0){n=-n;d=-d;}
-    const g=Frac.gcd(Math.abs(n),Math.abs(d));
-    this.n=n/g;this.d=d/g;
-  }
-  static gcd(a,b){while(b){const t=a%b;a=b;b=t;}return a||1;}
-  static of(x){return x instanceof Frac?x:new Frac(x,1);}
-  add(o){o=Frac.of(o);return new Frac(this.n*o.d+o.n*this.d,this.d*o.d);}
-  sub(o){o=Frac.of(o);return new Frac(this.n*o.d-o.n*this.d,this.d*o.d);}
-  mul(o){o=Frac.of(o);return new Frac(this.n*o.n,this.d*o.d);}
-  neg(){return new Frac(-this.n,this.d);}
-  inv(){if(this.n===0)throw new Error('zero reciprocal');return new Frac(this.d,this.n);}
-  abs(){return new Frac(Math.abs(this.n),this.d);}
-  eq(o){o=Frac.of(o);return this.n===o.n&&this.d===o.d;}
-  zero(){return this.n===0;}
-  one(){return this.n===this.d;}
-  value(){return this.n/this.d;}
-  text(){if(this.d===1)return String(this.n).replace('-', '−');return (this.n<0?'−':'')+Math.abs(this.n)+'/'+this.d;}
-  ascii(){return this.d===1?String(this.n):`${this.n}/${this.d}`;}
-}
-
-const F=(n,d=1)=>new Frac(n,d);
-const MAX_ROWS=4;
-const MAX_VARS=4;
-const GOALS=new Set(['ref','classify','solve','nullspace']);
-const GOAL_LABELS={ref:'Reach REF',classify:'Classify the system',solve:'Solve the system',nullspace:'Find the null space'};
-const allVars=['x','y','z','w'];
-
-let problem=null;
-let startM=null;
-let M=null;
-let nVars=2;
-let rowCount=2;
-let activeVars=['x','y'];
-let goal='classify';
-let phase='ref';
-let pivotRow=0;
-let pivotCol=0;
-let mistakes=0;
-let completedQuestions=0;
-let solved=false;
-let currentTask=null;
-let currentChoices=[];
-let currentFeedback={type:'',text:''};
-let answerLocked=false;
-let flashing=[];
-let swapAnim={};
-let swapAnimDist={};
-let lastModalFocus=null;
-let builderLastGrid=null;
-let builderLastRows=2;
-let builderLastVars=2;
-
-const clone=A=>A.map(row=>row.map(x=>F(x.n,x.d)));
-const escapeHtml=s=>String(s).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
-const shuffle=a=>{const out=[...a];for(let i=out.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[out[i],out[j]]=[out[j],out[i]];}return out;};
-const sub=n=>String(n).replace(/[123456789]/g,m=>({'1':'₁','2':'₂','3':'₃','4':'₄','5':'₅','6':'₆','7':'₇','8':'₈','9':'₉'}[m]));
-const rname=i=>'R'+sub(i+1);
-const rowTex=i=>`R_${i+1}`;
-const wrapCoeff=c=>{const t=c.text();return c.n<0||c.d!==1?`(${t})`:t;};
-const fracTex=c=>{c=F(c.n,c.d);if(c.d===1)return String(c.n);return `${c.n<0?'-':''}\\tfrac{${Math.abs(c.n)}}{${c.d}}`;};
-const fracPlain=c=>c.text();
-
-function opScale(row,c){return {t:'scale',row,c,txt:`${rname(row)} → ${wrapCoeff(c)}${rname(row)}`,tex:`${rowTex(row)} \\to ${fracTex(c)}${rowTex(row)}`};}
-function opSwap(a,b){return {t:'swap',a,b,txt:`${rname(a)} ↔ ${rname(b)}`,tex:`${rowTex(a)} \\leftrightarrow ${rowTex(b)}`};}
-function opKeep(row){return {t:'keep',row,txt:`${rname(row)} stays`,tex:`${rowTex(row)} \\text{ stays}`};}
-function opAdd(target,source,c){
-  const sign=c.n<0?' − ':' + ';const mag=c.abs();const coeff=mag.one()?'':wrapCoeff(mag);
-  const texSign=c.n<0?' - ':' + ';const texCoeff=mag.one()?'':fracTex(mag);
-  return {t:'add',target,source,c,txt:`${rname(target)} → ${rname(target)}${sign}${coeff}${rname(source)}`,tex:`${rowTex(target)} \\to ${rowTex(target)}${texSign}${texCoeff}${rowTex(source)}`};
-}
-function sameOp(a,b){
-  if(!a||!b||a.t!==b.t)return false;
-  if(a.t==='keep')return a.row===b.row;
-  if(a.t==='swap')return (a.a===b.a&&a.b===b.b)||(a.a===b.b&&a.b===b.a);
-  if(a.t==='scale')return a.row===b.row&&a.c.eq(b.c);
-  if(a.t==='add')return a.target===b.target&&a.source===b.source&&a.c.eq(b.c);
-  return false;
-}
-function addUniqueChoice(arr,item){
-  const duplicate=arr.some(x=>(x.op&&item.op&&sameOp(x.op,item.op))||(x.tex&&item.tex&&x.tex===item.tex)||(!x.tex&&!item.tex&&x.txt===item.txt));
-  if(!duplicate)arr.push(item);
-}
-function rawAdd(A,target,source,c){A[target]=A[target].map((x,j)=>x.add(A[source][j].mul(c)));}
-function rawSwap(A,a,b){[A[a],A[b]]=[A[b],A[a]];}
-function rawScale(A,row,c){A[row]=A[row].map(x=>x.mul(c));}
-function applyToMatrix(A,op){if(op.t==='keep')return;if(op.t==='swap')rawSwap(A,op.a,op.b);else if(op.t==='scale')rawScale(A,op.row,op.c);else if(op.t==='add')rawAdd(A,op.target,op.source,op.c);}
-function applyOperation(op){
-  flashing=[];swapAnim={};swapAnimDist={};
-  if(op.t==='keep')return;
-  if(op.t==='swap'){
-    rawSwap(M,op.a,op.b);flashing=[op.a,op.b];
-    const dist=Math.abs(op.b-op.a)*48;
-    swapAnim[op.a]=op.b>op.a?'swapFromDown':'swapFromUp';
-    swapAnim[op.b]=op.a>op.b?'swapFromDown':'swapFromUp';
-    swapAnimDist[op.a]=dist;swapAnimDist[op.b]=dist;
-  }else if(op.t==='scale'){
-    rawScale(M,op.row,op.c);flashing=[op.row];
-  }else if(op.t==='add'){
-    rawAdd(M,op.target,op.source,op.c);flashing=[op.target];
-  }
-}
-
-function sanitizeActivity(value){
-  const s=String(value||'').trim().replace(/^activity\s*/i,'').slice(0,40);
-  return s||'Untitled';
-}
-function parseIntegerToken(token,rowIndex,colIndex){
-  const text=String(token).trim();
-  if(!/^-?\d+$/.test(text))throw new Error(`Entry (${rowIndex+1}, ${colIndex+1}) is not an integer.`);
-  const value=Number(text);
-  if(!Number.isSafeInteger(value)||Math.abs(value)>999)throw new Error(`Entry (${rowIndex+1}, ${colIndex+1}) must be between −999 and 999.`);
-  return F(value);
-}
-function normalizeBackUrl(raw){
-  const text=String(raw||'').trim();
-  if(!text)return 'https://math345-textbook.github.io/';
-  let url;
-  try{
-    const hasScheme=/^[A-Za-z][A-Za-z0-9+.-]*:/.test(text);
-    url=new URL(text,hasScheme?undefined:'https://math345-textbook.github.io/');
-  }catch(e){throw new Error('The Back-to-notes URL is not valid.');}
-  if(!['http:','https:','file:'].includes(url.protocol))throw new Error('The Back-to-notes URL must use http, https, or a relative textbook path.');
-  return url.toString();
-}
-function parseProblemFromParams(params){
-  const raw=params.get('m');
-  if(!raw)throw new Error('No augmented matrix was supplied. Open the bare Scratchpad URL to use the instructor link builder.');
-  const activityValue=params.get('activity')||params.get('label');
-  if(!String(activityValue||'').trim())throw new Error('No activity number was supplied.');
-  const matrix=raw.split('~').map((rowText,i)=>rowText.split(',').map((token,j)=>parseIntegerToken(token,i,j)));
-  if(matrix.length<1||matrix.length>MAX_ROWS)throw new Error('An activity must have between 1 and 4 equations.');
-  const width=matrix[0].length;
-  if(matrix.some(row=>row.length!==width))throw new Error('Every augmented-matrix row must have the same number of entries.');
-  const variablesCount=width-1;
-  if(variablesCount<1||variablesCount>MAX_VARS)throw new Error('An activity must have between 1 and 4 variables.');
-  const varsRaw=params.get('vars');
-  const variables=varsRaw?varsRaw.split(',').map(x=>x.trim()):allVars.slice(0,variablesCount);
-  if(variables.length!==variablesCount)throw new Error('The variable list does not match the number of coefficient columns.');
-  if(variables.some(name=>!/^[A-Za-z][A-Za-z0-9_]*$/.test(name)))throw new Error('Variable names must begin with a letter and use only letters, digits, or underscores.');
-  if(new Set(variables).size!==variables.length)throw new Error('Variable names must be distinct.');
-  const selectedGoal=params.get('goal')||'classify';
-  if(!GOALS.has(selectedGoal))throw new Error(`Unknown goal “${selectedGoal}”.`);
-  if(selectedGoal==='nullspace'&&matrix.some(row=>!row[variablesCount].zero()))throw new Error('The null-space goal requires a homogeneous system: every right-hand side must be 0.');
-  return {
-    version:params.get('v')||'1',
-    activity:sanitizeActivity(activityValue),
-    goal:selectedGoal,
-    matrix,
-    variables,
-    back:normalizeBackUrl(params.get('back')||'https://math345-textbook.github.io/')
-  };
-}
-
-function columnName(col){return col<nVars?`${activeVars[col]}-column`:'augmented column';}
-function columnShort(col){return col<nVars?activeVars[col]:'b';}
-function leadingIndex(row,cols=row.length){for(let j=0;j<cols;j++)if(!row[j].zero())return j;return -1;}
-function pivotData(B=M){
-  const out=[];
-  for(let r=0;r<B.length;r++){
-    const col=leadingIndex(B[r],B[r].length);
-    if(col>=0)out.push({row:r,col});
-  }
-  return out;
-}
-function nonzeroRowsFrom(row,col){const out=[];for(let r=row;r<rowCount;r++)if(!M[r][col].zero())out.push(r);return out;}
-function belowNonzero(row,col){const out=[];for(let r=row+1;r<rowCount;r++)if(!M[r][col].zero())out.push(r);return out;}
-function aboveNonzero(row,col){const out=[];for(let r=0;r<row;r++)if(!M[r][col].zero())out.push(r);return out;}
-
-function computeRefTask(){
-  const totalCols=nVars+1;
-  while(true){
-    if(pivotRow>=rowCount||pivotCol>=totalCols)return null;
-    const candidates=nonzeroRowsFrom(pivotRow,pivotCol);
-    if(!candidates.length){pivotCol++;continue;}
-    if(M[pivotRow][pivotCol].zero())return {kind:'pivot',stage:'ref',row:pivotRow,col:pivotCol,candidates};
-    if(!M[pivotRow][pivotCol].one())return {kind:'scale',stage:'ref',row:pivotRow,col:pivotCol,pivot:M[pivotRow][pivotCol]};
-    const targets=belowNonzero(pivotRow,pivotCol);
-    if(targets.length)return {kind:'clear',stage:'ref',row:pivotRow,col:pivotCol,targets};
-    pivotRow++;pivotCol++;
-  }
-}
-function computeRrefTask(){
-  const pivots=pivotData(M);
-  for(let i=pivots.length-1;i>=0;i--){
-    const p=pivots[i];
-    const targets=aboveNonzero(p.row,p.col);
-    if(targets.length)return {kind:'clearAbove',stage:'rref',row:p.row,col:p.col,targets};
-  }
-  return null;
-}
-function computeTask(){
-  while(true){
-    if(phase==='ref'){
-      const task=computeRefTask();
-      if(task)return task;
-      if(goal==='ref'){phase='refConfirm';continue;}
-      if(goal==='classify'){phase='variables';continue;}
-      phase='rref';continue;
-    }
-    if(phase==='rref'){
-      const task=computeRrefTask();
-      if(task)return task;
-      phase='finalAnswer';continue;
-    }
-    if(phase==='refConfirm')return {kind:'refConfirm',stage:'check'};
-    if(phase==='variables')return {kind:'variables',stage:'variables'};
-    if(phase==='solutionCount')return {kind:'solutionCount',stage:'solutions'};
-    if(phase==='finalAnswer')return {kind:goal==='nullspace'?'nullspaceAnswer':'solveAnswer',stage:'answer'};
-    return null;
-  }
-}
-
-function basicFree(B=M){
-  const basicIdx=[];
-  for(const row of B){
-    const p=leadingIndex(row,nVars);
-    if(p>=0&&!basicIdx.includes(p))basicIdx.push(p);
-  }
-  const freeIdx=[];for(let j=0;j<nVars;j++)if(!basicIdx.includes(j))freeIdx.push(j);
-  return {basicIdx,freeIdx,basic:basicIdx.map(j=>activeVars[j]),free:freeIdx.map(j=>activeVars[j])};
-}
-function isInconsistent(B=M){
-  return B.some(row=>row.slice(0,nVars).every(x=>x.zero())&&!row[nVars].zero());
-}
-function solutionCount(B=M){if(isInconsistent(B))return 'none';return basicFree(B).freeIdx.length?'inf':'one';}
-function rrefClone(A){
-  const B=clone(A);const rows=B.length,cols=B[0].length;let pr=0;
-  for(let c=0;c<cols&&pr<rows;c++){
-    let k=pr;while(k<rows&&B[k][c].zero())k++;
-    if(k===rows)continue;
-    if(k!==pr)rawSwap(B,k,pr);
-    if(!B[pr][c].one())rawScale(B,pr,B[pr][c].inv());
-    for(let r=0;r<rows;r++)if(r!==pr&&!B[r][c].zero())rawAdd(B,r,pr,B[r][c].neg());
-    pr++;
-  }
-  return B;
-}
-function analyzeSystem(B=M){
-  const R=rrefClone(B);
-  const inconsistent=R.some(row=>row.slice(0,nVars).every(x=>x.zero())&&!row[nVars].zero());
-  if(inconsistent)return {kind:'none',R,pivotCols:[],freeCols:[],particular:null,basis:[]};
-  const pivotRows=[];const pivotCols=[];
-  for(let r=0;r<R.length;r++){
-    const p=leadingIndex(R[r],nVars);
-    if(p>=0){pivotRows.push({row:r,col:p});pivotCols.push(p);}
-  }
-  const freeCols=[];for(let j=0;j<nVars;j++)if(!pivotCols.includes(j))freeCols.push(j);
-  const particular=Array.from({length:nVars},()=>F(0));
-  for(const p of pivotRows)particular[p.col]=R[p.row][nVars];
-  const basis=freeCols.map(f=>{
-    const v=Array.from({length:nVars},()=>F(0));v[f]=F(1);
-    for(const p of pivotRows)v[p.col]=R[p.row][f].neg();
-    return v;
-  });
-  return {kind:freeCols.length?'inf':'one',R,pivotCols,freeCols,particular,basis};
-}
-
-function fmtVarList(indices){return indices.length?indices.map(j=>activeVars[j]).join(', '):'none';}
-function texVarList(indices){return indices.length?indices.map(j=>activeVars[j]).join(', '):'\\text{none}';}
-function variableChoice(basicIdx,freeIdx,correct=false,reason='Basic variables correspond to pivot columns; every other variable is free.'){
-  return {txt:`basic: ${fmtVarList(basicIdx)}\nfree: ${fmtVarList(freeIdx)}`,tex:`\\begin{array}{l}\\text{basic: }${texVarList(basicIdx)}\\\\ \\text{free: }${texVarList(freeIdx)}\\end{array}`,basicIdx,freeIdx,correct,reason};
-}
-function variableChoices(){
-  const bf=basicFree();const correct=variableChoice(bf.basicIdx,bf.freeIdx,true);
-  const wrong=[];
-  for(let mask=0;mask<(1<<nVars);mask++){
-    const basic=[];const free=[];
-    for(let j=0;j<nVars;j++)((mask>>j)&1?basic:free).push(j);
-    if(basic.length===bf.basicIdx.length&&basic.every(j=>bf.basicIdx.includes(j)))continue;
-    wrong.push(variableChoice(basic,free,false));
-  }
-  return shuffle([correct,...shuffle(wrong).slice(0,3)]);
-}
-function solutionCountChoices(){
-  const answer=solutionCount();
-  return shuffle([
-    {txt:'No solutions',answer:'none',correct:answer==='none',reason:'No solutions occur only when RREF contains a contradiction row.'},
-    {txt:'Exactly one solution',answer:'one',correct:answer==='one',reason:'A unique solution requires consistency and a pivot in every variable column.'},
-    {txt:'Infinitely many solutions',answer:'inf',correct:answer==='inf',reason:'A consistent system with at least one free variable has infinitely many solutions.'}
-  ]);
-}
-function refConfirmChoices(){
-  return shuffle([
-    {txt:'The matrix is in row echelon form, so the REF goal is reached.',correct:true},
-    {txt:'It is not in REF because entries above pivots may be nonzero.',correct:false,reason:'Entries above pivots may be nonzero in REF; they must be zero only in RREF.'},
-    {txt:'It is not in REF because every variable column needs a pivot.',correct:false,reason:'A free-variable column may have no pivot. That does not prevent the matrix from being in REF.'},
-    {txt:'It is not in REF unless the augmented column contains a pivot.',correct:false,reason:'A pivot in the augmented column is not required for REF.'}
-  ]);
-}
-
-function vectorTex(v){return `\\begin{bmatrix}${v.map(fracTex).join('\\\\')}\\end{bmatrix}`;}
-function zeroVector(n=nVars){return Array.from({length:n},()=>F(0));}
-function standardVector(index,n=nVars){const v=zeroVector(n);v[index]=F(1);return v;}
-function variablesVectorTex(){return `\\begin{bmatrix}${activeVars.join('\\\\')}\\end{bmatrix}`;}
-function vectorPlain(v){return `[${v.map(fracPlain).join(', ')}]^T`;}
-function isZeroVector(v){return v.every(x=>x.zero());}
-function solutionTex(data){
-  if(data.kind==='none')return '\\text{No solution}';
-  if(data.kind==='one')return `${variablesVectorTex()}=${vectorTex(data.particular)}`;
-  const terms=[];
-  if(!isZeroVector(data.particular))terms.push(vectorTex(data.particular));
-  data.basis.forEach((v,i)=>terms.push(`t_${i+1}${vectorTex(v)}`));
-  const rhs=terms.join('+').replace(/\+\-/g,'-')||vectorTex(zeroVector());
-  const params=data.basis.map((_,i)=>`t_${i+1}`).join(',');
-  return `${variablesVectorTex()}=${rhs},\\qquad ${params}\\in\\mathbb R`;
-}
-function solutionPlain(data){
-  if(data.kind==='none')return 'No solution';
-  if(data.kind==='one')return `(${activeVars.join(', ')}) = ${vectorPlain(data.particular)}`;
-  return 'A parametric solution family';
-}
-function nullspaceTex(data){
-  if(!data.basis.length)return '\\operatorname{Null}(A)=\\{\\mathbf 0\\}';
-  return `\\operatorname{Null}(A)=\\operatorname{span}\\left\\{${data.basis.map(vectorTex).join(',')}\\right\\}`;
-}
-function nullspacePlain(data){return data.basis.length?`Null(A) is spanned by ${data.basis.length} vector${data.basis.length===1?'':'s'}.`:'Null(A) = {0}';}
-function modifiedWrongBasis(data){
-  if(!data.basis.length)return null;
-  const wrong=data.basis.map(v=>v.map(x=>F(x.n,x.d)));
-  if(data.pivotCols.length){const p=data.pivotCols[0];wrong[0][p]=wrong[0][p].add(F(1));return wrong;}
-  if(wrong.length>1)return wrong.slice(0,-1);
-  return null;
-}
-function solveAnswerChoices(){
-  const data=analyzeSystem();const choices=[];
-  addUniqueChoice(choices,{txt:solutionPlain(data),tex:solutionTex(data),correct:true});
-  const commonReason='Read the pivot equations from RREF and use one parameter for each free variable.';
-  if(data.kind==='none'){
-    const zero=zeroVector();
-    addUniqueChoice(choices,{txt:'The zero vector is the unique solution.',tex:`${variablesVectorTex()}=${vectorTex(zero)}`,reason:'The contradiction row makes the system inconsistent, so no vector satisfies every equation.'});
-    addUniqueChoice(choices,{txt:'Every vector is a solution.',tex:`${variablesVectorTex()}\\in\\mathbb R^{${nVars}}`,reason:'A contradiction row rules out every vector.'});
-    addUniqueChoice(choices,{txt:'A nonzero vector is the unique solution.',tex:`${variablesVectorTex()}=${vectorTex(standardVector(0))}`,reason:'The contradiction row makes the system inconsistent, so no vector is a solution.'});
-  }else if(data.kind==='one'){
-    const wrong=data.particular.map(x=>F(x.n,x.d));wrong[0]=wrong[0].add(F(1));
-    addUniqueChoice(choices,{txt:'A nearby vector.',tex:`${variablesVectorTex()}=${vectorTex(wrong)}`,reason:commonReason});
-    addUniqueChoice(choices,{txt:'No solution.',tex:'\\text{No solution}',reason:'The RREF matrix has no contradiction row.'});
-    addUniqueChoice(choices,{txt:'A one-parameter family.',tex:`${variablesVectorTex()}=${vectorTex(data.particular)}+t${vectorTex(standardVector(nVars-1))},\\ t\\in\\mathbb R`,reason:'There is a pivot in every variable column, so there is no free parameter.'});
-  }else{
-    addUniqueChoice(choices,{txt:'No solution.',tex:'\\text{No solution}',reason:'The RREF matrix is consistent.'});
-    addUniqueChoice(choices,{txt:'Only the particular solution.',tex:`${variablesVectorTex()}=${vectorTex(data.particular)}`,reason:'Each free variable contributes a direction to the full solution set.'});
-    const wrongBasis=modifiedWrongBasis(data);
-    if(wrongBasis){
-      const fake={...data,basis:wrongBasis};
-      addUniqueChoice(choices,{txt:'A parametric family with an incorrect direction.',tex:solutionTex(fake),reason:commonReason});
-    }
-    if(choices.length<4){
-      const wrong=data.particular.map(x=>F(x.n,x.d));wrong[0]=wrong[0].add(F(1));
-      addUniqueChoice(choices,{txt:'A different single vector.',tex:`${variablesVectorTex()}=${vectorTex(wrong)}`,reason:'A system with a free variable has infinitely many solutions, not a single solution.'});
-    }
-  }
-  return shuffle(choices.slice(0,4));
-}
-function nullspaceAnswerChoices(){
-  const data=analyzeSystem();const choices=[];
-  addUniqueChoice(choices,{txt:nullspacePlain(data),tex:nullspaceTex(data),correct:true});
-  const reason='Every spanning vector must satisfy A\\mathbf v=\\mathbf 0, and the number of independent directions must equal the number of free variables.';
-  if(!data.basis.length){
-    addUniqueChoice(choices,{txt:'The whole space.',tex:`\\operatorname{Null}(A)=\\mathbb R^{${nVars}}`,reason:'A pivot in every variable column leaves no nonzero null-space direction.'});
-    if(nVars>1)addUniqueChoice(choices,{txt:'The first coordinate axis.',tex:`\\operatorname{Null}(A)=\\operatorname{span}\\left\\{${vectorTex(standardVector(0))}\\right\\}`,reason});
-    addUniqueChoice(choices,{txt:'A nonzero singleton.',tex:`\\operatorname{Null}(A)=\\left\\{${vectorTex(standardVector(0))}\\right\\}`,reason:'A null space is a subspace and must contain the zero vector.'});
-    if(choices.length<4)addUniqueChoice(choices,{txt:'The empty set.',tex:'\\operatorname{Null}(A)=\\varnothing',reason:'The zero vector is always in a null space.'});
-  }else{
-    addUniqueChoice(choices,{txt:'Only the zero vector.',tex:'\\operatorname{Null}(A)=\\{\\mathbf 0\\}',reason:'At least one variable is free, so the null space has a nonzero direction.'});
-    if(data.basis.length<nVars)addUniqueChoice(choices,{txt:'The whole space.',tex:`\\operatorname{Null}(A)=\\mathbb R^{${nVars}}`,reason:'Only matrices with no pivot constraints have the whole space as their null space.'});
-    const wrongBasis=modifiedWrongBasis(data);
-    if(wrongBasis)addUniqueChoice(choices,{txt:'A span with an incorrect basis vector.',tex:`\\operatorname{Null}(A)=\\operatorname{span}\\left\\{${wrongBasis.map(vectorTex).join(',')}\\right\\}`,reason});
-    if(data.basis.length>1)addUniqueChoice(choices,{txt:'A span missing a free direction.',tex:`\\operatorname{Null}(A)=\\operatorname{span}\\left\\{${data.basis.slice(0,-1).map(vectorTex).join(',')}\\right\\}`,reason:'This omits one independent direction associated with a free variable.'});
-    if(choices.length<4)addUniqueChoice(choices,{txt:'The empty set.',tex:'\\operatorname{Null}(A)=\\varnothing',reason:'The zero vector is always in a null space.'});
-    if(choices.length<4)addUniqueChoice(choices,{txt:'A nonzero singleton.',tex:`\\operatorname{Null}(A)=\\left\\{${vectorTex(standardVector(0))}\\right\\}`,reason:'A null space is a subspace and must contain the zero vector.'});
-  }
-  return shuffle(choices.slice(0,4));
-}
-
-function operationChoices(task){
-  const good=[];const wrong=[];const r=task.row,c=task.col;
-  const addWrong=(item,priority=99)=>{item.priority=priority;addUniqueChoice(wrong,item);};
-  if(task.kind==='pivot'){
-    task.candidates.forEach(k=>addUniqueChoice(good,{txt:opSwap(r,k).txt,tex:opSwap(r,k).tex,op:opSwap(r,k),correct:true}));
-    addWrong({txt:opKeep(r).txt,tex:opKeep(r).tex,op:opKeep(r),reason:`${rname(r)} has 0 in the ${columnName(c)}, so it cannot supply the next pivot.`},1);
-    for(let a=0;a<rowCount;a++)for(let b=a+1;b<rowCount;b++)if(!good.some(g=>sameOp(g.op,opSwap(a,b))))addWrong({txt:opSwap(a,b).txt,tex:opSwap(a,b).tex,op:opSwap(a,b),reason:`The next pivot must be moved into ${rname(r)}, and the chosen row needs a nonzero entry in the ${columnName(c)}.`},2);
-    addWrong({txt:opScale(r,F(2)).txt,tex:opScale(r,F(2)).tex,op:opScale(r,F(2)),reason:'Scaling does not help while the pivot position is 0. First swap a nonzero entry into place.'},3);
-    if(rowCount>1){const source=(r+1)%rowCount;addWrong({txt:opAdd(r,source,F(1)).txt,tex:opAdd(r,source,F(1)).tex,op:opAdd(r,source,F(1)),reason:'The fixed Gaussian-elimination route first moves a nonzero entry into the pivot position.'},4);}
-  }
-  if(task.kind==='scale'){
-    const corr=opScale(r,task.pivot.inv());addUniqueChoice(good,{txt:corr.txt,tex:corr.tex,op:corr,correct:true});
-    const candidates=[task.pivot,task.pivot.inv().neg(),F(2),F(-2),F(0)];
-    candidates.forEach((factor,i)=>addWrong({txt:opScale(r,factor).txt,tex:opScale(r,factor).tex,op:opScale(r,factor),reason:factor.zero()?'Scaling by 0 is not an elementary row operation.':`The pivot must become exactly 1. Multiply by its reciprocal, ${task.pivot.inv().text()}.`},i+1));
-    if(rowCount>1){const other=r===0?1:0;const op=opScale(other,task.pivot.inv());addWrong({txt:op.txt,tex:op.tex,op,reason:`Scale the pivot row ${rname(r)}, not another row.`},3);}
-    if(rowCount>1){const source=r===rowCount-1?r-1:r+1;const op=opAdd(r,source,F(1));addWrong({txt:op.txt,tex:op.tex,op,reason:'First make the pivot equal to 1 by scaling the pivot row.'},5);}
-  }
-  if(task.kind==='clear'||task.kind==='clearAbove'){
-    task.targets.forEach(t=>{const op=opAdd(t,r,M[t][c].neg());addUniqueChoice(good,{txt:op.txt,tex:op.tex,op,correct:true});});
-    task.targets.forEach(t=>{
-      const wrongSign=opAdd(t,r,M[t][c]);addWrong({txt:wrongSign.txt,tex:wrongSign.tex,op:wrongSign,reason:`Wrong sign: the entry is ${M[t][c].text()}, so add ${M[t][c].neg().text()} times ${rname(r)} to make it 0.`},1);
-      const swapped=opAdd(r,t,M[t][c].neg());addWrong({txt:swapped.txt,tex:swapped.tex,op:swapped,reason:`Keep the pivot row ${rname(r)} unchanged; replace ${rname(t)} instead.`},2);
-      const minusOne=opAdd(t,r,F(-1));addWrong({txt:minusOne.txt,tex:minusOne.tex,op:minusOne,reason:`Use the multiplier that cancels the entry, ${M[t][c].neg().text()}, rather than always using −1.`},3);
-    });
-    const scale=opScale(r,F(2));addWrong({txt:scale.txt,tex:scale.tex,op:scale,reason:'The pivot is already 1. Use row replacement to clear the highlighted entry.'},4);
-    if(rowCount>1){const a=Math.max(0,Math.min(r,rowCount-2));const sw=opSwap(a,a+1);addWrong({txt:sw.txt,tex:sw.tex,op:sw,reason:'Swapping now would move a completed pivot out of place. Clear the highlighted entry instead.'},5);}
-  }
-  const filtered=wrong.filter(w=>!good.some(g=>(g.op&&w.op&&sameOp(g.op,w.op))||(g.tex&&w.tex&&g.tex===w.tex))).sort((a,b)=>(a.priority??99)-(b.priority??99));
-  return shuffle([...good,...filtered.slice(0,Math.max(0,4-good.length))]).slice(0,4);
-}
-function choiceSet(task){
-  if(['pivot','scale','clear','clearAbove'].includes(task.kind))return operationChoices(task);
-  if(task.kind==='variables')return variableChoices();
-  if(task.kind==='solutionCount')return solutionCountChoices();
-  if(task.kind==='refConfirm')return refConfirmChoices();
-  if(task.kind==='solveAnswer')return solveAnswerChoices();
-  if(task.kind==='nullspaceAnswer')return nullspaceAnswerChoices();
-  return [];
-}
-
-function promptFor(task){
-  if(task.kind==='pivot')return {label:`REF · ${columnShort(task.col)} · pivot`,text:`Pick a pivot row for the ${columnName(task.col)}.`};
-  if(task.kind==='scale')return {label:`REF · ${columnShort(task.col)} · scale`,text:`Make the pivot in ${rname(task.row)} equal to 1.`};
-  if(task.kind==='clear')return {label:`REF · ${columnShort(task.col)} · clear below`,text:'Use the leading 1 to clear below it.'};
-  if(task.kind==='clearAbove')return {label:`RREF · ${columnShort(task.col)} · clear above`,text:'Use the pivot to clear above it.'};
-  if(task.kind==='variables')return {label:'Classify variables',text:'Which variables are basic and which are free?'};
-  if(task.kind==='solutionCount')return {label:'Classify solutions',text:'How many solutions does the system have?'};
-  if(task.kind==='refConfirm')return {label:'REF reached',text:'What is the status of the current matrix?'};
-  if(task.kind==='solveAnswer')return {label:'Read the RREF matrix',text:'Which is the solution set?'};
-  if(task.kind==='nullspaceAnswer')return {label:'Read the RREF matrix',text:'Which is the null space?'};
-  return {label:'Activity',text:'Choose the correct answer.'};
-}
-function stageDefinitions(){
-  if(goal==='ref')return [{id:'ref',label:'Reach REF'},{id:'check',label:'Confirm REF'}];
-  if(goal==='classify')return [{id:'ref',label:'Reach REF'},{id:'variables',label:'Identify variables'},{id:'solutions',label:'Classify solutions'}];
-  if(goal==='solve')return [{id:'ref',label:'Reach REF'},{id:'rref',label:'Reach RREF'},{id:'answer',label:'Choose solution set'}];
-  return [{id:'ref',label:'Reach REF'},{id:'rref',label:'Reach RREF'},{id:'answer',label:'Choose null space'}];
-}
-function renderTracker(task){
-  const defs=stageDefinitions();const current=Math.max(0,defs.findIndex(x=>x.id===task.stage));
-  const tracker=document.getElementById('tracker');
-  tracker.style.setProperty('--progress',defs.length<=1?'100%':`${Math.round(current/(defs.length-1)*100)}%`);
-  tracker.innerHTML=defs.map((d,i)=>{
-    const cls=i<current?'done':(i===current?'now':'');const num=i<current?'✓':i+1;
-    return `<span class="trackStep ${cls}"><span class="num">${num}</span>${escapeHtml(d.label)}</span>`;
-  }).join('');
-}
-function completedPivotData(){
-  const out=[];
-  for(let r=0;r<M.length;r++){
-    const p=leadingIndex(M[r],M[r].length);
-    if(p>=0&&M[r][p].one())out.push({row:r,col:p});
-  }
-  return out;
-}
-function isZeroZone(i,j){
-  if(j>nVars)return false;
-  const pivots=completedPivotData().sort((a,b)=>a.row-b.row||a.col-b.col);let last=-1;
-  for(const p of pivots){if(p.col<=last)continue;last=p.col;if(i>p.row&&j<=p.col)return true;}
-  return false;
-}
-function cellClass(i,j,task){
-  const cls=[];const p=leadingIndex(M[i],M[i].length);
-  if(p===j&&M[i][j].one())cls.push('pivotDone');
-  if(isZeroZone(i,j))cls.push('zeroZone');
-  if(['pivot','scale','clear','clearAbove'].includes(task.kind)){
-    if(j===task.col)cls.push('activeCol');
-    const targetFocus=(task.targets||[]).includes(i);
-    if(j===task.col&&(i===task.row||targetFocus))cls.push('focus');
-  }
-  return cls.join(' ');
-}
-function renderRowLabels(){
-  const el=document.getElementById('rowLabels');el.style.setProperty('--rows',String(rowCount));el.style.setProperty('--rowh','48px');
-  el.innerHTML=Array.from({length:rowCount},(_,i)=>`<div class="rowLabel">${rname(i)}</div>`).join('');
-}
-function renderMatrix(task){
-  const tbl=document.getElementById('matrix');tbl.innerHTML='';
-  const coefW=nVars===4?52:(nVars===3?62:(nVars===2?70:78));const constW=nVars===4?62:70;const rowH=48;
-  const shell=document.getElementById('matrixShell');shell.style.setProperty('--coefw',coefW+'px');shell.style.setProperty('--constw',constW+'px');shell.style.setProperty('--rowh',rowH+'px');
-  document.getElementById('augLine').style.left=(11+coefW*nVars)+'px';
-  tbl.style.width=(coefW*nVars+constW)+'px';
-  const cg=document.createElement('colgroup');
-  for(let j=0;j<nVars+1;j++){const col=document.createElement('col');col.className=j===nVars?'constantCol':'coef';cg.appendChild(col);}tbl.appendChild(cg);
-  M.forEach((row,i)=>{
-    const tr=document.createElement('tr');const rowClasses=[];
-    if(flashing.includes(i))rowClasses.push('flash');if(swapAnim[i])rowClasses.push(swapAnim[i]);tr.className=rowClasses.join(' ');tr.style.setProperty('--swapdist',(swapAnimDist[i]||rowH)+'px');
-    row.forEach((x,j)=>{const td=document.createElement('td');td.className=cellClass(i,j,task);if(j===nVars)td.classList.add('constant');td.textContent=x.text();tr.appendChild(td);});tbl.appendChild(tr);
-  });
-  renderRowLabels();requestAnimationFrame(()=>renderStairSvg(coefW,constW,rowH,task));
-}
-function staircasePivotsForTask(task){
-  let pivots=completedPivotData();
-  if(task.stage==='ref')pivots=pivots.filter(p=>p.row<pivotRow||(p.row===pivotRow&&p.col<=pivotCol));
-  if(task.stage==='ref'&&typeof task.row==='number'&&typeof task.col==='number'&&!pivots.some(p=>p.row===task.row&&p.col===task.col))pivots.push({row:task.row,col:task.col,current:true});
-  pivots.sort((a,b)=>a.row-b.row||a.col-b.col);
-  const clean=[];let last=-1;
-  for(const p of pivots){if(p.col>last){clean.push(p);last=p.col;}}
-  return clean;
-}
-function renderStairSvg(coefW,constW,rowH,task){
-  const svg=document.getElementById('stairSvg');const tbl=document.getElementById('matrix');const first=tbl?.rows?.[0]?.cells?.[0];
-  const tableW=(tbl&&tbl.offsetWidth)||coefW*nVars+constW;const tableH=(tbl&&tbl.offsetHeight)||rowH*rowCount;
-  svg.setAttribute('width',tableW);svg.setAttribute('height',tableH);svg.setAttribute('viewBox',`0 0 ${tableW} ${tableH}`);
-  svg.innerHTML='<defs><linearGradient id="stairGradient" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#5b65f2"/><stop offset="100%" stop-color="#14b8a6"/></linearGradient></defs>';
-  const guide=staircasePivotsForTask(task);if(!guide.length)return;
-  const hasLayout=!!(first&&first.offsetWidth);const cell=(r,c)=>tbl?.rows?.[r]?.cells?.[c];
-  const left=c=>{const td=cell(0,Math.min(c,nVars));return hasLayout&&td?td.offsetLeft+3:c*coefW+3;};
-  const bottom=r=>{const td=cell(r,0);return hasLayout&&td?td.offsetTop+td.offsetHeight-2:(r+1)*rowH-2;};
-  const topY=hasLayout?Math.max(-4,(cell(0,0)?.offsetTop||0)-6):-4;const augCell=cell(0,nVars);const augX=hasLayout&&augCell?augCell.offsetLeft:nVars*coefW;
-  let d=`M ${left(guide[0].col)} ${topY} `;const pts=[`0 ${tableH}`,`0 ${topY}`,`${left(guide[0].col)} ${topY}`];
-  for(let i=0;i<guide.length;i++){
-    const p=guide[i];const nextX=i<guide.length-1?left(guide[i+1].col):(p.col===nVars?tableW:augX);
-    d+=`L ${left(p.col)} ${bottom(p.row)} L ${nextX} ${bottom(p.row)} `;pts.push(`${left(p.col)} ${bottom(p.row)}`,`${nextX} ${bottom(p.row)}`);
-  }
-  pts.push(`${augX} ${tableH}`);
-  const poly=document.createElementNS('http://www.w3.org/2000/svg','polygon');poly.setAttribute('points',pts.join(' '));poly.setAttribute('opacity',guide.some(p=>p.current)?'.38':'.7');svg.appendChild(poly);
-  const path=document.createElementNS('http://www.w3.org/2000/svg','path');path.setAttribute('d',d);path.setAttribute('opacity',guide.some(p=>p.current)?'.52':'.95');svg.appendChild(path);
-}
-function termCoeff(c){const a=c.abs();return a.one()?'':a.text();}
-function eqTerm(c,v,first){if(c.zero())return '';const neg=c.n<0,body=termCoeff(c)+v;if(first)return neg?'−'+body:body;return neg?' − '+body:' + '+body;}
-function rowEquation(row){let left='';for(let j=0;j<nVars;j++){const term=eqTerm(row[j],activeVars[j],left==='');if(term)left+=term;}if(!left)left='0';return `${left} = ${row[nVars].text()}`;}
-function renderEquations(){document.getElementById('equations').innerHTML=M.map((row,i)=>`<div class="eqLine">${rname(i)}  ${escapeHtml(rowEquation(row))}</div>`).join('');}
-function renderChoiceMath(root=document.getElementById('choices')){
-  const spans=[...root.querySelectorAll('.choiceText[data-tex]')];if(!spans.length||!(window.MathJax&&window.MathJax.typesetPromise))return;
-  spans.forEach(span=>{span.textContent=`\\(${span.dataset.tex}\\)`;});
-  try{if(window.MathJax.typesetClear)window.MathJax.typesetClear(spans);}catch(e){}
-  window.MathJax.typesetPromise(spans).catch(()=>spans.forEach(span=>{span.textContent=span.dataset.fallback||span.textContent;}));
-}
-function renderChoices(task){
-  currentChoices=choiceSet(task);const el=document.getElementById('choices');
-  el.className='choices'+(['variables','solveAnswer','nullspaceAnswer'].includes(task.kind)?' fullWidth':'');el.innerHTML='';
-  const keys='ABCD';
-  currentChoices.forEach((choice,i)=>{
-    const btn=document.createElement('button');btn.type='button';btn.className='choice';btn.dataset.i=String(i);
-    const plain=String(choice.txt||'');btn.setAttribute('aria-label',`${keys[i]}. ${plain.replace(/\n/g,' ')}`);
-    const attrs=choice.tex?` data-tex="${escapeHtml(choice.tex)}" data-fallback="${escapeHtml(plain)}"`:'';
-    btn.innerHTML=`<span class="choiceKey" aria-hidden="true">${keys[i]}</span><span class="choiceText"${attrs}>${escapeHtml(plain)}</span>`;
-    btn.addEventListener('click',()=>choose(choice,btn,task));el.appendChild(btn);
-  });
-  renderChoiceMath(el);
-}
-function renderFeedback(){
-  const box=document.getElementById('feedback');const hide=!currentFeedback.type&&!currentFeedback.text;
-  box.className='feedback '+(currentFeedback.type||'')+(hide?' hiddenFeedback':'');
-  document.getElementById('feedbackIcon').textContent=currentFeedback.type==='good'?'✓':(currentFeedback.type==='bad'?'✕':'•');
-  document.getElementById('feedbackText').textContent=currentFeedback.text||'';
-}
-function setFeedback(type,text){currentFeedback={type,text};renderFeedback();}
-function clearFeedback(){setFeedback('','');}
-function renderPrompt(task){
-  const p=promptFor(task);document.getElementById('taskLabel').textContent=p.label;document.getElementById('promptText').textContent=p.text;
-  document.getElementById('validChoicesNote').hidden=!(['pivot','clear','clearAbove'].includes(task.kind)&&((task.candidates||task.targets||[]).length>1));
-}
-function renderStats(){
-  document.getElementById('goalStat').textContent=GOAL_LABELS[goal];
-  document.getElementById('questionStat').textContent=solved?`questions ${completedQuestions}`:`question ${completedQuestions+1}`;
-  document.getElementById('missStat').textContent=`misses ${mistakes}`;
-}
-function renderAll(){
-  if(!M||solved)return;
-  currentTask=computeTask();
-  if(!currentTask)return;
-  renderTracker(currentTask);renderPrompt(currentTask);renderMatrix(currentTask);renderEquations();renderChoices(currentTask);renderFeedback();renderStats();
-}
-function wrongFeedback(choice,task){
-  if(choice.reason)return choice.reason;
-  if(task.kind==='pivot')return 'Move a row with a nonzero entry into the pivot position.';
-  if(task.kind==='scale')return 'Use the reciprocal of the current pivot so that it becomes 1.';
-  if(task.kind==='clear'||task.kind==='clearAbove')return 'Choose the row replacement whose multiplier makes the highlighted entry equal to 0.';
-  if(task.kind==='variables')return 'Basic variables correspond to pivot columns; the remaining variables are free.';
-  if(task.kind==='solutionCount')return 'Check for a contradiction row and then count free variables.';
-  if(task.kind==='solveAnswer')return 'Read the pivot equations from RREF and use one parameter for each free variable.';
-  if(task.kind==='nullspaceAnswer')return 'Each basis vector must satisfy A v = 0, with one independent direction for each free variable.';
-  return 'Try a different choice.';
-}
-function recordMistake(){mistakes++;renderStats();}
-function choose(choice,button,task){
-  if(answerLocked||solved||task!==currentTask)return;
-  if(choice.correct){
-    answerLocked=true;button.classList.add('correct');
-    setTimeout(()=>{
-      completedQuestions++;
-      if(choice.op){applyOperation(choice.op);}
-      else if(task.kind==='variables'){phase='solutionCount';}
-      else if(task.kind==='solutionCount'||task.kind==='refConfirm'||task.kind==='solveAnswer'||task.kind==='nullspaceAnswer'){finishActivity();answerLocked=false;return;}
-      clearFeedback();currentTask=null;renderAll();answerLocked=false;
-      if(flashing.length||Object.keys(swapAnim).length)setTimeout(()=>{flashing=[];swapAnim={};swapAnimDist={};if(!solved&&currentTask)renderMatrix(currentTask);},560);
-    },150);
-  }else{
-    recordMistake();button.classList.add('wrong');setFeedback('bad',wrongFeedback(choice,task));setTimeout(()=>button.classList.remove('wrong'),320);
-  }
-}
-function starRating(){return mistakes===0?3:(mistakes<=2?2:1);}
-function starHTML(n){let out='';for(let i=1;i<=3;i++)out+=`<span class="starIcon ${i<=n?'filled':'empty'}">★</span>`;return out;}
-function renderEndStair(){document.getElementById('endStairSvg').innerHTML='<defs><linearGradient id="endGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#5b65f2"/><stop offset="100%" stop-color="#14b8a6"/></linearGradient></defs><path d="M18 18 H62 V40 H104 V62 H150 V78"/>';}
-function finishMessage(){
-  if(goal==='ref')return 'You reached row echelon form.';
-  if(goal==='classify')return 'You reached REF, identified the basic and free variables, and classified the solution set.';
-  if(goal==='solve')return 'You finished RREF and identified the complete solution set.';
-  return 'You finished RREF and identified the null space.';
-}
-function finishActivity(){
-  solved=true;renderStats();renderEndStair();
-  document.getElementById('endTitle').textContent=`Activity ${problem.activity} complete`;
-  document.getElementById('endStars').innerHTML=starHTML(starRating());
-  document.getElementById('endQuestions').textContent=String(completedQuestions);
-  document.getElementById('endMistakes').textContent=String(mistakes);
-  document.getElementById('endNote').textContent=finishMessage();
-  setTimeout(()=>{document.getElementById('endPanel').classList.add('show');syncModalState();document.getElementById('againBtn').focus();},360);
-}
-function resetActivity(){
-  M=clone(startM);phase='ref';pivotRow=0;pivotCol=0;mistakes=0;completedQuestions=0;solved=false;currentTask=null;currentChoices=[];currentFeedback={type:'',text:''};answerLocked=false;flashing=[];swapAnim={};swapAnimDist={};document.getElementById('endPanel').classList.remove('show');syncModalState();renderAll();requestAnimationFrame(()=>document.getElementById('taskPanel').focus());
-}
-function goBackToNotes(){location.assign(problem?.back||'https://math345-textbook.github.io/');}
-function loadProblem(nextProblem){
-  problem=nextProblem;startM=clone(problem.matrix);M=clone(startM);nVars=problem.variables.length;activeVars=[...problem.variables];rowCount=M.length;goal=problem.goal;
-  document.getElementById('pageTitle').textContent=`Activity ${problem.activity}`;
-  document.title=`Activity ${problem.activity} · The Elimination Scratchpad`;
-  document.getElementById('backBtn').hidden=false;document.getElementById('backBtn').textContent='Back to notes';
-  document.getElementById('statBar').hidden=false;document.getElementById('padStat').textContent='The Elimination Scratchpad';
-  document.getElementById('builderView').hidden=true;document.getElementById('errorView').hidden=true;document.getElementById('playView').hidden=false;document.getElementById('aboutBtn').hidden=false;
-  resetActivity();
-}
-function showError(error){
-  document.getElementById('pageTitle').textContent='The Elimination Scratchpad';document.title='The Elimination Scratchpad · Invalid activity';
-  document.getElementById('backBtn').hidden=true;document.getElementById('statBar').hidden=true;document.getElementById('playView').hidden=true;document.getElementById('builderView').hidden=true;document.getElementById('errorView').hidden=false;document.getElementById('errorText').textContent=error instanceof Error?error.message:String(error);
-}
-
-function matrixMeasure(A){
-  let maxNumerator=0,maxDenominator=1;
-  for(const row of A)for(const x of row){maxNumerator=Math.max(maxNumerator,Math.abs(x.n));maxDenominator=Math.max(maxDenominator,x.d);}
-  return {maxNumerator,maxDenominator};
-}
-function simulateFixedPath(A,n){
-  const B=clone(A),rows=B.length,cols=n+1;let pr=0,pc=0,refMoves=0,rrefMoves=0;let measure=matrixMeasure(B);
-  const update=()=>{const m=matrixMeasure(B);measure.maxNumerator=Math.max(measure.maxNumerator,m.maxNumerator);measure.maxDenominator=Math.max(measure.maxDenominator,m.maxDenominator);};
-  while(pr<rows&&pc<cols){
-    let k=pr;while(k<rows&&B[k][pc].zero())k++;
-    if(k===rows){pc++;continue;}
-    if(B[pr][pc].zero()){rawSwap(B,pr,k);refMoves++;update();}
-    if(!B[pr][pc].one()){rawScale(B,pr,B[pr][pc].inv());refMoves++;update();}
-    for(let r=pr+1;r<rows;r++)if(!B[r][pc].zero()){rawAdd(B,r,pr,B[r][pc].neg());refMoves++;update();}
-    pr++;pc++;
-  }
-  const refMatrix=clone(B);const pivots=pivotData(B);
-  for(let i=pivots.length-1;i>=0;i--){const p=pivots[i];for(let r=0;r<p.row;r++)if(!B[r][p.col].zero()){rawAdd(B,r,p.row,B[r][p.col].neg());rrefMoves++;update();}}
-  const previousN=nVars,previousVars=activeVars;nVars=n;activeVars=allVars.slice(0,n);
-  const analysis=analyzeSystem(B);
-  nVars=previousN;activeVars=previousVars;
-  return {refMoves,rrefMoves,refMatrix,rrefMatrix:B,maxNumerator:measure.maxNumerator,maxDenominator:measure.maxDenominator,analysis};
-}
-function outcomeLabel(analysis){if(analysis.kind==='none')return 'no solutions';if(analysis.kind==='one')return 'one solution';return 'infinitely many';}
-
-function builderGridValues(){
-  const rows=Number(document.getElementById('builderRows').value),vars=Number(document.getElementById('builderVarsCount').value);const values=[];
-  for(let r=0;r<rows;r++){const row=[];for(let c=0;c<vars+1;c++){const input=document.querySelector(`[data-builder-cell="${r},${c}"]`);row.push(input?input.value:'0');}values.push(row);}return values;
-}
-function renderBuilderMatrix({preserve=true}={}){
-  const rows=Number(document.getElementById('builderRows').value),vars=Number(document.getElementById('builderVarsCount').value);
-  const old=preserve&&builderLastGrid?builderLastGrid:builderLastGrid;
-  const oldVars=builderLastVars;
-  const names=document.getElementById('builderVars').value.split(',').map(x=>x.trim());
-  const grid=document.getElementById('builderMatrix');grid.style.setProperty('--cols',String(vars+1));grid.innerHTML='';
-  const header=document.createElement('div');header.className='builderMatrixHeader';header.innerHTML='<span></span>'+Array.from({length:vars},(_,c)=>`<span>${escapeHtml(names[c]||allVars[c])}</span>`).join('')+'<span class="augHead">b</span>';grid.appendChild(header);
-  for(let r=0;r<rows;r++){
-    const row=document.createElement('div');row.className='builderMatrixRow';row.innerHTML=`<span class="builderRowLabel">${rname(r)}</span>`;
-    for(let c=0;c<vars+1;c++){
-      const input=document.createElement('input');input.className='builderCell'+(c===vars?' constant':'');input.inputMode='numeric';input.autocomplete='off';input.dataset.builderCell=`${r},${c}`;
-      let value;
-      if(old?.[r])value=c<vars?(c<oldVars?old[r][c]:'0'):(old[r][oldVars]??'0');
-      if(value===undefined)value='';
-      input.value=value;input.setAttribute('aria-label',`Row ${r+1}, ${c===vars?'right-hand side':`coefficient ${c+1}`}`);
-      input.addEventListener('input',()=>{builderLastGrid=builderGridValues();builderLastRows=rows;builderLastVars=vars;updateBuilderAudit();});row.appendChild(input);
-    }
-    grid.appendChild(row);
-  }
-  builderLastRows=rows;builderLastVars=vars;builderLastGrid=builderGridValues();updateBuilderAudit();
-}
-function readBuilderProblem(){
-  const rows=Number(document.getElementById('builderRows').value),vars=Number(document.getElementById('builderVarsCount').value);const raw=builderGridValues();
-  const activityValue=document.getElementById('builderActivity').value.trim();
-  if(!activityValue)throw new Error('Enter the activity number.');
-  const matrix=raw.map((row,r)=>row.map((token,c)=>parseIntegerToken(token,r,c)));
-  const variables=document.getElementById('builderVars').value.split(',').map(x=>x.trim());
-  if(variables.length!==vars)throw new Error('The variable-name list must contain exactly one name per variable column.');
-  if(variables.some(name=>!/^[A-Za-z][A-Za-z0-9_]*$/.test(name)))throw new Error('Variable names must begin with a letter and use only letters, digits, or underscores.');
-  if(new Set(variables).size!==variables.length)throw new Error('Variable names must be distinct.');
-  const selectedGoal=document.getElementById('builderGoal').value;
-  if(selectedGoal==='nullspace'&&matrix.some(row=>!row[vars].zero()))throw new Error('The null-space goal requires every right-hand side to be 0.');
-  return {version:'1',activity:sanitizeActivity(activityValue),goal:selectedGoal,matrix,variables,back:normalizeBackUrl(document.getElementById('builderBack').value),rows,vars};
-}
-function matrixParam(A){return A.map(row=>row.map(x=>x.ascii()).join(',')).join('~');}
-function activityURL(p){
-  const url=new URL(location.href);url.search='';url.hash='';
-  url.searchParams.set('v','1');url.searchParams.set('activity',p.activity);url.searchParams.set('m',matrixParam(p.matrix));url.searchParams.set('vars',p.variables.join(','));url.searchParams.set('goal',p.goal);
-  if(p.back)url.searchParams.set('back',p.back);
-  return url.toString();
-}
-function xmlEscape(s){return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-function pretextSnippet(p){const link=activityURL(p);return `<url href="${xmlEscape(link)}" visual="The Elimination Scratchpad">Practice Activity ${escapeHtml(p.activity)} in The Elimination Scratchpad</url>`;}
-function updateBuilderAudit(){
-  const grid=document.getElementById('auditGrid'),message=document.getElementById('auditMessage');
-  try{
-    const p=readBuilderProblem();const sim=simulateFixedPath(p.matrix,p.variables.length);const nullity=sim.analysis.kind==='none'?'—':sim.analysis.freeCols.length;
-    grid.innerHTML=[
-      ['Dimensions',`${p.matrix.length} × ${p.variables.length}`],['Outcome',outcomeLabel(sim.analysis)],['Nullity',String(nullity)],
-      ['REF moves',String(sim.refMoves)],['RREF moves',String(sim.rrefMoves)],['Largest fraction',`${sim.maxNumerator}/${sim.maxDenominator}`]
-    ].map(([label,value])=>`<div class="auditItem"><span>${escapeHtml(label)}</span><b>${escapeHtml(value)}</b></div>`).join('');
-    const warnings=[];
-    if(sim.maxNumerator>96)warnings.push(`an intermediate numerator reaches ${sim.maxNumerator}`);
-    if(sim.maxDenominator>8)warnings.push(`an intermediate denominator reaches ${sim.maxDenominator}`);
-    if(p.goal==='ref'&&sim.refMoves===0)warnings.push('the starting matrix is already in REF, so the activity will consist only of the final REF check');
-    if((p.goal==='solve'||p.goal==='nullspace')&&sim.refMoves===0&&sim.rrefMoves===0)warnings.push('the starting matrix is already in RREF, so the activity will go directly to the final answer question');
-    if(warnings.length){message.className='auditMessage warn';message.textContent=`Valid, but note: ${warnings.join('; ')}.`;}
-    else{message.className='auditMessage';message.textContent='Valid. The fixed pivot–scale–clear route keeps the arithmetic within the recommended range.';}
-    document.getElementById('builderOutput').value=activityURL(p);
-  }catch(e){
-    grid.innerHTML='';message.className='auditMessage bad';message.textContent=e.message;document.getElementById('builderOutput').value='';
-  }
-}
-async function copyText(text){
-  try{await navigator.clipboard.writeText(text);return true;}catch(e){
-    const area=document.createElement('textarea');area.value=text;area.style.position='fixed';area.style.opacity='0';document.body.appendChild(area);area.select();let ok=false;try{ok=document.execCommand('copy');}catch(err){}area.remove();return ok;
-  }
-}
-function setCopyStatus(text){document.getElementById('copyStatus').textContent=text;}
-function showBuilder(){
-  document.getElementById('pageTitle').textContent='The Elimination Scratchpad';document.title='The Elimination Scratchpad · Link Builder';document.getElementById('backBtn').hidden=true;
-  document.getElementById('statBar').hidden=false;document.getElementById('padStat').textContent='Instructor link builder';document.getElementById('goalStat').textContent='1–4 equations · 1–4 variables';document.getElementById('questionStat').textContent='URL + PreTeXt';document.getElementById('missStat').textContent='exact fractions';
-  document.getElementById('playView').hidden=true;document.getElementById('errorView').hidden=true;document.getElementById('builderView').hidden=false;document.getElementById('aboutBtn').hidden=false;
-  builderLastRows=2;builderLastVars=2;builderLastGrid=[['','',''],['','','']];renderBuilderMatrix({preserve:false});
-}
-
-function anyModalOpen(){return document.getElementById('endPanel').classList.contains('show')||document.getElementById('aboutPanel').classList.contains('show');}
-function syncModalState(){const open=anyModalOpen();document.body.classList.toggle('modalOpen',open);document.getElementById('allGamesNav').inert=open;}
-function openAbout(){lastModalFocus=document.activeElement;document.getElementById('aboutPanel').classList.add('show');syncModalState();requestAnimationFrame(()=>document.getElementById('aboutCloseBtn').focus());}
-function closeAbout(){document.getElementById('aboutPanel').classList.remove('show');syncModalState();requestAnimationFrame(()=>lastModalFocus?.focus?.());}
-function activeDialog(){if(document.getElementById('aboutPanel').classList.contains('show'))return document.getElementById('aboutPanel');if(document.getElementById('endPanel').classList.contains('show'))return document.getElementById('endPanel');return null;}
-function trapDialogKeys(e){
-  const panel=activeDialog();if(!panel)return;
-  if(e.key==='Escape'){e.preventDefault();if(panel.id==='aboutPanel')closeAbout();return;}
-  if(e.key!=='Tab')return;const focusables=[...panel.querySelectorAll('button,[href],[tabindex]:not([tabindex="-1"])')].filter(el=>!el.disabled&&!el.hidden&&el.offsetParent!==null);if(!focusables.length)return;const first=focusables[0],last=focusables[focusables.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}
-}
-
-document.getElementById('backBtn').addEventListener('click',goBackToNotes);
-document.getElementById('endBackBtn').addEventListener('click',goBackToNotes);
-document.getElementById('againBtn').addEventListener('click',resetActivity);
-document.getElementById('aboutBtn').addEventListener('click',openAbout);
-document.getElementById('aboutCloseBtn').addEventListener('click',closeAbout);
-document.getElementById('aboutDoneBtn').addEventListener('click',closeAbout);
-document.getElementById('aboutPanel').addEventListener('click',e=>{if(e.target===e.currentTarget)closeAbout();});
-document.getElementById('errorBuilderBtn').addEventListener('click',()=>{const u=new URL(location.href);u.search='?author=1';u.hash='';location.href=u.toString();});
-document.getElementById('builderRows').addEventListener('change',()=>renderBuilderMatrix({preserve:true}));
-document.getElementById('builderVarsCount').addEventListener('change',()=>{
-  const count=Number(document.getElementById('builderVarsCount').value);const current=document.getElementById('builderVars').value.split(',').map(x=>x.trim()).filter(Boolean);document.getElementById('builderVars').value=Array.from({length:count},(_,i)=>current[i]||allVars[i]).join(',');renderBuilderMatrix({preserve:true});
-});
-document.getElementById('builderVars').addEventListener('input',()=>{renderBuilderMatrix({preserve:true});});
-['builderActivity','builderGoal','builderBack'].forEach(id=>document.getElementById(id).addEventListener('input',updateBuilderAudit));
-document.getElementById('builderGoal').addEventListener('change',updateBuilderAudit);
-document.getElementById('previewBtn').addEventListener('click',()=>{try{location.href=activityURL(readBuilderProblem());}catch(e){setCopyStatus(e.message);}});
-document.getElementById('copyUrlBtn').addEventListener('click',async()=>{try{const text=activityURL(readBuilderProblem());document.getElementById('builderOutput').value=text;setCopyStatus(await copyText(text)?'Activity link copied.':'Copy failed; select the link below.');}catch(e){setCopyStatus(e.message);}});
-document.getElementById('copyPretextBtn').addEventListener('click',async()=>{try{const text=pretextSnippet(readBuilderProblem());document.getElementById('builderOutput').value=text;setCopyStatus(await copyText(text)?'PreTeXt snippet copied.':'Copy failed; select the snippet below.');}catch(e){setCopyStatus(e.message);}});
-document.addEventListener('keydown',e=>{
-  if(activeDialog()){trapDialogKeys(e);return;}
-  if(document.getElementById('playView').hidden||solved)return;
-  if(e.target&&['INPUT','TEXTAREA','SELECT','BUTTON'].includes(e.target.tagName))return;
-  const map={'1':0,'2':1,'3':2,'4':3,'a':0,'b':1,'c':2,'d':3};const key=e.key.toLowerCase();
-  if(Object.prototype.hasOwnProperty.call(map,key)){const btn=[...document.querySelectorAll('#choices .choice')][map[key]];if(btn){e.preventDefault();btn.click();}}
-});
-window.addEventListener('resize',()=>{if(!document.getElementById('playView').hidden&&currentTask)renderMatrix(currentTask);});
-window.addEventListener('mathjax-ready',()=>{if(!document.getElementById('playView').hidden)renderChoiceMath();});
-
-const bootParams=new URLSearchParams(location.search);
-const activityOptionKeys=['m','activity','label','vars','goal','back','v'];
-const hasActivityOptions=activityOptionKeys.some(key=>bootParams.has(key));
-if(bootParams.get('author')==='1'||!hasActivityOptions)showBuilder();
-else{
-  try{loadProblem(parseProblemFromParams(bootParams));}
-  catch(error){showError(error);}
-}
-</script>
+<dialog id="q1r" aria-labelledby="q1s"><div class="q3o"><h2 id="q1s">Feedback explanation</h2><button type="button" class="btn" id="q1t">Close</button></div><div class="q3p"><p id="q1u"></p><p id="q1v"></p><div id="preview" class="preview hidden"></div></div></dialog>
+<script>"use strict";class Frac{constructor(e,t=1){if(!Number.isSafeInteger(e)||!Number.isSafeInteger(t))throw new Error("fraction entries must be safe integers");if(0===t)throw new Error("zero denominator");t<0&&(e=-e,t=-t);const n=Frac.gcd(Math.abs(e),Math.abs(t));this.n=e/n,this.d=t/n}static gcd(e,t){for(;t;){const n=e%t;e=t,t=n}return e||1}static of(e){return e instanceof Frac?e:new Frac(e,1)}add(e){return e=Frac.of(e),new Frac(this.n*e.d+e.n*this.d,this.d*e.d)}sub(e){return e=Frac.of(e),new Frac(this.n*e.d-e.n*this.d,this.d*e.d)}mul(e){return e=Frac.of(e),new Frac(this.n*e.n,this.d*e.d)}neg(){return new Frac(-this.n,this.d)}inv(){if(0===this.n)throw new Error("zero reciprocal");return new Frac(this.d,this.n)}abs(){return new Frac(Math.abs(this.n),this.d)}eq(e){return e=Frac.of(e),this.n===e.n&&this.d===e.d}zero(){return 0===this.n}one(){return this.n===this.d}value(){return this.n/this.d}text(){return 1===this.d?String(this.n).replace("-","−"):(this.n<0?"−":"")+Math.abs(this.n)+"/"+this.d}ascii(){return 1===this.d?String(this.n):`${this.n}/${this.d}`}}const F=(e,t=1)=>new Frac(e,t),e=new Set(["ref","classify","solve","nullspace"]),t={ref:"Reach REF",classify:"Classify the system",solve:"Solve the system",nullspace:"Find the null space"},q4a=["x","y","z","w"];let n=null,q5o=null,M=null,q4w=2,o=2,q48=["x","y"],goal="classify",phase="ref",q54=0,q53=0,mistakes=0,q4j=0,solved=!1,q4p=null,q4n=[],q4o={type:"",text:""},q4c=!1,flashing=[],q5q={},q5r={},r=null,i=null,a=2,s=2,q5j=0,c=0,l=0,u=0,h=0,d=null,p=null,f=0,q4b=0,m=Promise.resolve(),v=!1;const x=new Set,g=new Map,b=new Map;function y(e){return document.querySelector(e)}function w(e){return document.createElement(e)}const q=new Map;let q4u=null,k=!1,E=!1,$=null;function C(e){return document.getElementById(e)}function A(){if(k)return;k=!0;const e=C("q1r");C("q1d").addEventListener("click",q4y),C("q1t").addEventListener("click",q4g),e.addEventListener("cancel",e=>{e.preventDefault(),q4g()}),C("qz").addEventListener("click",()=>q5l("matrix")),C("q10").addEventListener("click",()=>q5l("equations")),new ResizeObserver(()=>{j()&&!E&&q4u&&q4u.key!==R()&&q58()}).observe(C("qv")),window.addEventListener("resize",()=>{if(j())q58()})}function R(){return[q5j,q48.join(","),C("qv").clientWidth,getComputedStyle(C("qx")).fontSize,getComputedStyle(document.body).fontSize].join("|")}function L(e,t){const n=e.cloneNode(!0);return n.removeAttribute("id"),n.querySelectorAll("[id]").forEach(e=>e.removeAttribute("id")),n.inert=!0,n.setAttribute("aria-hidden","true"),n.style.cssText="position:fixed;left:-100000px;top:0;visibility:hidden;pointer-events:none;width:"+t+"px;height:auto;min-height:0;max-height:none",document.body.append(n),n}function S(){A(),document.body.classList.add("q3g");const e=R();if(q4u?.key===e)return;E=!0;const t=q4u,n=q.get(e)||{key:e,view:t?.run===q5j?t.view:"matrix",run:q5j,q43:0,q42:0,q44:0};q.set(e,n),q4u=n;const o=C("qv"),r=L(o,o.clientWidth);r.querySelector(".qy")?.remove();let i=0;const a=["pivot","scale","clear","clearAbove","variables","solutionCount","refConfirm","solveAnswer","nullspaceAnswer"];for(const e of a)for(let t=0;t<q4w;t++)for(let n=0;n<M.length;n++){const o=je({kind:e,col:t,row:n});o&&(r.querySelector(".qw").textContent=""+o.label,r.querySelector(".qx").textContent=o.text,i=Math.max(i,r.getBoundingClientRect().height))}r.remove(),o.style.height=Math.ceil(i)+"px";const s=C("matrix"),c=parseFloat(getComputedStyle(s).fontSize);n.q45=Math.max(36,2.2*c),n.q46=Math.max(60,3.5*c),n.q41=null,n.q40=0,y(".play").style.setProperty("--zm",n.q45+"px");const l=C("feedback");l.classList.remove("q3n");const u=C("q1c"),h=parseFloat(getComputedStyle(u).lineHeight);u.style.height=u.style.minHeight=2*h+"px";if(!feedbackFits("Recheck the target row and multiplier.",u))l.classList.add("q3n");E=!1}function q5l(e){q4u&&(q4u.view=e,T())}function T(){const e=matchMedia("(max-width:600px)").matches,t=C("q13"),n=C("q19"),o=y(".play .q27");t.hidden||(q4u.q43=o.scrollLeft),n.hidden||(q4u.q42=n.scrollLeft),t.hidden=e&&"matrix"!==q4u.view,n.hidden=e&&"equations"!==q4u.view,C("qz").setAttribute("aria-pressed",String("matrix"===q4u.view)),C("q10").setAttribute("aria-pressed",String("equations"===q4u.view)),t.hidden||(o.scrollLeft=q4u.q43),n.hidden||(n.scrollLeft=q4u.q42);const r=e&&"equations"===q4u.view?n:o;C("q11").style.visibility=r.scrollWidth>r.clientWidth+1?"visible":"hidden"}function q5c(e){S();const t=C("matrix"),n=y(".play .q27"),o=C("q16"),r=n.scrollLeft;t.innerHTML="",t.style.width="",o.style.cssText="";const i=C("q14");i.innerHTML=q48.map(e=>"<span>"+(/^[A-Za-z]$/.test(e)?"<var>"+e+"</var>":W(e))+"</span>").join("")+'<span aria-label="Right-hand side">RHS</span>',q4u.widths||(q4u.widths=[...i.children].map((e,t)=>{const n=document.createRange();return n.selectNodeContents(e),Math.ceil(Math.max(q4u.q46+(t===q4w?8:0),n.getBoundingClientRect().width+12))})),M.forEach((n,o)=>{const r=w("tr");r.className=[flashing.includes(o)?"flash":"",q5q[o]||""].join(" "),r.style.setProperty("--swapdist",(q5r[o]||q4u.q45)+"px"),n.forEach((t,n)=>{const i=w("td");i.className=function(e,t,n){if(!Ie(n))return"";const o=[];return q4i(n).some(n=>n.row===e&&n.col===t)&&o.push("q2a"),function(e,t){return!!M[e][t]?.zero()&&q4i().some(n=>e>n.row&&t<=n.col)}(e,t)&&o.push("q2b"),t===n.col&&o.push("q29"),t!==n.col||e!==n.row&&!(n.targets||[]).includes(e)||o.push("focus"),o.join(" ")}(o,n,e)+(n===q4w?" constant":""),i.textContent=t.text(),i.style.minWidth=q4u.widths[n]+"px",r.append(i)}),t.append(r)}),y(".play .q15").innerHTML=M.map((e,t)=>'<div class="q26">'+K(t)+"</div>").join(""),function(e=q4p){const t=C("matrix");if(!t.rows.length)return;const n=C("q13"),o=n.hidden;n.hidden=!1;const r=[...t.rows[0].cells],i=C("q16"),a=C("q14"),s=y(".play .q15");a.style.gridTemplateColumns=r.map(e=>e.offsetWidth+"px").join(" "),a.style.paddingInline=getComputedStyle(i).paddingLeft,C("q17").style.left=i.clientLeft+t.offsetLeft+r[q4w].offsetLeft+"px",s.style.paddingTop=t.rows[0].offsetTop+"px",s.style.gridTemplateRows=[...t.rows].map(e=>e.offsetHeight+"px").join(" "),function(e,t,n,o){const r=C("q18"),i=C("matrix"),a=i.offsetWidth,s=i.offsetHeight;r.setAttribute("width",a),r.setAttribute("height",s),r.setAttribute("viewBox",`0 0 ${a} ${s}`),r.innerHTML='<defs><linearGradient id="q1w" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#5b65f2"/><stop offset="100%" stop-color="#14b8a6"/></linearGradient></defs>';const c=q4i(o,false);if(!c.length)return;const l=e=>i.rows[e.row].cells[e.col],u=e=>l(e).offsetLeft+3;let h=`M ${u(c[0])} -4 `;c.forEach((e,t)=>{const n=l(e),o=n.offsetTop+n.offsetHeight-2,r=t+1<c.length?u(c[t+1]):n.offsetLeft+n.offsetWidth-2;h+=`L ${u(e)} ${o} L ${r} ${o} `});const d=document.createElementNS("http://www.w3.org/2000/svg","path");d.setAttribute("d",h),r.appendChild(d)}(0,0,q4u.q45,e);const c=y(".play .q3j"),l=c.parentElement;null===q4u.q41&&(q4u.q41=Math.max(0,(l.clientWidth-c.offsetWidth)/2)),c.style.marginLeft=q4u.q41+"px",c.style.marginRight="0",q4u.q40=Math.max(q4u.q40,n.getBoundingClientRect().height),n.hidden=o}(e),n.scrollLeft=r}function q5i(e,t){const n=C("matrix").rows;return n[e]&&n[t]?Math.abs(n[e].offsetTop-n[t].offsetTop):Math.abs(e-t)*(q4u?.q45||48)}function N(e,t,n){const o=["pivot","scale","clear","clearAbove"].includes(n.kind);e.classList.toggle("q3m",o);const r=w("div");r.className=e.className,r.inert=!0,r.style.cssText="position:fixed;visibility:hidden;left:-100000px;top:0;width:"+e.clientWidth+"px",t.forEach(e=>{const t=e.cloneNode(!0);t.style.height="auto",r.append(t)}),document.body.append(r);const i=Math.ceil(Math.max(48,...[...r.children].map(e=>e.getBoundingClientRect().height)));r.remove(),t.forEach(e=>{e.style.height=i+"px",e.querySelector(".q2h").setAttribute("aria-label","Answer "+"ABCD"[Number(e.dataset.i)]+" mathematics. Scroll horizontally to read the full expression.")}),n.q47=q4u.key,q4u.q44=Math.max(q4u.q44,i*Math.ceil(t.length/(matchMedia("(max-width:600px)").matches||e.classList.contains("q2f")?1:2))),e.style.minHeight=q4u.q44+"px"}function feedbackFits(message,text){const probe=L(text,text.clientWidth),style=getComputedStyle(text);probe.style.font=style.font;probe.style.letterSpacing=style.letterSpacing;probe.textContent=message;const fits=probe.getBoundingClientRect().height<=parseFloat(style.lineHeight)*2+1;probe.remove();return fits}function z(){
+ A();const rail=C('feedback'),text=C('q1c'),full=q4o.text||'',type=q4o.type||'',independent=false;
+ rail.className='feedback'+(rail.classList.contains('q3n')?' q3n':'')+' '+type;
+ let message=full||'Several choices may be correct.',shortened=false;
+ if(full){let fits;if(independent){const probe=L(text,text.clientWidth);probe.textContent=full;fits=probe.getBoundingClientRect().height<=parseFloat(getComputedStyle(text).lineHeight)*2+1;probe.remove();}else fits=feedbackFits(full,text);
+ if(!fits){shortened=true;const summaries={pivot:'The pivot is misplaced.',scale:'The scale is incorrect.',clear:'The elimination fails.',clearAbove:'The elimination fails.',variables:'The groups are incorrect.',solution:'The count is incorrect.',solutionCount:'The count is incorrect.',refConfirm:'That REF claim is wrong.',solveAnswer:'The solution set is wrong.',nullspaceAnswer:'This is not the null space.'};message=independent?'Try a different choice.':summaries[q4p?.kind]||'This choice is incorrect.';}}
+ if(!independent&&shortened&&!feedbackFits(message,text))message='Incorrect choice.';
+ if(text.textContent!==message)text.textContent=message;C('q1b').textContent=type==='good'?'✓':type==='bad'?'✕':'•';const action=C('q1d'),show=!!full&&(independent||shortened);action.style.visibility=show?'visible':'hidden';action.disabled=!show;action.tabIndex=show?0:-1;action.setAttribute('aria-hidden',String(!show));
+}function q4y(){q4o.text&&!_e()&&($=document.activeElement,C("q1u").textContent=C("qx").textContent,C("q1v").textContent=q4o.text,C("preview").innerHTML=q4o.preview||"",C("preview").classList.toggle("hidden",!q4o.preview),C("q1r").showModal(),q5s(),C("q1t").focus({preventScroll:!0}))}function q4g(){const e=C("q1r");e?.open&&(e.close(),q5s(),P($))}function j(){return!C("qt").hidden}function I(e,t,n=q4p){const o=l,r=setTimeout(()=>{x.delete(r),o!==l||n&&n!==q4p||!j()||e()},t);return x.add(r),r}function q4s(e=!1){q4g(),l++,h++,q4b++;for(const e of x)clearTimeout(e);x.clear(),p=null,d=null,q4c=!1,f=0,e&&(q5j=++c)}function q5p(){const e=q4l();q4p=e,e?(e.id=++u,e.q5j=q5j,e.presentation=null,q4n=q4e(e),e.choices=q4n,q4n.forEach((t,n)=>{t.id=e.id+":"+n})):q4n=[]}function H(){const e=q4c||solved||performance.now()<f||d!==q4p;for(const t of document.querySelectorAll("#choices .choice"))t.setAttribute("aria-disabled",String(e))}function P(e,t=()=>!0){const n=l;requestAnimationFrame(()=>{n===l&&e?.isConnected&&e.getClientRects().length&&!e.closest("[inert]")&&t()&&e.focus({preventScroll:!0})})}function B(e){try{window.MathJax?.typesetClear?.([e])}catch{}}function q5a(e,t,n,o){if(!t)return;if(n.presentation)return t.forEach((e,t)=>{e.querySelector(".q2h").innerHTML=n.presentation[t]}),void o();if(!window.MathJax?.typesetPromise){const r=l,i=h,s=C("MathJax-script");let c=!1;const u=()=>{if(c)return;c=!0,clearTimeout(d),window.removeEventListener("mathjax-ready",u),s?.removeEventListener("error",u);r===l&&n===q4p&&i===h&&j()&&(window.MathJax?.typesetPromise?q5a(e,t,n,o):o())},d=setTimeout(u,3000);return window.addEventListener("mathjax-ready",u),void s?.addEventListener("error",u)}if(v)return void o();const r=l,i=h,a=()=>r===l&&n===q4p&&i===h&&j(),s=w("div");s.className=e.className,s.inert=!0,s.setAttribute("aria-hidden","true"),s.style.cssText="position:fixed;left:-100000px;top:0;visibility:hidden;pointer-events:none;width:"+e.getBoundingClientRect().width+"px",t.forEach(e=>s.appendChild(e.cloneNode(!0))),document.body.appendChild(s);const c=[...s.querySelectorAll(".q2h[data-tex]")];if(!c.length)return s.remove(),void o();c.forEach(e=>{e.textContent="\\("+e.dataset.tex+"\\)"});let u=!1;const d=e=>{!u&&a()&&(u=!0,e&&[...s.querySelectorAll(".q2h")].forEach((e,n)=>t[n].querySelector(".q2h").replaceChildren(...e.childNodes)),o())},p=I(()=>d(!1),1200,n);v=!0,m=m.catch(()=>{}).then(async()=>{a()&&(await(window.MathJax.startup?.promise),a()&&(await window.MathJax.typesetPromise([s]),await document.fonts.ready))}).then(()=>d(!0),()=>d(!1)).finally(()=>{clearTimeout(p),x.delete(p),B(s),s.remove(),v=!1})}function q59(e,t=q4p){const n=C("choices");if(d===t||t.preparing)return void H();t.preparing=!0;const o=++h;n.className="choices"+(["variables","solveAnswer","nullspaceAnswer"].includes(t.kind)?" q2f":"");const r="ABCD",i=e.map((e,n)=>{const o=w("button");o.type="button",o.className="choice",o.dataset.i=String(n);const i=String(e.txt||"");o.setAttribute("aria-label",r[n]+". "+i.split("\n").join(" "));const a=e.tex?' data-tex="'+W(e.displayTex||e.tex)+'" data-fallback="'+W(i)+'"':"";return o.innerHTML='<span class="q2g" aria-hidden="true">'+r[n]+'</span><span class="q2h'+(e.math?" q3c":"")+'"'+a+">"+(e.math?function(e){const t=e=>$e(e.map(Y)),n=$e(e.vars),o=e=>'<span class="q3e">'+e+"</span>",r="<span>ℝ<sup>"+e.vars.length+"</sup></span>";let i=[];if("none"===e.type)i=[o("No solution.")];else if("vector"===e.type)i=[o(n+" = "),t(e.particular)];else if("all"===e.type)i=[o(n+" ∈ "+r)];else if("family"===e.type){i=[o(n+" = ")];const r=e.showParticular||!Te(e.particular);r&&i.push(t(e.particular)),e.basis.forEach((n,a)=>i.push(o((r||a?"+ ":"")+W(e.params[a])+" "+t(n)))),i.push(o(W(e.params.join(", "))+" ∈ ℝ"))}else i=[o("Null(A) = ")],"span"===e.type?(i.push(o("span {")),e.basis.forEach((e,n)=>i.push(o((n?", ":"")+t(e)))),i.push(o("}"))):"singleton"===e.type?i.push(o("{ "+t(e.vector)+" }")):"zero"===e.type?i.push(o("{ "+t(Re(e.vars.length))+" }")):i.push(o("space"===e.type?r:"∅"));return'<span class="q3d">'+i.join("")+"</span>"}(e.math):W(i))+"</span>",o.addEventListener("click",n=>choose(e,o,t,n)),o});H(),q5a(n,i,t,()=>{if(t!==q4p||o!==h||!j())return;const e=document.activeElement,r=e?.parentElement===n?Number(e.dataset.i):-1;N(n,i,t),B(n),n.replaceChildren(...i),d=t,t.preparing=!1,t.presentation=i.map(e=>e.querySelector(".q2h").innerHTML),H(),r>=0&&!_e()&&i[Math.min(r,i.length-1)]?.focus({preventScroll:!0})})}function D(){return q4p?.id}document.addEventListener("pointermove",e=>{const t=b.get(e.pointerId);t&&Math.hypot(e.clientX-t.x,e.clientY-t.y)>8&&(t.blocked=!0)},!0),document.addEventListener("pointerdown",e=>{e.target.closest(".choice,#warmupNextBtn,#warmupAgainBtn")&&b.set(e.pointerId,{id:D(),x:e.clientX,y:e.clientY,blocked:performance.now()<f||q4c})},!0),document.addEventListener("pointercancel",e=>b.delete(e.pointerId),!0),document.addEventListener("click",e=>{if(!e.target.closest(".choice,#warmupNextBtn,#warmupAgainBtn"))return;const t=b.get(e.pointerId);b.delete(e.pointerId),t&&(t.id!==D()||t.blocked)&&(e.preventDefault(),e.stopImmediatePropagation())},!0),document.addEventListener("keydown",e=>{if(e.ctrlKey||e.metaKey||e.altKey)return;const t=e.key.toLowerCase(),n=e.target.closest?.(".choice,#warmupNextBtn,#warmupAgainBtn");return!n&&["INPUT","TEXTAREA","SELECT"].includes(e.target.tagName)||!/^[a-d1-4]$/.test(t)&&(!n||"enter"!==t&&" "!==t)?void 0:e.repeat||g.has(t)?(e.preventDefault(),void e.stopImmediatePropagation()):void g.set(t,{id:D(),blocked:performance.now()<f||q4c})},!0),document.addEventListener("keyup",e=>{const t=e.key.toLowerCase(),n=g.get(t);g.delete(t),n&&(n.id!==D()||n.blocked)&&(e.preventDefault(),e.stopImmediatePropagation())},!0),window.addEventListener("blur",()=>{g.clear(),b.clear()});const clone=e=>e.map(e=>e.map(e=>F(e.n,e.d))),W=e=>String(e).replace(/[&<>"']/g,e=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[e])),U=e=>{const t=[...e];for(let e=t.length-1;e>0;e--){const n=Math.floor(Math.random()*(e+1));[t[e],t[n]]=[t[n],t[e]]}return t},K=e=>"R"+String(e+1).replace(/[123456789]/g,e=>({1:"₁",2:"₂",3:"₃",4:"₄",5:"₅",6:"₆",7:"₇",8:"₈",9:"₉"}[e])),V=e=>`R_${e+1}`,Z=e=>{const t=e.text();return e.n<0||1!==e.d?`(${t})`:t},O=e=>1===(e=F(e.n,e.d)).d?String(e.n):`${e.n<0?"-":""}\\tfrac{${Math.abs(e.n)}}{${e.d}}`,Y=e=>e.text();function _(e,t){return{t:"scale",row:e,c:t,txt:`${K(e)} → ${Z(t)}${K(e)}`,tex:`${V(e)} \\to ${O(t)}${V(e)}`}}function G(e,t){return{t:"swap",a:e,b:t,txt:`${K(e)} ↔ ${K(t)}`,tex:`${V(e)} \\leftrightarrow ${V(t)}`}}function X(e){return{t:"keep",row:e,txt:`${K(e)} stays`,tex:`${V(e)} \\text{ stays}`}}function J(e,t,n){const o=n.n<0?" − ":" + ",r=n.abs(),i=r.one()?"":Z(r),a=n.n<0?" - ":" + ",s=r.one()?"":O(r);return{t:"add",target:e,source:t,c:n,txt:`${K(e)} → ${K(e)}${o}${i}${K(t)}`,tex:`${V(e)} \\to ${V(e)}${a}${s}${V(t)}`}}function Q(e,t){return!(!e||!t||e.t!==t.t)&&("keep"===e.t?e.row===t.row:"swap"===e.t?e.a===t.a&&e.b===t.b||e.a===t.b&&e.b===t.a:"scale"===e.t?e.row===t.row&&e.c.eq(t.c):"add"===e.t&&e.target===t.target&&e.source===t.source&&e.c.eq(t.c))}function ee(e,t){e.some(e=>e.op&&t.op&&Q(e.op,t.op)||e.tex&&t.tex&&e.tex===t.tex||!e.tex&&!t.tex&&e.txt===t.txt)||e.push(t)}function te(e,t,n,o){e[t]=e[t].map((t,r)=>t.add(e[n][r].mul(o)))}function ne(e,t,n){[e[t],e[n]]=[e[n],e[t]]}function oe(e,t,n){e[t]=e[t].map(e=>e.mul(n))}function re(e){return String(e||"").trim().replace(/^activity\s*/i,"").slice(0,40)||"Untitled"}function ie(e,t,n){const o=String(e).trim();if(!/^-?\d+$/.test(o))throw new Error(`Entry (${t+1}, ${n+1}) is not an integer.`);const r=Number(o);if(!Number.isSafeInteger(r)||Math.abs(r)>999)throw new Error(`Entry (${t+1}, ${n+1}) must be between −999 and 999.`);return F(r)}function ae(e){const t=String(e||"").trim();if(!t)return"https://math345-textbook.github.io/";let n;try{const e=/^[A-Za-z][A-Za-z0-9+.-]*:/.test(t);n=new URL(t,e?void 0:"https://math345-textbook.github.io/")}catch(e){throw new Error("The Back-to-notes URL is not valid.")}if(!["http:","https:","file:"].includes(n.protocol))throw new Error("The Back-to-notes URL must use http, https, or a relative textbook path.");return n.toString()}function se(e){return e<q4w?`${q48[e]}-column`:"augmented column"}function ce(e){return e<q4w?q48[e]:"b"}function le(e,t=e.length){for(let n=0;n<t;n++)if(!e[n].zero())return n;return-1}function ue(e=M){const t=[];for(let n=0;n<e.length;n++){const o=le(e[n],e[n].length);o>=0&&t.push({row:n,col:o})}return t}function he(e,t){const n=[];for(let r=e;r<o;r++)M[r][t].zero()||n.push(r);return n}function de(e,t){const n=[];for(let r=e+1;r<o;r++)M[r][t].zero()||n.push(r);return n}function pe(e,t){const n=[];for(let o=0;o<e;o++)M[o][t].zero()||n.push(o);return n}function fe(){const e=q4w+1;for(;;){if(q54>=o||q53>=e)return null;const t=he(q54,q53);if(!t.length){q53++;continue}if(M[q54][q53].zero())return{kind:"pivot",stage:"ref",row:q54,col:q53,candidates:t};if(!M[q54][q53].one())return{kind:"scale",stage:"ref",row:q54,col:q53,pivot:M[q54][q53]};const n=de(q54,q53);if(n.length)return{kind:"clear",stage:"ref",row:q54,col:q53,targets:n};q54++,q53++}}function me(){const e=ue(M);for(let t=e.length-1;t>=0;t--){const n=e[t],o=pe(n.row,n.col);if(o.length)return{kind:"clearAbove",stage:"rref",row:n.row,col:n.col,targets:o}}return null}function q4l(){for(;;){if("ref"===phase){const e=fe();if(e)return e;if("ref"===goal){phase="refConfirm";continue}if("classify"===goal){phase="variables";continue}phase="rref";continue}if("rref"===phase){const e=me();if(e)return e;phase="finalAnswer";continue}return"refConfirm"===phase?{kind:"refConfirm",stage:"check"}:"variables"===phase?{kind:"variables",stage:"variables"}:"solutionCount"===phase?{kind:"solutionCount",stage:"solutions"}:"finalAnswer"===phase?{kind:"nullspace"===goal?"nullspaceAnswer":"solveAnswer",stage:"answer"}:null}}function ve(e=M){const t=[];for(const n of e){const e=le(n,q4w);e>=0&&!t.includes(e)&&t.push(e)}const n=[];for(let e=0;e<q4w;e++)t.includes(e)||n.push(e);return{basicIdx:t,freeIdx:n,basic:t.map(e=>q48[e]),free:n.map(e=>q48[e])}}function xe(e=M){const t=function(e){const t=clone(e),n=t.length,o=t[0].length;let r=0;for(let e=0;e<o&&r<n;e++){let o=r;for(;o<n&&t[o][e].zero();)o++;if(o!==n){o!==r&&ne(t,o,r),t[r][e].one()||oe(t,r,t[r][e].inv());for(let o=0;o<n;o++)o===r||t[o][e].zero()||te(t,o,r,t[o][e].neg());r++}}return t}(e);if(t.some(e=>e.slice(0,q4w).every(e=>e.zero())&&!e[q4w].zero()))return{kind:"none",R:t,pivotCols:[],freeCols:[],particular:null,basis:[]};const n=[],o=[];for(let e=0;e<t.length;e++){const r=le(t[e],q4w);r>=0&&(n.push({row:e,col:r}),o.push(r))}const r=[];for(let e=0;e<q4w;e++)o.includes(e)||r.push(e);const i=Array.from({length:q4w},()=>F(0));for(const e of n)i[e.col]=t[e.row][q4w];const a=r.map(e=>{const o=Array.from({length:q4w},()=>F(0));o[e]=F(1);for(const r of n)o[r.col]=t[r.row][e].neg();return o});return{kind:r.length?"inf":"one",R:t,pivotCols:o,freeCols:r,particular:i,basis:a}}function ge(e){return e.length?e.map(e=>q48[e]).join(", "):"none"}function be(e){return e.length?e.map(e=>Me(q48[e])).join(", "):"\\text{none}"}function ye(e,t,n=!1,o="The groups mismatch the pivots."){return{txt:`basic: ${ge(e)}\nfree: ${ge(t)}`,tex:`\\begin{array}{l}\\text{basic: }${be(e)}\\\\ \\text{free: }${be(t)}\\end{array}`,basicIdx:e,freeIdx:t,correct:n,reason:o}}function we(e,t={}){return{type:e,vars:[...q48],...t}}function qe(e,t=e.basis.map((e,t)=>"t_"+(t+1))){return we("none"===e.kind?"none":"one"===e.kind?"vector":"family",{particular:e.particular,basis:e.basis,params:t})}function ke(e){return"column vector with entries "+e.map(Y).join(", ")}function Ee(e){const t="column vector of variables "+e.vars.join(", "),n=ke;if("none"===e.type)return"No solution.";if("vector"===e.type)return t+" equals "+n(e.particular)+".";if("all"===e.type)return t+" can be any vector in R to the power "+e.vars.length+".";if("family"===e.type){const o=[];return!e.showParticular&&Te(e.particular)||o.push(n(e.particular)),e.basis.forEach((t,r)=>o.push(e.params[r]+" times "+n(t))),t+" equals "+o.join(" plus ")+". Parameters "+e.params.join(", ")+" are real numbers."}const o="Coordinate order: "+e.vars.join(", ")+". Null(A) equals ";return"span"===e.type?o+"the span of "+e.basis.map(n).join("; ")+".":"singleton"===e.type?o+"the set containing "+n(e.vector)+".":"zero"===e.type?o+"the set containing the zero vector.":"space"===e.type?o+"all of R to the power "+e.vars.length+".":o+"the empty set."}function $e(e){return'<span class="q3f">'+e.map(e=>"<span>"+(/^[A-Za-z]$/.test(e)?"<var>"+e+"</var>":W(e))+"</span>").join("")+"</span>"}function Ce(e){for(const t of e)t.txt=Ee(t.math),t.displayTex=t.tex;return e}function Ae(e){return`\\begin{bmatrix}${e.map(O).join("\\\\")}\\end{bmatrix}`}function Re(e=q4w){return Array.from({length:e},()=>F(0))}function Le(e,t=q4w){const n=Re(t);return n[e]=F(1),n}function Se(){return`\\begin{bmatrix}${q48.map(Me).join("\\\\")}\\end{bmatrix}`}function Me(e){return/^[A-Za-z]$/.test(e)?e:"\\text{"+e+"}"}function Te(e){return e.every(e=>e.zero())}function Ne(e){if("none"===e.kind)return"\\text{No solution}";if("one"===e.kind)return`${Se()}=${Ae(e.particular)}`;const t=[];Te(e.particular)||t.push(Ae(e.particular)),e.basis.forEach((e,n)=>t.push(`t_${n+1}${Ae(e)}`));const n=t.join("+").replace(/\+\-/g,"-")||Ae(Re()),o=e.basis.map((e,t)=>`t_${t+1}`).join(",");return`${Se()}=${n},\\qquad ${o}\\in\\mathbb R`}function ze(e){return e.basis.length?`\\operatorname{Null}(A)=\\operatorname{span}\\left\\{${e.basis.map(Ae).join(",")}\\right\\}`:"\\operatorname{Null}(A)=\\{\\mathbf 0\\}"}function Fe(e){if(!e.basis.length)return null;const t=e.basis.map(e=>e.map(e=>F(e.n,e.d)));if(e.pivotCols.length){const n=e.pivotCols[0];return t[0][n]=t[0][n].add(F(1)),t}return t.length>1?t.slice(0,-1):null}function q4e(e){return["pivot","scale","clear","clearAbove"].includes(e.kind)?function(e){const t=[],n=[],r=e.row,i=e.col,a=(e,t=99)=>{e.priority=t,ee(n,e)};if("pivot"===e.kind){e.candidates.forEach(e=>ee(t,{txt:G(r,e).txt,tex:G(r,e).tex,op:G(r,e),correct:!0})),a({txt:X(r).txt,tex:X(r).tex,op:X(r),reason:"The pivot position is still zero."},1);for(let e=0;e<o;e++)for(let n=e+1;n<o;n++)t.some(t=>Q(t.op,G(e,n)))||a({txt:G(e,n).txt,tex:G(e,n).tex,op:G(e,n),reason:"That swap leaves the wrong pivot."},2);if(a({txt:_(r,F(2)).txt,tex:_(r,F(2)).tex,op:_(r,F(2)),reason:"Scaling cannot fix a zero pivot."},3),o>1){const e=(r+1)%o;a({txt:J(r,e,F(1)).txt,tex:J(r,e,F(1)).tex,op:J(r,e,F(1)),reason:"This skips pivot selection."},4)}}if("scale"===e.kind){const n=_(r,e.pivot.inv());if(ee(t,{txt:n.txt,tex:n.tex,op:n,correct:!0}),[e.pivot,e.pivot.inv().neg(),F(2),F(-2),F(0)].forEach((t,n)=>a({txt:_(r,t).txt,tex:_(r,t).tex,op:_(r,t),reason:t.zero()?"A zero factor destroys the row.":"The factor does not normalize."},n+1)),o>1){const t=_(0===r?1:0,e.pivot.inv());a({txt:t.txt,tex:t.tex,op:t,reason:"This scales the wrong row."},3)}if(o>1){const e=J(r,r===o-1?r-1:r+1,F(1));a({txt:e.txt,tex:e.tex,op:e,reason:"The pivot is not normalized yet."},5)}}if("clear"===e.kind||"clearAbove"===e.kind){e.targets.forEach(e=>{const n=J(e,r,M[e][i].neg());ee(t,{txt:n.txt,tex:n.tex,op:n,correct:!0})}),e.targets.forEach(e=>{const t=J(e,r,M[e][i]);a({txt:t.txt,tex:t.tex,op:t,reason:"The multiplier has the wrong sign."},1);const n=J(r,e,M[e][i].neg());a({txt:n.txt,tex:n.tex,op:n,reason:"This changes the pivot row."},2);const o=J(e,r,F(-1));a({txt:o.txt,tex:o.tex,op:o,reason:"The target stays nonzero."},3)});const n=_(r,F(2));if(a({txt:n.txt,tex:n.tex,op:n,reason:"This changes a finished pivot."},4),o>1){const e=Math.max(0,Math.min(r,o-2)),t=G(e,e+1);a({txt:t.txt,tex:t.tex,op:t,reason:"This displaces a finished pivot."},5)}}const s=n.filter(e=>!t.some(t=>t.op&&e.op&&Q(t.op,e.op)||t.tex&&e.tex&&t.tex===e.tex)).sort((e,t)=>(e.priority??99)-(t.priority??99));return U([...t,...s.slice(0,Math.max(0,4-t.length))]).slice(0,4)}(e):"variables"===e.kind?function(){const e=ve(),t=ye(e.basicIdx,e.freeIdx,!0),n=[];for(let t=0;t<1<<q4w;t++){const o=[],r=[];for(let e=0;e<q4w;e++)(t>>e&1?o:r).push(e);o.length===e.basicIdx.length&&o.every(t=>e.basicIdx.includes(t))||n.push(ye(o,r,!1))}return U([t,...U(n).slice(0,3)])}():"solutionCount"===e.kind?function(){const e=function(e=M){return function(e=M){return e.some(e=>e.slice(0,q4w).every(e=>e.zero())&&!e[q4w].zero())}(e)?"none":ve(e).freeIdx.length?"inf":"one"}();return U([{txt:"No solutions",answer:"none",correct:"none"===e,reason:"That claim lacks a contradiction."},{txt:"Exactly one solution",answer:"one",correct:"one"===e,reason:"The uniqueness conditions fail."},{txt:"Infinitely many solutions",answer:"inf",correct:"inf"===e,reason:"The family conditions fail."}])}():"refConfirm"===e.kind?U([{txt:"The matrix is in row echelon form, so the REF goal is reached.",correct:!0},{txt:"It is not in REF because entries above pivots may be nonzero.",correct:!1,reason:"This confuses REF with RREF."},{txt:"It is not in REF because every variable column needs a pivot.",correct:!1,reason:"REF need not pivot in every column."},{txt:"It is not in REF unless the augmented column contains a pivot.",correct:!1,reason:"REF need not pivot in the RHS."}]):"solveAnswer"===e.kind?function(){const e=xe(),t=[];ee(t,{tex:Ne(e),correct:!0,math:qe(e)});const n="This set fails an equation.";if("none"===e.kind){const e=Re();ee(t,{math:we("vector",{particular:e}),tex:`${Se()}=${Ae(e)}`,reason:"This vector fails an equation."}),ee(t,{math:we("all"),tex:`${Se()}\\in\\mathbb R^{${q4w}}`,reason:"This set fails an equation."}),ee(t,{math:we("vector",{particular:Le(0)}),tex:`${Se()}=${Ae(Le(0))}`,reason:"This vector fails an equation."})}else if("one"===e.kind){const o=e.particular.map(e=>F(e.n,e.d));o[0]=o[0].add(F(1)),ee(t,{math:we("vector",{particular:o}),tex:`${Se()}=${Ae(o)}`,reason:n}),ee(t,{math:we("none"),tex:"\\text{No solution}",reason:"That claim lacks a contradiction."}),ee(t,{math:we("family",{particular:e.particular,basis:[Le(q4w-1)],params:["t"],showParticular:!0}),tex:`${Se()}=${Ae(e.particular)}+t${Ae(Le(q4w-1))},\\ t\\in\\mathbb R`,reason:"The parameter is unsupported."})}else{ee(t,{math:we("none"),tex:"\\text{No solution}",reason:"That claim lacks a contradiction."}),ee(t,{math:we("vector",{particular:e.particular}),tex:`${Se()}=${Ae(e.particular)}`,reason:"This omits possible solutions."});const o=Fe(e);if(o){const r={...e,basis:o};ee(t,{math:qe(r),tex:Ne(r),reason:n})}if(t.length<4){const n=e.particular.map(e=>F(e.n,e.d));n[0]=n[0].add(F(1)),ee(t,{math:we("vector",{particular:n}),tex:`${Se()}=${Ae(n)}`,reason:"This omits possible solutions."})}}return Ce(U(t.slice(0,4)))}():"nullspaceAnswer"===e.kind?function(){const e=xe(),t=[];ee(t,{tex:ze(e),correct:!0,math:we(e.basis.length?"span":"zero",{basis:e.basis})});const n="This fails the null-space conditions.";if(e.basis.length){ee(t,{math:we("zero"),tex:"\\operatorname{Null}(A)=\\{\\mathbf 0\\}",reason:"This omits null-space directions."}),e.basis.length<q4w&&ee(t,{math:we("space"),tex:`\\operatorname{Null}(A)=\\mathbb R^{${q4w}}`,reason:"This set violates the constraints."});const o=Fe(e);o&&ee(t,{math:we("span",{basis:o}),tex:`\\operatorname{Null}(A)=\\operatorname{span}\\left\\{${o.map(Ae).join(",")}\\right\\}`,reason:n}),e.basis.length>1&&ee(t,{math:we("span",{basis:e.basis.slice(0,-1)}),tex:`\\operatorname{Null}(A)=\\operatorname{span}\\left\\{${e.basis.slice(0,-1).map(Ae).join(",")}\\right\\}`,reason:"This omits an independent direction."}),t.length<4&&ee(t,{math:we("empty"),tex:"\\operatorname{Null}(A)=\\varnothing",reason:"This excludes the zero vector."}),t.length<4&&ee(t,{math:we("singleton",{vector:Le(0)}),tex:`\\operatorname{Null}(A)=\\left\\{${Ae(Le(0))}\\right\\}`,reason:"This set omits the zero vector."})}else ee(t,{math:we("space"),tex:`\\operatorname{Null}(A)=\\mathbb R^{${q4w}}`,reason:"This set violates the constraints."}),q4w>1&&ee(t,{math:we("span",{basis:[Le(0)]}),tex:`\\operatorname{Null}(A)=\\operatorname{span}\\left\\{${Ae(Le(0))}\\right\\}`,reason:n}),ee(t,{math:we("singleton",{vector:Le(0)}),tex:`\\operatorname{Null}(A)=\\left\\{${Ae(Le(0))}\\right\\}`,reason:"This set omits the zero vector."}),t.length<4&&ee(t,{math:we("empty"),tex:"\\operatorname{Null}(A)=\\varnothing",reason:"This excludes the zero vector."});return Ce(U(t.slice(0,4)))}():[]}function je(e){return"pivot"===e.kind?{label:`REF · ${ce(e.col)} · pivot`,text:`Pick pivot row for ${se(e.col)}.`}:"scale"===e.kind?{label:`REF · ${ce(e.col)} · scale`,text:`Make the pivot in ${K(e.row)} equal to 1.`}:"clear"===e.kind?{label:`REF · ${ce(e.col)} · clear below`,text:"Use leading 1 to clear below it."}:"clearAbove"===e.kind?{label:`RREF · ${ce(e.col)} · clear above`,text:"Use the pivot to clear above it."}:"variables"===e.kind?{label:"Classify variables",text:"Which variables are basic/free?"}:"solutionCount"===e.kind?{label:"Classify solutions",text:"How many solutions?"}:"refConfirm"===e.kind?{label:"Check the matrix",text:"Status of current matrix?"}:"solveAnswer"===e.kind?{label:"Read the RREF matrix",text:"Which is the solution set?"}:"nullspaceAnswer"===e.kind?{label:"Read the RREF matrix",text:"Which is the null space?"}:{label:"Activity",text:"Choose the correct answer."}}function Ie(e=q4p){return!solved&&["pivot","scale","clear","clearAbove"].includes(e?.kind)}function q4i(e=q4p,requireReduced=true){if(!Ie(e))return[];const t=[];let n=-1;const r="rref"===e.stage,i=r?o:e.row;for(let e=0;e<i;e++){const o=le(M[e],q4w+1);if(o<=n||o<0||!M[e][o].one()||M.slice(e+1).some(e=>!e[o].zero()))break;n=o,r&&requireReduced&&!M.every((t,n)=>n===e||t[o].zero())||t.push({row:e,col:o})}return t}function He(e,t,n){if(e.zero())return"";const o=e.n<0,r=function(e){const t=e.abs();return t.one()?"":t.text()}(e)+t;return n?o?"−"+r:r:o?" − "+r:" + "+r}function q5b(e){q59(q4n,e)}function Pe(e,t){q4o={type:e,text:t},z()}function q5d(){C("q8").textContent=t[goal],C("q9").textContent=solved?`questions ${q4j}`:`question ${q4j+1}`,C("qa").textContent=`misses ${mistakes}`}function q58(){M&&j()&&!solved&&q4p&&(S(),function(e){const t="ref"===goal?[{id:"ref",label:"Eliminate"},{id:"check",label:"Check"}]:"classify"===goal?[{id:"ref",label:"Eliminate"},{id:"variables",label:"Variables"},{id:"solutions",label:"Solutions"}]:"solve"===goal?[{id:"ref",label:"REF"},{id:"rref",label:"RREF"},{id:"answer",label:"Solution"}]:[{id:"ref",label:"REF"},{id:"rref",label:"RREF"},{id:"answer",label:"Null space"}],n=Math.max(0,t.findIndex(t=>t.id===e.stage)),o=C("qu");o.style.setProperty("--stages",t.length),o.style.setProperty("--zn",t.length<=1?"100%":`${Math.round(n/(t.length-1)*100)}%`),o.innerHTML=t.map((e,t)=>`<span class="q24 ${t<n?"done":t===n?"now":""}"><span class="num">${t<n?"✓":t+1}</span>${W(e.label)}</span>`).join("")}(q4p),function(e){const t=je(e);C("qw").textContent=t.label,C("qx").textContent=t.text,C("qy").hidden=!(["pivot","clear","clearAbove"].includes(e.kind)&&(e.candidates||e.targets||[]).length>1)}(q4p),q5c(q4p),y(".q1a").innerHTML="System as equations ("+q48.map(e=>/^[A-Za-z]$/.test(e)?"<var>"+e+"</var>":W(e)).join(", ")+")",C("equations").innerHTML=M.map((e,t)=>`<div class="q3k">${K(t)}:  ${W(function(e){let t="";for(let n=0;n<q4w;n++){const o=He(e[n],q48[n],""===t);o&&(t+=o)}return t||(t="0"),`${t} = ${e[q4w].text()}`}(e))}</div>`).join(""),q5b(q4p),function(){const e=C("q19"),t=e.hidden;e.hidden=!1,e.open=!0,q4u.q40=Math.max(q4u.q40,e.getBoundingClientRect().height),e.hidden=t,C("q12").style.height=matchMedia("(max-width:600px)").matches?Math.ceil(q4u.q40)+"px":"",T(),function(){const e=C("choices");d===q4p&&q4p.q47!==q4u.key&&N(e,[...e.children],q4p)}()}(),z(),q5d())}function choose(e,t,o=q4p,r){if(function(e,t,n,o){return!(!j()||_e()||solved||q4c||performance.now()<f||n!==q4p||n.q5j!==q5j||d!==n||!q4n.includes(e)||!t.isConnected||t.parentElement!==C("choices")||o?.detail>1||(f=performance.now()+250,I(H,255,null),0))}(e,t,o,r))if(e.correct)q4c=!0,t.classList.add("correct"),H(),function(e,t=150){const n=l,o=q4p;p=()=>{n===l&&o===q4p&&j()&&(p=null,e())},I(()=>p?.(),t,o)}(()=>{if(q4j++,e.op)!function(e){if(flashing=[],q5q={},q5r={},"keep"!==e.t)if("swap"===e.t){ne(M,e.a,e.b),flashing=[e.a,e.b];const t=q5i(e.a,e.b);q5q[e.a]=e.b>e.a?"q2c":"q2d",q5q[e.b]=e.a>e.b?"q2c":"q2d",q5r[e.a]=t,q5r[e.b]=t}else"scale"===e.t?(oe(M,e.row,e.c),flashing=[e.row]):"add"===e.t&&(te(M,e.target,e.source,e.c),flashing=[e.target])}(e.op);else if("variables"===o.kind)phase="solutionCount";else if(["solutionCount","refConfirm","solveAnswer","nullspaceAnswer"].includes(o.kind))return solved=!0,q5d(),C("q1g").innerHTML='<defs><linearGradient id="q1x" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#5b65f2"/><stop offset="100%" stop-color="#14b8a6"/></linearGradient></defs><path d="M18 18 H62 V40 H104 V62 H150 V78"/>',C("q1f").textContent=`Activity ${n.activity} complete`,C("q1h").innerHTML=function(e){let t="";for(let n=1;n<=3;n++)t+=`<span class="q2o ${n<=e?"filled":"empty"}">★</span>`;return t}(0===mistakes?3:mistakes<=2?2:1),C("q1i").textContent=String(q4j),C("q1j").textContent=String(mistakes),C("q1k").textContent="ref"===goal?"You reached row echelon form.":"classify"===goal?"You reached REF, identified the basic and free variables, and classified the solution set.":"solve"===goal?"You finished RREF and identified the complete solution set.":"You finished RREF and identified the null space.",void I(function e(){_e()?I(e,60):(C("q1e").classList.add("show"),q5s(),P(C("q1m")))},360);Pe("",""),q5p(),q4c=!1,q58();const t=++q4b;(flashing.length||Object.keys(q5q).length)&&I(()=>{t===q4b&&(flashing=[],q5q={},q5r={},!solved&&q4p&&q5c(q4p))},560)});else{mistakes++,q5d(),t.classList.add("wrong"),Pe("bad",function(e,t){return e.reason?e.reason:"pivot"===t.kind?"The pivot is misplaced.":"scale"===t.kind?"The factor does not normalize.":"clear"===t.kind||"clearAbove"===t.kind?"The target stays nonzero.":"variables"===t.kind?"The groups mismatch the pivots.":"solutionCount"===t.kind?"The solution count does not fit.":"solveAnswer"===t.kind?"This set fails an equation.":"nullspaceAnswer"===t.kind?"This fails the null-space conditions.":"Try a different choice."}(e,o)),H();const n=t.wrongRevision=(t.wrongRevision||0)+1;I(()=>{t.wrongRevision===n&&t.classList.remove("wrong")},320,o)}}function q5f(){q4s(!0),M=clone(q5o),phase="ref",q54=0,q53=0,mistakes=0,q4j=0,solved=!1,q4p=null,q4n=[],q4o={type:"",text:""},q4c=!1,flashing=[],q5q={},q5r={},C("q1e").classList.remove("show"),q5s(),q5p(),q58(),P(C("qv"))}function Be(){location.assign(n?.back||"https://math345-textbook.github.io/")}function De(e){let t=0,n=1;for(const o of e)for(const e of o)t=Math.max(t,Math.abs(e.n)),n=Math.max(n,e.d);return{maxNumerator:t,maxDenominator:n}}function We(){const e=Number(C("qh").value),t=Number(C("qi").value),n=[];for(let o=0;o<e;o++){const e=[];for(let n=0;n<t+1;n++){const t=y(`[data-builder-cell="${o},${n}"]`);e.push(t?t.value:"0")}n.push(e)}return n}function Ue({preserve:e=!0}={}){const t=Number(C("qh").value),n=Number(C("qi").value),o=i,r=s,c=C("qj").value.split(",").map(e=>e.trim()),l=C("ql");l.style.setProperty("--cols",String(n+1)),l.innerHTML="";const u=w("div");u.className="q34",u.innerHTML="<span></span>"+Array.from({length:n},(e,t)=>`<span>${W(c[t]||q4a[t])}</span>`).join("")+'<span class="q36">b</span>',l.appendChild(u);for(let e=0;e<t;e++){const c=w("div");c.className="q35",c.innerHTML=`<span class="q37">${K(e)}</span>`;for(let l=0;l<n+1;l++){const u=w("input");let h;u.className="builderCell"+(l===n?" constant":""),u.inputMode="text",u.autocomplete="off",u.dataset.builderCell=`${e},${l}`,o?.[e]&&(h=l<n?l<r?o[e][l]:"0":o[e][r]??"0"),void 0===h&&(h=""),u.value=h,u.setAttribute("aria-label",`Row ${e+1}, ${l===n?"right-hand side":`coefficient ${l+1}`}`),u.addEventListener("input",()=>{i=We(),a=t,s=n,Ze()}),c.appendChild(u)}l.appendChild(c)}a=t,s=n,i=We(),Ze()}function Ke(){const e=Number(C("qh").value),t=Number(C("qi").value),n=We(),o=C("qf").value.trim();if(!o)throw new Error("Enter the activity number.");const r=n.map((e,t)=>e.map((e,n)=>ie(e,t,n))),i=C("qj").value.split(",").map(e=>e.trim());if(i.length!==t)throw new Error("The variable-name list must contain exactly one name per variable column.");if(i.some(e=>!/^[A-Za-z][A-Za-z0-9_]*$/.test(e)))throw new Error("Variable names must begin with a letter and use only letters, digits, or underscores.");if(new Set(i).size!==i.length)throw new Error("Variable names must be distinct.");const a=C("qg").value;if("nullspace"===a&&r.some(e=>!e[t].zero()))throw new Error("The null-space goal requires every right-hand side to be 0.");return{version:"1",activity:re(o),goal:a,matrix:r,variables:i,back:ae(C("qk").value),rows:e,vars:t}}function Ve(e){const t=new URL(location.href);return t.search="",t.hash="",t.searchParams.set("v","1"),t.searchParams.set("activity",e.activity),t.searchParams.set("m",e.matrix.map(e=>e.map(e=>e.ascii()).join(",")).join("~")),t.searchParams.set("vars",e.variables.join(",")),t.searchParams.set("goal",e.goal),e.back&&t.searchParams.set("back",e.back),t.toString()}function Ze(){const e=C("qm"),t=C("qn");try{const o=Ke(),r=function(e,t){const n=clone(e),o=n.length,r=t+1;let i=0,a=0,s=0,c=0,l=De(n);const u=()=>{const e=De(n);l.maxNumerator=Math.max(l.maxNumerator,e.maxNumerator),l.maxDenominator=Math.max(l.maxDenominator,e.maxDenominator)};for(;i<o&&a<r;){let e=i;for(;e<o&&n[e][a].zero();)e++;if(e!==o){n[i][a].zero()&&(ne(n,i,e),s++,u()),n[i][a].one()||(oe(n,i,n[i][a].inv()),s++,u());for(let e=i+1;e<o;e++)n[e][a].zero()||(te(n,e,i,n[e][a].neg()),s++,u());i++,a++}else a++}const h=clone(n),d=ue(n);for(let e=d.length-1;e>=0;e--){const t=d[e];for(let e=0;e<t.row;e++)n[e][t.col].zero()||(te(n,e,t.row,n[e][t.col].neg()),c++,u())}const p=q4w,f=q48;q4w=t,q48=q4a.slice(0,t);const m=xe(n);return q4w=p,q48=f,{refMoves:s,rrefMoves:c,refMatrix:h,rrefMatrix:n,maxNumerator:l.maxNumerator,maxDenominator:l.maxDenominator,analysis:m}}(o.matrix,o.variables.length),i="none"===r.analysis.kind?"—":r.analysis.freeCols.length;e.innerHTML=[["Dimensions",`${o.matrix.length} × ${o.variables.length}`],["Outcome",(n=r.analysis,"none"===n.kind?"no solutions":"one"===n.kind?"one solution":"infinitely many")],["Nullity",String(i)],["REF moves",String(r.refMoves)],["RREF moves",String(r.rrefMoves)],["Largest fraction",`${r.maxNumerator}/${r.maxDenominator}`]].map(([e,t])=>`<div class="q39"><span>${W(e)}</span><b>${W(t)}</b></div>`).join("");const a=[];r.maxNumerator>96&&a.push(`an intermediate numerator reaches ${r.maxNumerator}`),r.maxDenominator>8&&a.push(`an intermediate denominator reaches ${r.maxDenominator}`),"ref"===o.goal&&0===r.refMoves&&a.push("the starting matrix is already in REF, so the activity will consist only of the final REF check"),"solve"!==o.goal&&"nullspace"!==o.goal||0!==r.refMoves||0!==r.rrefMoves||a.push("the starting matrix is already in RREF, so the activity will go directly to the final answer question"),a.length?(t.className="qn warn",t.textContent=`Valid, but note: ${a.join("; ")}.`):(t.className="qn",t.textContent="Valid. The fixed pivot–scale–clear route keeps the arithmetic within the recommended range."),C("qs").value=Ve(o)}catch(n){e.innerHTML="",t.className="qn bad",t.textContent=n.message,C("qs").value=""}var n}async function Oe(e){try{return await navigator.clipboard.writeText(e),!0}catch(t){const n=w("textarea");n.value=e,n.style.position="fixed",n.style.opacity="0",document.body.appendChild(n),n.select();let o=!1;try{o=document.execCommand("copy")}catch(e){}return n.remove(),o}}function Ye(e){C("qr").textContent=e}function q5s(){const e=_e(),t=!!e;document.body.classList.toggle("q3b",t);for(const t of document.querySelector("main").children)t.inert=!!e&&t!==e;C("q0").inert=t}function q4x(){r=document.activeElement,C("q1n").classList.add("show"),q5s(),P(C("q1p"))}function q4f(){C("q1n").classList.remove("show"),q5s(),P(r)}function _e(){return C("q1r")?.open?C("q1r"):C("q1n").classList.contains("show")?C("q1n"):C("q1e").classList.contains("show")?C("q1e"):null}document.addEventListener("focusin",e=>{const t=_e();t&&!t.contains(e.target)&&t.querySelector("button:not(:disabled)")?.focus({preventScroll:!0})}),C("q5").addEventListener("click",Be),C("q1l").addEventListener("click",Be),C("q1m").addEventListener("click",q5f),C("q2").addEventListener("click",q4x),C("q1p").addEventListener("click",q4f),C("q1q").addEventListener("click",q4f),C("q1n").addEventListener("click",e=>{e.target===e.currentTarget&&q4f()}),C("qd").addEventListener("click",()=>{const e=new URL(location.href);e.search="?author=1",e.hash="",location.href=e.toString()}),C("qh").addEventListener("change",()=>Ue({preserve:!0})),C("qi").addEventListener("change",()=>{const e=Number(C("qi").value),t=C("qj").value.split(",").map(e=>e.trim()).filter(Boolean);C("qj").value=Array.from({length:e},(e,n)=>t[n]||q4a[n]).join(","),Ue({preserve:!0})}),C("qj").addEventListener("input",()=>{Ue({preserve:!0})}),["qf","qg","qk"].forEach(e=>C(e).addEventListener("input",Ze)),C("qg").addEventListener("change",Ze),C("qo").addEventListener("click",()=>{try{location.href=Ve(Ke())}catch(e){Ye(e.message)}}),C("qp").addEventListener("click",async()=>{try{const e=Ve(Ke());C("qs").value=e,Ye(await Oe(e)?"Activity link copied.":"Copy failed; select the link below.")}catch(e){Ye(e.message)}}),C("qq").addEventListener("click",async()=>{try{const n=`<url href="${t=Ve(e=Ke()),String(t).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}" visual="The Elimination Scratchpad">Practice Activity ${W(e.activity)} in The Elimination Scratchpad</url>`;C("qs").value=n,Ye(await Oe(n)?"PreTeXt snippet copied.":"Copy failed; select the snippet below.")}catch(e){Ye(e.message)}var e,t}),document.addEventListener("keydown",e=>{if(e.ctrlKey||e.metaKey||e.altKey)return;if(_e())return void function(e){if(e.ctrlKey||e.metaKey||e.altKey)return;const t=_e();if(!t)return;if("Escape"===e.key)return e.preventDefault(),"q1r"===t.id?void q4g():void("q1n"===t.id&&q4f());if("Tab"!==e.key)return;const n=[...t.querySelectorAll('button,[href],[tabindex]:not([tabindex="-1"])')].filter(e=>!e.disabled&&!e.hidden&&!e.closest("[inert]")&&e.getClientRects().length&&"hidden"!==getComputedStyle(e).visibility);if(!n.length)return;const o=n[0],r=n[n.length-1];!e.shiftKey||document.activeElement!==o&&t.contains(document.activeElement)?e.shiftKey||document.activeElement!==r&&t.contains(document.activeElement)||(e.preventDefault(),o.focus()):(e.preventDefault(),r.focus())}(e);if(C("qt").hidden||solved)return;if(e.target?.matches("input,textarea,select,button:not(.choice)"))return;const t={1:0,2:1,3:2,4:3,a:0,b:1,c:2,d:3},n=e.key.toLowerCase();if(Object.prototype.hasOwnProperty.call(t,n)){const o=[...document.querySelectorAll("#choices .choice")][t[n]];o&&(e.preventDefault(),o.click())}}),window.addEventListener("resize",()=>{!C("qt").hidden&&q4p&&q5c(q4p)});const Ge=new URLSearchParams(location.search),Xe=["m","activity","label","vars","goal","back","v"].some(e=>Ge.has(e));if("1"!==Ge.get("author")&&Xe)try{Je=function(t){const n=t.get("m");if(!n)throw new Error("No augmented matrix was supplied. Open the bare Scratchpad URL to use the instructor link builder.");const o=t.get("activity")||t.get("label");if(!String(o||"").trim())throw new Error("No activity number was supplied.");const r=n.split("~").map((e,t)=>e.split(",").map((e,n)=>ie(e,t,n)));if(r.length<1||r.length>4)throw new Error("An activity must have between 1 and 4 equations.");const i=r[0].length;if(r.some(e=>e.length!==i))throw new Error("Every augmented-matrix row must have the same number of entries.");const a=i-1;if(a<1||a>4)throw new Error("An activity must have between 1 and 4 variables.");const s=t.get("vars"),c=s?s.split(",").map(e=>e.trim()):q4a.slice(0,a);if(c.length!==a)throw new Error("The variable list does not match the number of coefficient columns.");if(c.some(e=>!/^[A-Za-z][A-Za-z0-9_]*$/.test(e)))throw new Error("Variable names must begin with a letter and use only letters, digits, or underscores.");if(new Set(c).size!==c.length)throw new Error("Variable names must be distinct.");const l=t.get("goal")||"classify";if(!e.has(l))throw new Error(`Unknown goal “${l}”.`);if("nullspace"===l&&r.some(e=>!e[a].zero()))throw new Error("The null-space goal requires a homogeneous system: every right-hand side must be 0.");return{version:t.get("v")||"1",activity:re(o),goal:l,matrix:r,variables:c,back:ae(t.get("back")||"https://math345-textbook.github.io/")}}(Ge),n=Je,q5o=clone(n.matrix),M=clone(q5o),q4w=n.variables.length,q48=[...n.variables],o=M.length,goal=n.goal,C("q4").textContent=`Activity ${n.activity}`,document.title=`Activity ${n.activity} · The Elimination Scratchpad`,C("q5").hidden=!1,C("q5").textContent="Back to notes",C("q6").hidden=!0,C("q7").textContent="The Elimination Scratchpad",C("qe").hidden=!0,C("qb").hidden=!0,C("qt").hidden=!1,C("q2").hidden=!1,q5f()}catch(e){!function(e){C("q4").textContent="The Elimination Scratchpad",document.title="The Elimination Scratchpad · Invalid activity",C("q5").hidden=!0,C("q6").hidden=!0,C("qt").hidden=!0,C("qe").hidden=!0,C("qb").hidden=!1,C("qc").textContent=e instanceof Error?e.message:String(e)}(e)}else q4s(),C("q4").textContent="The Elimination Scratchpad",document.title="The Elimination Scratchpad · Link Builder",C("q5").hidden=!0,C("q6").hidden=!1,C("q7").textContent="Instructor link builder",C("q8").textContent="1–4 equations · 1–4 variables",C("q9").textContent="URL + PreTeXt",C("qa").textContent="exact fractions",C("qt").hidden=!0,C("qb").hidden=!0,C("qe").hidden=!1,C("q2").hidden=!1,a=2,s=2,i=[["","",""],["","",""]],Ue({preserve:!1});var Je;</script>
 </body>
 </html>
