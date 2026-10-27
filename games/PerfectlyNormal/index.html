@@ -151,10 +151,8 @@ button{touch-action:manipulation}
 .outcomesGrid{display:grid;grid-template-columns:1fr;gap:10px;margin-top:10px;padding-left:10px;border-left:2px solid rgba(31,42,68,.14);}
 .outcomeItem{border:0;padding:4px 0;font:650 13.5px/1.4 var(--sans);}
 .outcomeItem::before{content:"∟";color:var(--star);font-weight:850;font-size:11px;margin-right:6px;}
-.cheatsheetCard{position:relative;}
 .outcomesCard>.introDisclosure>summary,
-.cheatsheetCard>.introDisclosure>summary{min-height:30px;padding-right:190px;}
-.outcomesCard>.introDisclosure>summary{padding-right:0;}
+.cheatsheetCard>.introDisclosure>summary{min-height:30px;}
 .cheatsheetLead{margin:10px 0 6px;padding:8px 10px;background:#fff;border:1px solid rgba(31,42,68,.18);font:650 13.5px/1.35 var(--sans);}
 .algorithmList{display:grid;border-top:1px solid rgba(31,42,68,.18);margin-top:0;}
 .algorithmStep,.qrSummary{
@@ -192,7 +190,7 @@ button{touch-action:manipulation}
 .quizLaunchBtn:active{transform:translateY(1px);}
 .quizLaunchBtn:focus-visible{outline:3px solid rgba(43,85,200,.25);outline-offset:2px;}
 .quizLaunchBest{font-size:11.5px;letter-spacing:.04em;opacity:.82;white-space:nowrap;}
-.cheatsheetCard>.quizLaunchBtn{position:absolute;top:12px;right:15px;}
+.introDisclosure>.quizLaunchBtn{margin:12px auto 0;}
 .modeCards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:1fr;gap:14px;}
 .modeCard{
   appearance:none;
@@ -244,9 +242,6 @@ button{touch-action:manipulation}
   .aboutBtn{flex-basis:34px;width:34px;height:34px;font-size:22px;}
 }
 @media(max-width:420px){
-  .cheatsheetCard{padding-top:42px;}
-  .cheatsheetCard>.introDisclosure>summary{padding-right:0;}
-  .cheatsheetCard>.quizLaunchBtn{top:7px;right:11px;min-width:136px;}
   .algorithmStep,.qrSummary{grid-template-columns:22px minmax(0,1fr);gap:3px 6px;}
   .stepName{grid-column:2;grid-row:1;font-size:11.5px;}
   .stepBody{grid-column:2;grid-row:2;font-size:12px;}
@@ -305,7 +300,6 @@ button{touch-action:manipulation}
 
 .worldCard,.ledgerCard,.dock{border:1px solid var(--rule);background:var(--card);box-shadow:var(--shadow-soft);min-height:0}
 .worldCard{position:relative;overflow:hidden;background:linear-gradient(180deg,var(--world-top),#f9fbfd 67%,var(--world-floor));isolation:isolate}
-#worldCanvas{display:block;width:100%;height:100%;touch-action:none;cursor:grab;outline:none}#worldCanvas.dragging{cursor:grabbing}
 
 /* ---------- ledger ---------- */
 .ledgerCard{display:flex;flex-direction:column;overflow:hidden;align-self:start}
@@ -369,8 +363,9 @@ button{touch-action:manipulation}
 .panel{position:absolute;top:56px;right:10px;bottom:10px;z-index:10;width:clamp(430px,40vw,480px);min-height:0;padding:0;display:grid;grid-template-rows:auto minmax(0,1fr);align-content:start;gap:8px;overflow:hidden}
 .worldCard{position:relative;height:100%;min-height:0;overflow:hidden;border:0;background:linear-gradient(180deg,var(--world-top),#f9fbfd 64%,var(--world-floor));box-shadow:none;isolation:isolate;cursor:grab}.worldCard.dragging{cursor:grabbing}
 .worldCard::after{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;background:radial-gradient(120% 90% at 38% 44%,transparent 55%,rgba(31,42,68,.09) 100%)}
-#worldCanvas,#threeCanvas{position:absolute;inset:0;z-index:1;width:100%;height:100%;display:block;touch-action:none;outline:none}
-#threeCanvas{display:none}.worldCard.threeReady #threeCanvas{display:block}.worldCard.threeReady #worldCanvas{display:none}
+#threeCanvas{position:absolute;inset:0;z-index:1;width:100%;height:100%;display:block;touch-action:none;outline:none}
+#threeCanvas{display:none}.worldCard.threeReady #threeCanvas{display:block}
+.worldFallback{position:absolute;inset:0;z-index:2;display:grid;place-items:center;margin:0;padding:24px;text-align:center;color:var(--ink-soft);font:600 14px/1.45 var(--sans)}
 .worldControls{position:absolute;left:14px;bottom:14px;z-index:4;pointer-events:none;padding:7px 10px;border:1px solid rgba(27,34,51,.22);background:rgba(255,255,255,.84);box-shadow:0 2px 8px rgba(27,34,51,.08);color:var(--muted);font:700 11px/1.2 var(--sans);letter-spacing:.015em;white-space:nowrap;backdrop-filter:blur(5px)}
 .completionThumb{position:absolute;left:22px;bottom:58px;z-index:5;display:grid;place-items:center;width:58px;height:58px;border:1px solid rgba(31,42,68,.18);border-radius:50%;background:rgba(255,255,255,.88);box-shadow:0 7px 24px rgba(31,42,68,.16);font:39px/1 system-ui,sans-serif;opacity:0;transform:translateY(8px) scale(.86);transition:.28s ease opacity,.28s ease transform;pointer-events:none;backdrop-filter:blur(5px)}.completionThumb.show{opacity:1;transform:translateY(0) scale(1)}
 .sceneLabels{z-index:3}.sceneLabel3d{font:700 var(--math-scene)/1 var(--serif);padding:3px 7px;background:rgba(255,255,255,.95);border:1px solid currentColor;box-shadow:0 1px 6px rgba(31,42,68,.14)}.sceneLabel3d.axis{font:750 10.5px/1 var(--sans);opacity:.62}.sceneLabel3d.unitSphereLabel{pointer-events:none;padding:4px 7px;background:rgba(255,255,255,.84);font:800 9.5px/1 var(--sans);letter-spacing:.09em;text-transform:uppercase}
@@ -458,7 +453,7 @@ button{touch-action:manipulation}
   .dock{gap:5px;padding:7px 8px 6px}.toolButton{min-height:48px}.inputObject{min-height:40px;padding:4px 7px}
   .calculationDetailsTitle{margin-bottom:4px}.calculationPanel{padding:5px 7px}.dockActions .smallButton,.dockActions .primaryButton{min-height:36px}.feedbackLine{min-height:20px}
 }
-@media(max-width:900px){
+@media(max-width:900px),(orientation:landscape) and (max-height:520px) and (pointer:coarse){
   body{overflow:auto}.gameScreen{height:auto;min-height:100dvh;display:grid;grid-template-columns:1fr;grid-template-rows:46px auto auto auto;overflow:visible;padding:0}
   .topbar{position:sticky;top:0;grid-column:1;grid-row:1;height:46px;z-index:20}.topbar #algorithmStrip{display:none}
   .stage{position:sticky;inset:auto;top:46px;z-index:12;grid-column:1;grid-row:2;height:min(38dvh,340px);padding:0}
@@ -471,6 +466,47 @@ button{touch-action:manipulation}
 @media(max-width:620px){.topMeta .optional,.modePill{display:none}.topTitle{font-size:18px}.panel{padding-inline:5px}.dock{padding:7px}.operandSlots{justify-content:flex-start}}
 @media(max-width:430px){.topbar{gap:5px;padding-inline:7px}.topTitle{font-size:16px}.topBrand .logoMark{width:27px;height:27px}.topMeta{display:none}.smallButton{padding-inline:7px}.toolName{display:none}.toolButton{min-height:46px}.factorEquation{scale:.9;transform-origin:left top}.algoRail{gap:1px}.algoStage{padding:2px 4px}.bannerNote{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}.sprintNextButton{min-width:124px;padding-inline:9px} }
 @media(pointer:coarse){.toolButton{min-height:62px}.inputObject{min-height:60px}.worldChip{min-height:40px}.dragGuide{width:80px;height:80px}}
+
+/* ---------- phone and tablet layout (≤900px) ---------- */
+.actionBar{display:contents}
+@media(pointer:coarse){
+  .worldControls{font-size:0}.worldControls::after{content:"drag to turn \00B7  pinch to zoom \00B7  double-tap to re-centre";font-size:11px}
+  .worldCard.handled .worldControls{opacity:0;transition:opacity .4s ease}
+}
+@media(max-width:900px),(orientation:landscape) and (max-height:520px) and (pointer:coarse){
+  .gameScreen{--top-h:76px;--stage-h:min(38dvh,340px);grid-template-rows:var(--top-h) auto auto auto;padding-bottom:132px}
+  /* row 1: brand and buttons; row 2: progress squares and score */
+  .topbar{height:var(--top-h);flex-wrap:wrap;align-content:center;row-gap:4px;padding-block:4px;background:var(--paper)}
+  .sceneLedger{z-index:9}
+  .topbar::after{content:"";order:9;flex-basis:100%;height:0}
+  .topBrand{flex:1 1 auto}
+  .topbar #algorithmStrip{display:flex;order:10;flex:1 1 0;max-width:none;min-width:0;height:24px;padding:4px 6px;align-self:center}
+  .topbar .topMeta{display:flex;order:11;margin-left:auto}
+  .topbar .smallButton{min-height:34px}
+  .stage{top:var(--top-h);height:var(--stage-h)}
+  .panel{overflow:visible;min-width:0}.bannerColumn{white-space:normal}
+  /* actions and feedback stay on screen */
+  .actionBar{position:fixed;left:0;right:0;bottom:0;z-index:40;display:grid;gap:6px;padding:8px 10px calc(8px + env(safe-area-inset-bottom));background:rgba(252,251,247,.97);border-top:1px solid var(--rule);box-shadow:0 -6px 18px rgba(31,42,68,.14);backdrop-filter:blur(6px)}
+  .actionBar .dockActions{display:flex;gap:6px}.actionBar .dockActions .primaryButton{flex:1 1 auto;min-height:44px}.actionBar .dockActions .smallButton{min-height:44px;padding-inline:16px}
+  .actionBar .feedbackLine{min-height:0}
+  .actionBar.idle,.actionBar>.idle,.actionBar #clearBtn:disabled{display:none}
+  .topbar,.stepBanner,.dock{backdrop-filter:none}
+}
+@media(max-width:900px) and (max-height:700px){.gameScreen{--stage-h:clamp(180px,32dvh,340px)}}
+@media(max-width:430px){
+  .progressSquares{grid-template-columns:repeat(var(--count),11px);grid-auto-rows:11px;gap:3px}.progressSquare{width:11px;height:11px;min-width:11px;min-height:11px}.progressSquare.current::after{left:1.5px;top:1.5px}
+  .topMeta{gap:5px}
+  .toolSymbol .katex{white-space:nowrap}.gameScreen.sprintMode .toolSymbol{font-size:16px}
+}
+/* landscape phones: world on the left, workbench on the right */
+@media(max-width:900px) and (orientation:landscape) and (max-height:520px),(orientation:landscape) and (max-height:520px) and (pointer:coarse){
+  .gameScreen{--top-h:46px;--stage-h:0px;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-rows:46px auto auto 1fr}
+  .topbar{grid-column:1/3;flex-wrap:nowrap}.topbar::after{display:none}.topbar #algorithmStrip{order:0;flex:1 1 auto;max-width:430px}.topbar .topMeta{order:0}.topBrand{flex:0 0 auto}
+  .stage{grid-column:1;grid-row:2/5;height:calc(100dvh - 46px)}
+  .panel{grid-column:2;grid-row:2}
+  .sceneLedger{grid-column:2;grid-row:3}
+  .actionBar{left:50%}
+}
 </style>
 
 <style id="all-games-navigation-styles">
@@ -548,9 +584,8 @@ button{touch-action:manipulation}
           <span class="stepName">Collect</span>
           <span class="stepBody"><span class="tex" data-tex="Q=[\,\mathbf q_1\;\cdots\;\mathbf q_n\,]">Q = [q₁ ⋯ qₙ]</span>, <span class="tex" data-tex="R=(r_{ij})">R = (rᵢⱼ)</span> upper triangular; <span class="tex" data-tex="Q^{T}Q=I">QᵀQ = I</span>, <span class="tex" data-tex="A=QR">A = QR</span>.</span>
         </div>
+        <button class="quizLaunchBtn" id="quizStartBtn" type="button"><span>Popup Quiz</span><span class="quizLaunchBest" id="quizBestBadge">BEST —</span></button>
       </details>
-
-      <button class="quizLaunchBtn" id="quizStartBtn" type="button"><span>Popup Quiz</span><span class="quizLaunchBest" id="quizBestBadge">BEST —</span></button>
     </section>
 
     <div class="modeCards" aria-label="Choose a mode">
@@ -577,7 +612,7 @@ button{touch-action:manipulation}
 
   <section class="stage" id="stage">
     <section class="worldCard" id="worldCard" aria-label="Three-dimensional vector world. Drag to turn. Two fingers, right-drag or shift-drag to pan. Pinch to zoom, twist to turn. Double-tap to re-centre.">
-      <canvas id="worldCanvas" tabindex="0" aria-label="Interactive three-dimensional Gram–Schmidt visualization"></canvas>
+      <p class="worldFallback" id="worldFallback" hidden>The 3D view needs WebGL, which this browser does not provide. Everything else still works: build Q and R with the tools and the ledger.</p>
       <canvas id="threeCanvas" tabindex="0" aria-label="Interactive WebGL Gram–Schmidt visualization"></canvas>
       <div class="sceneLabels" id="threeLabels" aria-hidden="false"></div>
       <div class="worldControls" aria-hidden="true">drag rotate &middot; shift-drag pan &middot; scroll zoom</div>
@@ -615,8 +650,10 @@ button{touch-action:manipulation}
         <div class="derivation" id="derivation"></div>
       </div>
     </div>
+    <div class="actionBar" id="actionBar">
     <div class="dockActions"><div class="actionStack"><button class="smallButton" id="clearBtn" type="button">clear</button></div><button class="primaryButton" id="commitBtn" type="button" disabled>write result</button></div>
     <div class="sprintFeedbackRow" id="sprintFeedbackRow"><div class="feedbackLine" id="feedbackLine" aria-live="polite"></div><button class="primaryButton sprintNextButton" id="nextQuestionBtn" type="button" hidden>next question</button></div>
+    </div>
     </section>
   </aside>
   <section class="ledgerCard sceneLedger" id="sceneLedger" aria-label="QR workbench">
@@ -655,7 +692,6 @@ function renderMath(root=document){
 window.addEventListener('perfectly-normal-katex-ready',()=>renderMath(document));
 const EPS=1e-8;
 const SUB=['₁','₂','₃'];
-const COLORS={a:'#2b57c8',p:'#c2571c',v:'#7a3bbf',q:'#12855a',gold:'#b07b12',ink:'#1b2233',grid:'#9eb0c4',sphere:'#6f9bc0',bad:'#b3372b'};
 const SELECT_TOOLS=['selectA1','selectA2','selectA3'];
 const TOOL_ORDER=[...SELECT_TOOLS,'inner','project','subtract','length','normalize'];
 function storageGet(key,fallback=null){try{const value=window.localStorage.getItem(key);return value===null?fallback:value;}catch(error){return fallback;}}
@@ -710,14 +746,16 @@ const fvDot=(a,b)=>a.reduce((sum,x,i)=>fAdd(sum,fMul(x,b[i])),F(0));
 function commonForm(v){let d=1;v.forEach(x=>d=lcm(d,x.d));let n=v.map(x=>x.n*(d/x.d));let g=d;n.forEach(x=>g=gcd(g,x));if(g>1){d/=g;n=n.map(x=>x/g);}const N=n.reduce((s,x)=>s+x*x,0);return {n,d,N,frac:v.map(x=>F(x.n,x.d)),numeric:v.map(fNum)};}
 function squareFree(n){let inside=Math.abs(n),outside=1;for(let p=2;p*p<=inside;p++){while(inside%(p*p)===0){inside/=p*p;outside*=p;}}return {outside,inside};}
 function radical(k,n=1,d=1){if(k===0)return {k:0,n:1,d:1,value:0};if(n<0)throw new Error('negative radical');const sf=squareFree(n);k*=sf.outside;n=sf.inside;const g=gcd(k,d);k/=g;d/=g;if(d<0){k=-k;d=-d;}return {k,n,d,value:k*Math.sqrt(n)/d};}
-function rFromInvSqrt(k,N){return radical(k,N,N);}
+// r_ij = q_i^T a_j is written k/√N with the same √N as q_i, so the shared factor is visible (as in the book).
+function rFromInvSqrt(k,N){const s=Math.round(Math.sqrt(N));if(k===0||s*s===N)return radical(k,1,s);return {k,n:N,d:1,inv:true,value:k/Math.sqrt(N)};}
 function rFromSqrt(N,d=1){return radical(1,N,d);}
-function scalarText(r){if(!r)return'·';if(r.k===0)return'0';const sign=r.k<0?'−':'';const ak=Math.abs(r.k);const root=r.n===1?'':`√${r.n}`;let num;if(r.n===1)num=String(ak);else num=(ak===1?'':String(ak))+root;return r.d===1?sign+num:`${sign}${num}/${r.d}`;}
+function scalarText(r){if(!r)return'·';if(r.k===0)return'0';const sign=r.k<0?'−':'';const ak=Math.abs(r.k);if(r.inv)return`${sign}${ak}/√${r.n}`;const root=r.n===1?'':`√${r.n}`;let num;if(r.n===1)num=String(ak);else num=(ak===1?'':String(ak))+root;return r.d===1?sign+num:`${sign}${num}/${r.d}`;}
 function rationalVectorText(form){return `${form.d===1?'':`1/${form.d}·`}(${form.n.join(', ')})`;}
 function qVectorText(q){return `${q.N===1?'':`1/√${q.N}·`}(${q.n.join(', ')})`;}
 function radicalTex(r){
   if(!r||r.k===0)return r?'0':'\\cdot';
   const sign=r.k<0?'-':'',ak=Math.abs(r.k),root=r.n===1?'':`\\sqrt{${r.n}}`;
+  if(r.inv)return `\\frac{${sign}${ak}}{${root}}`;
   const numerator=r.n===1?String(ak):(ak===1?root:`${ak}${root}`);
   return r.d===1?`${sign}${numerator}`:`\\frac{${sign}${numerator}}{${r.d}}`;
 }
@@ -748,7 +786,7 @@ function computeExact(cols){
       components[i][j]=commonForm(comp);p=fvAdd(p,comp);v=fvSub(v,comp);
     }
     P[j]=commonForm(p);V[j]=commonForm(v);C[j]=V[j];
-    let directionGcd=0;V[j].n.forEach(x=>directionGcd=gcd(directionGcd,x));directionGcd=directionGcd||1;
+    let directionGcd=0;V[j].n.forEach(x=>directionGcd=directionGcd?gcd(directionGcd,x):Math.abs(x));directionGcd=directionGcd||1;
     const direction=V[j].n.map(x=>x/directionGcd),directionN=V[j].N/(directionGcd*directionGcd);
     Q[j]={n:direction,N:directionN,numeric:direction.map(x=>x/Math.sqrt(directionN))};
     R[j][j]=rFromSqrt(V[j].N,V[j].d);
@@ -849,7 +887,7 @@ function sprintTargetPrompt(id){
 
 const app={
   mode:'menu',phase:'menu',puzzleIndex:0,puzzle:PUZZLES[0],records:{},selectedTarget:null,selectedTool:null,operands:[],preview:null,
-  attempts:{},mistakes:0,history:[],whyOpen:false,highlight:null,
+  attempts:{},mistakes:0,missBy:{},history:[],whyOpen:false,highlight:null,
   lastDerivation:'',lastAction:null,animation:null,pendingAdvance:null,resultCaption:'',submitted:false,
   sprint:{questions:[],index:0,score:0,attempts:0,hintUsed:false,questionComplete:false,pointEarned:false,results:[]}
 };
@@ -984,7 +1022,7 @@ function derivationHtml(lines){return lines.map(line=>`<span class="derivationLi
 function choosePuzzle(){const prev=Number(storageGet('pn-v3-last','-1'));let i=Math.floor(Math.random()*PUZZLES.length);if(i===prev)i=(i+1)%PUZZLES.length;storageSet('pn-v3-last',i);return i;}
 function reset(mode,index){
   cancelCompletionModal();
-  app.mode=mode;app.phase='build';app.puzzleIndex=index;app.puzzle=PUZZLES[index];app.records={};app.selectedTarget=null;app.selectedTool=null;app.operands=[];app.preview=null;app.attempts={};app.mistakes=0;app.history=[];app.whyOpen=false;app.highlight=null;app.lastDerivation='';app.lastAction=null;app.animation=null;app.pendingAdvance=null;app.resultCaption='';app.submitted=false;
+  app.mode=mode;app.phase='build';app.puzzleIndex=index;app.puzzle=PUZZLES[index];app.records={};app.selectedTarget=null;app.selectedTool=null;app.operands=[];app.preview=null;app.attempts={};app.mistakes=0;app.missBy={};app.history=[];app.whyOpen=false;app.highlight=null;app.lastDerivation='';app.lastAction=null;app.animation=null;app.pendingAdvance=null;app.resultCaption='';app.submitted=false;
   app.sprint={questions:[],index:0,score:0,attempts:0,hintUsed:false,questionComplete:false,pointEarned:false,results:[]};
   if(mode==='sprint'){
     app.sprint.questions=buildSprintQuestions();
@@ -1008,7 +1046,7 @@ function loadSprintQuestion(index){
 function startMode(mode){reset(mode,choosePuzzle());const entryId=++rig.entryId;$('menuScreen').hidden=true;$('gameScreen').hidden=false;$('gameScreen').classList.toggle('sprintMode',mode==='sprint');$('modePill').textContent=mode==='study'?'Study':'Sprint';$('metricLabel').textContent=mode==='sprint'?'unassisted first try':'misses';$('gameCheatsheetBtn').textContent=mode==='sprint'?'hint':'cheatsheet';$('algorithmStrip').setAttribute('aria-label',mode==='sprint'?'Progress through 10 sprint questions':'Progress through columns q1, q2, and q3');setFeedback('','');renderAll();
   // Establish the opening frame before the browser paints, then let later layout
   // settling update only the viewport—not the camera path.
-  const refreshLayout=()=>{if(entryId!==rig.entryId||app.phase!=='build'||$('gameScreen').hidden)return;resizeCanvas();window.PN_V3?.viewportChanged?.();};
+  const refreshLayout=()=>{if(entryId!==rig.entryId||app.phase!=='build'||$('gameScreen').hidden)return;window.PN_V3?.viewportChanged?.();};
   refreshLayout();if(mode==='study')startIntroTour();else autoFrame(true,null,true,1.30);requestAnimationFrame(refreshLayout);setTimeout(refreshLayout,140);setTimeout(refreshLayout,520);}
 function leaveToMenu(){cancelCompletionModal();rig.entryId++;rig.intro=null;rig.goal=null;app.mode='menu';app.phase='menu';$('gameScreen').hidden=true;$('gameScreen').classList.remove('sprintMode');$('menuScreen').hidden=false;closeModal();updateBest();}
 
@@ -1041,13 +1079,13 @@ function selectTool(tool){
   if(!compatibleTools().includes(tool))return false;
   if(tool==='project'&&!projectionExpected(id).length&&!sprintLive()){setFeedback(noProjectionMessage(id),'bad');return false;}
   // Column selection remains a visible choice in Study Mode only.
-  if(SELECT_TOOLS.includes(tool)&&expectedTool(id)!==tool){app.mistakes++;setFeedback(wrongToolMessage(id,tool),'bad');renderAll();return false;}
+  if(SELECT_TOOLS.includes(tool)&&expectedTool(id)!==tool){noteMiss();setFeedback(wrongToolMessage(id,tool),'bad');renderAll();return false;}
   // Study Mode diagnoses a wrong operator immediately. Sprint waits for Check Answer.
-  if(!sprintLive()&&expectedTool(id)!==tool){app.mistakes++;setFeedback(wrongToolMessage(id,tool),'bad');renderAll();return false;}
+  if(!sprintLive()&&expectedTool(id)!==tool){noteMiss();setFeedback(wrongToolMessage(id,tool),'bad');renderAll();return false;}
   app.selectedTool=tool;app.operands=[];app.preview=null;
   if(SELECT_TOOLS.includes(tool)){app.preview=null;app.selectedTool=null;setFeedback('','');commitStart(`a${TOOLS[tool].column+1}`);return true;}
   else setFeedback('','');
-  renderAll();return true;
+  renderAll();revealOnMobile($('inputShelfPanel'));return true;
 }
 function expectedOperandType(){return app.selectedTool?toolTypeAt(app.selectedTool,app.selectedTarget,app.operands.length):null;}
 function chooseOperand(key){
@@ -1062,10 +1100,10 @@ function chooseOperand(key){
     if(issue){
       if(issue.clearAll)app.operands=[];
       if(issue.accept)app.operands.push(key);
-      app.preview=null;app.mistakes++;setFeedback(issue.message,'bad');renderAll();return false;
+      app.preview=null;noteMiss();setFeedback(issue.message,'bad');renderAll();return false;
     }
   }
-  app.operands.push(key);setFeedback('','');if(app.operands.length===arity)app.preview=tool==='project'?calculateProjectionPreview():calculatePreview();renderAll();return true;
+  app.operands.push(key);setFeedback('','');if(app.operands.length===arity)app.preview=tool==='project'?calculateProjectionPreview():calculatePreview();renderAll();if(app.preview)revealOnMobile($('operationArea'));return true;
 }
 function calculatePreview(){
   const tool=app.selectedTool,objs=app.operands.map(getObject);let value;
@@ -1224,7 +1262,9 @@ function wrongMessage(id,p){
   if(t.tool==='normalize')return p.operands[0]!==t.operands[0]?'Rescale the residual from this column, not an original column, projection, or earlier direction.':'Use this residual’s positive diagonal length, not a projection coefficient.';
   return roleFallback(id);
 }
-function saveHistory(){app.history.push(JSON.stringify({records:app.records,mistakes:app.mistakes,attempts:app.attempts,lastDerivation:app.lastDerivation}));if(app.history.length>30)app.history.shift();}
+// Misses are kept per step so the end screen can say which steps and columns were clean.
+function noteMiss(){app.mistakes++;const id=app.selectedTarget;if(id)app.missBy[id]=(app.missBy[id]||0)+1;}
+function saveHistory(){app.history.push(JSON.stringify({records:app.records,mistakes:app.mistakes,missBy:app.missBy,attempts:app.attempts,lastDerivation:app.lastDerivation}));if(app.history.length>30)app.history.shift();}
 function checkSprintAnswer(p){
   const id=app.selectedTarget;if(!sprintLive()||!id||!p||app.sprint.questionComplete)return false;
   app.sprint.attempts++;
@@ -1250,7 +1290,7 @@ function commitPreview(){
   if(sprintLive())return checkSprintAnswer(p);
   if(Array.isArray(p.value)&&p.value.some(Number.isNaN))return setFeedback('Division by 0 is undefined. The normalizing denominator is the positive length recorded for this residual.','bad');
   app.attempts[id]=(app.attempts[id]||0)+1;
-  if(!(p.signature&&p.correctValue)){app.mistakes++;setFeedback(wrongMessage(id,p),'bad');renderAll();return;}
+  if(!(p.signature&&p.correctValue)){noteMiss();setFeedback(wrongMessage(id,p),'bad');renderAll();return;}
   saveHistory();if(filled(id))descendants(id).forEach(d=>delete app.records[d]);
   const correct=p.signature&&p.correctValue;app.records[id]={value:correct?(Array.isArray(targetExact(id))?targetExact(id).slice():targetExact(id)):(Array.isArray(p.value)?p.value.slice():p.value),correct,methodCorrect:p.signature,derivation:correct?exactDerivation(id):p.lines,tool:p.tool,operands:p.operands.slice()};
   app.lastDerivation=derivationHtml(app.records[id].derivation);const action={id,kind:TARGETS[id].tool,operands:p.operands.slice(),correct};app.lastAction=action;
@@ -1268,13 +1308,18 @@ function commitAssembly(){
   const id=app.selectedTarget,p=app.preview;if(!id||app.selectedTool!=='project'||!p||interactionLocked())return;
   if(sprintLive())return checkSprintAnswer(p);
   app.attempts[id]=(app.attempts[id]||0)+1;const wrongTarget=TARGETS[id].tool!=='project'||TARGETS[id].type!=='vector';
-  if(wrongTarget||!(p.signature&&p.correctValue)){app.mistakes++;setFeedback(wrongTarget?wrongMessage(id,p):'Keep each coefficient with the direction used to measure it.','bad');renderAll();return;}
+  if(wrongTarget||!(p.signature&&p.correctValue)){noteMiss();setFeedback(wrongTarget?wrongMessage(id,p):'Keep each coefficient with the direction used to measure it.','bad');renderAll();return;}
   saveHistory();if(filled(id))descendants(id).forEach(d=>delete app.records[d]);const correct=p.signature&&p.correctValue;app.records[id]={value:correct?targetExact(id).slice():p.value.slice(),correct,methodCorrect:p.signature,derivation:correct?exactDerivation(id):p.lines,tool:'project',operands:p.operands.slice()};app.lastDerivation=derivationHtml(app.records[id].derivation);const action={id,kind:'assemble',parts:p.parts.map(x=>x.slice()),correct};app.lastAction=action;playAnimation(action);app.selectedTool=null;app.operands=[];app.preview=null;
   const next=firstOpen();app.pendingAdvance={from:id,to:next,complete:allFilled()};setFeedback('👍','good');renderAll();
 }
 function clearSelection(){if(interactionLocked())return;clearHeldAnimation();clearResultCaption();app.selectedTool=null;app.operands=[];app.preview=null;setFeedback('','');renderAll();}
-function setFeedback(html,tone=''){const line=$('feedbackLine');line.innerHTML=html;line.className=`feedbackLine${tone?` ${tone}`:''}`;renderMath(line);}
-function undo(){if(sprintLive()||!app.history.length)return;const snap=JSON.parse(app.history.pop());app.records=snap.records;app.mistakes=snap.mistakes;app.attempts=snap.attempts;app.lastDerivation=snap.lastDerivation;app.selectedTarget=firstOpen();clearSelection();}
+function setFeedback(html,tone=''){const line=$('feedbackLine');line.innerHTML=html;line.className=`feedbackLine${tone?` ${tone}`:''}`;renderMath(line);syncActionBar();}
+// On phones the action bar is pinned to the bottom edge; hide whichever half has nothing to show.
+function syncActionBar(){const actions=$('commitBtn').closest('.dockActions'),idleActions=actions.hidden||($('commitBtn').disabled&&$('clearBtn').disabled),idleFeedback=!$('feedbackLine').innerHTML.trim()&&$('nextQuestionBtn').hidden;actions.classList.toggle('idle',idleActions);$('sprintFeedbackRow').classList.toggle('idle',idleFeedback);$('actionBar').classList.toggle('idle',idleActions&&idleFeedback);}
+const narrowLayout=matchMedia('(max-width:900px),(orientation:landscape) and (max-height:520px) and (pointer:coarse)');
+// Scroll just enough to lift el above the pinned action bar without sliding it under the sticky world view.
+function revealOnMobile(el){if(!narrowLayout.matches||!el)return;requestAnimationFrame(()=>{const r=el.getBoundingClientRect(),stage=$('stage').getBoundingClientRect(),bar=$('actionBar'),floor=(bar.classList.contains('idle')?innerHeight:bar.getBoundingClientRect().top)-8,ceiling=(stage.right<=r.left+1?document.querySelector('.topbar').getBoundingClientRect().bottom:stage.bottom)+8,dy=Math.min(r.bottom-floor,r.top-ceiling);if(dy>0)window.scrollBy({top:dy,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});});}
+function undo(){if(sprintLive()||!app.history.length)return;const snap=JSON.parse(app.history.pop());app.records=snap.records;app.mistakes=snap.mistakes;app.missBy=snap.missBy||{};app.attempts=snap.attempts;app.lastDerivation=snap.lastDerivation;app.selectedTarget=firstOpen();clearSelection();}
 
 /* ---------- rendering the interface ---------- */
 function renderAll(){renderHeader();renderNow();renderLedger();renderDock();renderMath($('gameScreen'));requestAnimationFrame(fitDerivation);scheduleDraw();}
@@ -1327,7 +1372,7 @@ function progressState(id){
   const current=currentProgressTarget();
   if(filled(id)){
     if(!recordCorrect(id))return'revealed';
-    return'clean';
+    return app.missBy[id]?'assisted':'clean';
   }
   if(current===id)return'current';
   return'upcoming';
@@ -1345,7 +1390,8 @@ function renderProgressSquares(){
   $('algorithmStrip').innerHTML=PROGRESS_GROUPS.map(group=>{
     const squares=group.ids.map(id=>{
       const state=progressState(id),label=id[0]==='s'?`start column ${id[1]}`:vecPlain(id);
-      return`<span class="progressSquare ${state}" title="${label}" aria-label="${label}: ${state}"></span>`;
+      const stateText=state==='assisted'?'done after a miss':state==='clean'?'done':state;
+      return`<span class="progressSquare ${state}" title="${label}${state==='assisted'?' (after a miss)':''}" aria-label="${label}: ${stateText}"></span>`;
     }).join('');
     return`<div class="progressGroup"><div class="progressSquares" style="--count:${group.ids.length}">${squares}</div></div>`;
   }).join('<span class="progressSeparator" aria-hidden="true">·</span>');
@@ -1394,6 +1440,7 @@ function renderDock(){
   actions.hidden=sprintDone;nextBtn.hidden=!sprintDone;nextBtn.textContent=app.sprint.index===SPRINT_TOTAL-1?'see score':'next question';
   commitBtn.hidden=false;commitBtn.innerHTML=sprintLive()?'check answer':commitReady?commitLabel(id):'';commitBtn.disabled=!commitReady;commitBtn.setAttribute('aria-label',commitReady?(sprintLive()?'check answer':`record ${vecPlain(id)}`):'answer unavailable');
   clearBtn.innerHTML=clearReady?'clear':'<span class="buttonPlaceholder" aria-hidden="true">clear</span>';clearBtn.disabled=!clearReady;clearBtn.setAttribute('aria-label',clearReady?'clear selection':'nothing to clear');
+  syncActionBar();
 }
 function slotBox(i,type){const key=app.operands[i];if(!key)return`<span class="operandSlot"><span class="slotHint">${sprintLive()?'?':type}</span></span>`;return`<span class="operandSlot filled"><span class="slotValue">${vecName(key)}</span><span class="slotNum">${compactObjectHtml(key)}</span></span>`;}
 function formulaHtml(id,tool){
@@ -1462,7 +1509,7 @@ function advanceSprintQuestion(){
   if(!sprintLive()||!app.sprint.questionComplete)return;
   if(app.sprint.index<SPRINT_TOTAL-1){
     loadSprintQuestion(app.sprint.index+1);setFeedback('','');renderAll();
-    requestAnimationFrame(()=>{resizeCanvas();autoFrame(true,null,true,1.30);window.PN_V3?.viewportChanged?.();});
+    requestAnimationFrame(()=>{autoFrame(true,null,true,1.30);window.PN_V3?.viewportChanged?.();});
     return;
   }
   finishSprint();
@@ -1473,18 +1520,17 @@ function finishSprint(){
   storageSet('pn-v4-sprint-best',best);renderAll();updateBest();
   openModal(`<h2 id="modalTitle">Sprint complete</h2><p class="modalLead">Unassisted first-try successes: ${app.sprint.score}/${SPRINT_TOTAL}. Best: ${best}/${SPRINT_TOTAL}.</p><div class="scoreGrid"><div class="scoreBox"><small>Unassisted First Try</small><b>${app.sprint.score}/${SPRINT_TOTAL}</b></div><div class="scoreBox"><small>hints used</small><b>${app.sprint.results.filter(result=>result?.hintUsed).length}/${SPRINT_TOTAL}</b></div></div><div class="modalActions"><button class="smallButton" data-modal="menu">menu</button><button class="primaryButton" data-modal="new">new sprint</button></div>`);
 }
-function finishRun(){app.phase='complete';app.submitted=true;setFeedback('','');const correct=SCORED.filter(recordCorrect).length,clean=[0,1,2].filter(j=>SCORED.filter(id=>TARGETS[id].col===j).every(recordCorrect)).length;const stored=storageGet('pn-v3-study',null),best=Number(stored);if(stored===null||!Number.isFinite(best)||app.mistakes<best)storageSet('pn-v3-study',app.mistakes);
+function finishRun(){app.phase='complete';app.submitted=true;setFeedback('','');const missed=id=>(app.missBy[id]||0)>0,cleanSteps=SCORED.filter(id=>!missed(id)).length,cleanColumns=[0,1,2].filter(j=>TARGET_ORDER.every(id=>TARGETS[id].col!==j||!missed(id))).length;const stored=storageGet('pn-v3-study',null),best=Number(stored),hadBest=stored!==null&&Number.isFinite(best);if(!hadBest||app.mistakes<best)storageSet('pn-v3-study',app.mistakes);
+  const misses=n=>`${n} miss${n===1?'':'es'}`,bestLine=!hadBest?'Your first finished frame sets the best to beat.':app.mistakes<best?`New best — previous best was ${misses(best)}.`:app.mistakes===best?`Ties your best of ${misses(best)}.`:`Your best is ${misses(best)}.`;
   const issueHtml=`<div class="modalMath"><b>Geometry and record agree.</b><br>The columns of <span class="math"><i>Q</i></span> are orthonormal and <span class="math"><i>QR=A</i></span>.</div>`;
-  const modalHtml=`<h2 id="modalTitle">Frame complete</h2><p class="modalLead">Every column of A sits in the span of the directions up to its own index.</p><div class="scoreGrid"><div class="scoreBox"><small>correct targets</small><b>${correct}/13</b></div><div class="scoreBox"><small>clean columns</small><b>${clean}/3</b></div></div>${issueHtml}<div class="modalActions"><button class="smallButton" data-modal="menu">menu</button><button class="primaryButton" data-modal="new">new problem</button></div>`;
+  const modalHtml=`<h2 id="modalTitle">Frame complete</h2><p class="modalLead">Every column of A sits in the span of the directions up to its own index.</p><div class="scoreGrid"><div class="scoreBox"><small>misses</small><b>${app.mistakes}</b></div><div class="scoreBox"><small>steps without a miss</small><b>${cleanSteps}/${SCORED.length}</b></div><div class="scoreBox"><small>columns without a miss</small><b>${cleanColumns}/3</b></div></div><p class="modalLead">${bestLine}</p>${issueHtml}<div class="modalActions"><button class="smallButton" data-modal="menu">menu</button><button class="primaryButton" data-modal="new">new problem</button></div>`;
   renderAll();scheduleCompletionModal(modalHtml);updateBest();}
 
-/* ---------- canvas 3D renderer ---------- */
-const canvas=$('worldCanvas'),ctx=canvas.getContext('2d');
-let DPR=1,W=1,H=1,drawQueued=false,hitAreas=[],drag=null,hoverKey=null;
+/* ---------- camera rig and animation clock ---------- */
+let drawQueued=false,hoverKey=null;
 const rig={yaw:-2.356,elev:.48,dist:5.6,target:[0,0,.48],yawT:-2.356,elevT:.48,distT:5.6,targetT:[0,0,.48],u:[0,0,1],b1:[1,0,0],b2:[0,1,0],goal:null,intro:null,entryId:0,userAt:0,DIST_MIN:1.55,DIST_MAX:9,ELEV_MIN:-.35,ELEV_MAX:1.42,lastTick:0};
 function setRigNow(){rig.yawT=rig.yaw;rig.elevT=rig.elev;rig.distT=rig.dist;rig.targetT=rig.target.slice();}
 function resetCamera(){Object.assign(rig,{yaw:-2.356,elev:.48,dist:5.6,target:[0,0,.48],goal:null,intro:null,userAt:0});setRigNow();scheduleDraw();}
-function resizeCanvas(){const r=canvas.getBoundingClientRect();DPR=Math.min(2,window.devicePixelRatio||1);W=Math.max(1,r.width);H=Math.max(1,r.height);canvas.width=Math.round(W*DPR);canvas.height=Math.round(H*DPR);ctx.setTransform(DPR,0,0,DPR,0,0);scheduleDraw();}
 // Framing follows the rectangle left of the action panel and below the floating ledger.
 function freeBox(){
   const card=$('worldCard'),r=card?card.getBoundingClientRect():null;
@@ -1508,63 +1554,15 @@ function freeBox(){
   return{w:r.width,h:r.height,left,right,top,bottom,cx:(left+right)/2,cy:(top+bottom)/2,usableW:Math.max(80,right-left),usableH:Math.max(80,bottom-top)};
 }
 function visibleCenterX(){return freeBox().cx;}
-function visibleCenterY(){return freeBox().cy;}
 function basisFor(yaw,elev,dist,target){const horizontal=V3.add(V3.scale(Math.cos(yaw),rig.b2),V3.scale(Math.sin(yaw),rig.b1)),dir=V3.normalize(V3.add(V3.scale(Math.cos(elev),horizontal),V3.scale(Math.sin(elev),rig.u))),pos=V3.add(target,V3.scale(dist,dir)),forward=V3.normalize(V3.sub(target,pos)),right=V3.normalize(V3.cross(forward,rig.u)),up=V3.normalize(V3.cross(right,forward));return{pos,forward,right,up};}
 function cameraBasis(){return basisFor(rig.yaw,rig.elev,rig.dist,rig.target);}
-function project(p){const b=cameraBasis(),rel=V3.sub(p,b.pos),z=V3.dot(rel,b.forward);if(z<=.05)return null;const f=Math.min(W,H)*1.12;return{x:visibleCenterX()+V3.dot(rel,b.right)*f/z,y:visibleCenterY()-V3.dot(rel,b.up)*f/z,z,scale:f/z};}
-function worldPoint(theta,phi,r=1){return V3.add(V3.scale(r*Math.cos(theta),rig.u),V3.add(V3.scale(r*Math.sin(theta)*Math.cos(phi),rig.b1),V3.scale(r*Math.sin(theta)*Math.sin(phi),rig.b2)));}
-function scheduleDraw(){if(drawQueued)return;drawQueued=true;requestAnimationFrame(t=>{drawQueued=false;drawWorld(t);});}
-function clearWorld(){ctx.clearRect(0,0,W,H);hitAreas=[];}
-function line3(points,stroke,width=1,dash=[],alpha=1){const pp=points.map(project);if(pp.some(x=>!x))return;ctx.save();ctx.globalAlpha=alpha;ctx.strokeStyle=stroke;ctx.lineWidth=width;ctx.setLineDash(dash);ctx.beginPath();ctx.moveTo(pp[0].x,pp[0].y);for(let i=1;i<pp.length;i++)ctx.lineTo(pp[i].x,pp[i].y);ctx.stroke();ctx.restore();}
-function fillPoly3(points,fill,alpha=.1){const pp=points.map(project);if(pp.some(x=>!x))return;ctx.save();ctx.globalAlpha=alpha;ctx.fillStyle=fill;ctx.beginPath();ctx.moveTo(pp[0].x,pp[0].y);for(let i=1;i<pp.length;i++)ctx.lineTo(pp[i].x,pp[i].y);ctx.closePath();ctx.fill();ctx.restore();}
-function drawBench(){
-  const R=2.62,ring=[];for(let k=0;k<=80;k++){const a=k/80*Math.PI*2;ring.push(V3.add(V3.scale(R*Math.cos(a),rig.b1),V3.scale(R*Math.sin(a),rig.b2)));}fillPoly3(ring,'#ffffff',.54);line3(ring,'rgba(94,119,148,.40)',1);
-  for(let t=-2.5;t<=2.51;t+=.5){const span=Math.sqrt(Math.max(0,R*R-t*t));line3([V3.add(V3.scale(t,rig.b1),V3.scale(-span,rig.b2)),V3.add(V3.scale(t,rig.b1),V3.scale(span,rig.b2))],COLORS.grid,t===0?1.1:.6,[],t===0?.45:.28);line3([V3.add(V3.scale(t,rig.b2),V3.scale(-span,rig.b1)),V3.add(V3.scale(t,rig.b2),V3.scale(span,rig.b1))],COLORS.grid,t===0?1.1:.6,[],t===0?.45:.28);}
-}
-// The unit shell exists only while something is being normalized (or in the
-// completion view) and remains translucent enough to keep vectors legible.
-function drawHemisphere(now){
-  const complete=app.phase==='complete';if(!complete&&app.animation?.kind!=='normalize')return;
-  const alpha=complete?.19:.20+.10*animationProgress(now),lat=complete?16:10,lon=complete?28:24,thetaMax=complete?Math.PI:Math.PI/2,tri=[];
-  for(let a=0;a<lat;a++){const t0=a/lat*thetaMax,t1=(a+1)/lat*thetaMax;for(let b=0;b<lon;b++){const p0=b/lon*Math.PI*2,p1=(b+1)/lon*Math.PI*2;const A=worldPoint(t0,p0),B=worldPoint(t1,p0),C=worldPoint(t1,p1),D=worldPoint(t0,p1);const z=[A,B,C,D].map(project).filter(Boolean).reduce((s,p)=>s+p.z,0)/4;tri.push({z,pts:[A,B,C]},{z,pts:[A,C,D]});}}
-  tri.sort((x,y)=>y.z-x.z).forEach(x=>fillPoly3(x.pts,COLORS.sphere,alpha));
-  drawLabel3(worldPoint(0,0,1.06),'UNIT SPHERE','#5c7390',true,'unit-sphere');
-}
-function drawAxes(){const axes=[{v:[1,0,0],name:'x'},{v:[0,1,0],name:'y'},{v:[0,0,1],name:'z'}];for(const a of axes){line3([V3.scale(-1.35,a.v),V3.scale(1.5,a.v)],'#5f6877',1.25,[],.66);for(const s of [-1,-.5,.5,1]){const p=V3.scale(s,a.v),perp=V3.normalize(V3.cross(a.v,cameraBasis().forward));line3([V3.add(p,V3.scale(-.025,perp)),V3.add(p,V3.scale(.025,perp))],'#6f7887',.8,[],.45);}drawLabel3(V3.scale(1.57,a.v),a.name,'#4e5869',false,`axis-${a.name}`);}}
-function objectOpacity(key,base=1){if(app.animation?.action.focus&&!app.animation.action.focus.includes(key))return Math.min(base,.1);const h=app.highlight||hoverKey;if(!h)return base;if(h===key)return 1;const related=(h[0]==='v'&&key===`p${h[1]}`)||(h[0]==='p'&&key===`v${h[1]}`);return related?Math.max(base,.76):Math.min(base,.34);}
-function drawArrow3(from,to,color,key,alpha=1,width=4,label=true){const a=project(from),b=project(to);if(!a||!b)return;const dx=b.x-a.x,dy=b.y-a.y,L=Math.hypot(dx,dy);if(L<3)return;const ux=dx/L,uy=dy/L,head=Math.min(13,Math.max(8,L*.12));ctx.save();ctx.globalAlpha=alpha;ctx.lineCap='round';ctx.strokeStyle='rgba(26,31,42,.26)';ctx.lineWidth=width+2;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x-ux*head*.65,b.y-uy*head*.65);ctx.stroke();ctx.strokeStyle=color;ctx.lineWidth=width;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x-ux*head*.65,b.y-uy*head*.65);ctx.stroke();ctx.fillStyle=color;ctx.beginPath();ctx.moveTo(b.x,b.y);ctx.lineTo(b.x-ux*head-uy*head*.48,b.y-uy*head+ux*head*.48);ctx.lineTo(b.x-ux*head+uy*head*.48,b.y-uy*head-ux*head*.48);ctx.closePath();ctx.fill();ctx.restore();if(key)hitAreas.push({key,a,b,radius:Math.max(10,width*2.5)});if(label&&key)drawLabel3(V3.add(to,V3.scale(.065,V3.normalize(V3.sub(to,from)))),vecPlain(key),color,true,key);}
-const LABEL_OFFSETS={a1:[-18,-16],a2:[12,-11],a3:[-15,-12],q1:[18,12],q2:[16,14],q3:[-17,14],v1:[-12,-9],v2:[-12,10],v3:[-14,-9],p2:[11,10],p3:[12,11],'axis-x':[8,4],'axis-y':[-8,4],'axis-z':[0,-8],'unit-sphere':[-64,14]};
-function drawLabel3(point,text,color,pill=true,key=''){const p=project(point);if(!p)return;const off=LABEL_OFFSETS[key]||[0,0];let x=p.x+off[0],y=p.y+off[1];ctx.save();ctx.font=key==='unit-sphere'?'800 10px system-ui':key.startsWith('axis-')?'800 12px system-ui':'700 14px Georgia';const w=ctx.measureText(text).width,h=18;if(key==='unit-sphere'){const box=freeBox(),half=w/2+6;x=Math.max(box.left+half+6,Math.min(box.right-half-6,x));y=Math.max(box.top+h/2+6,Math.min(box.bottom-h/2-52,y));}if(pill){ctx.fillStyle='rgba(255,255,255,.82)';ctx.strokeStyle=color;ctx.lineWidth=1;ctx.beginPath();roundRect(ctx,x-w/2-5,y-h/2,w+10,h,5);ctx.fill();ctx.stroke();}ctx.fillStyle=color;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(text,x,y+.5);ctx.restore();}
-function roundRect(c,x,y,w,h,r){r=Math.min(r,w/2,h/2);c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath();}
-function poly3(points,fill,alpha=.14){const pp=points.map(project);if(pp.some(x=>!x))return;ctx.save();ctx.globalAlpha=alpha;ctx.fillStyle=fill;ctx.beginPath();ctx.moveTo(pp[0].x,pp[0].y);for(let i=1;i<pp.length;i++)ctx.lineTo(pp[i].x,pp[i].y);ctx.closePath();ctx.fill();ctx.restore();}
-function drawTape2(vec,color){const a=project([0,0,0]),b=project(vec);if(!a||!b)return;const dx=b.x-a.x,dy=b.y-a.y,L=Math.hypot(dx,dy);if(L<2)return;const nx=-dy/L*11,ny=dx/L*11;ctx.save();ctx.strokeStyle=color;ctx.lineWidth=2.2;ctx.beginPath();ctx.moveTo(a.x+nx,a.y+ny);ctx.lineTo(b.x+nx,b.y+ny);ctx.stroke();ctx.lineWidth=1.3;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(a.x+nx,a.y+ny);ctx.moveTo(b.x,b.y);ctx.lineTo(b.x+nx,b.y+ny);ctx.stroke();ctx.fillStyle=color;ctx.beginPath();ctx.arc(b.x+nx,b.y+ny,3.6,0,Math.PI*2);ctx.fill();ctx.restore();}
-function drawRightAngle(foot,dir,residual,alpha=.85){const u=V3.normalize(dir),v=V3.normalize(residual),s=.12;const a=V3.add(foot,V3.scale(-s,u)),b=V3.add(a,V3.scale(s,v)),c=V3.add(foot,V3.scale(s,v));line3([a,b,c],COLORS.gold,2,[],alpha);}
-function drawPairCorner(a,b,index=0,opacity=.82,base=.105){const s=base+index*.018,p1=V3.scale(s,a),p2=V3.add(p1,V3.scale(s,b)),p3=V3.scale(s,b);line3([p1,p2,p3],COLORS.gold,1.7,[],opacity);}
+// The Three.js view reads app.animation every frame; this clock advances the captions and completes the step.
+function scheduleDraw(){if(drawQueued)return;drawQueued=true;requestAnimationFrame(t=>{drawQueued=false;tickAnimation(t);});}
+function tickAnimation(now){const a=app.animation;if(!a||a.completed)return;const elapsed=now-a.start;if(elapsed<a.total){const caption=elapsed>=a.move?animationResultCaption(a.action):animationCaption(a.action,beatOf(a.kind,animationProgress(now)));if(caption!==a.caption){a.caption=caption;showWorldCaption(caption);}scheduleDraw();}else{a.completed=true;a.held=true;app.resultCaption=animationResultCaption(a.action);showWorldCaption(app.resultCaption);if(app.pendingAdvance)completePendingAdvance();frameOverview();}}
 function activeColumn(){if(app.selectedTarget)return TARGETS[app.selectedTarget].col;const f=firstOpen();return f?TARGETS[f].col:2;}
-function drawStaticGeometry(now){
-  const s=deriveState(),done=app.phase==='complete',col=activeColumn(),activeV=s.V[col],activeVRecord=col>0&&!!app.records[`v${col+1}`],animId=app.animation?.action?.id||'',animKind=app.animation?.action?.kind||'';
-  if(!done)for(let j=0;j<3;j++){const key=`a${j+1}`,active=j===col,awaitingStart=!!app.selectedTarget&&/^s[123]$/.test(app.selectedTarget)&&!filled(app.selectedTarget),duplicate=active&&activeVRecord&&activeV&&V3.dist(activeV,s.A[j])<1e-7,sourceHighlighted=(app.highlight||hoverKey)===key,alpha=objectOpacity(key,awaitingStart?.9:active?.92:.28);if(!duplicate||sourceHighlighted)drawArrow3([0,0,0],s.A[j],COLORS.a,key,alpha,awaitingStart?5.2:active?4.5:3,alpha>.2);}
-  const qVisible=i=>!(animKind==='normalize'&&animId===`q${i+1}`);
-  for(let i=0;i<3;i++)if(s.Q[i]&&qVisible(i)){const key=`q${i+1}`,alpha=done?1:objectOpacity(key,.98),length=V3.norm(s.Q[i]),unit=Math.abs(length-1)<2e-4;drawArrow3([0,0,0],s.Q[i],unit?COLORS.q:COLORS.bad,key,alpha,done?6.2:4.8,true);}
-  if(done){if(s.Q[0]&&s.Q[1])drawPairCorner(s.Q[0],s.Q[1],0,.94,.15);}
-  else{let cornerIndex=0;for(let i=0;i<3;i++)for(let j=i+1;j<3;j++)if(s.Q[i]&&s.Q[j]&&qVisible(i)&&qVisible(j)&&Math.abs(V3.dot(s.Q[i],s.Q[j]))<2e-4)drawPairCorner(s.Q[i],s.Q[j],cornerIndex++);}
-  if(col>0&&!app.records[`p${col+1}`]&&(!app.animation||app.animation.held)){for(let i=0;i<col;i++){const r=s.R[i][col];if(s.Q[i]&&Number.isFinite(r)&&Math.abs(r)>1e-9&&app.records[`r${i+1}${col+1}`])drawTape2(V3.scale(r,s.Q[i]),COLORS.gold);}}
-  const p=done?null:s.P[col],v=done?null:s.V[col],a=s.A[col],pKey=`p${col+1}`,hideP=!app.animation?.held&&animKind==='assemble'&&animId===pKey;if(p&&V3.norm(p)>EPS&&!hideP){const alpha=objectOpacity(pKey,.92);drawArrow3([0,0,0],p,COLORS.p,pKey,alpha,4,true);}
-  const held=!!app.animation?.held,vKey=`v${col+1}`,vRecord=activeVRecord,hideV=!held&&((animKind==='subtract'&&animId===vKey)||(animKind==='start'&&animId===`s${col+1}`)),hideVLabel=(app.highlight||hoverKey)===`a${col+1}`&&v&&V3.dist(v,a)<1e-7;if(v&&vRecord&&!hideV){const alpha=objectOpacity(vKey,.92);drawArrow3([0,0,0],v,COLORS.v,vKey,alpha,4.2,!hideVLabel);if(p&&col>0){const dir=s.Q[Math.max(0,col-1)]||p;drawRightAngle(p,dir,v,alpha);}}
-  if(app.animation)drawAnimation(now,s);
-}
 const EASE=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2,BEATS={start:[[0,1]],inner:[[0,.20],[.20,.50],[.50,1]],assemble:[[0,.34],[.34,.68],[.68,1]],subtract:[[0,.28],[.28,.62],[.62,1]],length:[[0,.70],[.70,1]],normalize:[[0,.70],[.70,1]]};
-function mixHexColor(a,b,t){const av=parseInt(a.slice(1),16),bv=parseInt(b.slice(1),16),mix=shift=>Math.round(((av>>shift)&255)*(1-t)+((bv>>shift)&255)*t);return`rgb(${mix(16)}, ${mix(8)}, ${mix(0)})`;}
 function beatOf(kind,t){const b=BEATS[kind]||BEATS.start;for(let i=0;i<b.length;i++)if(t<=b[i][1])return i;return b.length-1;}
 function localT(kind,i,t){const b=(BEATS[kind]||BEATS.start)[i];return EASE(Math.max(0,Math.min(1,(t-b[0])/(b[1]-b[0]))));}
-function drawAnimation(now,s){const a=app.animation,t=animationProgress(now),kind=a.action.kind,beat=beatOf(kind,t),u=localT(kind,beat,t),id=a.action.id||'',target=TARGETS[id],j=target?.col??activeColumn();if(kind==='start')drawArrow3([0,0,0],s.A[j],COLORS.a,null,.72+.28*u,5.5,false);else if(kind==='inner'){
-    const i=Number(a.action.operands.find(k=>k[0]==='q')[1])-1,avec=s.A[j],q=s.Q[i],r=s.R[i][j]??app.records[id]?.value,foot=V3.scale(r,q);if(beat>0){const drop=V3.add(avec,V3.scale(beat===1?u:1,V3.sub(foot,avec)));poly3([[0,0,0],avec,drop],COLORS.gold,.13);line3([avec,drop],COLORS.gold,2,[6,4],.9);}if(beat===2)drawTape(foot,u,exactObjectText(id));
-  }else if(kind==='assemble'){let total=[0,0,0];for(let i=0;i<j;i++)total=V3.add(total,a.action.parts?.[i]||app.puzzle.exact.components[i][j].numeric);if(j>1)poly3([V3.scale(-1.2,s.Q[0]||[1,0,0]),V3.add(V3.scale(1.2,s.Q[0]||[1,0,0]),V3.scale(-1.2,s.Q[1]||[0,1,0])),V3.scale(1.2,s.Q[0]||[1,0,0]),V3.add(V3.scale(-1.2,s.Q[0]||[1,0,0]),V3.scale(1.2,s.Q[1]||[0,1,0]))],COLORS.p,.07);drawArrow3([0,0,0],V3.scale(beat===0?u:1,total),COLORS.p,null,1,beat>=2?6:5,false);}
-  else if(kind==='subtract'){const p=s.P[j]||app.puzzle.exact.P[j].numeric,orig=s.A[j],v=app.puzzle.exact.V[j].numeric;poly3([[0,0,0],p,orig],COLORS.v,beat===0?.05+.1*u:.15);line3([[0,0,0],p],COLORS.p,4,[],beat===0?.32+.4*u:.72);if(beat===1)line3([p,V3.add(p,V3.scale(beat===1?u:1,v))],COLORS.v,4,[],.5);if(beat===2){const from=V3.scale(1-u,p),to=V3.add(from,v);drawArrow3(from,to,COLORS.v,null,.98,5,false);drawRightAngle(p,s.Q[Math.max(0,j-1)]||p,v,u);}}
-  else if(kind==='length'){const v=(j===0?s.A[0]:s.V[j])||app.puzzle.exact.V[j].numeric;drawTape(v,beat===0?u:1,exactObjectText(id));}
-  else if(kind==='normalize'){const v=(j===0?s.A[0]:s.V[j])||app.puzzle.exact.V[j].numeric,q=app.puzzle.exact.Q[j].numeric,slide=beat===0?u:1,end=V3.add(V3.scale(1-slide,v),V3.scale(slide,q));drawArrow3([0,0,0],v,COLORS.v,null,.25,4,false);drawArrow3([0,0,0],end,COLORS.q,null,.98,5,false);}
-  const elapsed=now-a.start;if(elapsed<a.total){const caption=elapsed>=a.move?animationResultCaption(a.action):animationCaption(a.action,beat);if(caption!==a.caption){a.caption=caption;showWorldCaption(caption);}scheduleDraw();}else if(!a.completed){a.completed=true;a.held=true;app.resultCaption=animationResultCaption(a.action);showWorldCaption(app.resultCaption);if(app.pendingAdvance)completePendingAdvance();else scheduleDraw();frameOverview();}
-}
 function animationProgress(now){if(!app.animation)return 1;if(app.animation.held)return 1;return Math.max(0,Math.min(1,(now-app.animation.start)/app.animation.move));}
 function skipAnimation(){
   const a=app.animation;if(!a||a.held)return false;
@@ -1573,7 +1571,6 @@ function skipAnimation(){
   scheduleDraw();return true;
 }
 function clearHeldAnimation(){if(app.animation?.held){app.animation=null;app.resultCaption='';renderNow();scheduleDraw();}}
-function drawTape(v,t,text){const a=project([0,0,0]),full=project(v);if(!a||!full)return;const dx=full.x-a.x,dy=full.y-a.y,L=Math.hypot(dx,dy);if(L<1)return;const nx=-dy/L,ny=dx/L,offset=10,sx=a.x+nx*offset,sy=a.y+ny*offset,tipX=a.x+dx*t,tipY=a.y+dy*t,tx=tipX+nx*offset,ty=tipY+ny*offset;ctx.save();ctx.strokeStyle=COLORS.gold;ctx.lineWidth=2.5;ctx.beginPath();ctx.moveTo(sx,sy);ctx.lineTo(tx,ty);ctx.stroke();ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(sx,sy);ctx.moveTo(tipX,tipY);ctx.lineTo(tx,ty);ctx.stroke();for(let s=0;s<=L*t;s+=18){const x=sx+dx*s/L,y=sy+dy*s/L;ctx.beginPath();ctx.moveTo(x+nx*3,y+ny*3);ctx.lineTo(x-nx*3,y-ny*3);ctx.stroke();}ctx.fillStyle=COLORS.gold;ctx.beginPath();ctx.arc(tx,ty,4,0,Math.PI*2);ctx.fill();if(t>.72){const box=freeBox(),labelW=68,labelH=22,keepUpperRight=app.animation?.action?.id==='r22',measureAbove=ny<0,rawX=keepUpperRight?tx+8:tx-labelW/2,rawY=keepUpperRight?ty-25:measureAbove?ty-labelH-18:ty+18,labelX=Math.max(box.left+6,Math.min(box.right-labelW-6,rawX)),labelY=Math.max(box.top+6,Math.min(box.bottom-labelH-6,rawY));ctx.fillStyle='rgba(255,255,255,.92)';ctx.strokeStyle=COLORS.gold;ctx.lineWidth=1;ctx.beginPath();roundRect(ctx,labelX,labelY,labelW,labelH,5);ctx.fill();ctx.stroke();ctx.fillStyle=COLORS.gold;ctx.font='700 11px ui-monospace';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(text,labelX+labelW/2,labelY+labelH/2);}ctx.restore();}
 function playAnimation(action){app.resultCaption='';const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;action.focus=action.focus||focusFor(action);const BASE={start:1400,inner:3000,assemble:2800,subtract:3000,length:2400,normalize:2600},move=reduced?120:(BASE[action.kind]||2600),dwell=reduced?0:520;frameForAction(action);app.animation={action,kind:action.kind,start:performance.now(),move,total:move+dwell,completed:false,held:false,caption:''};showWorldCaption(animationCaption(action,0));if(action.id?.[0]==='q')requestAnimationFrame(()=>{const group=$('algorithmStrip').querySelectorAll('.progressGroup')[TARGETS[action.id].col];group?.classList.add('flash');setTimeout(()=>group?.classList.remove('flash'),410);});scheduleDraw();}
 function actionPoints(a){
   const s=deriveState(),id=a.id||'',t=TARGETS[id],j=t?.col??0,pts=[[0,0,0]];
@@ -1636,12 +1633,7 @@ function frameForAction(a){
 function focusFor(a){const id=a.id||'',t=TARGETS[id],j=t?.col??0;if(a.kind==='start')return['a1','a2','a3',...Array.from({length:j},(_,i)=>`q${i+1}`)];if(a.kind==='inner')return a.operands;if(a.kind==='assemble')return[id,...Array.from({length:j},(_,i)=>`q${i+1}`)];if(a.kind==='subtract')return[`a${j+1}`,`p${j+1}`,`v${j+1}`];if(a.kind==='length')return[j===0?'a1':`v${j+1}`];if(a.kind==='normalize')return[j===0?'a1':`v${j+1}`,`q${j+1}`];return[...Array.from({length:j+1},(_,i)=>`q${i+1}`),`a${j+1}`];}
 function animationCaption(a,b=0){const id=a.id,t=TARGETS[id],j=t?.col+1||1,q=t?.operands?.find(k=>k[0]==='q')||`q${Math.max(1,j-1)}`,terms=t?.components?.map(c=>`${vecName(`r${c[1]}${c[2]}`)}${vecName(`q${c[1]}`)}`).join(' and ')||vecName(id);const copy={start:[j===1?`1 / 1 — ${vecName('a1')} joins the inputs. There are no earlier directions yet, so it is measured directly.`:`1 / 1 — ${vecName(`a${j}`)} joins the inputs and stays there for the rest of this column.`],inner:[`1 / 3 — Blue ${vecName(`a${j}`)} and green ${vecName(q)} are the two inputs.`,`2 / 3 — Drop a perpendicular from the tip of ${vecName(`a${j}`)} onto the line through ${vecName(q)}.`,`3 / 3 — The foot sits at ${vecName(id)}${vecName(q)}. The signed distance along ${vecName(q)} is ${vecName(id)}.`],assemble:[`1 / 3 — The readings ${terms} are the coordinates of ${vecName(`a${j}`)} along the directions already found.`,`2 / 3 — Together they reach one point in their span, shaded here.`,`3 / 3 — The arrow from the origin to that point is the projection ${vecName(id)}.`],subtract:[`1 / 3 — Orange ${vecName(`p${j}`)} is the part along the directions already found.`,`2 / 3 — The gap up to blue ${vecName(`a${j}`)} is the residual ${vecName(`v${j}`)}.`,`3 / 3 — Slide it back to the origin. Same length, same direction, now perpendicular.`],length:[`1 / 2 — Measure ${vecName(j===1?'a1':`v${j}`)} along its own direction, before anything rescales it.`,`2 / 2 — That length is the diagonal entry ${vecName(id)}.`],normalize:[`1 / 2 — Divide by ${vecName(`r${j}${j}`)}. The tip slides along the same ray.`,`2 / 2 — It lands on the unit shell. Direction unchanged, length now 1.`]};return(copy[a.kind]||[''])[b];}
 function animationResultCaption(a){const id=a.id,t=TARGETS[id],j=t?.col+1||1,shown=id&&app.records[id]?actualObjectHtml(id):'';if(a.kind==='start')return j===1?`${vecName('a1')} added — nothing to project away, so measure it next.`:j===2?`${vecName('a2')} added. Next: measure its component along ${vecName('q1')}.`:`${vecName('a3')} added. Next: measure one component along each finished direction.`;if(a.kind==='inner')return`${vecName(id)} = ${shown} — signed: a negative value means ${vecName(`a${j}`)} leans against ${vecName(t.operands.find(k=>k[0]==='q'))}.`;if(a.kind==='assemble')return`${vecName(id)} = ${shown} — the whole part of ${vecName(`a${j}`)} along the directions already found.`;if(a.kind==='subtract')return`${vecName(id)} = ${shown} — the square corner confirms it is perpendicular to everything built so far.`;if(a.kind==='length')return`${vecName(id)} = ${shown} — recorded on the diagonal, and it is positive.`;if(a.kind==='normalize')return`${vecName(id)} = ${shown} — direction unchanged, length exactly 1.`;return'';}
-function drawWorld(now=performance.now()){clearWorld();drawBench();drawHemisphere(now);drawAxes();drawStaticGeometry(now);}
 
-/* ---------- canvas input ---------- */
-function pointerPos(e){const r=canvas.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top};}
-function distToSegment(p,a,b){const vx=b.x-a.x,vy=b.y-a.y,wx=p.x-a.x,wy=p.y-a.y,c1=vx*wx+vy*wy,c2=vx*vx+vy*vy,t=c2?Math.max(0,Math.min(1,c1/c2)):0;return Math.hypot(p.x-(a.x+t*vx),p.y-(a.y+t*vy));}
-function hitAt(p){let best=null,d=Infinity;for(const h of hitAreas){const x=distToSegment(p,h.a,h.b);if(x<h.radius&&x<d){best=h;d=x;}}return best;}
 function framePoints(key=null){
   const s=deriveState(),obj=key&&getObject(key);if(obj?.type==='vector')return[[0,0,0],obj.value];
   if(app.phase==='complete')return dedupePoints([[0,0,0],...s.Q.filter(Boolean)]);
@@ -1750,7 +1742,7 @@ const pressMark=$('pressMark');let pressTimer;
 function showPressMark(x,y,pan=false){pressMark.hidden=false;pressMark.classList.toggle('panning',!!pan);pressMark.style.left=`${x}px`;pressMark.style.top=`${y}px`;pressMark.style.animation='none';void pressMark.offsetWidth;pressMark.style.animation='';clearTimeout(pressTimer);pressTimer=setTimeout(()=>{pressMark.hidden=true;},460);}
 const worldCard=$('worldCard'),pointers=new Map();let gesture=null,lastTap={time:0,x:0,y:0};
 function cardPoint(e){const r=worldCard.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top};}
-function worldHit(e){return worldCard.classList.contains('threeReady')&&window.PN_V3?.hitTest?window.PN_V3.hitTest(e.clientX,e.clientY):hitAt(pointerPos(e))?.key||null;}
+function worldHit(e){return window.PN_V3?.hitTest?window.PN_V3.hitTest(e.clientX,e.clientY):null;}
 function beginGesture(pan=false){
   const values=[...pointers.values()];
   if(values.length===1){const p=values[0];gesture={count:1,pan,x:p.x,y:p.y,yaw:rig.yawT,elev:rig.elevT,target:rig.targetT.slice(),moved:false};showDragGuide(p.x,p.y,pan);}
@@ -1760,7 +1752,8 @@ function beginGesture(pan=false){
              dist:rig.distT,yaw:rig.yawT,target:rig.targetT.slice(),moved:true};
   }
 }
-worldCard.addEventListener('pointerdown',e=>{if(e.target.closest('.worldChip,.sceneLabel3d'))return;skipAnimation();manualCamera();worldCard.classList.add('dragging');worldCard.setPointerCapture(e.pointerId);const p=cardPoint(e),pan=e.shiftKey||e.button===1||e.button===2;pointers.set(e.pointerId,p);showPressMark(p.x,p.y,pan);beginGesture(pan);canvas.focus({preventScroll:true});});
+worldCard.addEventListener('pointerdown',()=>worldCard.classList.add('handled'),{once:true});
+worldCard.addEventListener('pointerdown',e=>{if(e.target.closest('.worldChip,.sceneLabel3d'))return;skipAnimation();manualCamera();worldCard.classList.add('dragging');worldCard.setPointerCapture(e.pointerId);const p=cardPoint(e),pan=e.shiftKey||e.button===1||e.button===2;pointers.set(e.pointerId,p);showPressMark(p.x,p.y,pan);beginGesture(pan);$('threeCanvas').focus({preventScroll:true});});
 worldCard.addEventListener('pointermove',e=>{if(!pointers.has(e.pointerId)){const key=worldHit(e);if(key!==hoverKey){hoverKey=key;window.PN_V3?.setWorldHighlight(key);scheduleDraw();}return;}pointers.set(e.pointerId,cardPoint(e));const rect=worldCard.getBoundingClientRect(),yawPx=Math.PI*2/(rect.width*1.15),elevPx=1.55/(rect.height*.92),values=[...pointers.values()];if(values.length>=2){
     if(gesture?.count!==2)beginGesture();
     const[a,b]=values,cx=(a.x+b.x)/2,cy=(a.y+b.y)/2,spread=Math.max(8,Math.hypot(a.x-b.x,a.y-b.y)),basis=cameraBasis(),scale=rig.dist*.0019;
@@ -1781,8 +1774,9 @@ worldCard.addEventListener('wheel',e=>{if(e.target.closest('.worldChip'))return;
 worldCard.addEventListener('keydown',e=>{if(!worldCard.contains(document.activeElement))return;let used=true;manualCamera();if(e.key==='ArrowLeft')rig.yawT-=.12;else if(e.key==='ArrowRight')rig.yawT+=.12;else if(e.key==='ArrowUp')rig.elevT=Math.min(rig.ELEV_MAX,rig.elevT+.09);else if(e.key==='ArrowDown')rig.elevT=Math.max(rig.ELEV_MIN,rig.elevT-.09);else if(e.key==='+'||e.key==='=')rig.distT*=.90;else if(e.key==='-'||e.key==='_')rig.distT*=1.10;else if(e.key==='0')autoFrame(true);else if(e.key.toLowerCase()==='f'){used=false;if(document.fullscreenElement)document.exitFullscreen();else worldCard.requestFullscreen?.();}else used=false;if(used){e.preventDefault();scheduleDraw();}});
 
 $('stepBanner').addEventListener('click',e=>{e.stopPropagation();skipAnimation();});
-new ResizeObserver(()=>{resizeCanvas();fitDerivation();window.PN_V3?.viewportChanged?.();}).observe(worldCard);
-requestAnimationFrame(function fallbackCameraLoop(now){if(!$('gameScreen').hidden&&!worldCard.classList.contains('threeReady')){if(rigTick(now)||app.animation)scheduleDraw();}requestAnimationFrame(fallbackCameraLoop);});
+new ResizeObserver(()=>{fitDerivation();window.PN_V3?.viewportChanged?.();}).observe(worldCard);
+// Without WebGL the world card explains itself instead of staying blank.
+window.addEventListener('load',()=>setTimeout(()=>{const missing=!worldCard.classList.contains('threeReady');$('worldFallback').hidden=!missing;if(missing)worldCard.querySelector('.worldControls').hidden=true;},0));
 
 /* ---------- audits ---------- */
 function auditPuzzles(){return PUZZLES.map(p=>{const e=p.exact,points=[];for(let j=0;j<3;j++){points.push(p.cols[j],e.V[j].numeric,e.Q[j].numeric,e.P[j].numeric);let sum=[0,0,0];for(let i=0;i<=j;i++){const comp=i<j?e.components[i][j]?.numeric:V3.scale(e.R[j][j].value,e.Q[j].numeric);if(comp){sum=V3.add(sum,comp);points.push(sum.slice());}}}const minHeight=Math.min(...points.map(x=>x[2])),maxRadius=Math.max(...points.map(V3.norm)),allOriginalsUpper=p.cols.every(v=>v[2]>0&&v.every(x=>x!==0));return{id:p.id,ok:e.V.every(x=>x.N>0)&&allOriginalsUpper&&minHeight>-0.03&&maxRadius<2.46,minHeight,maxRadius};});}
@@ -1795,7 +1789,7 @@ function modalAction(action){if(action==='close')closeModal();if(action==='menu'
 let toastTimer;function toast(text){$('toast').textContent=text;$('toast').classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.remove('show'),2400);}
 function updateBest(){const s=storageGet('pn-v3-study',null),sp=storageGet('pn-v4-sprint-best',null);$('studyBest').textContent=s===null?'best: -':`best: ${s} miss${String(s)==='1'?'':'es'}`;$('sprintBest').textContent=sp===null?'best: -':`best: ${sp}/${SPRINT_TOTAL}`;const q=$('quizBestBadge'),qb=quizBest();if(q)q.textContent=qb===null?'BEST —':`BEST ${qb}/10`;}
 function showAbout(){openModal(`<h2 id="modalTitle">About Perfectly Normal</h2><div class="aboutList">
-  <p><strong>Version:</strong> Perfectly Normal [v0.3(beta)]</p>
+  <p><strong>Version:</strong> Perfectly Normal [v0.4(beta)]</p>
   <p><strong>Copyright:</strong> © 2026 <a href="https://people.math.wisc.edu/~roch/" target="_blank" rel="noopener noreferrer">Sébastien Roch</a></p>
   <p><strong>Code license:</strong> The software source code—including the functional HTML, CSS, and JavaScript—is available under the <a href="https://opensource.org/license/mit" target="_blank" rel="noopener noreferrer">MIT License</a>.</p>
   <p><strong>Content license:</strong> Except where otherwise noted, the original instructional text, questions, feedback, and visual assets are licensed under the <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener noreferrer">Creative Commons Attribution-NonCommercial 4.0 International License</a>.</p>
@@ -1803,7 +1797,7 @@ function showAbout(){openModal(`<h2 id="modalTitle">About Perfectly Normal</h2><
   <p><strong>Privacy:</strong> Your best scores are saved in this browser on this device. They are not uploaded anywhere. If you use a private window, clear site data, switch browsers, or block site storage, your best scores may reset.</p>
   <p><strong>Acknowledgments:</strong> Thanks to Betsy Stovall and Jingyi Li for helpful feedback.</p>
 </div><div class="modalActions"><button class="primaryButton" data-modal="close">close</button></div>`,'aboutCard');}
-function showGameCheatsheet(){const content=$('cheatsheetCard').querySelector('.introDisclosure').cloneNode(true);content.querySelector('summary')?.remove();content.querySelectorAll('[id]').forEach(node=>node.removeAttribute('id'));openModal(`<h2 id="modalTitle">Gram–Schmidt Cheatsheet</h2><div class="modalCheatsheet">${content.innerHTML}</div><div class="modalActions"><button class="primaryButton" data-modal="close">dismiss</button></div>`,'cheatsheetModal');}
+function showGameCheatsheet(){const content=$('cheatsheetCard').querySelector('.introDisclosure').cloneNode(true);content.querySelector('summary')?.remove();content.querySelector('.quizLaunchBtn')?.remove();content.querySelectorAll('[id]').forEach(node=>node.removeAttribute('id'));openModal(`<h2 id="modalTitle">Gram–Schmidt Cheatsheet</h2><div class="modalCheatsheet">${content.innerHTML}</div><div class="modalActions"><button class="primaryButton" data-modal="close">dismiss</button></div>`,'cheatsheetModal');}
 function showSprintHint(){
   if(!sprintLive()||app.sprint.questionComplete)return;
   app.sprint.hintUsed=true;const id=currentSprintQuestion()?.target,copy=BANNER_COPY[id];

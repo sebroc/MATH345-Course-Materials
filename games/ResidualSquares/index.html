@@ -19,8 +19,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous" />
-  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous" onload="window.dispatchEvent(new Event('residual-squares-katex-ready'))"></script>
   <script>
     window.MathJax = {
       tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] },
@@ -228,18 +226,7 @@
       line-height: 1.55;
     }
     .tip-formula mjx-container { max-width: 100%; overflow-x: auto; overflow-y: hidden; }
-    .tip-gradient-row {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 5px 18px;
-      margin-top: 2px;
-    }
-    .tip-gradient-row > span {
-      flex: 0 0 auto;
-      max-width: 100%;
-      white-space: nowrap;
-    }
+
     .tip-rule {
       margin-top: 11px;
       color: #334155;
@@ -506,7 +493,6 @@
     }
 
     .howto-card {
-      padding: 15px 17px;
       color: #334155;
       background:
         linear-gradient(
@@ -519,52 +505,30 @@
 
     .howto-card h2 {
       color: #1e293b;
-      font-size: 1rem;
+
       font-weight: 950;
       letter-spacing: -0.02em;
     }
 
     .howto-steps {
       display: grid;
-      grid-template-columns: minmax(0, 0.72fr) minmax(270px, 1.56fr) minmax(0, 0.72fr);
-      gap: 8px;
-      margin-top: 10px;
+
       margin-bottom: 0;
       padding: 0;
       list-style: none;
     }
 
     .howto-step {
-      display: grid;
       grid-template-columns: 25px minmax(0, 1fr);
-      gap: 8px;
-      align-items: center;
-      min-width: 0;
-      padding: 9px 10px;
-      border: 1px solid rgba(244, 114, 182, 0.28);
-      border-radius: 13px;
-      background: rgba(255, 255, 255, 0.72);
-    }
 
-    .howto-step-visual {
-      align-items: start;
-      border-color: rgba(37, 99, 235, 0.22);
-      background: rgba(255, 255, 255, 0.88);
-    }
-
-    .howto-visual-body {
-      display: grid;
-      grid-template-columns: minmax(180px, 240px) minmax(120px, 1fr);
-      gap: 12px;
       align-items: center;
-      min-width: 0;
+
     }
 
     .howto-diagram {
       position: relative;
       width: 100%;
-      max-width: 240px;
-      aspect-ratio: 260 / 116;
+
       justify-self: center;
       overflow: hidden;
       border-radius: 11px;
@@ -599,33 +563,6 @@
 
     .howto-step strong {
       color: #1e293b;
-    }
-
-    .howto-legend,
-    .howto-score {
-      margin-top: 9px;
-      color: #334155;
-      font-size: 0.88rem;
-      line-height: 1.4;
-    }
-
-    .howto-legend {
-      padding-top: 9px;
-      border-top: 1px solid rgba(244, 114, 182, 0.28);
-    }
-
-    .keyboard-note {
-      margin-top: 5px;
-      color: #64748b;
-      font-size: 0.79rem;
-      line-height: 1.35;
-    }
-
-    .howto-save {
-      margin-top: 5px;
-      color: #64748b;
-      font-size: 0.79rem;
-      line-height: 1.35;
     }
 
     .mode-chooser {
@@ -709,7 +646,6 @@
       font-size: 0.86rem;
       font-weight: 650;
     }
-    .mode-record { justify-self: start; font-size: 0.82rem; }
 
     .game-card {
       background: rgba(255,255,255,0.88);
@@ -844,7 +780,7 @@
       background: #fff;
       overflow: hidden;
       box-shadow: inset 0 1px 0 rgba(255,255,255,0.9), 0 10px 34px rgba(15,23,42,0.08);
-      touch-action: none;
+      touch-action: pan-y;
     }
 
     .play-layout.quad-layout .canvas-shell {
@@ -856,7 +792,7 @@
       display: block;
       width: 100%;
       height: 100%;
-      touch-action: none;
+      touch-action: pan-y;
       cursor: crosshair;
       outline: none;
     }
@@ -886,23 +822,17 @@
     }
 
     .contour-panel {
-      left: 12px;
-      top: 12px;
-      width: 176px;
-      padding: 7px 8px 8px;
       color: #334155;
       border-color: rgba(148,163,184,0.56);
-      background: rgba(255,255,255,0.96);
-      box-shadow: 0 10px 24px rgba(15,23,42,0.12);
-      overflow: hidden;
+
       transition: none;
     }
     .contour-head {
       display: flex;
-      align-items: baseline;
+
       justify-content: space-between;
       gap: 8px;
-      margin-bottom: 3px;
+
     }
     .contour-head span {
       color: #64748b;
@@ -915,7 +845,7 @@
       flex: 0 0 auto;
       color: #4338ca;
       font-family: Georgia, 'Times New Roman', serif;
-      font-size: 0.82rem;
+
       font-style: italic;
       white-space: nowrap;
     }
@@ -947,9 +877,9 @@
     .contour-zoom-btn:disabled { color: #a8b1c1; cursor: default; }
     .contour-canvas-wrap {
       position: relative;
-      height: 128px;
+
       border: 1px solid rgba(148,163,184,0.52);
-      border-radius: 8px;
+
       background: #f8fafc;
       box-shadow: inset 0 0 0 1px rgba(255,255,255,0.64);
       overflow: hidden;
@@ -972,10 +902,10 @@
       display: flex;
       justify-content: space-between;
       gap: 5px;
-      margin-top: 4px;
+
       color: #475569;
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      font-size: 0.61rem;
+
       font-weight: 900;
       font-variant-numeric: tabular-nums;
       line-height: 1.2;
@@ -1113,10 +1043,7 @@
     .quad-card {
       width: 100%;
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 12px;
-      margin-bottom: 10px;
-      padding: 11px 14px 10px;
+
       border: 1px solid rgba(203,213,225,0.9);
       border-radius: 18px;
       background: rgba(255,255,255,0.9);
@@ -1124,10 +1051,9 @@
       pointer-events: auto;
     }
     .quad-activity-panel {
-      grid-column: 1 / -1;
       display: grid;
       grid-template-columns: 1fr;
-      gap: 8px;
+
       align-items: center;
     }
     .quad-activity-segments {
@@ -1140,8 +1066,7 @@
     }
     .quad-activity-button {
       min-width: 0;
-      min-height: 36px;
-      padding: 7px 10px;
+
       border: 0;
       border-radius: 10px;
       color: #64748b;
@@ -1159,24 +1084,7 @@
     .quad-activity-button:disabled { color: #94a3b8; cursor: not-allowed; }
     .quad-activity-button:focus-visible,
     .fine-button:focus-visible { outline: 3px solid rgba(6,182,212,0.28); outline-offset: 1px; }
-    .guided-auto-fit {
-      grid-column: 1 / -1;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-    }
-    .auto-fit-value {
-      display: flex;
-      justify-content: space-between;
-      gap: 8px;
-      padding: 7px 9px;
-      border: 1px solid #e2e8f0;
-      border-radius: 11px;
-      color: #475569;
-      background: #f8fafc;
-      font-size: 0.72rem;
-      font-weight: 850;
-    }
+
     .quad-card .slider-row { min-width: 0; }
     .quad-card .slider-row.guided-bend { grid-column: 1 / -1; }
     .quad-card .slider-row.a { --slider-color: var(--amber); }
@@ -1188,7 +1096,7 @@
       align-items: baseline;
       gap: 8px;
       font-weight: 900;
-      font-size: 0.85rem;
+
       color: #334155;
       margin-bottom: 2px;
     }
@@ -1198,7 +1106,7 @@
       -webkit-appearance: none;
       width: 100%;
       height: 6px;
-      margin: 6px 0;
+
       border: 0;
       border-radius: 999px;
       outline: none;
@@ -1254,37 +1162,6 @@
     }
     .fine-button:hover { color: var(--slider-color); border-color: var(--slider-color); }
     .fine-button:disabled { opacity: 0.48; cursor: not-allowed; }
-    .gradient-feedback {
-      min-height: 30px;
-      padding: 5px 7px;
-      border-radius: 9px;
-      color: #475569;
-      background: #f8fafc;
-      font-size: 0.66rem;
-      font-weight: 800;
-      line-height: 1.25;
-    }
-    .gradient-feedback strong { color: #1e293b; }
-    .gradient-feedback.raise { color: #047857; background: #ecfdf5; }
-    .gradient-feedback.lower { color: #be123c; background: #fff1f2; }
-    .gradient-feedback.balanced { color: #047857; background: #d1fae5; }
-    .combined-balance {
-      grid-column: 1 / -1;
-      display: grid;
-      grid-template-columns: auto minmax(80px, 1fr) auto;
-      gap: 8px;
-      align-items: center;
-      padding: 7px 9px;
-      border-radius: 11px;
-      color: #475569;
-      background: #f8fafc;
-      font-size: 0.72rem;
-      font-weight: 900;
-    }
-    .combined-track { height: 7px; overflow: hidden; border-radius: 999px; background: #dbe3ef; }
-    .combined-fill { display: block; width: 0; height: 100%; border-radius: inherit; background: #f43f5e; transition: width 0.12s linear, background 0.12s linear; }
-    .combined-balance.in-target { color: #047857; background: #ecfdf5; }
-    .combined-balance.in-target .combined-fill { background: #10b981; }
 
     .gauge-card {
       width: min(124px, calc(100% - 24px));
@@ -1300,15 +1177,7 @@
       gap: 4px;
       align-items: stretch;
     }
-    .gauge-card.three-gauges { width: min(134px, calc(100% - 24px)); }
-    .gauge-panel {
-      left: auto;
-      right: 10px;
-      top: 10px;
-      transition: none;
-    }
-    .angle-gauge-panel { right: 140px; }
-    .angle-gauge-panel.three-gauges { right: 150px; }
+
     .gauge-unit {
       display: grid;
       grid-template-columns: minmax(0, 1fr) 52px;
@@ -1350,26 +1219,20 @@
     }
 
     .recap {
-      position: absolute;
       top: 14px;
       right: 14px;
-      width: min(92%, 300px);
-      border-radius: 18px;
-      background: rgba(255,255,255,0.95);
+
       border: 1px solid #dbe4f0;
-      box-shadow: 0 24px 80px rgba(15,23,42,0.22);
-      padding: 13px;
+
       z-index: 6;
       backdrop-filter: blur(14px);
-      max-height: calc(100% - 20px);
-      overflow: auto;
+
     }
     .recap h3 {
-      display: grid;
       grid-template-columns: 1fr auto 1fr;
       align-items: center;
       letter-spacing: -0.03em;
-      font-size: 1.34rem;
+
     }
     .recap-body { margin-top: 7px; }
     .recap-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
@@ -1385,8 +1248,8 @@
       line-height: 1.2;
     }
     .recap-metrics strong { color: #1e293b; font-size: 1.06rem; font-variant-numeric: tabular-nums; }
-    .recap-actions { margin-top: 9px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-    .recap-actions.three-actions { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .recap-actions { margin-top: 9px; display: grid; gap: 8px; }
+
     .recap-actions .action {
       display: inline-flex;
       align-items: center;
@@ -1406,7 +1269,7 @@
       border: 1px solid var(--edge);
       background: #ffffff;
       box-shadow: 0 10px 34px rgba(15,23,42,0.06);
-      padding: 12px;
+
       height: min(585px, calc(100vh - 260px));
       min-height: 388px;
       display: flex;
@@ -1420,13 +1283,12 @@
       border-radius: 16px;
       background: #f8fafc;
       flex: 1;
-      min-height: 0;
+
     }
 
     .basis-panel {
       display: grid;
-      gap: 7px;
-      margin-bottom: 9px;
+
     }
 
     .basis-segments {
@@ -1440,12 +1302,12 @@
 
     .basis-segment {
       min-width: 0;
-      padding: 7px 6px;
+
       border: 0;
       border-radius: 10px;
       color: #64748b;
       background: transparent;
-      font-size: 0.72rem;
+
       font-weight: 900;
       line-height: 1.25;
       cursor: pointer;
@@ -1462,17 +1324,9 @@
       outline-offset: 1px;
     }
 
-    .basis-segment .katex { font-size: 1em; }
-
     .basis-note {
-      padding: 7px 9px;
       border-radius: 11px;
-      color: #475569;
-      background: #f8fafc;
-      font-size: 0.72rem;
-      font-weight: 750;
-      line-height: 1.35;
-      text-align: center;
+
     }
 
     .basis-note mjx-container { margin: 0 1px !important; }
@@ -1557,14 +1411,11 @@
     .strip-table tr.highlighted td[data-key="r"][data-sign="zero"] { color: #047857; }
 
     .panel-blurb {
-      margin-top: 9px;
-      padding: 8px 10px;
       border-radius: 14px;
       background: #f8fafc;
       border: 1px solid var(--edge);
       color: #475569;
-      line-height: 1.4;
-      font-size: 0.85rem;
+
     }
 
     .toolbar-actions {
@@ -1633,7 +1484,6 @@
       box-shadow: none;
     }
 
-
     .columns-toggle {
       display: none;
       align-items: center;
@@ -1642,15 +1492,11 @@
     }
 
     @media (min-width: 921px) {
-      .app { padding: 14px 0 10px; }
-      .intro-stack { gap: 10px; }
       .intro-stack > .hero-banner {
-        min-height: 150px;
         margin-bottom: 0;
-        padding: 15px 24px;
+
       }
       .intro-stack > .hero-banner h1 {
-        font-size: clamp(2.8rem, 4.4vw, 3.55rem);
         line-height: 0.92;
         white-space: nowrap;
       }
@@ -1658,9 +1504,7 @@
       .intro-stack > .hero-banner h1 .t2 { margin-left: 0.16em; }
       .intro-stack > .hero-banner .hero-sub {
         max-width: 760px;
-        margin-top: 7px;
-        font-size: 0.92rem;
-        line-height: 1.4;
+
       }
       .intro-stack > .hero-banner .info-button {
         right: 14px;
@@ -1710,11 +1554,7 @@
         justify-self: stretch;
         width: 100%;
       }
-      .howto-visual-body {
-        grid-template-columns: 1fr;
-        gap: 6px;
-      }
-      .howto-diagram { max-width: 190px; }
+
     }
 
     @media (max-width: 920px) {
@@ -1745,6 +1585,8 @@
       .toolbar-actions { width: 100%; }
       .play-toolbar .area-card,
       .play-toolbar .eq-card { width: 100%; min-width: 0; max-width: none; }
+      .status-cards:has(#eqC) { grid-template-columns: 1fr; }
+      .play-toolbar .eq-card #eqCurrent { flex-wrap: wrap; }
       .cheatsheet-body {
         grid-template-columns: 1fr;
         padding: 12px;
@@ -1758,18 +1600,11 @@
         gap: 4px;
         align-items: start;
       }
-      .howto-steps { grid-template-columns: 1fr; }
-      .howto-step { min-height: 44px; }
-      .howto-step-visual { min-height: 0; }
-      .howto-visual-body {
-        grid-template-columns: minmax(140px, 0.95fr) minmax(0, 1.05fr);
-        gap: 10px;
-      }
-      .howto-diagram { max-width: 190px; }
+
       .mode-grid { grid-template-columns: 1fr; }
       .mode-button { grid-template-columns: 118px minmax(0, 1fr); grid-template-rows: auto auto; align-items: center; }
       .mode-preview { grid-row: 1 / span 2; height: 100%; min-height: 112px; }
-      .mode-record { align-self: start; }
+
       .hero-banner:not(.slim) .hero-text { width: 86%; }
       .hero-banner:not(.slim) .hero-art { width: 72%; opacity: 0.52; }
     }
@@ -1794,56 +1629,34 @@
       .mode-preview { min-height: 102px; }
       .canvas-shell { min-height: 340px; border-radius: 18px; }
       .gauge-card { width: min(120px, calc(100% - 18px)); padding: 5px 6px; gap: 3px; }
-      .gauge-card.three-gauges { width: min(130px, calc(100% - 18px)); }
-      .angle-gauge-panel { right: 136px; }
-      .angle-gauge-panel.three-gauges { right: 146px; }
-      #contourPanel:not(.hidden) ~ .angle-gauge-panel { right: 10px; top: 112px; }
+
       .gauge-unit { grid-template-columns: minmax(0, 1fr) 50px; grid-template-rows: 24px 14px; column-gap: 3px; }
       .gauge-card canvas { height: 24px; }
-      .contour-panel { width: 132px; padding: 6px; }
-      .contour-canvas-wrap { height: 104px; }
+
       .contour-head span { font-size: 0.52rem; }
-      .contour-head strong { font-size: 0.72rem; }
-      .contour-readout { display: grid; grid-template-columns: 1fr; gap: 1px; font-size: 0.56rem; }
-      .howto-visual-body { grid-template-columns: minmax(128px, 0.92fr) minmax(0, 1.08fr); gap: 8px; }
-      .quad-card { grid-template-columns: 1fr; gap: 7px; padding: 10px; }
+
+      .contour-readout { display: grid; grid-template-columns: 1fr; gap: 1px; }
+
       .quad-card .slider-row { grid-column: 1 / -1; }
-      .quad-card .slider-row label { gap: 4px; font-size: 0.74rem; }
+      .quad-card .slider-row label { gap: 4px; }
       .quad-activity-panel { grid-template-columns: 1fr; }
-      .gradient-feedback { min-height: 0; }
-      .recap-actions.three-actions { grid-template-columns: 1fr; }
+
       .toolbar-actions .action { flex: 1 1 auto; }
       .strip-table { font-size: 0.74rem; }
       .strip-table:not(.quad) td { padding: 6px 5px; min-width: 36px; }
       .strip-table.quad td { min-width: 28px; padding: 6px 2px; }
       .strip-table.quad td.op, .strip-table.quad th.op { min-width: 9px; width: 9px; padding: 6px 0; }
-      .recap { padding: 13px; }
+
       .recap-body { font-size: 0.88rem; }
       .tip-advice-row { grid-template-columns: 1fr; }
       .tip-direction { justify-self: start; }
       .tip-formula { padding-inline: 8px; font-size: 0.82rem; }
     }
 
-
     .howto-card {
       padding: 17px;
     }
-    .howto-title-row {
-      display: flex;
-      align-items: end;
-      justify-content: space-between;
-      gap: 18px;
-    }
-    .howto-title-row > p { max-width: 560px; color: #64748b; font-size: 0.86rem; font-weight: 720; line-height: 1.4; text-align: right; }
-    .howto-kicker, .panel-kicker {
-      display: block;
-      margin-bottom: 3px;
-      color: #7c3aed;
-      font-size: 0.63rem;
-      font-weight: 950;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-    }
+
     .howto-card h2 { font-size: 1.08rem; }
     .howto-steps { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 12px; }
     .howto-step {
@@ -1863,13 +1676,13 @@
     .howto-step-head { display: grid; grid-template-columns: 25px minmax(0, 1fr); gap: 8px; align-items: start; align-self: stretch; }
     .howto-step-head p { padding-top: 2px; color: #334155; font-size: 0.84rem; line-height: 1.32; }
     .howto-diagram { max-width: none; aspect-ratio: 260 / 116; margin-top: auto; }
-    .howto-controls-diagram { background: linear-gradient(145deg, rgba(250,245,255,0.96), rgba(255,255,255,0.9)); }
+
     .howto-many-squares { background: linear-gradient(145deg, rgba(236,254,255,0.88), rgba(255,255,255,0.92)); }
 
     .mode-button.locked { cursor: not-allowed; filter: saturate(0.55); opacity: 0.68; }
     .mode-button.locked:hover { transform: none; border-color: rgba(203,213,225,0.9); box-shadow: 0 12px 34px rgba(15,23,42,0.08); }
     .mode-status { align-self: end; justify-self: start; display: inline-flex; align-items: center; justify-content: center; width: min(150px, 100%); min-height: 34px; box-sizing: border-box; gap: 6px; padding: 6px 10px; border-radius: 999px; border: 1px solid #dbe3ef; color: #475569; background: #f8fafc; font-size: 0.78rem; font-weight: 900; text-align: center; }
-    .mode-status.complete { color: #047857; border-color: #a7f3d0; background: #ecfdf5; }
+
     .mode-status.available { color: #5b21b6; border-color: #ddd6fe; background: #f5f3ff; }
     .mode-status.locked { color: #64748b; background: #f1f5f9; }
     .mode-footer { display:flex; align-items:center; justify-content:space-between; }
@@ -1925,7 +1738,7 @@
     .contour-head > div { min-width: 0; }
     .contour-head span { display: block; }
     .contour-head strong { display: block; margin-top: 2px; font-size: 1rem; }
-    .contour-canvas-wrap { flex: 1 1 auto; height: auto; min-height: 210px; border-radius: 12px; }
+    .contour-canvas-wrap { flex: 1 1 auto; height: auto; border-radius: 12px; }
     .contour-readout { margin-top: 7px; font-size: 0.68rem; }
     .contour-legend { display: flex; flex-direction: column; align-items: center; gap: 5px; margin-top: 8px; color: #475569; font-size: 0.68rem; font-weight: 850; }
     .contour-legend > div { display: flex; justify-content: center; gap: 22px; }
@@ -1940,72 +1753,48 @@
     .contour-legend .legend-path-m { background: rgba(6,182,212,0.55); }
     .tip-advice.single-column .tip-advice-row { grid-template-columns: 1fr; }
 
-    .basis-heading, .signal-head { display: flex; align-items: center; justify-content: space-between; gap: 9px; }
-    .basis-heading strong, .signal-head strong { display: block; color: #1e293b; font-size: 0.8rem; line-height: 1.25; }
-    .compare-progress { flex: 0 0 auto; padding: 5px 8px; border-radius: 999px; color: #6d28d9; background: #f5f3ff; font-size: 0.66rem; font-weight: 950; }
-    .basis-segments { margin-top: 7px; }
-    .basis-segment { font-size: 0.69rem; }
-    .basis-segment.tried::after { content: ' ✓'; color: #059669; }
-    .basis-note { text-align: left; }
+    .basis-heading { display: flex; align-items: center; justify-content: space-between; gap: 9px; }
+    .basis-heading strong { display: block; color: #1e293b; font-size: 0.8rem; line-height: 1.25; }
 
-    .balance-panel { display: grid; gap: 7px; margin-bottom: 9px; padding: 9px; border: 1px solid #e2e8f0; border-radius: 15px; background: #f8fafc; }
+    .basis-segment.tried::after { content: ' ✓'; color: #059669; }
+
+    .balance-panel { display: grid; border: 1px solid #e2e8f0; border-radius: 15px; background: #f8fafc; }
     .signal-segments { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; padding: 3px; border: 1px solid #cbd5e1; border-radius: 11px; background: #e2e8f0; }
     .signal-segment { padding: 5px 7px; border: 0; border-radius: 8px; color: #64748b; background: transparent; font-size: 0.65rem; font-weight: 950; cursor: pointer; white-space: nowrap; }
     .signal-segment[aria-pressed="true"] { color: #4c1d95; background: #fff; box-shadow: 0 2px 7px rgba(15,23,42,0.1); }
-    .signal-bridge { color: #475569; font-size: 0.68rem; font-weight: 760; line-height: 1.32; text-align: center; }
+
     .balance-panel .gauge-card {
       position: static;
       left: auto;
       right: auto;
       top: auto;
       width: 100%;
-      padding: 6px 8px;
+
       border-radius: 13px;
       background: #fff;
       box-shadow: 0 5px 16px rgba(15,23,42,0.06);
     }
-    .balance-panel .gauge-unit { grid-template-columns: minmax(0, 1fr) 70px; grid-template-rows: 28px 15px; }
-    .balance-panel .gauge-label { font-size: 0.7rem; }
-    .balance-panel .gauge-card canvas { height: 28px; }
 
-    .quad-card { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px 12px; padding: 9px 12px; }
+    .quad-card { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     .quad-activity-panel { grid-column: 1 / -1; }
-    .quad-activity-button { min-height: 32px; }
-    .guided-auto-fit { grid-column: 1 / -1; }
-    .gradient-feedback, .combined-balance { display: none !important; }
+
     @media (min-width: 921px) {
       .game-hero { min-height: 70px !important; margin-bottom: 8px !important; }
-      .game-card { padding: 10px; }
-      .play-toolbar { margin-bottom: 8px; padding: 6px 8px; }
-      .canvas-shell, .strip-panel, .result-panel {
-        height: min(570px, calc(100vh - 214px));
-        min-height: 360px;
-        max-height: min(570px, calc(100vh - 214px));
-      }
-      .play-layout.quad-layout .canvas-shell,
-      .play-layout.quad-layout .result-panel {
-        height: min(480px, calc(100vh - 322px));
-        min-height: 330px;
-        max-height: min(480px, calc(100vh - 322px));
-      }
+
     }
 
     @media (max-width: 920px) {
       .play-layout.single-panel { grid-template-columns: 1fr; }
       .result-panel { order: 2; height: auto; min-height: 390px; max-height: none; }
-      .contour-canvas-wrap { min-height: 250px; }
+
     }
 
     @media (max-width: 700px) {
-      .howto-title-row { align-items: start; flex-direction: column; gap: 5px; }
-      .howto-title-row > p { text-align: left; }
       .howto-steps { grid-template-columns: 1fr; }
       .howto-step { min-height: 0; }
       .howto-diagram { max-width: 260px; width: 100%; justify-self: center; align-self: center; }
       .recap-actions, .recap-actions.three-actions { grid-template-columns: 1fr; }
     }
-
-
 
     /* Compact play screen: no desktop scrolling at ordinary laptop heights. */
     @media (min-width: 921px) {
@@ -2018,14 +1807,11 @@
     @media (min-width: 1051px) {
       .play-toolbar { grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); }
     }
-    .toolbar-actions.with-tip { grid-template-columns: 1fr 1fr; width: 230px; }
+
     .toolbar-actions.with-tip .action { min-width: 0; padding-left: 10px; padding-right: 10px; }
 
-    .basis-panel { gap: 5px; margin-bottom: 7px; }
-    .basis-segments { margin-top: 4px; }
-    .basis-note { padding: 6px 8px; font-size: 0.66rem; line-height: 1.27; }
     .balance-panel { gap: 5px; margin-bottom: 7px; padding: 7px; }
-    .signal-bridge { font-size: 0.64rem; line-height: 1.24; }
+
     .balance-panel .gauge-card {
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 0;
@@ -2046,9 +1832,8 @@
     .balance-panel .gauge-label { grid-column: 1; grid-row: 1; font-size: 0.65rem; }
     .balance-panel .gauge-card canvas { grid-column: 1; grid-row: 2; height: 26px; }
     .balance-panel .gauge-value { grid-column: 1; grid-row: 3; font-size: 0.66rem; }
-    .strip-panel { padding: 10px; }
+
     .strip-scroll { min-height: 150px; }
-    .panel-blurb { margin-top: 7px; padding: 6px 8px; font-size: 0.76rem; line-height: 1.3; }
 
     .result-panel .recap-actions.three-actions { grid-template-columns: 1fr 1fr; }
     .result-panel .recap-actions.three-actions #recapFreeBtn { grid-column: 1 / -1; grid-row: 1; }
@@ -2059,13 +1844,11 @@
     .quad-card { gap: 6px 10px; padding: 7px 10px; margin-bottom: 7px; }
     .quad-activity-panel { gap: 6px; }
     .quad-activity-button { min-height: 29px; padding: 5px 8px; }
-    .guided-auto-fit { gap: 6px; }
-    .auto-fit-value { padding: 5px 7px; }
+
     .quad-card .slider-row label { font-size: 0.78rem; }
     .quad-card input[type="range"] { margin: 4px 0; }
 
     @media (min-width: 921px) {
-      .app { padding-top: 9px; padding-bottom: 0; }
       .hero-banner.game-hero { min-height: 62px !important; margin-bottom: 6px !important; padding-top: 7px; padding-bottom: 7px; }
       .game-card { padding: 8px; }
       .play-toolbar { margin-bottom: 6px; padding: 5px 7px; }
@@ -2114,8 +1897,6 @@
       }
     }
 
-
-
     /* Keep the Level 1 map legend visible beside a compact recap. */
     .contour-canvas-wrap { min-height: 150px; }
     .contour-readout, .contour-legend { flex: 0 0 auto; }
@@ -2129,12 +1910,7 @@
     .result-panel .recap-actions { margin-top: 6px; gap: 6px; }
     .result-panel .recap-actions .action { height: 36px; min-height: 36px; }
 
-
-
-    @media (max-width: 920px) {
-      .toolbar-actions.with-tip { width: 100%; grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    }
-
+    
 
     .mode-status.tried { color: #047857; border-color: #a7f3d0; background: #ecfdf5; }
 
@@ -2180,7 +1956,7 @@
       top: 10px;
       right: 10px;
       z-index: 5;
-      width: min(262px, calc(100% - 20px));
+
       margin: 0;
       padding: 7px;
       gap: 5px;
@@ -2213,27 +1989,24 @@
     }
     .plot-balance-panel .gauge-unit {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) 74px;
-      grid-template-rows: 27px 14px;
-      column-gap: 5px;
+
       min-width: 0;
     }
     .plot-balance-panel .gauge-unit + .gauge-unit {
-      padding-top: 5px;
       padding-left: 0;
       border-top: 1px solid rgba(203,213,225,0.72);
       border-left: 0;
     }
-    .plot-balance-panel .gauge-label { grid-column: 1; grid-row: 1 / 3; height: auto; font-size: 0.7rem; }
-    .plot-balance-panel .gauge-card canvas { grid-column: 2; grid-row: 1; width: 100%; height: 27px; }
-    .plot-balance-panel .gauge-value { grid-column: 2; grid-row: 2; font-size: 0.66rem; }
+    .plot-balance-panel .gauge-label { height: auto; font-size: 0.7rem; }
+    .plot-balance-panel .gauge-card canvas { height: 27px; }
+    .plot-balance-panel .gauge-value { font-size: 0.66rem; }
 
     .toolbar-actions.with-tip { grid-template-columns: 1fr; width: 160px; }
     .toolbar-actions.with-tip .action { width: 100%; }
 
     .quad-card.guided-stage { grid-template-columns: 1fr; }
     .quad-card.guided-stage .quad-activity-panel { grid-column: 1; }
-    .quad-card.guided-stage .guided-auto-fit { display: none !important; }
+
     .quad-card.guided-stage .slider-row.guided-bend {
       grid-column: 1;
       justify-self: center;
@@ -2272,12 +2045,12 @@
     @media (max-width: 920px) {
       .play-layout.level-one-result { grid-template-columns: 1fr; }
       .toolbar-actions.with-tip { width: 100%; grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .plot-balance-panel { width: min(238px, calc(100% - 18px)); top: 9px; right: 9px; }
+      .plot-balance-panel { top: 9px; right: 9px; }
     }
 
     @media (max-width: 640px) {
       .toolbar-actions.with-tip { grid-template-columns: 1fr; }
-      .plot-balance-panel { width: min(220px, calc(100% - 16px)); top: 8px; right: 8px; padding: 6px; }
+      .plot-balance-panel { top: 8px; right: 8px; padding: 6px; }
       .play-layout.level-one-result .contour-canvas-wrap { min-height: 250px; }
     }
 
@@ -2351,6 +2124,35 @@
       .game-cheatsheet-body { padding: 0; }
     }
 
+    @media (max-width: 640px) {
+      .canvas-shell:has(> .plot-balance-panel:not(.hidden)) {
+        display: flex;
+        flex-direction: column;
+        height: auto;
+        min-height: 0;
+        max-height: none;
+        aspect-ratio: auto;
+      }
+      .canvas-shell:has(> .plot-balance-panel:not(.hidden)) #plotCanvas { flex: none; height: min(470px, calc(100vh - 290px)); min-height: 340px; }
+      .plot-balance-panel {
+        position: static;
+        order: -1;
+        grid-template-columns: auto minmax(0, 1fr);
+        align-items: center;
+        width: auto;
+        padding: 6px;
+        border: 0;
+        border-bottom: 1px solid #e2e8f0;
+        border-radius: 0;
+        background: #f8fafc;
+        box-shadow: none;
+        backdrop-filter: none;
+      }
+      .plot-balance-panel .signal-segments { grid-template-columns: 1fr; }
+      .plot-balance-panel .gauge-card { grid-template-columns: repeat(2, minmax(0, 1fr)); padding: 3px 4px; }
+      .plot-balance-panel .gauge-unit + .gauge-unit { padding-top: 3px; border-top: 0; border-left: 1px solid rgba(203,213,225,0.72); }
+      .plot-balance-panel .gauge-blurb { grid-column: 1 / -1; margin: 0; }
+    }
   </style>
 
 <style id="all-games-navigation-styles">
@@ -2412,9 +2214,9 @@
             <li>Interpret residuals and squared residuals.</li>
             <li>Fit line and quadratic models by minimizing \(\sum_i r_i^2\).</li>
             <li>Recognize least squares as projection onto a model column space.</li>
-            <li>Use \(X^\top\mathbf r=\mathbf0\) to connect residual orthogonality, the normal equations, and a zero gradient.</li>
-            <li>Center predictors (\(z_i=x_i-\bar x\)) to make columns orthogonal and decouple the normal equations.</li>
-            <li>Interpret \(\mathbf 1\), \(\mathbf x\), and \(\mathbf x^2\) as feature columns for polynomial regression.</li>
+            <li>Use \(X^\top\mathbf r=\mathbf0\), i.e. \(X^\top X\hat{\mathbf c}=X^\top\mathbf y\), to connect residual orthogonality, the normal equations, and a zero gradient.</li>
+            <li>Center the input (\(z_i=t_i-\bar t\)) to make columns orthogonal and decouple the normal equations.</li>
+            <li>Interpret \(\mathbf 1\), \(\mathbf t\), and \(\mathbf t^2\) as feature columns for polynomial regression.</li>
           </ul>
         </div>
       </details>
@@ -2429,12 +2231,12 @@
             <dl class="cheat-list">
               <div>
                 <dt>Model</dt>
-                <dd>\(\hat y_i=b+mx_i\)</dd>
+                <dd>\(\hat y_i=c_0+c_1t_i\)</dd>
               </div>
 
               <div>
                 <dt>Centered</dt>
-                <dd>\(z_i=x_i-\bar x\), \(\hat y_i=h+mz_i\)<br>Same line; \(h=b+m\bar x\) is its height at \(\bar x\)</dd>
+                <dd>\(z_i=t_i-\bar t\), \(\hat y_i=h+c_1z_i\)<br>Same line; \(h=c_0+c_1\bar t\) is its height at \(\bar t\)</dd>
               </div>
 
               <div>
@@ -2444,7 +2246,7 @@
 
               <div>
                 <dt>Goal</dt>
-                <dd>Minimize \(\mathrm{SSE}(b,m)=\sum_i r_i^2\)</dd>
+                <dd>Minimize \(\sum_i r_i^2=\|X\mathbf c-\mathbf y\|^2\)</dd>
               </div>
 
               <div>
@@ -2454,7 +2256,7 @@
 
               <div>
                 <dt>Quadratic</dt>
-                <dd>Add \(x_i^2\) to the model</dd>
+                <dd>Add a \(c_2t_i^2\) term</dd>
               </div>
             </dl>
           </section>
@@ -2465,41 +2267,41 @@
             <dl class="cheat-list">
               <div>
                 <dt>Design</dt>
-                <dd>\(X=[\,\mathbf{1}\;\mathbf{x}\,],\,\beta=(b,m)\)</dd>
+                <dd>\(X=[\,\mathbf{1}\;\mathbf{t}\,],\ \mathbf c=(c_0,c_1)\)</dd>
               </div>
 
               <div>
-                <dt>Prediction</dt>
-                <dd>\(\hat{\mathbf{y}}=X\beta\)</dd>
+                <dt>Fitted vector</dt>
+                <dd>\(\hat{\mathbf{y}}=X\mathbf c\)</dd>
               </div>
 
               <div>
-                <dt>Best prediction</dt>
-                <dd>\(\hat{\mathbf{y}}=\mathrm{proj}_{\mathrm{col}(X)}(\mathbf{y})\)</dd>
+                <dt>Least squares</dt>
+                <dd>\(X\hat{\mathbf c}=\mathrm{proj}_{\mathrm{col}(X)}(\mathbf{y})\)</dd>
               </div>
 
               <div>
                 <dt>Normal equations</dt>
-                <dd>\(X^\top\mathbf{r}=\mathbf{0}\)</dd>
+                <dd>\(X^\top\mathbf{r}=\mathbf{0}\)<br>\(\iff X^\top X\hat{\mathbf c}=X^\top\mathbf y\)</dd>
               </div>
 
               <div>
                 <dt>For a line</dt>
-                <dd>\(\sum_i r_i=0,\quad \sum_i x_i r_i=0\)</dd>
+                <dd>\(\sum_i r_i=0,\quad \sum_i t_i r_i=0\)</dd>
               </div>
 
               <div class="centered-columns-entry">
                 <dt>Centered columns</dt>
-                <dd>\(\mathbf z=\mathbf x-\bar x\mathbf 1\perp\mathbf 1\), so the normal equations decouple:<br>\(h^*=\bar y,\quad m^*=\sum_i z_iy_i\,/\,\sum_i z_i^2\)</dd>
+                <dd>\(\mathbf z=\mathbf t-\bar t\mathbf 1\perp\mathbf 1\), so the normal equations decouple:<br>\(\hat h=\bar y,\quad \hat c_1=\sum_i z_iy_i\,/\,\sum_i z_i^2\)</dd>
               </div>
 
               <div>
                 <dt>For quadratic</dt>
-                <dd>Also require \(\sum_i x_i^2r_i=0\)</dd>
+                <dd>Also require \(\sum_i t_i^2r_i=0\)</dd>
               </div>
             </dl>
 
-            <p class="cheat-note"><strong>Consequence:</strong> the least-squares line passes through \((\bar x,\bar y)\).</p>
+            <p class="cheat-note"><strong>Consequence:</strong> the least-squares line passes through \((\bar t,\bar y)\).</p>
           </section>
         </div>
       </details>
@@ -2570,21 +2372,7 @@
 
     <section id="gameScreen" class="hidden" aria-label="Residual Squares game">
       <header class="hero-banner slim game-hero">
-        <svg class="hero-art" viewBox="0 0 400 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-          <rect x="246" y="18" width="68" height="68" rx="5" fill="#22d3ee" fill-opacity="0.82" />
-          <circle cx="246" cy="18" r="5" fill="#67e8f9" />
-          <rect x="198" y="55" width="58" height="58" rx="5" fill="#ec4899" fill-opacity="0.86" />
-          <circle cx="256" cy="55" r="5" fill="#f9a8d4" />
-          <rect x="305" y="78" width="48" height="48" rx="4" fill="#8b5cf6" fill-opacity="0.83" />
-          <circle cx="353" cy="126" r="5" fill="#c4b5fd" />
-          <rect x="158" y="102" width="42" height="42" rx="4" fill="#fbbf24" fill-opacity="0.86" />
-          <circle cx="158" cy="144" r="4.5" fill="#fde68a" />
-          <rect x="267" y="137" width="36" height="36" rx="4" fill="#10b981" fill-opacity="0.82" />
-          <circle cx="303" cy="137" r="4.5" fill="#6ee7b7" />
-          <rect x="123" y="62" width="31" height="31" rx="4" fill="#8b5cf6" fill-opacity="0.8" />
-          <circle cx="123" cy="62" r="4" fill="#c4b5fd" />
-          <rect x="-62" y="104" width="560" height="10" rx="5" fill="#ffffff" fill-opacity="0.92" transform="rotate(-24 200 120)" />
-        </svg>
+        <svg class="hero-art" viewBox="0 0 400 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true"></svg>
         <div class="game-hero-actions">
           <span id="heroBest" class="hero-best hidden">best —</span>
           <button id="gameCheatsheetBtn" class="game-cheatsheet-button" type="button" aria-haspopup="dialog" aria-controls="gameCheatsheetModal">Cheatsheet</button>
@@ -2640,37 +2428,26 @@
                 </div>
               </div>
 
-              <div id="guidedAutoFit" class="guided-auto-fit hidden" aria-hidden="true">
-                <div class="auto-fit-value"><span>fixed LS-line \(c\)</span><strong id="guidedCValue" class="num purple">0.00</strong></div>
-                <div class="auto-fit-value"><span>fixed LS-line \(b\)</span><strong id="guidedBValue" class="num cyan">0.00</strong></div>
-              </div>
-
               <div id="cSliderRow" class="slider-row c hidden">
-                <label><span>\(c\) · lifts</span><span id="cValue" class="num purple">0.00</span></label>
+                <label><span>\(c_0\) · lifts</span><span id="cValue" class="num purple">0.00</span></label>
                 <div class="slider-control-line">
-                  <input id="cSlider" type="range" min="-4" max="9" step="0.05" value="0" aria-label="Lift coefficient c" aria-keyshortcuts="c" />
-                  <span class="fine-controls"><button class="fine-button" type="button" data-coef="c" data-direction="-1" aria-label="Decrease c by 0.01">−</button><button class="fine-button" type="button" data-coef="c" data-direction="1" aria-label="Increase c by 0.01">+</button></span>
+                  <input id="cSlider" type="range" min="-4" max="9" step="0.05" value="0" aria-label="Intercept coefficient c0" aria-keyshortcuts="0" />
+                  <span class="fine-controls"><button class="fine-button" type="button" data-coef="c" data-direction="-1" aria-label="Decrease c0 by 0.01">−</button><button class="fine-button" type="button" data-coef="c" data-direction="1" aria-label="Increase c0 by 0.01">+</button></span>
                 </div>
-                <div id="cGradient" class="gradient-feedback"></div>
               </div>
               <div id="bSliderRow" class="slider-row b hidden">
-                <label><span>\(b\,x\) · tilts</span><span id="qbValue" class="num cyan">0.00</span></label>
+                <label><span>\(c_1t\) · tilts</span><span id="qbValue" class="num cyan">0.00</span></label>
                 <div class="slider-control-line">
-                  <input id="bSlider" type="range" min="-6" max="6" step="0.02" value="0" aria-label="Tilt coefficient b" aria-keyshortcuts="b" />
-                  <span class="fine-controls"><button class="fine-button" type="button" data-coef="b" data-direction="-1" aria-label="Decrease b by 0.005">−</button><button class="fine-button" type="button" data-coef="b" data-direction="1" aria-label="Increase b by 0.005">+</button></span>
+                  <input id="bSlider" type="range" min="-6" max="6" step="0.02" value="0" aria-label="Linear coefficient c1" aria-keyshortcuts="1" />
+                  <span class="fine-controls"><button class="fine-button" type="button" data-coef="b" data-direction="-1" aria-label="Decrease c1 by 0.005">−</button><button class="fine-button" type="button" data-coef="b" data-direction="1" aria-label="Increase c1 by 0.005">+</button></span>
                 </div>
-                <div id="bGradient" class="gradient-feedback"></div>
               </div>
               <div id="aSliderRow" class="slider-row a guided-bend">
-                <label><span id="aSliderLabel">\(a\,x^2\) · bends</span><span id="aValue" class="num amber">0.00</span></label>
+                <label><span id="aSliderLabel">\(c_2t^2\) · bends</span><span id="aValue" class="num amber">0.00</span></label>
                 <div class="slider-control-line">
-                  <input id="aSlider" type="range" min="-0.35" max="0.35" step="0.001" value="0" aria-label="Curvature coefficient a" aria-keyshortcuts="a" />
-                  <span id="aFineControls" class="fine-controls hidden"><button class="fine-button" type="button" data-coef="a" data-direction="-1" aria-label="Decrease a by 0.001">−</button><button class="fine-button" type="button" data-coef="a" data-direction="1" aria-label="Increase a by 0.001">+</button></span>
+                  <input id="aSlider" type="range" min="-0.35" max="0.35" step="0.001" value="0" aria-label="Quadratic coefficient c2" aria-keyshortcuts="2" />
+                  <span id="aFineControls" class="fine-controls hidden"><button class="fine-button" type="button" data-coef="a" data-direction="-1" aria-label="Decrease c2 by 0.001">−</button><button class="fine-button" type="button" data-coef="a" data-direction="1" aria-label="Increase c2 by 0.001">+</button></span>
                 </div>
-                <div id="aGradient" class="gradient-feedback hidden"></div>
-              </div>
-              <div id="combinedBalance" class="combined-balance hidden" aria-live="polite">
-                <span>combined balance</span><span class="combined-track"><span id="combinedBalanceFill" class="combined-fill"></span></span><strong id="combinedBalanceValue">—</strong>
               </div>
             </div>
 
@@ -2683,45 +2460,22 @@
                   <button id="signalAnglesBtn" class="signal-segment" type="button" aria-label="Show residual angles" title="Angles" aria-pressed="false">∠</button>
                   <button id="signalSumsBtn" class="signal-segment" type="button" aria-label="Show residual inner products" title="Inner products" aria-pressed="true">⟨·,·⟩</button>
                 </div>
-                <div id="gaugePanel" class="gauge-card hidden" aria-hidden="true">
-                  <div id="gaugeCard0" class="gauge-unit">
+                <div id="gaugePanel" class="gauge-card">
+                  <div class="gauge-unit">
                     <div id="gaugeLabel0" class="gauge-label">\(\sum_i r_i\)</div>
                     <canvas id="gauge0"></canvas>
                     <div id="gauge0Value" class="gauge-value">0.0</div>
                   </div>
-                  <div id="gaugeCard1" class="gauge-unit">
-                    <div id="gaugeLabel1" class="gauge-label">\(\sum_i x_i r_i\)</div>
+                  <div class="gauge-unit">
+                    <div id="gaugeLabel1" class="gauge-label">\(\sum_i t_i r_i\)</div>
                     <canvas id="gauge1"></canvas>
                     <div id="gauge1Value" class="gauge-value">0.0</div>
-                  </div>
-                  <div id="gaugeCard2" class="gauge-unit hidden">
-                    <div class="gauge-label">\(\sum_i x_i^2 r_i\)</div>
-                    <canvas id="gauge2"></canvas>
-                    <div id="gauge2Value" class="gauge-value">0.0</div>
-                  </div>
-                </div>
-
-                <div id="angleGaugePanel" class="gauge-card" aria-hidden="false" aria-label="Residual-vector angle gauges; the green band spans 87 to 93 degrees">
-                  <div id="angleGaugeCard0" class="gauge-unit">
-                    <div id="angleGaugeLabel0" class="gauge-label">\(\angle(\mathbf 1,\mathbf r)\)</div>
-                    <canvas id="angleGauge0" aria-label="Angle between the ones vector and the residual vector"></canvas>
-                    <div id="angleGauge0Value" class="gauge-value">90.0°</div>
-                  </div>
-                  <div id="angleGaugeCard1" class="gauge-unit">
-                    <div id="angleGaugeLabel1" class="gauge-label">\(\angle(\mathbf x,\mathbf r)\)</div>
-                    <canvas id="angleGauge1" aria-label="Angle between the active slope column and the residual vector"></canvas>
-                    <div id="angleGauge1Value" class="gauge-value">90.0°</div>
-                  </div>
-                  <div id="angleGaugeCard2" class="gauge-unit hidden">
-                    <div class="gauge-label">\(\angle(\mathbf x^2,\mathbf r)\)</div>
-                    <canvas id="angleGauge2" aria-label="Angle between x squared and the residual vector"></canvas>
-                    <div id="angleGauge2Value" class="gauge-value">90.0°</div>
                   </div>
                 </div>
                 <p id="signalBridge" class="panel-blurb gauge-blurb">Each gauge is one entry of \(X^\top\mathbf r\). Zero out both to reach least squares.</p>
               </section>
             </div>
-            <p id="gameKeyboardHint" class="visually-hidden">Focus the plot. In Level 2 press H or M to choose height or slope; B is an alias for H. In Level 1 press B or M. In parabola mode press C, B, or A. Hold Shift for larger steps.</p>
+            <p id="gameKeyboardHint" class="visually-hidden">Focus the plot. Press 0 for the intercept c0 (or the centered height h) and 1 for the slope c1. In parabola mode press 0, 1, or 2. Hold Shift for larger steps.</p>
             <p id="keyboardLive" class="visually-hidden" aria-live="polite"></p>
           </div>
 
@@ -2732,8 +2486,8 @@
                 <span id="basisProgress" aria-live="polite">0 of 2 tried</span>
               </div>
               <div class="basis-segments" role="group" aria-label="Try both line-model column parametrizations">
-                <button id="basisCourseBtn" class="basis-segment" type="button" aria-pressed="true" aria-label="Course columns one and x"><span class="basis-katex" data-tex="\mathbf{1},\,\mathbf{x}">1, x</span></button>
-                <button id="basisControlBtn" class="basis-segment" type="button" aria-pressed="false" aria-label="Centered columns one and z equals x minus x bar times one"><span class="basis-katex" data-tex="\mathbf{1},\mathbf{z}=\mathbf{x}-\bar{x}\mathbf{1}">1, z = x − x̄1</span></button>
+                <button id="basisCourseBtn" class="basis-segment" type="button" aria-pressed="true" aria-label="Original columns one and t">\(\mathbf 1,\ \mathbf t\)</button>
+                <button id="basisControlBtn" class="basis-segment" type="button" aria-pressed="false" aria-label="Centered columns one and z equals t minus t bar times one">\(\mathbf 1,\ \mathbf z=\mathbf t-\bar t\mathbf 1\)</button>
               </div>
               <p id="basisNote" class="basis-note"></p>
             </div>
@@ -2747,7 +2501,7 @@
           <aside id="resultPanel" class="result-panel hidden" aria-label="Locked fit comparison">
             <section id="contourPanel" class="contour-panel hidden" role="group" aria-hidden="true" aria-label="Least-squares loss landscape">
               <div class="contour-head">
-                <div><span>your route through the loss landscape</span><strong id="contourTitle">S(b, m)</strong></div>
+                <div><span>your route through the loss landscape</span><strong id="contourTitle">L(c₀, c₁)</strong></div>
                 <div class="contour-tools" role="group" aria-label="Loss landscape zoom controls">
                   <button id="contourZoomOut" class="contour-zoom-btn" type="button" aria-label="Zoom out loss landscape" title="Zoom out">−</button>
                   <button id="contourZoomFit" class="contour-zoom-btn fit" type="button" aria-label="Reset loss landscape to the original view" title="Reset to original view">↺</button>
@@ -2756,13 +2510,13 @@
               </div>
               <div class="contour-canvas-wrap" title="Use the zoom controls or scroll here to zoom">
                 <canvas id="contourCanvas" aria-hidden="true"></canvas>
-                <span id="contourXAxis" class="contour-axis x">b</span>
-                <span class="contour-axis y">m</span>
+                <span id="contourXAxis" class="contour-axis x">c₀</span>
+                <span class="contour-axis y">c₁</span>
               </div>
-              <div class="contour-readout"><span id="contourCoords">b=— · m=—</span><span id="contourSSE" class="sse">S=—</span></div>
+              <div class="contour-readout"><span id="contourCoords">c₀=— · c₁=—</span><span id="contourSSE" class="sse">L=—</span></div>
               <div class="contour-legend" aria-hidden="true">
                 <div><span><i class="legend-start"></i>start</span><span><i class="legend-current"></i>your fit</span><span><i class="legend-best"></i>least squares</span></div>
-                <div><span><i class="legend-path legend-path-b"></i>b moves</span><span><i class="legend-path legend-path-m"></i>m moves</span></div>
+                <div><span><i class="legend-path legend-path-b"></i>c₀ moves</span><span><i class="legend-path legend-path-m"></i>c₁ moves</span></div>
               </div>
             </section>
 
@@ -2785,7 +2539,7 @@
     <div class="info-dialog" role="dialog" aria-modal="true" aria-labelledby="infoTitle">
       <h2 id="infoTitle">About Residual Squares</h2>
       <div class="info-list">
-          <p><strong>Version:</strong> v0.3(beta)</p>
+          <p><strong>Version:</strong> v0.4(beta)</p>
         <p><strong>Copyright:</strong> © 2026 <a href="https://people.math.wisc.edu/~roch/" target="_blank" rel="noopener noreferrer">Sébastien Roch</a></p>
         <p><strong>Code license:</strong> The software source code—including the functional HTML, CSS, and JavaScript—is available under the <a href="https://opensource.org/license/mit" target="_blank" rel="noopener noreferrer">MIT License</a>.</p>
         <p><strong>Content license:</strong> Except where otherwise noted, the original instructional text, questions, feedback, and visual assets are licensed under the <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener noreferrer">Creative Commons Attribution-NonCommercial 4.0 International License</a>.</p>
@@ -2842,10 +2596,6 @@
       const shell = document.getElementById('canvasShell');
       const gauge0 = document.getElementById('gauge0');
       const gauge1 = document.getElementById('gauge1');
-      const gauge2 = document.getElementById('gauge2');
-      const angleGauge0 = document.getElementById('angleGauge0');
-      const angleGauge1 = document.getElementById('angleGauge1');
-      const angleGauge2 = document.getElementById('angleGauge2');
 
       const ui = {
         introScreen: document.getElementById('introScreen'),
@@ -2881,20 +2631,11 @@
         quadCard: document.getElementById('quadCard'),
         guidedActivityBtn: document.getElementById('guidedActivityBtn'),
         advancedActivityBtn: document.getElementById('advancedActivityBtn'),
-        guidedAutoFit: document.getElementById('guidedAutoFit'),
-        guidedCValue: document.getElementById('guidedCValue'),
-        guidedBValue: document.getElementById('guidedBValue'),
         cSliderRow: document.getElementById('cSliderRow'),
         bSliderRow: document.getElementById('bSliderRow'),
         aSliderRow: document.getElementById('aSliderRow'),
         aSliderLabel: document.getElementById('aSliderLabel'),
         aFineControls: document.getElementById('aFineControls'),
-        cGradient: document.getElementById('cGradient'),
-        bGradient: document.getElementById('bGradient'),
-        aGradient: document.getElementById('aGradient'),
-        combinedBalance: document.getElementById('combinedBalance'),
-        combinedBalanceFill: document.getElementById('combinedBalanceFill'),
-        combinedBalanceValue: document.getElementById('combinedBalanceValue'),
         contourPanel: document.getElementById('contourPanel'),
         contourTitle: document.getElementById('contourTitle'),
         contourXAxis: document.getElementById('contourXAxis'),
@@ -2904,23 +2645,10 @@
         contourZoomFit: document.getElementById('contourZoomFit'),
         contourZoomIn: document.getElementById('contourZoomIn'),
         gaugePanel: document.getElementById('gaugePanel'),
-        gaugeCard0: document.getElementById('gaugeCard0'),
-        gaugeCard1: document.getElementById('gaugeCard1'),
-        gaugeCard2: document.getElementById('gaugeCard2'),
         gaugeLabel0: document.getElementById('gaugeLabel0'),
         gaugeLabel1: document.getElementById('gaugeLabel1'),
         gauge0Value: document.getElementById('gauge0Value'),
         gauge1Value: document.getElementById('gauge1Value'),
-        gauge2Value: document.getElementById('gauge2Value'),
-        angleGaugePanel: document.getElementById('angleGaugePanel'),
-        angleGaugeCard0: document.getElementById('angleGaugeCard0'),
-        angleGaugeCard1: document.getElementById('angleGaugeCard1'),
-        angleGaugeCard2: document.getElementById('angleGaugeCard2'),
-        angleGaugeLabel0: document.getElementById('angleGaugeLabel0'),
-        angleGaugeLabel1: document.getElementById('angleGaugeLabel1'),
-        angleGauge0Value: document.getElementById('angleGauge0Value'),
-        angleGauge1Value: document.getElementById('angleGauge1Value'),
-        angleGauge2Value: document.getElementById('angleGauge2Value'),
         recap: document.getElementById('recap'),
         recapTitle: document.getElementById('recapTitle'),
         recapBody: document.getElementById('recapBody'),
@@ -2960,8 +2688,8 @@
       const LEVELS = {
         1: {
           type: 'line', mode: 'squares', dataset: 'line', title: 'Fit the Line',
-          subtitle: 'Adjust \\(b\\) and \\(m\\) to shrink the residual-square area, then lock your fit.',
-          tagline: 'Drag intercept and slope to shrink cumulative squared miss.'
+          subtitle: 'Adjust \\(c_0\\) and \\(c_1\\) to shrink the residual-square area, then lock your fit.',
+          tagline: 'Drag the intercept c₀ and slope c₁ to shrink the sum of squared residuals.'
         },
         2: {
           type: 'line', mode: 'columns', dataset: 'line', title: 'Balance the Gauges',
@@ -2970,7 +2698,7 @@
         },
         3: {
           type: 'quad', mode: 'bend', dataset: 'quad', title: 'Add a Bend',
-          subtitle: 'Begin at the least-squares line. Change only \\(a\\) in \\(\\hat y=c+bx+ax^2\\) and see whether the area drops.',
+          subtitle: 'Begin at the least-squares line. Change only \\(c_2\\) in \\(\\hat y=c_0+c_1t+c_2t^2\\) and see whether the area drops.',
           tagline: 'Guide one bend, then unlock free quadratic controls.'
         }
       };
@@ -3000,8 +2728,6 @@
       const RESIDUAL_TUTORIAL_PROMPT_AT = 0.60;
       const RESIDUAL_TUTORIAL_REDUCED_PROMPT_AT = 0.25;
       const PROGRESS_STORAGE_KEY = 'residualSquares.progress.v5';
-      const ADVANCED_TARGET = Math.sin(ANGLE_TOLERANCE_DEG * Math.PI / 180);
-      const ADVANCED_DWELL_MS = 400;
       const ADVANCED_FINE_STEPS = { c: 0.01, b: 0.005, a: 0.001 };
       const ADVANCED_MEDALS = [{key:'bronze',at:60,icon:'🥉'},{key:'silver',at:80,icon:'🥈'},{key:'gold',at:93,icon:'🥇'}];
       const CONTOUR_LEVEL_FRACTIONS = [0.0004, 0.0012, 0.003, 0.0065, 0.012, 0.022, 0.04, 0.07, 0.12, 0.20, 0.34, 0.52, 0.76];
@@ -3061,12 +2787,8 @@
         advancedRunResult: null,
         introTypesetDone: false,
         xMean: 0,
-        xScale: 1,
         quadActivity: 'guided',
         quadControls: { a: 0, b: 0, c: 0 },
-        initialQuadControls: null,
-        advancedBalanceStart: null,
-        advancedBalance: null,
         lineBasisView: 'course',
         signalView: 'sums',
         basisMoves: { course: 0, control: 0 },
@@ -3179,23 +2901,6 @@
         }
       }
 
-      function renderBasisKatex() {
-        if (!window.katex) return;
-        document.querySelectorAll('.basis-katex[data-tex]').forEach(element => {
-          if (element.dataset.katexRendered === element.dataset.tex) return;
-          window.katex.render(element.dataset.tex, element, {
-            throwOnError: false,
-            strict: 'ignore',
-            displayMode: false,
-            trust: false,
-            output: 'htmlAndMathml'
-          });
-          element.dataset.katexRendered = element.dataset.tex;
-        });
-      }
-
-      window.addEventListener('residual-squares-katex-ready', renderBasisKatex);
-
       function fallbackMath(root) {
         const replacements = [
           [/\\color\{[^}]*\}/g, ''],
@@ -3209,6 +2914,15 @@
           [/\\mathbf\s*z/g, 'z'],
           [/\\mathbf\s*r/g, 'r'],
           [/\\bar\s*x/g, 'x̄'],
+          [/\\bar\s*t/g, 't̄'],
+          [/\\mathbf\s*t/g, 't'],
+          [/\\mathbf\{t\}/g, 't'],
+          [/\\hat\{\\mathbf c\}/g, 'ĉ'],
+          [/\\mathbf\s*c/g, 'c'],
+          [/\\iff/g, '⇔'],
+          [/_0/g, '₀'],
+          [/_1/g, '₁'],
+          [/_2/g, '₂'],
           [/\\sum_i/g, 'Σᵢ'],
           [/\\angle/g, '∠'],
           [/\\mathbf\{0\}/g, '0'],
@@ -3225,7 +2939,7 @@
           [/\\le/g, '≤'],
           [/\\perp/g, '⟂'],
           [/\\sum_i\s*r_i\^2/g, 'Σᵢ rᵢ²'],
-          [/\\sum_i\s*x_i\s*r_i/g, 'Σᵢ xᵢrᵢ'],
+          [/\\sum_i\s*t_i\s*r_i/g, 'Σᵢ tᵢrᵢ'],
           [/\\sum_i\s*r_i/g, 'Σᵢ rᵢ'],
           [/r_i\^2/g, 'rᵢ²'],
           [/_i/g, 'ᵢ'],
@@ -3285,29 +2999,6 @@
         return model.b + model.m * x;
       }
 
-      function zAt(x) { return (x - state.xMean) / Math.max(state.xScale, EPS); }
-
-      function originalFromZControls(controls) {
-        const s = Math.max(state.xScale, EPS);
-        const mu = state.xMean;
-        return {
-          type: 'quad',
-          a: controls.a / (s * s),
-          b: controls.b / s - 2 * mu * controls.a / (s * s),
-          c: controls.c - mu * controls.b / s + mu * mu * controls.a / (s * s)
-        };
-      }
-
-      function zControlsFromOriginal(model) {
-        const s = Math.max(state.xScale, EPS);
-        const mu = state.xMean;
-        return {
-          a: model.a * s * s,
-          b: s * (model.b + 2 * model.a * mu),
-          c: model.c + model.b * mu + model.a * mu * mu
-        };
-      }
-
       function clampAdvancedControls(controls) {
         return {
           a: clamp(controls.a, Number(ui.aSlider.min), Number(ui.aSlider.max)),
@@ -3315,24 +3006,6 @@
           c: clamp(controls.c, Number(ui.cSlider.min), Number(ui.cSlider.max))
         };
       }
-
-      function profileQuadAtA(a) {
-        a = clamp(a, -0.35, 0.35);
-        let sx = 0, sx2 = 0, syAdjusted = 0, sxyAdjusted = 0;
-        const n = state.points.length;
-        for (const p of state.points) {
-          const adjusted = p.y - a * p.x * p.x;
-          sx += p.x;
-          sx2 += p.x * p.x;
-          syAdjusted += adjusted;
-          sxyAdjusted += p.x * adjusted;
-        }
-        const denom = n * sx2 - sx * sx;
-        const b = Math.abs(denom) <= EPS ? 0 : (n * sxyAdjusted - sx * syAdjusted) / denom;
-        const c = n ? (syAdjusted - b * sx) / n : 0;
-        return { type: 'quad', a, b, c };
-      }
-
 
       function guidedQuadAtA(a, lineModel = state.guidedLineModel) {
         const line = lineModel || fitLine(state.points);
@@ -3485,19 +3158,6 @@
         return { type: 'quad', a, b, c };
       }
 
-      function correlation(points) {
-        const n = points.length;
-        let sx = 0, sy = 0;
-        for (const p of points) { sx += p.x; sy += p.y; }
-        const mx = sx / n, my = sy / n;
-        let sxx = 0, syy = 0, sxy = 0;
-        for (const p of points) {
-          const dx = p.x - mx, dy = p.y - my;
-          sxx += dx * dx; syy += dy * dy; sxy += dx * dy;
-        }
-        return sxx * syy <= EPS ? 0 : sxy / Math.sqrt(sxx * syy);
-      }
-
       function residualMoments(model) {
         let g0 = 0, g1 = 0, g2 = 0;
         for (const p of state.points) {
@@ -3505,18 +3165,6 @@
           g0 += r;
           g1 += p.x * r;
           g2 += p.x * p.x * r;
-        }
-        return { g0, g1, g2 };
-      }
-
-      function scaledResidualMoments(model) {
-        let g0 = 0, g1 = 0, g2 = 0;
-        for (const p of state.points) {
-          const r = p.y - yAt(model, p.x);
-          const z = zAt(p.x);
-          g0 += r;
-          g1 += z * r;
-          g2 += z * z * r;
         }
         return { g0, g1, g2 };
       }
@@ -3789,53 +3437,9 @@
         return { a0: angleFor(() => 1), a1: angleFor(p => p.x - state.xMean), a2: 90 };
       }
 
-      function scaledResidualAngles(model) {
-        const rs = residuals(state.points, model);
-        const residualNorm = Math.sqrt(rs.reduce((sum, r) => sum + r * r, 0));
-        const angleFor = (basisAt) => {
-          let dot = 0, basisNormSq = 0;
-          for (let i = 0; i < state.points.length; i++) {
-            const basis = basisAt(zAt(state.points[i].x));
-            dot += basis * rs[i];
-            basisNormSq += basis * basis;
-          }
-          const denom = Math.sqrt(basisNormSq) * residualNorm;
-          if (denom <= EPS) return 90;
-          return Math.acos(clamp(dot / denom, -1, 1)) * 180 / Math.PI;
-        };
-        return { a0: angleFor(() => 1), a1: angleFor(z => z), a2: angleFor(z => z * z) };
-      }
-
       function gaugeAngles(model) {
         if (usesGauges()) return usesCenteredLineControls() ? centeredResidualAngles(model) : residualAngles(model);
         return residualAngles(model);
-      }
-
-      function advancedBalanceFor(model) {
-        const moments = scaledResidualMoments(model);
-        const rs = residuals(state.points, model);
-        const residualNorm = Math.sqrt(rs.reduce((sum, r) => sum + r * r, 0));
-        const basisNorms = [0, 0, 0];
-        for (const p of state.points) {
-          const z = zAt(p.x);
-          basisNorms[0] += 1;
-          basisNorms[1] += z * z;
-          basisNorms[2] += z * z * z * z;
-        }
-        const raw = [moments.g0, moments.g1, moments.g2];
-        const denoms = basisNorms.map(value => Math.sqrt(value) * residualNorm);
-        const normalized = raw.map((value, i) => {
-          const denom = denoms[i];
-          return denom <= EPS ? 0 : Math.abs(value) / denom;
-        });
-        return {
-          moments,
-          gradients: { c: -2 * moments.g0, b: -2 * moments.g1, a: -2 * moments.g2 },
-          normalized: { c: normalized[0], b: normalized[1], a: normalized[2] },
-          tolerances: { c: ADVANCED_TARGET * denoms[0], b: ADVANCED_TARGET * denoms[1], a: ADVANCED_TARGET * denoms[2] },
-          combined: Math.max(...normalized),
-          target: ADVANCED_TARGET
-        };
       }
 
       function cloudSafeLine(points, opt) {
@@ -3948,7 +3552,6 @@
         const ys = state.points.map(p => p.y);
         if (def.type === 'line') {
           ys.push(opt.b, yAt(opt, X_MAX), opt.b - 1.9, opt.b + 1.9);
-          if (state.optModelWithout) ys.push(state.optModelWithout.b, yAt(state.optModelWithout, X_MAX));
         } else {
           for (let x = 0; x <= 10; x += 1) ys.push(yAt(opt, x));
           ys.push(opt.c - 1.3, opt.c + 1.3);
@@ -4110,10 +3713,7 @@
         state.lockedProgress = null;
         state.revealed = false;
         state.revealStart = 0;
-        state.advancedBalanceStart = null;
-        state.advancedBalance = null;
         state.advancedRunResult = null;
-        state.initialQuadControls = null;
         state.highlightIndex = null;
         state.drag = null;
         state.hoverHandle = null;
@@ -4139,7 +3739,6 @@
           state.optModel = fitLine(state.points);
         }
         state.xMean = state.points.reduce((sum, point) => sum + point.x, 0) / state.points.length;
-        state.xScale = Math.sqrt(state.points.reduce((sum, point) => sum + Math.pow(point.x - state.xMean, 2), 0) / state.points.length) || 1;
         computeView();
         syncSliderBounds();
         state.initialModel = makeInitialModel();
@@ -4341,12 +3940,12 @@
         let comparisonMetricLabel = 'Least-squares area';
         if (state.level === 2) {
           note = firstLevel2Lock
-            ? 'Centered controls just unlocked: the height handle now sits at x̄, the center of the cloud. Try them on another cloud and compare how the gauges respond.'
+            ? 'Centered controls just unlocked: the height handle now sits at t̄, the center of the cloud. Try them on another cloud and compare how the gauges respond.'
             : '';
         } else if (isGuidedQuad()) {
           title = 'Bend locked';
-          comparisonMetricLabel = 'Best with b, c fixed';
-          note = 'The gray line kept the least-squares-line values of b and c. Only the x² coefficient changed.';
+          comparisonMetricLabel = 'Best with c₀, c₁ fixed';
+          note = 'Your model kept the least-squares line’s c₀ and c₁. Only c₂, the t² coefficient, changed.';
         } else if (advanced) {
           const run = state.advancedRunResult;
           note = run?.newBest
@@ -4391,11 +3990,11 @@
         ui.basisCourseBtn.disabled = !fitting;
         ui.basisControlBtn.disabled = !fitting || !state.centeredControlsUnlocked;
         ui.basisControlBtn.title = state.centeredControlsUnlocked
-          ? 'Centered columns one and z equals x minus x bar times one'
+          ? 'Centered columns one and z equals t minus t bar times one'
           : 'Lock the coefficient fit to unlock centered controls';
         ui.basisControlBtn.setAttribute('aria-label', state.centeredControlsUnlocked
-          ? 'Centered columns one and z equals x minus x bar times one'
-          : 'Centered columns one and z equals x minus x bar times one, locked until the coefficient fit is locked');
+          ? 'Centered columns one and z equals t minus t bar times one'
+          : 'Centered columns one and z equals t minus t bar times one, locked until the coefficient fit is locked');
         ui.basisControlBtn.setAttribute('aria-pressed', state.lineBasisView === 'control' ? 'true' : 'false');
         ui.basisCourseBtn.setAttribute('aria-pressed', state.lineBasisView === 'course' ? 'true' : 'false');
         ui.basisCourseBtn.classList.toggle('tried', courseTried);
@@ -4406,7 +4005,7 @@
         ui.basisNote.classList.toggle('warning', !centered);
         ui.basisNote.textContent = centered
           ? 'Centered controls separate height from slope!'
-          : 'Warning: Coefficient controls can disturb both gauges.';
+          : 'Warning: c₀ and c₁ controls can disturb both gauges.';
       }
 
       function updateSignalPanel() {
@@ -4414,16 +4013,11 @@
         const angles = state.signalView === 'angles';
         ui.signalAnglesBtn.setAttribute('aria-pressed', angles ? 'true' : 'false');
         ui.signalSumsBtn.setAttribute('aria-pressed', angles ? 'false' : 'true');
-        ui.angleGaugePanel.classList.toggle('hidden', !angles);
-        ui.gaugePanel.classList.toggle('hidden', angles);
-        ui.angleGaugePanel.setAttribute('aria-hidden', angles ? 'false' : 'true');
-        ui.gaugePanel.setAttribute('aria-hidden', angles ? 'true' : 'false');
-        const slopeColumn = usesCenteredLineControls() ? '\\mathbf z' : '\\mathbf x';
-        const slopeSum = usesCenteredLineControls() ? '\\sum_i z_i r_i' : '\\sum_i x_i r_i';
-        ui.gaugeLabel0.innerHTML = '\\(\\sum_i r_i\\)';
-        ui.gaugeLabel1.innerHTML = `\\(${slopeSum}\\)`;
-        ui.angleGaugeLabel0.innerHTML = '\\(\\angle(\\mathbf 1,\\mathbf r)\\)';
-        ui.angleGaugeLabel1.innerHTML = `\\(\\angle(${slopeColumn},\\mathbf r)\\)`;
+        ui.gaugePanel.setAttribute('aria-label', angles ? 'Residual angle gauges; green means within 3 degrees of 90' : 'Residual inner-product gauges; green means near zero');
+        const slopeColumn = usesCenteredLineControls() ? '\\mathbf z' : '\\mathbf t';
+        const slopeSum = usesCenteredLineControls() ? '\\sum_i z_i r_i' : '\\sum_i t_i r_i';
+        ui.gaugeLabel0.innerHTML = angles ? '\\(\\angle(\\mathbf 1,\\mathbf r)\\)' : '\\(\\sum_i r_i\\)';
+        ui.gaugeLabel1.innerHTML = angles ? `\\(\\angle(${slopeColumn},\\mathbf r)\\)` : `\\(${slopeSum}\\)`;
         ui.signalBridge.innerHTML = angles
           ? 'Each gauge shows one angle with \\(\\mathbf r\\). Adjust both to 90° to reach least squares.'
           : 'Each gauge is one entry of \\(X^\\top\\mathbf r\\). Zero out both to reach least squares.';
@@ -4442,11 +4036,11 @@
         ui.gameSubtitle.textContent = LEVELS[2].subtitle;
         ui.panelBlurb.textContent = 'Tap a row or point to match its prediction, residual, and square.';
         canvas.setAttribute('aria-label', centered
-          ? 'Interactive line fit using centered height h and slope m, with residual squares, a column table, and balance gauges'
-          : 'Interactive line fit using intercept b and slope m, with residual squares, a column table, and balance gauges');
+          ? 'Interactive line fit using centered height h and slope c1, with residual squares, a column table, and balance gauges'
+          : 'Interactive line fit using intercept c0 and slope c1, with residual squares, a column table, and balance gauges');
         ui.gameKeyboardHint.textContent = centered
-          ? 'Centered view: press H or B for height h, or M for slope. Use arrow keys; hold Shift for larger steps.'
-          : 'Course view: press B for intercept or M for slope. Use arrow keys; hold Shift for larger steps.';
+          ? 'Centered columns: press 0 or H for the height h, or 1 for the slope c1. Use arrow keys; hold Shift for larger steps.'
+          : 'Original columns: press 0 for the intercept c0 or 1 for the slope c1. Use arrow keys; hold Shift for larger steps.';
         typesetMath(ui.gameSubtitle);
       }
 
@@ -4504,7 +4098,7 @@
         buildStripTable();
         updateLevelUI();
         updateAuxiliaryPanels();
-        announceKeyboard('Challenge started. All three x-basis coefficients are live; lock whenever you are done exploring.');
+        announceKeyboard('Challenge started. All three coefficients c0, c1, c2 are live; lock whenever you are done exploring.');
       }
 
       function advancedMedalState(best = state.advancedBestPercent) { return Object.fromEntries(ADVANCED_MEDALS.map(medal => [medal.key, Number.isFinite(best) && best >= medal.at])); }
@@ -4527,34 +4121,27 @@
         ui.guidedActivityBtn.setAttribute('aria-pressed', advanced ? 'false' : 'true');
         ui.advancedActivityBtn.setAttribute('aria-pressed', advanced ? 'true' : 'false');
         ui.advancedActivityBtn.disabled = !state.advancedUnlocked;
-        ui.guidedAutoFit.classList.add('hidden');
         ui.cSliderRow.classList.toggle('hidden', !advanced);
         ui.bSliderRow.classList.toggle('hidden', !advanced);
         ui.aSliderRow.classList.toggle('guided-bend', !advanced);
-        ui.aSliderLabel.innerHTML = '\\(a\\,x^2\\) · bends';
+        ui.aSliderLabel.innerHTML = '\\(c_2t^2\\) · bends';
         ui.aFineControls.classList.toggle('hidden', !advanced);
-        ui.cGradient.classList.add('hidden');
-        ui.bGradient.classList.add('hidden');
-        ui.aGradient.classList.add('hidden');
-        ui.combinedBalance.classList.add('hidden');
         ui.quadCard.classList.toggle('guided-stage', !advanced);
         ui.quadCard.classList.toggle('advanced-stage', advanced);
         ui.gameKeyboardHint.textContent = advanced
-          ? 'All-coefficient challenge: press C, B, or A, then use arrow keys; hold Shift for larger steps.'
-          : 'One-bend stage: press A, then use arrow keys; hold Shift for larger steps. The least-squares-line b and c stay fixed.';
+          ? 'All-coefficient challenge: press 0, 1, or 2, then use arrow keys; hold Shift for larger steps.'
+          : 'One-bend stage: press 2, then use arrow keys; hold Shift for larger steps. The least-squares line keeps its c0 and c1.';
         typesetMath(ui.quadCard);
       }
 
       function updateLevelUI() {
         ui.gameSubtitle.innerHTML = isAdvancedQuad()
-          ? 'Challenge: adjust \\(c\\), \\(b\\), and \\(a\\) in \\(\\hat y=c+bx+ax^2\\). Try to improve the total area.'
+          ? 'Challenge: adjust \\(c_0\\), \\(c_1\\), and \\(c_2\\) in \\(\\hat y=c_0+c_1t+c_2t^2\\). Try to improve the total area.'
           : levelDef().subtitle;
         ui.quadCard.classList.toggle('hidden', !usesSliders());
         shell.classList.toggle('quad-mode', usesSliders());
         ui.playLayout.classList.toggle('quad-layout', usesSliders());
         ui.areaCard.classList.remove('hidden');
-        ui.gaugeCard2.classList.add('hidden');
-        ui.angleGaugeCard2.classList.add('hidden');
         updateBasisPanel();
         updateSignalPanel();
         if (usesGauges()) updateLineControlUI();
@@ -4562,8 +4149,8 @@
         updateQuadActivityUI();
         canvas.setAttribute('aria-label', usesSliders()
           ? isAdvancedQuad()
-            ? 'Quadratic challenge with direct c, b, and a coefficient sliders and residual squares'
-            : 'Quadratic bend experiment beginning at the least-squares line, with b and c fixed and only a adjustable'
+            ? 'Quadratic challenge with c0, c1, and c2 coefficient sliders and residual squares'
+            : 'Quadratic bend experiment beginning at the least-squares line, with c0 and c1 fixed and only c2 adjustable'
           : usesGauges()
             ? canvas.getAttribute('aria-label')
             : 'Interactive line-fitting plot with intercept and slope handles and residual squares');
@@ -4701,14 +4288,14 @@
           const targetLabelTex = isGuidedQuad() ? '\\hat y_{\\rm best}=' : '\\hat y_{\\rm LS}=';
           ui.eqCard.innerHTML = `
             <span class="model-label">current model</span>
-            <div class="eq-row" id="eqCurrent"><span class="math">\\(\\hat y =\\)</span><span id="eqC" class="num purple"></span><span class="eq-term"><span id="eqQBTerm" class="num cyan"></span><span class="math">\\(x\\)</span></span><span class="eq-term"><span id="eqATerm" class="num amber"></span><span class="math">\\(x^2\\)</span></span></div>
-            <div class="eq-row eq-opt" id="eqOpt"><span class="math">\\(${targetLabelTex}\\)</span><span id="optC" class="num green"></span><span class="eq-term"><span id="optQBTerm" class="num green"></span><span class="math">\\(x\\)</span></span><span class="eq-term"><span id="optATerm" class="num green"></span><span class="math">\\(x^2\\)</span></span></div>`;
+            <div class="eq-row" id="eqCurrent"><span class="math">\\(\\hat y =\\)</span><span id="eqC" class="num purple"></span><span class="eq-term"><span id="eqQBTerm" class="num cyan"></span><span class="math">\\(t\\)</span></span><span class="eq-term"><span id="eqATerm" class="num amber"></span><span class="math">\\(t^2\\)</span></span></div>
+            <div class="eq-row eq-opt" id="eqOpt"><span class="math">\\(${targetLabelTex}\\)</span><span id="optC" class="num green"></span><span class="eq-term"><span id="optQBTerm" class="num green"></span><span class="math">\\(t\\)</span></span><span class="eq-term"><span id="optATerm" class="num green"></span><span class="math">\\(t^2\\)</span></span></div>`;
         } else {
           ui.eqCard.innerHTML = `
             <span class="model-label">current line</span>
-            <div class="eq-row" id="eqCurrent"><span class="math">\\(\\hat y =\\)</span><span id="eqB" class="num purple" title="b"></span><span id="eqMTerm" class="num cyan" title="m"></span><span class="math">\\(x\\)</span></div>
-            <div id="eqCentered" class="eq-centered ${usesGauges() && state.centeredControlsUnlocked ? '' : 'hidden'}"><span>same line: \\(\\hat y=\\)</span><span id="eqH" class="num purple"></span><span id="eqCenteredMTerm" class="num cyan"></span><span>\\(z\\), \\(z=x-\\bar x\\), \\(h=b+m\\bar x\\), \\(\\bar x=\\)</span><span id="eqXMean" class="num"></span></div>
-            <div class="eq-row eq-opt" id="eqOpt"><span class="math">\\(\\hat y_{\\rm LS}=\\)</span><span id="optB" class="num green"></span><span id="optMTerm" class="num green"></span><span class="math">\\(x\\)</span></div>`;
+            <div class="eq-row" id="eqCurrent"><span class="math">\\(\\hat y =\\)</span><span id="eqB" class="num purple" title="c₀"></span><span id="eqMTerm" class="num cyan" title="c₁"></span><span class="math">\\(t\\)</span></div>
+            <div id="eqCentered" class="eq-centered ${usesGauges() && state.centeredControlsUnlocked ? '' : 'hidden'}"><span>same line: \\(\\hat y=\\)</span><span id="eqH" class="num purple"></span><span id="eqCenteredMTerm" class="num cyan"></span><span>\\(z\\), \\(z=t-\\bar t\\), \\(h=c_0+c_1\\bar t\\), \\(\\bar t=\\)</span><span id="eqXMean" class="num"></span></div>
+            <div class="eq-row eq-opt" id="eqOpt"><span class="math">\\(\\hat y_{\\rm LS}=\\)</span><span id="optB" class="num green"></span><span id="optMTerm" class="num green"></span><span class="math">\\(t\\)</span></div>`;
         }
         eqRefs = {
           eqB: document.getElementById('eqB'), eqMTerm: document.getElementById('eqMTerm'), optB: document.getElementById('optB'), optMTerm: document.getElementById('optMTerm'),
@@ -4753,9 +4340,9 @@
           ? [
               { key: 'one', label: '\\(\\mathbf{1}\\)', coef: 'coefC', cls: 'purple' },
               { key: 'op1', label: '', op: true },
-              { key: 'x', label: '\\(\\mathbf{x}\\)', coef: 'coefQB', cls: 'cyan' },
+              { key: 'x', label: '\\(\\mathbf{t}\\)', coef: 'coefQB', cls: 'cyan' },
               { key: 'op2', label: '', op: true },
-              { key: 'x2', label: '\\(\\mathbf{x}^2\\)', coef: 'coefA', cls: 'amber' },
+              { key: 'x2', label: '\\(\\mathbf{t}^2\\)', coef: 'coefA', cls: 'amber' },
               { key: 'eq', label: '', op: true },
               { key: 'yhat', label: '\\(\\hat{\\mathbf{y}}\\)' },
               { key: 'y', label: '\\(\\mathbf{y}\\)', sep: true },
@@ -4774,7 +4361,7 @@
           : [
               { key: 'one', label: '\\(\\mathbf{1}\\)', coef: 'coefB', cls: 'purple' },
               { key: 'op1', label: '', op: true },
-              { key: 'x', label: '\\(\\mathbf{x}\\)', coef: 'coefM', cls: 'cyan' },
+              { key: 'x', label: '\\(\\mathbf{t}\\)', coef: 'coefM', cls: 'cyan' },
               { key: 'eq', label: '', op: true },
               { key: 'yhat', label: '\\(\\hat{\\mathbf{y}}\\)' },
               { key: 'y', label: '\\(\\mathbf{y}\\)', sep: true },
@@ -4828,7 +4415,6 @@
       function updateStripTable(model) {
         const rows = Array.from(ui.stripTable.tBodies[0]?.rows || []);
         const rs = residuals(state.points, model);
-        const maxR2 = Math.max(0.01, ...rs.map(r => r * r));
         const coefB = document.getElementById('coefB');
         const coefH = document.getElementById('coefH');
         const coefM = document.getElementById('coefM');
@@ -4861,33 +4447,17 @@
             eq: '=',
             x: fmt(p.x, 1),
             z: fmtSigned(p.x - state.xMean, 2),
-            z2: Math.pow(zAt(p.x), 2) >= 10 ? fmt(Math.pow(zAt(p.x), 2), 0) : fmt(Math.pow(zAt(p.x), 2), 2),
             x2: p.x * p.x >= 10 ? fmt(p.x * p.x, 0) : fmt(p.x * p.x, 1),
             y: fmt(p.y, 1),
             yhat: fmt(yhat, 1),
             r: fmtSigned(r, 2),
-            r2: r2 >= 10 ? fmt(r2, 1) : fmt(r2, 2)
           };
           tr.classList.toggle('highlighted', i === state.highlightIndex);
           tr.classList.toggle('tutorial-highlight', tutorialRow);
           for (const td of tr.cells) {
             const key = td.dataset.key;
             td.textContent = values[key] ?? '';
-            if (key === 'r') {
-              td.dataset.sign = Math.abs(r) < 0.005 ? 'zero' : r < 0 ? 'negative' : 'positive';
-              td.style.backgroundColor = '';
-              td.style.color = '';
-              td.style.fontWeight = '';
-            } else if (key === 'r2') {
-              const alpha = clamp(0.10 + 0.58 * (r2 / maxR2), 0.08, 0.68);
-              td.style.backgroundColor = `rgba(251, 146, 60, ${alpha})`;
-              td.style.color = alpha > 0.42 ? '#7c2d12' : '#334155';
-              td.style.fontWeight = alpha > 0.42 ? '950' : '750';
-            } else if (!td.classList.contains('op')) {
-              td.style.backgroundColor = '';
-              td.style.color = '';
-              td.style.fontWeight = '';
-            }
+            if (key === 'r') td.dataset.sign = Math.abs(r) < 0.005 ? 'zero' : r < 0 ? 'negative' : 'positive';
           }
         });
       }
@@ -4907,8 +4477,6 @@
         ui.aValue.textContent = fmt(displayed.a, 3);
         ui.qbValue.textContent = fmt(displayed.b, 2);
         ui.cValue.textContent = fmt(displayed.c, 2);
-        ui.guidedBValue.textContent = fmt(state.model.b, 2);
-        ui.guidedCValue.textContent = fmt(state.model.c, 2);
       }
 
       function sliderKeyFor(input) {
@@ -4951,11 +4519,7 @@
         state.model = clampQuad({ type: 'quad', ...state.quadControls });
         rememberBestModel();
         syncSlidersFromModel();
-        announceKeyboard(`${coefficient} is now ${coefficient === 'a' ? fmt(state.quadControls[coefficient], 3) : fmt(state.quadControls[coefficient], 2)}.`);
-      }
-
-      function updateAdvancedFeedback() {
-        /* The optional free stage deliberately has no automatic target or pass/fail condition. */
+        announceKeyboard(`${quadCoefName(coefficient)} is now ${coefficient === 'a' ? fmt(state.quadControls[coefficient], 3) : fmt(state.quadControls[coefficient], 2)}.`);
       }
 
       function setHighlight(index) {
@@ -4974,8 +4538,11 @@
         announceKeyboard(`Point ${index + 1}. Signed residual r i equals ${fmtSigned(r, 2)}; square area r i squared equals ${fmt(r * r, 2)}.`);
       }
 
+      // On phones the Level 2 gauges sit in a strip above the plot instead of over it.
+      const gaugeStripQuery = window.matchMedia('(max-width: 640px)');
+
       function resizeCanvas() {
-        const rect = shell.getBoundingClientRect();
+        const rect = canvas.getBoundingClientRect();
         const w = Math.max(320, rect.width || 800);
         const h = Math.max(300, rect.height || 500);
         const nextDpr = Math.max(1, Math.min(2.5, window.devicePixelRatio || 1));
@@ -4986,7 +4553,7 @@
         }
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
         const left = clamp(W * 0.072, 44, 60);
-        const gaugeReserve = usesGauges() && state.phase === 'fit'
+        const gaugeReserve = usesGauges() && state.phase === 'fit' && !gaugeStripQuery.matches
           ? (W >= 760 ? 238 : W >= 560 ? 132 : 0)
           : 0;
         const right = Math.max(16, W * 0.028) + gaugeReserve;
@@ -5482,8 +5049,8 @@
         const showB = activeB || state.hoverHandle === heightKey || selectedB;
         const showM = activeM || state.hoverHandle === 'm' || selectedM;
         if (showB) drawInterceptAffordance(bPos, activeB ? 0.36 : state.hoverHandle === heightKey ? 0.20 : 0.14);
-        drawDiamondHandle(bPos, heightKey, COLORS.purple, activeB);
-        drawRoundHandle(mPos, 'm', COLORS.cyan, activeM);
+        drawDiamondHandle(bPos, heightKey === 'h' ? 'h' : 'c₀', COLORS.purple, activeB);
+        drawRoundHandle(mPos, 'c₁', COLORS.cyan, activeM);
         if (showM) drawSlopeAffordance(mPos, activeM ? 0.42 : state.hoverHandle === 'm' ? 0.20 : 0.14);
       }
 
@@ -5577,22 +5144,23 @@
 
       function drawGauges() {
         if (!showsGauges()) return;
-        const g = gaugeMoments(state.model);
-        const angles = gaugeAngles(state.model);
-        ui.gauge0Value.textContent = fmt(g.g0, 1);
-        ui.gauge1Value.textContent = fmt(g.g1, 1);
-        ui.angleGauge0Value.textContent = `${fmt(angles.a0, 1)}°`;
-        ui.angleGauge1Value.textContent = `${fmt(angles.a1, 1)}°`;
         if (state.signalView === 'sums') {
-          drawGauge(gauge0, g.g0, state.gaugeScale.g0);
-          drawGauge(gauge1, g.g1, state.gaugeScale.g1);
+          const g = gaugeMoments(state.model);
+          ui.gauge0Value.textContent = fmt(g.g0, 1);
+          ui.gauge1Value.textContent = fmt(g.g1, 1);
+          drawGauge(gauge0, clamp(g.g0 / Math.max(state.gaugeScale.g0, EPS), -1, 1), 0.08);
+          drawGauge(gauge1, clamp(g.g1 / Math.max(state.gaugeScale.g1, EPS), -1, 1), 0.08);
         } else {
-          drawAngleGauge(angleGauge0, angles.a0);
-          drawAngleGauge(angleGauge1, angles.a1);
+          const angles = gaugeAngles(state.model);
+          ui.gauge0Value.textContent = `${fmt(angles.a0, 1)}°`;
+          ui.gauge1Value.textContent = `${fmt(angles.a1, 1)}°`;
+          drawGauge(gauge0, clamp(angles.a0, 0, 180) / 90 - 1, ANGLE_TOLERANCE_DEG / 90, true);
+          drawGauge(gauge1, clamp(angles.a1, 0, 180) / 90 - 1, ANGLE_TOLERANCE_DEG / 90, true);
         }
       }
 
-      function drawGauge(gaugeCanvas, value, scale, targetRaw = null) {
+      // norm in [-1, 1] maps onto the dial; |norm| <= band is the green target zone.
+      function drawGauge(gaugeCanvas, norm, band, angleView = false) {
         const rect = gaugeCanvas.getBoundingClientRect();
         const gw = Math.max(72, rect.width || 100), gh = Math.max(30, rect.height || 34);
         const gdpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
@@ -5603,46 +5171,15 @@
         c.setTransform(gdpr, 0, 0, gdpr, 0, 0);
         c.clearRect(0, 0, gw, gh);
         const cx = gw / 2, cy = gh * 0.96, r = Math.min(gw * 0.34, gh * 0.68);
+        const angleAt = (v) => lerp(Math.PI * 1.08, Math.PI * 1.92, (v + 1) / 2);
         c.lineCap = 'round';
         c.lineWidth = 5;
         c.strokeStyle = '#e2e8f0';
-        c.beginPath(); c.arc(cx, cy, r, Math.PI * 1.08, Math.PI * 1.92); c.stroke();
-        c.strokeStyle = 'rgba(16,185,129,0.72)';
-        const targetNorm = targetRaw == null ? 0.08 : clamp(targetRaw / Math.max(scale, EPS), 0.01, 0.42);
-        c.beginPath(); c.arc(cx, cy, r, Math.PI * (1.5 - 0.42 * targetNorm), Math.PI * (1.5 + 0.42 * targetNorm)); c.stroke();
-        const norm = clamp(value / Math.max(scale, EPS), -1, 1);
-        const angle = lerp(Math.PI * 1.08, Math.PI * 1.92, (norm + 1) / 2);
-        c.strokeStyle = targetRaw == null ? (Math.abs(norm) < 0.08 ? '#10b981' : '#f43f5e') : (Math.abs(value) <= targetRaw ? '#10b981' : '#f43f5e');
-        c.lineWidth = 3;
-        c.beginPath(); c.moveTo(cx, cy); c.lineTo(cx + Math.cos(angle) * r * 0.82, cy + Math.sin(angle) * r * 0.82); c.stroke();
-        c.fillStyle = '#0f172a';
-        c.beginPath(); c.arc(cx, cy, 3.6, 0, Math.PI * 2); c.fill();
-      }
-
-      function drawAngleGauge(gaugeCanvas, degrees) {
-        const rect = gaugeCanvas.getBoundingClientRect();
-        const gw = Math.max(72, rect.width || 100), gh = Math.max(30, rect.height || 34);
-        const gdpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
-        if (gaugeCanvas.width !== Math.round(gw * gdpr) || gaugeCanvas.height !== Math.round(gh * gdpr)) {
-          gaugeCanvas.width = Math.round(gw * gdpr); gaugeCanvas.height = Math.round(gh * gdpr);
-        }
-        const c = gaugeCanvas.getContext('2d');
-        c.setTransform(gdpr, 0, 0, gdpr, 0, 0);
-        c.clearRect(0, 0, gw, gh);
-        const cx = gw / 2, cy = gh * 0.96, r = Math.min(gw * 0.34, gh * 0.68);
-        const arcStart = Math.PI * 1.08;
-        const arcEnd = Math.PI * 1.92;
-        const angleAt = (value) => lerp(arcStart, arcEnd, clamp(value, 0, 180) / 180);
-        c.lineCap = 'round';
-        c.lineWidth = 5;
-        c.strokeStyle = '#e2e8f0';
-        c.beginPath(); c.arc(cx, cy, r, arcStart, arcEnd); c.stroke();
-        c.strokeStyle = 'rgba(16,185,129,0.82)';
-        c.beginPath();
-        c.arc(cx, cy, r, angleAt(90 - ANGLE_TOLERANCE_DEG), angleAt(90 + ANGLE_TOLERANCE_DEG));
-        c.stroke();
-        const needleAngle = angleAt(degrees);
-        c.strokeStyle = Math.abs(degrees - 90) <= ANGLE_TOLERANCE_DEG ? '#10b981' : '#f59e0b';
+        c.beginPath(); c.arc(cx, cy, r, angleAt(-1), angleAt(1)); c.stroke();
+        c.strokeStyle = angleView ? 'rgba(16,185,129,0.82)' : 'rgba(16,185,129,0.72)';
+        c.beginPath(); c.arc(cx, cy, r, angleAt(-band), angleAt(band)); c.stroke();
+        const needleAngle = angleAt(norm);
+        c.strokeStyle = Math.abs(norm) <= band ? '#10b981' : angleView ? '#f59e0b' : '#f43f5e';
         c.lineWidth = 3;
         c.beginPath(); c.moveTo(cx, cy); c.lineTo(cx + Math.cos(needleAngle) * r * 0.82, cy + Math.sin(needleAngle) * r * 0.82); c.stroke();
         c.fillStyle = '#0f172a';
@@ -5795,14 +5332,14 @@
 
         const currentSSE = sse(state.points, displayModel);
         const optimalSSE = sse(state.points, state.optModel);
-        ui.contourTitle.textContent = 'S(b, m)';
-        ui.contourXAxis.textContent = 'b';
-        ui.contourCoords.textContent = `b=${fmt(current.u, 2)} · m=${fmt(current.m, 2)}`;
+        ui.contourTitle.textContent = 'L(c₀, c₁)';
+        ui.contourXAxis.textContent = 'c₀';
+        ui.contourCoords.textContent = `c₀=${fmt(current.u, 2)} · c₁=${fmt(current.m, 2)}`;
         ui.contourSSE.textContent = `yours=${fmt(currentSSE, 2)} · LS=${fmt(optimalSSE, 2)}`;
         const ariaSig = [current.u.toFixed(2), current.m.toFixed(2), currentSSE.toFixed(2), state.linePath.length, state.contourZoom.toFixed(2)].join('|');
         if (ariaSig !== state.contourAriaSig) {
           state.contourAriaSig = ariaSig;
-          ui.contourPanel.setAttribute('aria-label', `Loss landscape S of b and m, zoom ${Math.round(state.contourZoom * 100)} percent. A gray marker shows the starting line, purple path segments show intercept moves and cyan segments show slope moves, a magenta marker shows the locked line at b ${fmt(current.u, 2)} and m ${fmt(current.m, 2)}, and a green marker shows the least-squares line. Learner area ${fmt(currentSSE, 2)}; least-squares area ${fmt(optimalSSE, 2)}.`);
+          ui.contourPanel.setAttribute('aria-label', `Loss landscape L of c0 and c1, zoom ${Math.round(state.contourZoom * 100)} percent. A gray marker shows the starting line, purple path segments show intercept moves and cyan segments show slope moves, a magenta marker shows the locked line at c0 ${fmt(current.u, 2)} and c1 ${fmt(current.m, 2)}, and a green marker shows the least-squares line. Learner area ${fmt(currentSSE, 2)}; least-squares area ${fmt(optimalSSE, 2)}.`);
         }
       }
 
@@ -5839,8 +5376,7 @@
           Math.round(W), Math.round(H),
           state.lineBasisView,
           ui.contourPanel.offsetWidth, ui.contourPanel.offsetHeight,
-          ui.gaugePanel.offsetWidth, ui.gaugePanel.offsetHeight,
-          ui.angleGaugePanel.offsetWidth, ui.angleGaugePanel.offsetHeight
+          ui.gaugePanel.offsetWidth, ui.gaugePanel.offsetHeight
         ].join('|');
       }
 
@@ -6061,17 +5597,20 @@
         });
       }
 
+      function quadCoefName(key) { return key === 'a' ? 'c2' : key === 'b' ? 'c1' : 'c0'; }
+
       function selectQuadKey(key) {
         if (isGuidedQuad()) key = 'a';
         const target = key === 'a' ? ui.aSlider : key === 'b' ? ui.bSlider : ui.cSlider;
         state.lastTouched = key;
         try { target.focus({ preventScroll: true }); } catch (_) { target.focus(); }
-        announceKeyboard(`${key} coefficient selected; use arrow keys to adjust.`);
+        announceKeyboard(`${quadCoefName(key)} coefficient selected; use arrow keys to adjust.`);
       }
 
       function canvasKeydown(event) {
         if (state.screen !== 'play' || state.phase !== 'fit') return;
-        const key = event.key.toLowerCase();
+        let key = event.key.toLowerCase();
+        if (['0', '1', '2'].includes(key)) key = usesSliders() ? { 0: 'c', 1: 'b', 2: 'a' }[key] : { 0: 'b', 1: 'm', 2: '' }[key];
         if (['a', 'b', 'c', 'h', 'm', 'arrowup', 'arrowright', 'arrowdown', 'arrowleft'].includes(key)) cancelResidualTutorial();
         if (usesSliders() && (isAdvancedQuad() ? ['a', 'b', 'c'].includes(key) : key === 'a')) {
           event.preventDefault();
@@ -6081,7 +5620,7 @@
         if (!usesSliders() && (['b', 'm'].includes(key) || (usesGauges() && key === 'h'))) {
           event.preventDefault();
           state.lastTouched = (key === 'b' || key === 'h') ? activeLineHeightKey() : key;
-          announceKeyboard(`${state.lastTouched === 'h' ? 'Centered height h' : state.lastTouched === 'b' ? 'Intercept b' : 'Slope m'} selected; use arrow keys to adjust.`);
+          announceKeyboard(`${state.lastTouched === 'h' ? 'Centered height h' : state.lastTouched === 'b' ? 'Intercept c0' : 'Slope c1'} selected; use arrow keys to adjust.`);
           return;
         }
         if (!['ArrowUp', 'ArrowRight', 'ArrowDown', 'ArrowLeft'].includes(event.key)) return;
@@ -6103,7 +5642,7 @@
           rememberBestModel();
           syncSlidersFromModel();
           const value = state.model[active];
-          announceKeyboard(`${active} is now ${active === 'a' ? fmt(value, 3) : fmt(value, 2)}.`);
+          announceKeyboard(`${quadCoefName(active)} is now ${active === 'a' ? fmt(value, 3) : fmt(value, 2)}.`);
         } else {
           const active = state.lastTouched === 'm' ? 'm' : activeLineHeightKey();
           if (usesCenteredLineControls()) {
@@ -6120,7 +5659,7 @@
           recordLinePath();
           markBasisMove();
           const value = active === 'h' ? centeredHeight(state.model) : state.model[active];
-          announceKeyboard(`${active === 'm' ? 'Slope m' : active === 'h' ? 'Centered height h' : 'Intercept b'} is now ${fmt(value, 2)}.`);
+          announceKeyboard(`${active === 'm' ? 'Slope c1' : active === 'h' ? 'Centered height h' : 'Intercept c0'} is now ${fmt(value, 2)}.`);
         }
       }
 
@@ -6155,68 +5694,68 @@
         const moments = gaugeMoments(state.model);
         if (state.level === 1) {
           ui.tipTitle.textContent = 'Descent tip';
-          return `<p class="tip-lead">Eyeball it first: drag the line until it roughly follows the cloud. That is your starting point.</p><p class="tip-rule">Then improve one coefficient at a time:</p><div class="tip-advice single-column"><div class="tip-advice-row"><span class="tip-moment">1. Nudge only \\(b\\) until the area stops shrinking.</span></div><div class="tip-advice-row"><span class="tip-moment">2. Nudge only \\(m\\) until the area stops shrinking.</span></div><div class="tip-advice-row"><span class="tip-moment">3. Repeat. A few rounds get very close.</span></div></div><p class="tip-note">This is coordinate descent by hand: minimize along one coordinate direction at a time. After you lock, the map traces your route through \\(S(b, m)\\) — \\(b\\)-moves run horizontally, \\(m\\)-moves run vertically.</p>`;
+          return `<p class="tip-lead">Eyeball it first: drag the line until it roughly follows the cloud. That is your starting point.</p><p class="tip-rule">Then improve one coefficient at a time:</p><div class="tip-advice single-column"><div class="tip-advice-row"><span class="tip-moment">1. Nudge only \\(c_0\\) until the area stops shrinking.</span></div><div class="tip-advice-row"><span class="tip-moment">2. Nudge only \\(c_1\\) until the area stops shrinking.</span></div><div class="tip-advice-row"><span class="tip-moment">3. Repeat. A few rounds get very close.</span></div></div><p class="tip-note">This is coordinate descent by hand: minimize along one coordinate direction at a time. After you lock, the map traces your route through \\(L(c_0, c_1)\\) — \\(c_0\\)-moves run horizontally, \\(c_1\\)-moves run vertically.</p>`;
         }
         if (usesGauges()) {
           if (!usesCenteredLineControls()) {
-            ui.tipTitle.textContent = 'Course-column tip';
+            ui.tipTitle.textContent = 'Original-column tip';
             return `
-              <p class="tip-lead">The course form is \\(\\hat y_i=b+mx_i\\). Its two columns are \\(\\mathbf 1\\) and \\(\\mathbf x\\).</p>
+              <p class="tip-lead">The original form is \\(\\hat y_i=c_0+c_1t_i\\). Its two columns are \\(\\mathbf 1\\) and \\(\\mathbf t\\).</p>
               <div class="tip-formula">
-                <div>\\(S=\\sum_i r_i^2\\)</div>
-                <div>\\(\\displaystyle \\frac{\\partial S}{\\partial b}=-2\\sum_i r_i,\\qquad \\frac{\\partial S}{\\partial m}=-2\\sum_i x_i r_i\\)</div>
+                <div>\\(L=\\sum_i r_i^2\\)</div>
+                <div>\\(\\displaystyle \\frac{\\partial L}{\\partial c_0}=-2\\sum_i r_i,\\qquad \\frac{\\partial L}{\\partial c_1}=-2\\sum_i t_i r_i\\)</div>
               </div>
-              <p class="tip-rule">Current course-coordinate advice:</p>
+              <p class="tip-rule">Current advice:</p>
               <div class="tip-advice">
-                ${tipAdviceRow('\\sum_i r_i', moments.g0, 'b', 'purple', 0.08 * state.gaugeScale.g0)}
-                ${tipAdviceRow('\\sum_i x_i r_i', moments.g1, 'm', 'cyan', 0.08 * state.gaugeScale.g1)}
+                ${tipAdviceRow('\\sum_i r_i', moments.g0, 'c_0', 'purple', 0.08 * state.gaugeScale.g0)}
+                ${tipAdviceRow('\\sum_i t_i r_i', moments.g1, 'c_1', 'cyan', 0.08 * state.gaugeScale.g1)}
               </div>
-              <p class="tip-note">\\(b\\) is the line's height at \\(x=0\\) — often far from the cloud — so \\(b\\) and \\(m\\) fight: one move swings both gauges. Centered controls (unlocked after your first lock) put the height where the data lives.</p>`;
+              <p class="tip-note">\\(c_0\\) is the line's height at \\(t=0\\) — often far from the cloud — so \\(c_0\\) and \\(c_1\\) fight: one move swings both gauges. Centered controls (unlocked after your first lock) put the height where the data lives.</p>`;
           }
           ui.tipTitle.textContent = 'Centered-column tip';
           return `
-            <p class="tip-lead">Write \\(z_i=x_i-\\bar x\\), where \\(\\bar x=\\frac1n\\sum_i x_i\\), and \\(\\hat y_i=h+mz_i\\). Same line, better knobs: \\(h=b+m\\bar x\\) is the height at the center of the cloud, and \\(m\\) tilts the line around that point — that is why the height handle sits at \\(\\bar x\\).</p>
+            <p class="tip-lead">Write \\(z_i=t_i-\\bar t\\), where \\(\\bar t=\\frac1n\\sum_i t_i\\), and \\(\\hat y_i=h+c_1z_i\\). Same line, better knobs: \\(h=c_0+c_1\\bar t\\) is the height at the center of the cloud, and \\(c_1\\) tilts the line around that point — that is why the height handle sits at \\(\\bar t\\).</p>
             <div class="tip-formula">
-              <div>\\(S=\\sum_i r_i^2\\)</div>
-              <div>\\(\\displaystyle \\frac{\\partial S}{\\partial h}=-2\\sum_i r_i,\\qquad \\frac{\\partial S}{\\partial m}=-2\\sum_i z_i r_i\\)</div>
+              <div>\\(L=\\sum_i r_i^2\\)</div>
+              <div>\\(\\displaystyle \\frac{\\partial L}{\\partial h}=-2\\sum_i r_i,\\qquad \\frac{\\partial L}{\\partial c_1}=-2\\sum_i z_i r_i\\)</div>
             </div>
             <p class="tip-rule">Current centered-coordinate advice:</p>
             <div class="tip-advice">
               ${tipAdviceRow('\\sum_i r_i', moments.g0, 'h', 'purple', 0.08 * state.gaugeScale.g0)}
-              ${tipAdviceRow('\\sum_i z_i r_i', moments.g1, 'm', 'cyan', 0.08 * state.gaugeScale.g1)}
+              ${tipAdviceRow('\\sum_i z_i r_i', moments.g1, 'c_1', 'cyan', 0.08 * state.gaugeScale.g1)}
             </div>
-            <p class="tip-note">Since \\(\\sum_i z_i=0\\), the columns \\(\\mathbf 1\\) and \\(\\mathbf z\\) are orthogonal: each control moves only its own gauge, so one pass per control finishes the job. Zeroing the first gauge alone gives \\(h=\\bar y\\) — the least-squares line passes through \\((\\bar x,\\bar y)\\).</p>`;
+            <p class="tip-note">Since \\(\\sum_i z_i=0\\), the columns \\(\\mathbf 1\\) and \\(\\mathbf z\\) are orthogonal: each control moves only its own gauge, so one pass per control finishes the job. Zeroing the first gauge alone gives \\(h=\\bar y\\) — the least-squares line passes through \\((\\bar t,\\bar y)\\).</p>`;
         }
 
         if (isGuidedQuad()) {
           const quadMoments = residualMoments(state.model);
           ui.tipTitle.textContent = 'One-bend tip';
-          return `<p class="tip-lead">The gray dashed model is the least-squares line. Its \\(b\\) and \\(c\\) stay fixed while you choose only \\(a\\) in \\(\\hat y_i=c+bx_i+ax_i^2\\).</p>
+          return `<p class="tip-lead">The gray dashed model is the least-squares line. Its \\(c_0\\) and \\(c_1\\) stay fixed while you choose only \\(c_2\\) in \\(\\hat y_i=c_0+c_1t_i+c_2t_i^2\\).</p>
             <div class="tip-formula">
-              <div>\\(S(a)=\\sum_i (y_i-c_{\\rm line}-b_{\\rm line}x_i-ax_i^2)^2\\)</div>
-              <div>\\(\\displaystyle \\frac{dS}{da}=-2\\sum_i x_i^2r_i\\)</div>
+              <div>\\(L(c_2)=\\sum_i (y_i-c_0-c_1t_i-c_2t_i^2)^2\\)</div>
+              <div>\\(\\displaystyle \\frac{dL}{dc_2}=-2\\sum_i t_i^2r_i\\)</div>
             </div>
             <p class="tip-rule">Current bend advice:</p>
-            <div class="tip-advice">${tipAdviceRow('\\sum_i x_i^2r_i', quadMoments.g2, 'a', 'amber', momentTolerance(2))}</div>
-            <p class="tip-note">Only a small improvement may be available with \\(b\\) and \\(c\\) frozen. That is the point of the experiment; lock whenever the comparison is clear.</p>`;
+            <div class="tip-advice">${tipAdviceRow('\\sum_i t_i^2r_i', quadMoments.g2, 'c_2', 'amber', momentTolerance(2))}</div>
+            <p class="tip-note">Only a small improvement may be available with \\(c_0\\) and \\(c_1\\) frozen. That is the point of the experiment; lock whenever the comparison is clear.</p>`;
         }
 
         const raw = residualMoments(state.model);
         ui.tipTitle.textContent = 'All-coefficient experiment';
         return `
-          <p class="tip-lead">Eyeball it first: sketch a rough parabola over the cloud with all three sliders. Then improve one coefficient at a time — and get the bend \\(a\\) right early, since it moves everything else.</p>
+          <p class="tip-lead">Eyeball it first: sketch a rough parabola over the cloud with all three sliders. Then improve one coefficient at a time — and get the bend \\(c_2\\) right early, since it moves everything else.</p>
           <div class="tip-formula">
-            <div>\\(\\displaystyle \\frac{\\partial S}{\\partial c}=-2\\sum_i r_i\\)</div>
-            <div>\\(\\displaystyle \\frac{\\partial S}{\\partial b}=-2\\sum_i x_i r_i\\)</div>
-            <div>\\(\\displaystyle \\frac{\\partial S}{\\partial a}=-2\\sum_i x_i^2r_i\\)</div>
+            <div>\\(\\displaystyle \\frac{\\partial L}{\\partial c_0}=-2\\sum_i r_i\\)</div>
+            <div>\\(\\displaystyle \\frac{\\partial L}{\\partial c_1}=-2\\sum_i t_i r_i\\)</div>
+            <div>\\(\\displaystyle \\frac{\\partial L}{\\partial c_2}=-2\\sum_i t_i^2r_i\\)</div>
           </div>
           <p class="tip-rule">Current gradient signs:</p>
           <div class="tip-advice">
-            ${tipAdviceRow('\\sum_i r_i', raw.g0, 'c', 'purple', momentTolerance(0))}
-            ${tipAdviceRow('\\sum_i x_i r_i', raw.g1, 'b', 'cyan', momentTolerance(1))}
-            ${tipAdviceRow('\\sum_i x_i^2r_i', raw.g2, 'a', 'amber', momentTolerance(2))}
+            ${tipAdviceRow('\\sum_i r_i', raw.g0, 'c_0', 'purple', momentTolerance(0))}
+            ${tipAdviceRow('\\sum_i t_i r_i', raw.g1, 'c_1', 'cyan', momentTolerance(1))}
+            ${tipAdviceRow('\\sum_i t_i^2r_i', raw.g2, 'c_2', 'amber', momentTolerance(2))}
           </div>
-          <p class="tip-note">One move can swing several gradient signs because \\(\\mathbf 1\\), \\(\\mathbf x\\), \\(\\mathbf x^2\\) are not orthogonal. Lock whenever you want to see how close you got.</p>`;
+          <p class="tip-note">One move can swing several gradient signs because \\(\\mathbf 1\\), \\(\\mathbf t\\), \\(\\mathbf t^2\\) are not orthogonal. Lock whenever you want to see how close you got.</p>`;
       }
 
       function openTip() {
@@ -6332,6 +5871,8 @@
         canvas.addEventListener('pointerup', pointerUp);
         canvas.addEventListener('pointercancel', pointerUp);
         canvas.addEventListener('pointerleave', pointerLeave);
+        // pointerdown runs first; a touch that grabbed a handle or the line must not scroll the page
+        canvas.addEventListener('touchstart', (event) => { if (state.drag) event.preventDefault(); }, { passive: false });
         canvas.addEventListener('keydown', canvasKeydown);
         [ui.aSlider, ui.bSlider, ui.cSlider].forEach(input => {
           input.addEventListener('input', sliderChanged);
@@ -6348,13 +5889,13 @@
       }
 
       function init() {
+        document.querySelector('.game-hero .hero-art').innerHTML = document.querySelector('#introScreen .hero-art').innerHTML;
         setupEvents();
         renderModeButtons();
         const directLevel = Number(new URLSearchParams(window.location.search).get('level'));
         if (LEVEL_ORDER.includes(directLevel)) enterLevel(directLevel, true);
         else showIntro();
         typesetMath(document.body);
-        renderBasisKatex();
         requestAnimationFrame(drawScene);
 
       }
